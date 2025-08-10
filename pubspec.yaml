@@ -3,16 +3,58 @@ version: 1.0.0+1
 publish_to: none
 environment:
   sdk: ^3.8.1
-description: A new Flutter project.
+description: A comprehensive Purple Star Astrology and BaZi calculation app
 dependencies:
   cupertino_icons: ^1.0.8
   dart_iztro: ^2.5.3
   flutter:
     sdk: flutter
+  flutter_datetime_picker_plus: ^2.1.0
+  flutter_localizations:
+    sdk: flutter
+  get: ^4.6.6
+  intl: ^0.20.2
+  shared_preferences: ^2.2.2
 dev_dependencies:
+  flutter_lints: ^3.0.1
   flutter_test:
     sdk: flutter
   pubspec_dependency_sorter: ^1.0.5
   very_good_analysis: ^9.0.0
 flutter:
   uses-material-design: true
+  fonts:
+    - family: SFProDisplay
+      fonts:
+        - asset: assets/fonts/Raleway-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Raleway-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Raleway-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Raleway-ExtraBold.ttf
+          weight: 800
+    - family: CinzelDecorative
+      fonts:
+        - asset: assets/fonts/CinzelDecorative-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/CinzelDecorative-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/CinzelDecorative-Black.ttf
+          weight: 900
+    - family: TenorSans
+      fonts:
+        - asset: assets/fonts/TenorSans-Regular.ttf
+          weight: 400
+    - family: YesevaOne
+      fonts:
+        - asset: assets/fonts/YesevaOne-Regular.ttf
+          weight: 400
+    - family: MaShanZheng
+      fonts:
+        - asset: assets/fonts/MaShanZheng-Regular.ttf
+          weight: 400
+    - family: B612Mono
+      fonts:
+        - asset: assets/fonts/B612Mono-Regular.ttf
+          weight: 400
