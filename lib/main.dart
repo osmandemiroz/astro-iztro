@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:dart_iztro/dart_iztro.dart';
 
 void main() {
   runApp(const AstroIztroApp());
