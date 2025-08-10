@@ -1,0 +1,18 @@
+name: astro_iztro
+version: 1.0.0+1
+publish_to: none
+environment:
+  sdk: ^3.8.1
+description: A new Flutter project.
+dependencies:
+  cupertino_icons: ^1.0.8
+  dart_iztro: ^2.5.3
+  flutter:
+    sdk: flutter
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  pubspec_dependency_sorter: ^1.0.5
+  very_good_analysis: ^9.0.0
+flutter:
+  uses-material-design: true
