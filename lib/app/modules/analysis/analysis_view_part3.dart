@@ -18,7 +18,7 @@ extension AnalysisViewPart3 on AnalysisView {
             ),
             const SizedBox(height: AppConstants.defaultPadding),
             ...chartData.palaces.map(
-              (palace) => _buildPalaceInfluence(palace),
+              _buildPalaceInfluence,
             ),
           ],
         ),

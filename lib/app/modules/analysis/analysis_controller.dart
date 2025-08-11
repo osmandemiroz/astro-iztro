@@ -142,7 +142,7 @@ class AnalysisController extends GetxController {
     }
 
     try {
-      final targetDate = DateTime(year, 1, 1);
+      final targetDate = DateTime(year);
       return {
         'date': targetDate.toIso8601String(),
         'grand_limit': 'Mock Grand Limit',
@@ -177,6 +177,7 @@ class AnalysisController extends GetxController {
 
   /// [selectAnalysisType] - Select analysis type (yearly/monthly/daily)
   void selectAnalysisType(String type) {
+    if (type == selectedAnalysisType.value) return;
     selectedAnalysisType.value = type;
   }
 
