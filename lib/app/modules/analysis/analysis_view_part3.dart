@@ -18,59 +18,21 @@ extension AnalysisViewPart3 on AnalysisView {
             ),
             const SizedBox(height: AppConstants.defaultPadding),
             ...chartData.palaces.map(
-              _buildPalaceInfluence,
+              (palace) => Column(
+                children: [
+                  PalaceInfluenceCard(
+                    palace: palace,
+                    stars: controller.chartData.value!.getStarsInPalace(
+                      palace.name,
+                    ),
+                    showChineseNames: controller.showChineseNames.value,
+                  ),
+                  const SizedBox(height: AppConstants.smallPadding),
+                ],
+              ),
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildPalaceInfluence(PalaceData palace) {
-    final stars = controller.chartData.value!.getStarsInPalace(palace.name);
-    return Padding(
-      padding: const EdgeInsets.only(bottom: AppConstants.defaultPadding),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Text(
-                controller.showChineseNames.value ? palace.nameZh : palace.name,
-                style: AppTheme.bodyMedium.copyWith(
-                  fontWeight: FontWeight.w600,
-                  fontFamily: controller.showChineseNames.value
-                      ? AppConstants.chineseFont
-                      : AppConstants.primaryFont,
-                ),
-              ),
-              const SizedBox(width: AppConstants.smallPadding),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 8,
-                  vertical: 2,
-                ),
-                decoration: BoxDecoration(
-                  color: AppColors.primaryPurple.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                child: Text(
-                  '${stars.length} stars',
-                  style: AppTheme.caption.copyWith(
-                    color: AppColors.primaryPurple,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 4),
-          Text(
-            palace.analysis['description'] as String,
-            style: AppTheme.bodyMedium.copyWith(
-              color: AppColors.grey700,
-            ),
-          ),
-        ],
       ),
     );
   }

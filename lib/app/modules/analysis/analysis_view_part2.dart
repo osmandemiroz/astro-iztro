@@ -41,25 +41,52 @@ extension AnalysisViewPart2 on AnalysisView {
                 final fortune = snapshot.data!;
                 return Column(
                   children: [
-                    _buildFortuneCycle(
-                      'grand_limit',
-                      fortune['grand_limit'] as String,
+                    FortuneCycleCard(
+                      cycleName: controller.getFortuneCycleName('grand_limit'),
+                      cycleValue: fortune['grand_limit'] as String,
+                      cycleDescription:
+                          'Major life cycle influencing long-term destiny',
+                      strength: 0.9,
+                      showChineseNames: controller.showChineseNames.value,
                     ),
-                    _buildFortuneCycle(
-                      'small_limit',
-                      fortune['small_limit'] as String,
+                    const SizedBox(height: AppConstants.smallPadding),
+                    FortuneCycleCard(
+                      cycleName: controller.getFortuneCycleName('small_limit'),
+                      cycleValue: fortune['small_limit'] as String,
+                      cycleDescription:
+                          'Minor cycle affecting specific life areas',
+                      strength: 0.7,
+                      showChineseNames: controller.showChineseNames.value,
                     ),
-                    _buildFortuneCycle(
-                      'annual_fortune',
-                      fortune['annual_fortune'] as String,
+                    const SizedBox(height: AppConstants.smallPadding),
+                    FortuneCycleCard(
+                      cycleName: controller.getFortuneCycleName(
+                        'annual_fortune',
+                      ),
+                      cycleValue: fortune['annual_fortune'] as String,
+                      cycleDescription: 'Yearly influences and opportunities',
+                      strength: 0.8,
+                      showChineseNames: controller.showChineseNames.value,
                     ),
-                    _buildFortuneCycle(
-                      'monthly_fortune',
-                      fortune['monthly_fortune'] as String,
+                    const SizedBox(height: AppConstants.smallPadding),
+                    FortuneCycleCard(
+                      cycleName: controller.getFortuneCycleName(
+                        'monthly_fortune',
+                      ),
+                      cycleValue: fortune['monthly_fortune'] as String,
+                      cycleDescription: 'Monthly trends and energies',
+                      strength: 0.6,
+                      showChineseNames: controller.showChineseNames.value,
                     ),
-                    _buildFortuneCycle(
-                      'daily_fortune',
-                      fortune['daily_fortune'] as String,
+                    const SizedBox(height: AppConstants.smallPadding),
+                    FortuneCycleCard(
+                      cycleName: controller.getFortuneCycleName(
+                        'daily_fortune',
+                      ),
+                      cycleValue: fortune['daily_fortune'] as String,
+                      cycleDescription: 'Daily activities and decisions',
+                      strength: 0.5,
+                      showChineseNames: controller.showChineseNames.value,
                     ),
                   ],
                 );
@@ -67,37 +94,6 @@ extension AnalysisViewPart2 on AnalysisView {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildFortuneCycle(String cycle, String value) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: AppConstants.smallPadding),
-      child: Row(
-        children: [
-          SizedBox(
-            width: 120,
-            child: Text(
-              controller.getFortuneCycleName(cycle),
-              style: AppTheme.bodyMedium.copyWith(
-                fontWeight: FontWeight.w500,
-                color: AppColors.grey700,
-              ),
-            ),
-          ),
-          Expanded(
-            child: Text(
-              value,
-              style: AppTheme.bodyMedium.copyWith(
-                color: AppColors.grey900,
-                fontFamily: controller.showChineseNames.value
-                    ? AppConstants.chineseFont
-                    : AppConstants.primaryFont,
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
@@ -118,12 +114,14 @@ extension AnalysisViewPart2 on AnalysisView {
             ),
             const SizedBox(height: AppConstants.defaultPadding),
             ...baziData.elementCounts.entries.map(
-              (entry) => _buildElementBar(
-                entry.key,
-                entry.value,
-                baziData.elementCounts.values.reduce(
+              (entry) => ElementStrengthCard(
+                element: entry.key,
+                count: entry.value,
+                maxCount: baziData.elementCounts.values.reduce(
                   (a, b) => a > b ? a : b,
                 ),
+                showChineseNames: controller.showChineseNames.value,
+                description: _getElementDescription(entry.key),
               ),
             ),
             const SizedBox(height: AppConstants.defaultPadding),
@@ -164,53 +162,20 @@ extension AnalysisViewPart2 on AnalysisView {
     );
   }
 
-  Widget _buildElementBar(String element, int count, int maxCount) {
-    final strength = count / maxCount;
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        children: [
-          SizedBox(
-            width: 40,
-            child: Text(
-              element,
-              style: AppTheme.bodyMedium.copyWith(
-                fontFamily: AppConstants.chineseFont,
-                fontWeight: FontWeight.bold,
-                color: controller.getElementColor(element, strength),
-              ),
-            ),
-          ),
-          Expanded(
-            child: LinearProgressIndicator(
-              value: strength,
-              backgroundColor: AppColors.grey200,
-              valueColor: AlwaysStoppedAnimation<Color>(
-                controller.getElementColor(element, strength),
-              ),
-              minHeight: 8,
-            ),
-          ),
-          const SizedBox(width: 8),
-          SizedBox(
-            width: 30,
-            child: Text(
-              count.toString(),
-              style: AppTheme.bodyMedium.copyWith(
-                fontWeight: FontWeight.w600,
-              ),
-              textAlign: TextAlign.right,
-            ),
-          ),
-          const SizedBox(width: 8),
-          Text(
-            controller.getFortuneStrength(strength),
-            style: AppTheme.caption.copyWith(
-              color: controller.getElementColor(element, strength),
-            ),
-          ),
-        ],
-      ),
-    );
+  String _getElementDescription(String element) {
+    switch (element) {
+      case '木':
+        return 'Wood element represents growth, flexibility, and creativity. It influences career development and family relationships.';
+      case '火':
+        return 'Fire element symbolizes passion, energy, and transformation. It affects reputation, leadership, and emotional expression.';
+      case '土':
+        return 'Earth element embodies stability, nourishment, and reliability. It impacts education, property, and self-cultivation.';
+      case '金':
+        return 'Metal element signifies clarity, precision, and determination. It relates to wealth, authority, and children.';
+      case '水':
+        return 'Water element reflects wisdom, adaptability, and communication. It governs career, travel, and intellectual pursuits.';
+      default:
+        return 'Element influences various aspects of life and destiny.';
+    }
   }
 }
