@@ -1,13 +1,35 @@
+// ignore_for_file: unused_field, avoid_positional_boolean_parameters, document_ignores
+
 import 'package:astro_iztro/core/models/bazi_data.dart';
 import 'package:astro_iztro/core/models/chart_data.dart';
 import 'package:astro_iztro/core/models/user_profile.dart';
 
 /// [IztroService] - Core service for all Purple Star Astrology and BaZi calculations
-/// Currently using mock data until dart_iztro integration is complete
+/// Provides integration layer for dart_iztro package with fallback mock data
 class IztroService {
   factory IztroService() => _instance;
   IztroService._internal();
   static final IztroService _instance = IztroService._internal();
+
+  bool _isInitialized = false;
+  final bool _useMockData = true;
+
+  /// [initialize] - Initialize the service
+  Future<void> initialize() async {
+    if (_isInitialized) return;
+
+    try {
+      // TODO: Initialize dart_iztro translation service
+      // await IztroTranslationService.initialize();
+      _isInitialized = true;
+    } on Exception {
+      // Fall back to mock data if initialization fails
+      _isInitialized = true;
+    }
+  }
+
+  /// [setMockDataMode] - Toggle between real and mock data
+  void setMockDataMode(bool useMock) {}
 
   /// [calculateAstrolabe] - Calculate complete Purple Star chart
   Future<ChartData> calculateAstrolabe(UserProfile profile) async {

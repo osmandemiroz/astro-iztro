@@ -427,6 +427,167 @@ class StorageService {
     }
   }
 
+  /// [saveStarAnalysis] - Save star analysis data
+  Future<bool> saveStarAnalysis(
+    String profileId,
+    String starName,
+    Map<String, dynamic> analysis,
+  ) async {
+    try {
+      final key = 'star_analysis_${profileId}_$starName';
+      final jsonString = json.encode(analysis);
+      return await prefs.setString(key, jsonString);
+    } catch (e) {
+      throw StorageException('Failed to save star analysis: $e');
+    }
+  }
+
+  /// [loadStarAnalysis] - Load star analysis data
+  Map<String, dynamic>? loadStarAnalysis(String profileId, String starName) {
+    try {
+      final key = 'star_analysis_${profileId}_$starName';
+      final jsonString = prefs.getString(key);
+      if (jsonString != null) {
+        return json.decode(jsonString) as Map<String, dynamic>;
+      }
+      return null;
+    } on Exception catch (e) {
+      if (kDebugMode) {
+        print('[StorageService] Failed to load star analysis: $e');
+      }
+      return null;
+    }
+  }
+
+  /// [savePalaceAnalysis] - Save palace analysis data
+  Future<bool> savePalaceAnalysis(
+    String profileId,
+    String palaceName,
+    Map<String, dynamic> analysis,
+  ) async {
+    try {
+      final key = 'palace_analysis_${profileId}_$palaceName';
+      final jsonString = json.encode(analysis);
+      return await prefs.setString(key, jsonString);
+    } catch (e) {
+      throw StorageException('Failed to save palace analysis: $e');
+    }
+  }
+
+  /// [loadPalaceAnalysis] - Load palace analysis data
+  Map<String, dynamic>? loadPalaceAnalysis(
+    String profileId,
+    String palaceName,
+  ) {
+    try {
+      final key = 'palace_analysis_${profileId}_$palaceName';
+      final jsonString = prefs.getString(key);
+      if (jsonString != null) {
+        return json.decode(jsonString) as Map<String, dynamic>;
+      }
+      return null;
+    } on Exception catch (e) {
+      if (kDebugMode) {
+        print('[StorageService] Failed to load palace analysis: $e');
+      }
+      return null;
+    }
+  }
+
+  /// [saveAnalysisSession] - Save complete analysis session
+  Future<bool> saveAnalysisSession(
+    String profileId,
+    Map<String, dynamic> session,
+  ) async {
+    try {
+      final key = 'analysis_session_$profileId';
+      final sessionData = {
+        'timestamp': DateTime.now().toIso8601String(),
+        'profile_id': profileId,
+        'data': session,
+      };
+      final jsonString = json.encode(sessionData);
+      return await prefs.setString(key, jsonString);
+    } catch (e) {
+      throw StorageException('Failed to save analysis session: $e');
+    }
+  }
+
+  /// [loadAnalysisSession] - Load analysis session
+  Map<String, dynamic>? loadAnalysisSession(String profileId) {
+    try {
+      final key = 'analysis_session_$profileId';
+      final jsonString = prefs.getString(key);
+      if (jsonString != null) {
+        return json.decode(jsonString) as Map<String, dynamic>;
+      }
+      return null;
+    } on Exception catch (e) {
+      if (kDebugMode) {
+        print('[StorageService] Failed to load analysis session: $e');
+      }
+      return null;
+    }
+  }
+
+  /// [saveUserBookmarks] - Save user bookmarks for specific analysis points
+  Future<bool> saveUserBookmarks(
+    String profileId,
+    List<Map<String, dynamic>> bookmarks,
+  ) async {
+    try {
+      final key = 'bookmarks_$profileId';
+      final jsonString = json.encode(bookmarks);
+      return await prefs.setString(key, jsonString);
+    } catch (e) {
+      throw StorageException('Failed to save user bookmarks: $e');
+    }
+  }
+
+  /// [loadUserBookmarks] - Load user bookmarks
+  List<Map<String, dynamic>> loadUserBookmarks(String profileId) {
+    try {
+      final key = 'bookmarks_$profileId';
+      final jsonString = prefs.getString(key);
+      if (jsonString != null) {
+        final decoded = json.decode(jsonString) as List<dynamic>;
+        return decoded.cast<Map<String, dynamic>>();
+      }
+      return [];
+    } on Exception catch (e) {
+      if (kDebugMode) {
+        print('[StorageService] Failed to load user bookmarks: $e');
+      }
+      return [];
+    }
+  }
+
+  /// [clearAnalysisData] - Clear all analysis data for a profile
+  Future<bool> clearAnalysisData(String profileId) async {
+    try {
+      final allKeys = prefs.getKeys();
+      final keysToRemove = allKeys
+          .where(
+            (key) =>
+                key.startsWith('star_analysis_$profileId') ||
+                key.startsWith('palace_analysis_$profileId') ||
+                key.startsWith('analysis_session_$profileId') ||
+                key.startsWith('bookmarks_$profileId'),
+          )
+          .toList();
+
+      var allSuccessful = true;
+      for (final key in keysToRemove) {
+        final success = await prefs.remove(key);
+        if (!success) allSuccessful = false;
+      }
+
+      return allSuccessful;
+    } catch (e) {
+      throw StorageException('Failed to clear analysis data: $e');
+    }
+  }
+
   /// Get default calculation preferences
   Map<String, dynamic> _getDefaultCalculationPreferences() {
     return {
@@ -437,6 +598,10 @@ class StorageService {
       'prefer_traditional_chinese': false,
       'auto_save_calculations': true,
       'show_advanced_analysis': false,
+      'enable_detailed_star_analysis': true,
+      'auto_save_palace_analysis': true,
+      'show_transformation_effects': true,
+      'enable_fortune_timing': true,
     };
   }
 }
