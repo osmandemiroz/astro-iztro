@@ -8,72 +8,54 @@ import 'package:astro_iztro/app/modules/home/home_binding.dart';
 import 'package:astro_iztro/app/modules/home/home_view.dart';
 import 'package:astro_iztro/app/modules/input/input_binding.dart';
 import 'package:astro_iztro/app/modules/input/input_view.dart';
+import 'package:astro_iztro/app/modules/palace_detail/palace_detail_binding.dart';
+import 'package:astro_iztro/app/modules/palace_detail/palace_detail_view.dart';
 import 'package:astro_iztro/app/modules/settings/settings_binding.dart';
 import 'package:astro_iztro/app/modules/settings/settings_view.dart';
+import 'package:astro_iztro/app/routes/app_routes.dart';
 import 'package:get/get.dart';
 
-part 'app_routes.dart';
+/// [AppPages] - Application page routes and bindings
+abstract class AppPages {
+  static const String INITIAL = AppRoutes.home;
 
-/// [AppPages] - Navigation configuration for the entire app
-/// Defines all routes and their corresponding pages with bindings
-class AppPages {
-  AppPages._();
-
-  static const String INITIAL = Routes.HOME;
-
-  static final List<GetPage<dynamic>> routes = [
-    // Home screen - Main dashboard
-    GetPage(
-      name: _Paths.HOME,
+  static final routes = [
+    GetPage<dynamic>(
+      name: AppRoutes.home,
       page: () => const HomeView(),
       binding: HomeBinding(),
-      transition: Transition.fade,
-      transitionDuration: const Duration(milliseconds: 300),
     ),
-
-    // User input screen - Birth data entry
-    GetPage(
-      name: _Paths.INPUT,
+    GetPage<dynamic>(
+      name: AppRoutes.input,
       page: () => const InputView(),
       binding: InputBinding(),
-      transition: Transition.rightToLeft,
-      transitionDuration: const Duration(milliseconds: 300),
     ),
-
-    // Purple Star chart screen
-    GetPage(
-      name: _Paths.CHART,
+    GetPage<dynamic>(
+      name: AppRoutes.chart,
       page: () => const ChartView(),
       binding: ChartBinding(),
-      transition: Transition.rightToLeft,
-      transitionDuration: const Duration(milliseconds: 300),
     ),
-
-    // BaZi calculation screen
-    GetPage(
-      name: _Paths.BAZI,
+    GetPage<dynamic>(
+      name: AppRoutes.bazi,
       page: () => const BaZiView(),
       binding: BaZiBinding(),
-      transition: Transition.rightToLeft,
-      transitionDuration: const Duration(milliseconds: 300),
     ),
-
-    // Detailed analysis screen
-    GetPage(
-      name: _Paths.ANALYSIS,
+    GetPage<dynamic>(
+      name: AppRoutes.analysis,
       page: () => const AnalysisView(),
       binding: AnalysisBinding(),
-      transition: Transition.rightToLeft,
-      transitionDuration: const Duration(milliseconds: 300),
     ),
-
-    // Settings screen
-    GetPage(
-      name: _Paths.SETTINGS,
+    GetPage<dynamic>(
+      name: AppRoutes.settings,
       page: () => const SettingsView(),
       binding: SettingsBinding(),
+    ),
+    GetPage<dynamic>(
+      name: AppRoutes.palaceDetail,
+      page: () => const PalaceDetailView(),
+      binding: PalaceDetailBinding(),
       transition: Transition.rightToLeft,
-      transitionDuration: const Duration(milliseconds: 300),
+      transitionDuration: const Duration(milliseconds: 250),
     ),
   ];
 }

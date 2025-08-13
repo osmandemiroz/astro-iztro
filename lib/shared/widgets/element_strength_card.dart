@@ -3,179 +3,240 @@ import 'package:astro_iztro/core/constants/colors.dart';
 import 'package:astro_iztro/shared/themes/app_theme.dart';
 import 'package:flutter/material.dart';
 
-/// [ElementStrengthCard] - Beautiful card displaying element strength
-/// Shows element name, count, and strength with visual indicators
+/// [ElementStrengthCard] - Beautiful card displaying element strength analysis
+/// Shows element distribution, balance, and recommendations
 class ElementStrengthCard extends StatelessWidget {
   const ElementStrengthCard({
-    required this.element,
-    required this.count,
-    required this.maxCount,
+    required this.elementCounts,
+    required this.strongestElement,
+    required this.weakestElement,
+    required this.balanceScore,
     required this.showChineseNames,
-    required this.description,
     super.key,
   });
-  final String element;
-  final int count;
-  final int maxCount;
+
+  final Map<String, int> elementCounts;
+  final String strongestElement;
+  final String weakestElement;
+  final int balanceScore;
   final bool showChineseNames;
-  final String description;
 
   @override
   Widget build(BuildContext context) {
-    final strength = count / maxCount;
-
     return Card(
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              AppColors.white,
-              _getElementColor().withValues(alpha: 0.1),
-            ],
-          ),
-          borderRadius: BorderRadius.circular(AppConstants.borderRadius),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(AppConstants.defaultPadding),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Element name and count
-              Row(
-                children: [
-                  Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: _getElementColor(),
-                      shape: BoxShape.circle,
-                      border: Border.all(color: AppColors.white, width: 2),
-                    ),
-                    child: Center(
-                      child: Text(
-                        element,
-                        style: AppTheme.headingSmall.copyWith(
-                          color: AppColors.white,
-                          fontFamily: AppConstants.chineseFont,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: AppConstants.smallPadding),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          _getElementName(),
-                          style: AppTheme.bodyMedium.copyWith(
-                            fontWeight: FontWeight.w600,
-                            color: _getElementColor(),
-                          ),
-                        ),
-                        Text(
-                          'Count: $count',
-                          style: AppTheme.caption.copyWith(
-                            color: AppColors.grey600,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 2,
-                    ),
-                    decoration: BoxDecoration(
-                      color: _getElementColor().withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(4),
-                      border: Border.all(
-                        color: _getElementColor().withValues(alpha: 0.3),
-                      ),
-                    ),
-                    child: Text(
-                      _getStrengthText(strength),
-                      style: AppTheme.caption.copyWith(
-                        color: _getElementColor(),
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: AppConstants.smallPadding),
-
-              // Description
-              Text(
-                description,
-                style: AppTheme.bodyMedium.copyWith(
-                  color: AppColors.grey700,
+      child: Padding(
+        padding: const EdgeInsets.all(AppConstants.defaultPadding),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                const Icon(
+                  Icons.water_drop_outlined,
+                  color: AppColors.primaryGold,
                 ),
+                const SizedBox(width: AppConstants.smallPadding),
+                Text(
+                  showChineseNames ? '五行分析' : 'Element Analysis',
+                  style: AppTheme.headingMedium.copyWith(
+                    color: AppColors.primaryPurple,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: AppConstants.defaultPadding),
+            ...elementCounts.entries.map(
+              (entry) => _buildElementBar(
+                entry.key,
+                entry.value,
+                elementCounts.values.reduce((a, b) => a > b ? a : b),
               ),
-
-              const SizedBox(height: AppConstants.smallPadding),
-
-              // Strength bar
-              LinearProgressIndicator(
-                value: strength,
-                backgroundColor: AppColors.grey200,
-                valueColor: AlwaysStoppedAnimation<Color>(_getElementColor()),
-                minHeight: 4,
-              ),
-            ],
-          ),
+            ),
+            const SizedBox(height: AppConstants.defaultPadding),
+            _buildElementSummary(),
+          ],
         ),
       ),
     );
   }
 
-  Color _getElementColor() {
-    switch (element) {
-      case '木':
-        return Colors.green;
-      case '火':
-        return Colors.red;
-      case '土':
-        return Colors.brown;
-      case '金':
-        return Colors.grey.shade600;
-      case '水':
-        return Colors.blue;
-      default:
-        return AppColors.grey500;
-    }
+  Widget _buildElementBar(String element, int count, int maxCount) {
+    final strength = count / maxCount;
+    final color = _getElementColor(element, strength);
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        children: [
+          SizedBox(
+            width: 40,
+            child: Text(
+              showChineseNames ? _getElementChinese(element) : element,
+              style: AppTheme.bodyMedium.copyWith(
+                fontFamily: showChineseNames
+                    ? AppConstants.chineseFont
+                    : AppConstants.primaryFont,
+                fontWeight: FontWeight.bold,
+                color: color,
+              ),
+            ),
+          ),
+          Expanded(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(4),
+              child: LinearProgressIndicator(
+                value: strength,
+                backgroundColor: AppColors.grey200,
+                valueColor: AlwaysStoppedAnimation<Color>(color),
+                minHeight: 8,
+              ),
+            ),
+          ),
+          const SizedBox(width: 8),
+          SizedBox(
+            width: 30,
+            child: Text(
+              count.toString(),
+              style: AppTheme.bodyMedium.copyWith(
+                fontWeight: FontWeight.w600,
+              ),
+              textAlign: TextAlign.right,
+            ),
+          ),
+          const SizedBox(width: 8),
+          Text(
+            _getStrengthText(strength),
+            style: AppTheme.caption.copyWith(color: color),
+          ),
+        ],
+      ),
+    );
   }
 
-  String _getElementName() {
-    if (!showChineseNames) {
-      switch (element) {
-        case '木':
-          return 'Wood';
-        case '火':
-          return 'Fire';
-        case '土':
-          return 'Earth';
-        case '金':
-          return 'Metal';
-        case '水':
-          return 'Water';
-        default:
-          return 'Unknown';
-      }
-    }
-    return element;
+  Widget _buildElementSummary() {
+    return Container(
+      padding: const EdgeInsets.all(AppConstants.smallPadding),
+      decoration: BoxDecoration(
+        color: AppColors.ultraLightPurple.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: AppColors.primaryPurple.withValues(alpha: 0.2),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                showChineseNames ? '最強五行：' : 'Strongest: ',
+                style: AppTheme.bodyMedium.copyWith(
+                  color: AppColors.grey700,
+                ),
+              ),
+              Text(
+                showChineseNames
+                    ? _getElementChinese(strongestElement)
+                    : strongestElement,
+                style: AppTheme.bodyMedium.copyWith(
+                  color: Colors.green,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: showChineseNames
+                      ? AppConstants.chineseFont
+                      : AppConstants.primaryFont,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                showChineseNames ? '最弱五行：' : 'Weakest: ',
+                style: AppTheme.bodyMedium.copyWith(
+                  color: AppColors.grey700,
+                ),
+              ),
+              Text(
+                showChineseNames
+                    ? _getElementChinese(weakestElement)
+                    : weakestElement,
+                style: AppTheme.bodyMedium.copyWith(
+                  color: Colors.red,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: showChineseNames
+                      ? AppConstants.chineseFont
+                      : AppConstants.primaryFont,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                showChineseNames ? '平衡指數：' : 'Balance: ',
+                style: AppTheme.bodyMedium.copyWith(
+                  color: AppColors.grey700,
+                ),
+              ),
+              Text(
+                '$balanceScore%',
+                style: AppTheme.bodyMedium.copyWith(
+                  color: _getBalanceColor(balanceScore),
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Color _getElementColor(String element, double strength) {
+    if (strength >= 0.8) return Colors.green;
+    if (strength >= 0.6) return Colors.lightGreen;
+    if (strength >= 0.4) return Colors.orange;
+    if (strength >= 0.2) return Colors.red;
+    return Colors.grey;
   }
 
   String _getStrengthText(double strength) {
-    if (strength >= 0.8) return 'Very Strong';
-    if (strength >= 0.6) return 'Strong';
-    if (strength >= 0.4) return 'Moderate';
-    if (strength >= 0.2) return 'Weak';
-    return 'Very Weak';
+    if (strength >= 0.8) {
+      return showChineseNames ? '非常強' : 'Very Strong';
+    }
+    if (strength >= 0.6) {
+      return showChineseNames ? '強' : 'Strong';
+    }
+    if (strength >= 0.4) {
+      return showChineseNames ? '中等' : 'Moderate';
+    }
+    if (strength >= 0.2) {
+      return showChineseNames ? '弱' : 'Weak';
+    }
+    return showChineseNames ? '非常弱' : 'Very Weak';
+  }
+
+  Color _getBalanceColor(int score) {
+    if (score >= 80) return Colors.green;
+    if (score >= 60) return Colors.lightGreen;
+    if (score >= 40) return Colors.orange;
+    if (score >= 20) return Colors.red;
+    return Colors.grey;
+  }
+
+  String _getElementChinese(String element) {
+    final elements = {
+      'Wood': '木',
+      'Fire': '火',
+      'Earth': '土',
+      'Metal': '金',
+      'Water': '水',
+    };
+    return elements[element] ?? element;
   }
 }

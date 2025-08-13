@@ -4,36 +4,31 @@ part of 'analysis_view.dart';
 extension AnalysisViewPart3 on AnalysisView {
   Widget _buildPalaceInfluences() {
     final chartData = controller.chartData.value!;
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(AppConstants.defaultPadding),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Palace Influences',
-              style: AppTheme.headingMedium.copyWith(
-                color: AppColors.primaryPurple,
-              ),
-            ),
-            const SizedBox(height: AppConstants.defaultPadding),
-            ...chartData.palaces.map(
-              (palace) => Column(
-                children: [
-                  PalaceInfluenceCard(
-                    palace: palace,
-                    stars: controller.chartData.value!.getStarsInPalace(
-                      palace.name,
-                    ),
-                    showChineseNames: controller.showChineseNames.value,
-                  ),
-                  const SizedBox(height: AppConstants.smallPadding),
-                ],
-              ),
-            ),
-          ],
+    return Column(
+      children: [
+        ...chartData.palaces.map(
+          (palace) => PalaceInfluenceCard(
+            palace: palace,
+            stars: chartData.getStarsInPalace(palace.name),
+            showChineseNames: controller.showChineseNames.value,
+            onTap:
+                ({
+                  required PalaceData palace,
+                  required List<StarData> stars,
+                  required bool showChineseNames,
+                }) {
+                  Get.toNamed<void>(
+                    '/palace_detail',
+                    arguments: {
+                      'palace': palace,
+                      'stars': stars,
+                      'showChineseNames': showChineseNames,
+                    },
+                  );
+                },
+          ),
         ),
-      ),
+      ],
     );
   }
 
