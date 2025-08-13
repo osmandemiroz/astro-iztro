@@ -1,4 +1,5 @@
 import 'package:astro_iztro/core/services/iztro_service.dart';
+import 'package:astro_iztro/core/services/performance_service.dart';
 import 'package:astro_iztro/core/services/storage_service.dart';
 import 'package:get/get.dart';
 
@@ -21,6 +22,11 @@ class InitialBinding extends Bindings {
       // IztroService - wrapper for dart_iztro calculations
       ..put<IztroService>(
         IztroService(),
+        permanent: true, // Keep alive throughout app lifecycle
+      )
+      // PerformanceService - app performance optimization
+      ..put<PerformanceService>(
+        PerformanceService(),
         permanent: true, // Keep alive throughout app lifecycle
       );
   }

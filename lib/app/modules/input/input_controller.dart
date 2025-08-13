@@ -1,6 +1,8 @@
 import 'package:astro_iztro/core/models/user_profile.dart';
 import 'package:astro_iztro/core/services/iztro_service.dart';
 import 'package:astro_iztro/core/services/storage_service.dart';
+import 'package:astro_iztro/core/services/validation_service.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -66,9 +68,10 @@ class InputController extends GetxController {
     }
   }
 
-  /// Save user profile
+  /// Save user profile with enhanced validation
   Future<void> saveProfile() async {
-    if (!formKey.currentState!.validate()) return;
+    // Use comprehensive validation
+    if (!await validateForm()) return;
 
     try {
       isLoading.value = true;
@@ -76,7 +79,7 @@ class InputController extends GetxController {
       final profile = UserProfile(
         name: nameController.text.trim().isEmpty
             ? null
-            : nameController.text.trim(),
+            : ValidationService.sanitizeInput(nameController.text.trim()),
         birthDate: selectedDate.value,
         birthHour: selectedHour.value,
         birthMinute: selectedMinute.value,
@@ -85,7 +88,7 @@ class InputController extends GetxController {
         longitude: double.parse(longitudeController.text),
         locationName: locationController.text.trim().isEmpty
             ? null
-            : locationController.text.trim(),
+            : ValidationService.sanitizeInput(locationController.text.trim()),
         isLunarCalendar: isLunarCalendar.value,
         hasLeapMonth: hasLeapMonth.value,
         languageCode: selectedLanguage.value,
@@ -99,6 +102,22 @@ class InputController extends GetxController {
 
       await _storageService.saveUserProfile(profile);
 
+      // Save to recent calculations
+      final recentCalculations = _storageService.loadRecentCalculations()
+        ..insert(0, {
+          'profile_name': profile.name ?? 'Unknown',
+          'birth_date': profile.birthDate.toIso8601String(),
+          'location': profile.locationName ?? 'Unknown',
+          'created_at': DateTime.now().toIso8601String(),
+        });
+
+      // Keep only last 10 calculations
+      if (recentCalculations.length > 10) {
+        recentCalculations.removeRange(10, recentCalculations.length);
+      }
+
+      await _storageService.saveRecentCalculations(recentCalculations);
+
       Get
         ..snackbar(
           'Success',
@@ -106,15 +125,99 @@ class InputController extends GetxController {
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Colors.green,
           colorText: Colors.white,
+          duration: const Duration(seconds: 2),
         )
         // Go back to home
         ..back(result: profile);
     } on Exception catch (e) {
+      if (kDebugMode) {
+        print('[InputController] Save error: $e');
+      }
       Get.snackbar(
         'Error',
         'Failed to save profile: $e',
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Colors.red,
+        colorText: Colors.white,
+        duration: const Duration(seconds: 4),
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  /// Comprehensive form validation using ValidationService
+  Future<bool> validateForm() async {
+    if (!formKey.currentState!.validate()) return false;
+
+    final results = ValidationService.validateUserProfileComplete(
+      name: nameController.text.trim().isEmpty
+          ? null
+          : nameController.text.trim(),
+      birthDate: selectedDate.value,
+      birthTime: DateTime(
+        selectedDate.value.year,
+        selectedDate.value.month,
+        selectedDate.value.day,
+        selectedHour.value,
+        selectedMinute.value,
+      ),
+      location: locationController.text.trim().isEmpty
+          ? null
+          : locationController.text.trim(),
+      latitude: double.tryParse(latitudeController.text),
+      longitude: double.tryParse(longitudeController.text),
+      gender: selectedGender.value,
+      calendarType: isLunarCalendar.value ? 'lunar' : 'solar',
+      languageCode: selectedLanguage.value,
+    );
+
+    if (ValidationService.hasErrors(results)) {
+      final errors = ValidationService.getErrorMessages(results);
+      Get.snackbar(
+        'Validation Error',
+        errors.first,
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+      return false;
+    }
+
+    if (ValidationService.hasWarnings(results)) {
+      final warnings = ValidationService.getWarningMessages(results);
+      if (kDebugMode) {
+        print('[InputController] Warnings: ${warnings.join(', ')}');
+      }
+    }
+
+    return true;
+  }
+
+  /// Smart location detection and auto-fill
+  Future<void> detectLocation() async {
+    try {
+      isLoading.value = true;
+
+      // TODO: Implement location detection
+      // For now, set a default location
+      locationController.text = 'New York, NY';
+      latitudeController.text = '40.7128';
+      longitudeController.text = '-74.0060';
+
+      Get.snackbar(
+        'Location Set',
+        'Location set to New York, NY',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.blue,
+        colorText: Colors.white,
+      );
+    } on Exception catch (e) {
+      Get.snackbar(
+        'Location Error',
+        'Failed to detect location: $e',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.orange,
         colorText: Colors.white,
       );
     } finally {
@@ -122,10 +225,26 @@ class InputController extends GetxController {
     }
   }
 
-  /// Validate form fields
+  /// Reset form to defaults
+  void resetForm() {
+    nameController.clear();
+    latitudeController.clear();
+    longitudeController.clear();
+    locationController.clear();
+    selectedDate.value = DateTime.now();
+    selectedHour.value = 12;
+    selectedMinute.value = 0;
+    selectedGender.value = 'male';
+    isLunarCalendar.value = false;
+    hasLeapMonth.value = false;
+    selectedLanguage.value = 'en';
+    useTrueSolarTime.value = true;
+  }
+
+  /// Validate form fields (for individual field validation)
   String? validateName(String? value) {
-    // Name is optional
-    return null;
+    final result = ValidationService.validateName(value);
+    return result.hasError ? result.message : null;
   }
 
   String? validateLatitude(String? value) {
@@ -138,11 +257,8 @@ class InputController extends GetxController {
       return 'Invalid latitude format';
     }
 
-    if (lat < -90 || lat > 90) {
-      return 'Latitude must be between -90 and 90';
-    }
-
-    return null;
+    final result = ValidationService.validateCoordinates(lat, 0);
+    return result.hasError ? 'Invalid latitude' : null;
   }
 
   String? validateLongitude(String? value) {
@@ -155,10 +271,27 @@ class InputController extends GetxController {
       return 'Invalid longitude format';
     }
 
-    if (lng < -180 || lng > 180) {
-      return 'Longitude must be between -180 and 180';
-    }
+    final result = ValidationService.validateCoordinates(0, lng);
+    return result.hasError ? 'Invalid longitude' : null;
+  }
 
-    return null;
+  String? validateLocation(String? value) {
+    final result = ValidationService.validateLocation(value);
+    return result.hasError ? result.message : null;
+  }
+
+  /// Auto-suggest time based on location (approximate sunrise time)
+  void suggestOptimalTime() {
+    // Set time to approximate sunrise (6:00 AM) for better chart quality
+    selectedHour.value = 6;
+    selectedMinute.value = 0;
+
+    Get.snackbar(
+      'Time Suggestion',
+      'Set to 6:00 AM (approximate sunrise)',
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: Colors.amber,
+      colorText: Colors.black,
+    );
   }
 }
