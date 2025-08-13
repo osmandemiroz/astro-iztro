@@ -1,6 +1,8 @@
 import 'package:astro_iztro/core/models/user_profile.dart';
 import 'package:astro_iztro/core/services/iztro_service.dart';
 import 'package:astro_iztro/core/services/storage_service.dart';
+import 'package:astro_iztro/core/services/validation_service.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -160,5 +162,90 @@ class InputController extends GetxController {
     }
 
     return null;
+  }
+
+  /// [validateCompleteForm] - Validate complete form using ValidationService
+  bool validateCompleteForm() {
+    final results = ValidationService.validateUserProfileComplete(
+      name: nameController.text,
+      birthDate: selectedDate.value,
+      birthTime: DateTime(
+        selectedDate.value.year,
+        selectedDate.value.month,
+        selectedDate.value.day,
+        selectedHour.value,
+        selectedMinute.value,
+      ),
+      location: locationController.text,
+      latitude: double.tryParse(latitudeController.text),
+      longitude: double.tryParse(longitudeController.text),
+      gender: selectedGender.value,
+      calendarType: isLunarCalendar.value ? 'lunar' : 'solar',
+      languageCode: selectedLanguage.value,
+      timezone: DateTime.now().timeZoneOffset.inHours.toString(),
+    );
+
+    if (ValidationService.hasErrors(results)) {
+      final errorMessages = ValidationService.getErrorMessages(results);
+      Get.snackbar(
+        'Validation Error',
+        errorMessages.first,
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+      return false;
+    }
+
+    if (ValidationService.hasWarnings(results)) {
+      final warningMessages = ValidationService.getWarningMessages(results);
+      if (kDebugMode) {
+        print('[InputController] Validation warnings: $warningMessages');
+      }
+    }
+
+    return true;
+  }
+
+  /// [sanitizeInputs] - Sanitize all text inputs
+  void sanitizeInputs() {
+    nameController.text = ValidationService.sanitizeInput(nameController.text);
+    locationController.text = ValidationService.sanitizeInput(
+      locationController.text,
+    );
+  }
+
+  /// [resetForm] - Reset form to initial state
+  void resetForm() {
+    nameController.clear();
+    latitudeController.clear();
+    longitudeController.clear();
+    locationController.clear();
+    selectedDate.value = DateTime.now();
+    selectedHour.value = 12;
+    selectedMinute.value = 0;
+    selectedGender.value = 'male';
+    isLunarCalendar.value = false;
+    hasLeapMonth.value = false;
+    selectedLanguage.value = 'en';
+    useTrueSolarTime.value = true;
+  }
+
+  /// [loadProfileData] - Load existing profile data into form
+  void loadProfileData(UserProfile profile) {
+    nameController.text = profile.name ?? '';
+    selectedDate.value = profile.birthDate;
+    // Extract hour and minute from birthDate since birthTime doesn't exist
+    selectedHour.value = profile.birthDate.hour;
+    selectedMinute.value = profile.birthDate.minute;
+    selectedGender.value = profile.gender;
+    latitudeController.text = profile.latitude.toString();
+    longitudeController.text = profile.longitude.toString();
+    locationController.text = profile.locationName ?? '';
+    // Use solar as default since calendarType doesn't exist
+    isLunarCalendar.value = false;
+    hasLeapMonth.value = profile.hasLeapMonth;
+    selectedLanguage.value = profile.languageCode;
+    useTrueSolarTime.value = profile.useTrueSolarTime;
   }
 }

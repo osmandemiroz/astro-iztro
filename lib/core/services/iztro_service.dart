@@ -19,8 +19,10 @@ class IztroService {
     if (_isInitialized) return;
 
     try {
-      // TODO: Initialize dart_iztro translation service
+      // TODO: Initialize dart_iztro translation service when package is ready
+      // Example implementation:
       // await IztroTranslationService.initialize();
+      // This will enable proper Chinese/English translations for stars and palaces
       _isInitialized = true;
     } on Exception {
       // Fall back to mock data if initialization fails
