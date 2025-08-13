@@ -1,27 +1,16 @@
-import 'package:astro_iztro/core/services/iztro_service.dart';
-import 'package:astro_iztro/core/services/storage_service.dart';
 import 'package:get/get.dart';
 
 /// [InitialBinding] - Initial dependency injection setup
-/// Initializes core services that need to be available throughout the app
+/// Core services are now initialized in main.dart to prevent initialization errors
+/// This binding can be used for additional route-specific dependencies
 class InitialBinding extends Bindings {
   @override
   void dependencies() {
-    // [InitialBinding] - Setting up core services for the entire app lifecycle
-    // StorageService - handles all local data persistence
-    Get
-      ..putAsync<StorageService>(
-        () async {
-          final service = StorageService();
-          await service.initialize();
-          return service;
-        },
-        permanent: true, // Keep alive throughout app lifecycle
-      )
-      // IztroService - wrapper for dart_iztro calculations
-      ..put<IztroService>(
-        IztroService(),
-        permanent: true, // Keep alive throughout app lifecycle
-      );
+    // [InitialBinding] - Core services (StorageService, IztroService) are now
+    // initialized in main.dart before the app starts to prevent "service not found" errors
+    // This ensures all services are available immediately when the app loads
+
+    // Additional route-specific dependencies can be added here if needed
+    // For example: controllers that should be available app-wide
   }
 }

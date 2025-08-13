@@ -14,12 +14,15 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Modern gradient background for visual appeal
+      // Modern gradient background for visual appeal - Edge-to-edge design
       body: Container(
         decoration: const BoxDecoration(
           gradient: AppColors.primaryGradient,
         ),
+        // [HomeView] - Using custom SafeArea for Apple-style edge-to-edge design
+        // This allows the gradient to extend to the very top while protecting content
         child: SafeArea(
+          top: false, // Allow gradient to extend to status bar
           child: Obx(_buildBody),
         ),
       ),
@@ -51,34 +54,61 @@ class HomeView extends GetView<HomeController> {
   }
 
   /// [buildAppBar] - Custom app bar with user greeting
+  /// Edge-to-edge design with proper status bar spacing
   Widget _buildAppBar() {
     return SliverAppBar(
-      expandedHeight: 120,
+      expandedHeight: 140, // Increased to account for status bar
       pinned: true,
       backgroundColor: Colors.transparent,
       elevation: 0,
-      flexibleSpace: FlexibleSpaceBar(
-        title: Text(
-          'Astro Iztro',
-          style: AppTheme.headingMedium.copyWith(
-            color: AppColors.white,
-            fontFamily: AppConstants.decorativeFont,
-          ),
-        ),
-        background: Container(
-          decoration: const BoxDecoration(
-            gradient: AppColors.primaryGradient,
-          ),
-          child: _buildHeaderContent(),
-        ),
+      stretch: true, // Apple-style stretch effect
+      flexibleSpace: LayoutBuilder(
+        builder: (context, constraints) {
+          // Get status bar height for proper spacing
+          final statusBarHeight = MediaQuery.of(context).padding.top;
+
+          return FlexibleSpaceBar(
+            title: Padding(
+              padding: const EdgeInsets.only(
+                bottom: AppConstants.defaultPadding,
+              ),
+              child: Text(
+                'ASTRO IZTRO',
+                style: AppTheme.headingMedium.copyWith(
+                  color: AppColors.white,
+                  fontFamily: AppConstants.decorativeFont,
+                  fontWeight: FontWeight.w300,
+                  letterSpacing: 2, // Apple-style letter spacing
+                ),
+              ),
+            ),
+            titlePadding: EdgeInsets.only(
+              left: 16,
+              bottom: AppConstants.largePadding,
+              top: statusBarHeight + 8, // Account for status bar
+            ),
+            background: Container(
+              decoration: const BoxDecoration(
+                gradient: AppColors.primaryGradient,
+              ),
+              child: _buildHeaderContent(),
+            ),
+          );
+        },
       ),
       actions: [
-        // Settings button
-        IconButton(
-          onPressed: controller.navigateToSettings,
-          icon: const Icon(
-            Icons.settings_outlined,
-            color: AppColors.white,
+        // Settings button with proper status bar spacing
+        Padding(
+          padding: EdgeInsets.only(
+            top: MediaQuery.of(Get.context!).padding.top,
+          ),
+          child: IconButton(
+            onPressed: controller.navigateToSettings,
+            icon: const Icon(
+              Icons.settings_outlined,
+              color: AppColors.white,
+              size: 24,
+            ),
           ),
         ),
       ],
@@ -86,49 +116,63 @@ class HomeView extends GetView<HomeController> {
   }
 
   /// [buildHeaderContent] - Header with user greeting and quick stats
+  /// Properly positioned to avoid status bar overlap
   Widget _buildHeaderContent() {
-    return Padding(
-      padding: const EdgeInsets.all(AppConstants.defaultPadding),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Obx(() {
-            final profile = controller.currentProfile.value;
-            return Text(
-              profile != null
-                  ? 'Welcome back, ${profile.name ?? 'User'}!'
-                  : 'Welcome to Astro Iztro!',
-              style: AppTheme.bodyLarge.copyWith(
-                color: AppColors.white,
-                fontWeight: FontWeight.w500,
-              ),
-            );
-          }),
-          const SizedBox(height: AppConstants.smallPadding),
-          Row(
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // Get status bar height for proper content positioning
+        final statusBarHeight = MediaQuery.of(context).padding.top;
+
+        return Padding(
+          padding: EdgeInsets.only(
+            left: AppConstants.defaultPadding,
+            right: AppConstants.defaultPadding,
+            bottom: AppConstants.smallPadding,
+            // Add extra top padding to push content below status bar and title
+            top: statusBarHeight + 10, // Status bar + title space
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              _buildQuickStat(
-                icon: Icons.people_outline,
-                label: 'Profiles',
-                value: controller.savedProfiles.length.toString(),
-              ),
-              const SizedBox(width: AppConstants.defaultPadding),
-              _buildQuickStat(
-                icon: Icons.history,
-                label: 'Recent',
-                value: controller.recentCalculations.length.toString(),
-              ),
-              const SizedBox(width: AppConstants.defaultPadding),
-              _buildQuickStat(
-                icon: Icons.favorite_outline,
-                label: 'Favorites',
-                value: controller.favoriteCharts.length.toString(),
+              Obx(() {
+                final profile = controller.currentProfile.value;
+                return Text(
+                  profile != null
+                      ? 'Welcome back, ${profile.name ?? 'User'}!'
+                      : 'Welcome to Astro Iztro!',
+                  style: AppTheme.bodyLarge.copyWith(
+                    color: AppColors.white,
+                    fontWeight: FontWeight.w800,
+                  ),
+                );
+              }),
+              const SizedBox(height: 2),
+              Row(
+                children: [
+                  _buildQuickStat(
+                    icon: Icons.people_outline,
+                    label: 'Profiles',
+                    value: controller.savedProfiles.length.toString(),
+                  ),
+                  const SizedBox(width: AppConstants.defaultPadding),
+                  _buildQuickStat(
+                    icon: Icons.history,
+                    label: 'Recent',
+                    value: controller.recentCalculations.length.toString(),
+                  ),
+                  const SizedBox(width: AppConstants.defaultPadding),
+                  _buildQuickStat(
+                    icon: Icons.favorite_outline,
+                    label: 'Favorites',
+                    value: controller.favoriteCharts.length.toString(),
+                  ),
+                ],
               ),
             ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -143,7 +187,7 @@ class HomeView extends GetView<HomeController> {
       children: [
         Icon(
           icon,
-          size: 16,
+          size: 12,
           color: AppColors.white.withValues(alpha: 0.8),
         ),
         const SizedBox(width: 4),
