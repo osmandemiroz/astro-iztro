@@ -1,6 +1,7 @@
 /// [PurpleStarEngine] - Native Purple Star Astrology calculation engine
 /// Implements authentic Purple Star calculations without external dependencies
 /// Production-ready implementation for reliable astrological computations
+library;
 
 import 'package:flutter/foundation.dart' show kDebugMode;
 
@@ -387,7 +388,7 @@ class PurpleStarEngine {
       },
     ];
 
-    for (int i = 0; i < 12; i++) {
+    for (var i = 0; i < 12; i++) {
       final palace = palaceInfo[i];
       final starsInPalace = stars
           .where((star) => star['position'] == i)
@@ -405,7 +406,7 @@ class PurpleStarEngine {
             ? starsInPalace[0]['brightness']
             : '平',
         'analysis': _generatePalaceAnalysis(
-          palace['name']! as String,
+          palace['name']!,
           starsInPalace,
         ),
       });
@@ -475,16 +476,12 @@ class PurpleStarEngine {
     switch (palaceName) {
       case 'Life':
         recommendations.add('Focus on personal development and self-awareness');
-        break;
       case 'Career':
         recommendations.add('Pursue leadership opportunities in your field');
-        break;
       case 'Wealth':
         recommendations.add('Consider long-term financial planning');
-        break;
       case 'Health':
         recommendations.add('Maintain regular health checkups');
-        break;
       default:
         recommendations.add(
           'Pay attention to this life area for balanced development',
@@ -591,7 +588,7 @@ class PurpleStarEngine {
     final isMale = gender.toLowerCase() == 'male';
     final cycles = <Map<String, dynamic>>[];
 
-    for (int decade = 0; decade < 8; decade++) {
+    for (var decade = 0; decade < 8; decade++) {
       final startAge = decade * 10;
       final endAge = startAge + 9;
       final palaceIndex = isMale ? decade % 12 : (decade + 6) % 12;

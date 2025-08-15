@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_dynamic_calls, unused_field
+// ignore_for_file: avoid_dynamic_calls, unused_field, document_ignores, use_is_even_rather_than_modulo
 
 import 'package:astro_iztro/core/engines/purple_star_engine.dart';
 import 'package:astro_iztro/core/models/bazi_data.dart';
@@ -68,7 +68,7 @@ class IztroService {
       }
 
       // Calculate adjusted birth time
-      var adjustedDateTime = DateTime(
+      final adjustedDateTime = DateTime(
         profile.birthDate.year,
         profile.birthDate.month,
         profile.birthDate.day,
@@ -360,14 +360,18 @@ class IztroService {
     if ((month == 7 && day >= 23) || (month == 8 && day <= 22)) return 'Leo';
     if ((month == 8 && day >= 23) || (month == 9 && day <= 22)) return 'Virgo';
     if ((month == 9 && day >= 23) || (month == 10 && day <= 22)) return 'Libra';
-    if ((month == 10 && day >= 23) || (month == 11 && day <= 21))
+    if ((month == 10 && day >= 23) || (month == 11 && day <= 21)) {
       return 'Scorpio';
-    if ((month == 11 && day >= 22) || (month == 12 && day <= 21))
+    }
+    if ((month == 11 && day >= 22) || (month == 12 && day <= 21)) {
       return 'Sagittarius';
-    if ((month == 12 && day >= 22) || (month == 1 && day <= 19))
+    }
+    if ((month == 12 && day >= 22) || (month == 1 && day <= 19)) {
       return 'Capricorn';
-    if ((month == 1 && day >= 20) || (month == 2 && day <= 18))
+    }
+    if ((month == 1 && day >= 20) || (month == 2 && day <= 18)) {
       return 'Aquarius';
+    }
     return 'Pisces';
   }
 
