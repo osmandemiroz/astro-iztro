@@ -6,7 +6,7 @@ environment:
 description: A comprehensive Purple Star Astrology and BaZi calculation app
 dependencies:
   cupertino_icons: ^1.0.8
-  dart_iztro: ^2.5.3
+  # dart_iztro: ^2.5.3  # Removed due to library bug - using native implementation
   flutter:
     sdk: flutter
   flutter_datetime_picker_plus: ^2.1.0
