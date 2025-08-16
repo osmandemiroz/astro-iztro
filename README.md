@@ -32,12 +32,22 @@ Astro Iztro is a mobile application built with Flutter that provides users with 
    cd astro-iztro
    ```
 
-2. **Install dependencies**
+2. **Set up environment variables**
+   ```bash
+   cp .env.example .env
+   ```
+   
+   Then edit the `.env` file and add your API keys:
+   ```
+   RAPIDAPI_KEY=your_rapidapi_key_here
+   ```
+
+3. **Install dependencies**
    ```bash
    flutter pub get
    ```
 
-3. **Run the application**
+4. **Run the application**
    ```bash
    flutter run
    ```

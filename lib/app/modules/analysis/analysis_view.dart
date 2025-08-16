@@ -48,6 +48,8 @@ class AnalysisView extends GetView<AnalysisController> {
                   controller.refreshAnalysis();
                 case 'export':
                   controller.exportAnalysis();
+                case 'test_api':
+                  controller.testApiConnection();
               }
             },
             itemBuilder: (context) => [
@@ -56,6 +58,14 @@ class AnalysisView extends GetView<AnalysisController> {
                 child: ListTile(
                   leading: Icon(Icons.refresh),
                   title: Text('Refresh Analysis'),
+                  dense: true,
+                ),
+              ),
+              const PopupMenuItem(
+                value: 'test_api',
+                child: ListTile(
+                  leading: Icon(Icons.api),
+                  title: Text('Test API Connection'),
                   dense: true,
                 ),
               ),

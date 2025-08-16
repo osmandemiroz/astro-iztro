@@ -2,6 +2,7 @@ import 'package:astro_iztro/core/models/bazi_data.dart';
 import 'package:astro_iztro/core/models/chart_data.dart';
 import 'package:astro_iztro/core/models/user_profile.dart';
 import 'package:astro_iztro/core/services/iztro_service.dart';
+import 'package:astro_iztro/core/services/rapid_api_service.dart';
 import 'package:astro_iztro/core/services/storage_service.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ class AnalysisController extends GetxController {
   // Services
   final StorageService _storageService = Get.find<StorageService>();
   final IztroService _iztroService = Get.find<IztroService>();
+  final RapidApiService _rapidApiService = RapidApiService();
 
   // Reactive state
   final Rx<ChartData?> chartData = Rx<ChartData?>(null);
@@ -135,22 +137,32 @@ class AnalysisController extends GetxController {
     }
   }
 
-  /// [calculateFortuneForYear] - Calculate fortune for specific year
+  /// [calculateFortuneForYear] - Calculate fortune for specific year using RapidAPI
   Future<Map<String, dynamic>> calculateFortuneForYear(int year) async {
-    if (chartData.value == null) {
-      throw Exception('No chart data available');
+    if (currentProfile.value == null) {
+      throw Exception('No user profile available');
     }
 
     try {
-      final targetDate = DateTime(year);
-      return {
-        'date': targetDate.toIso8601String(),
-        'grand_limit': 'Mock Grand Limit',
-        'small_limit': 'Mock Small Limit',
-        'annual_fortune': 'Mock Annual Fortune',
-        'monthly_fortune': 'Mock Monthly Fortune',
-        'daily_fortune': 'Mock Daily Fortune',
-      };
+      if (kDebugMode) {
+        print(
+          '[AnalysisController] Calculating fortune for year $year using RapidAPI...',
+        );
+      }
+
+      // Use RapidAPI service to get real fortune data
+      final fortuneData = await _rapidApiService.calculateFortuneForYear(
+        currentProfile.value!,
+        year,
+      );
+
+      if (kDebugMode) {
+        print(
+          '[AnalysisController] Fortune calculation completed: ${fortuneData['source']}',
+        );
+      }
+
+      return fortuneData;
     } on Exception catch (e) {
       if (kDebugMode) {
         print('[AnalysisController] Error calculating fortune: $e');
@@ -256,5 +268,71 @@ class AnalysisController extends GetxController {
     if (value >= 0.4) return 'Moderate';
     if (value >= 0.2) return 'Weak';
     return 'Very Weak';
+  }
+
+  /// [testApiConnection] - Test the RapidAPI connection with current profile
+  Future<void> testApiConnection() async {
+    if (currentProfile.value == null) {
+      Get.snackbar(
+        'No Profile',
+        'Please create a profile first to test API connection',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      return;
+    }
+
+    try {
+      isLoading.value = true;
+
+      if (kDebugMode) {
+        print('[AnalysisController] Testing RapidAPI connection...');
+      }
+
+      final apiResults = await _rapidApiService.testAstrologyAPIs(
+        currentProfile.value!,
+      );
+
+      // Find working APIs
+      final workingAPIs = <String>[];
+      final failedAPIs = <String>[];
+
+      for (final entry in apiResults.entries) {
+        final result = entry.value as Map<String, dynamic>;
+        if (result['success'] == true) {
+          workingAPIs.add(result['api_name'].toString());
+        } else {
+          failedAPIs.add('${entry.key}: ${result['status_code'] ?? 'Error'}');
+        }
+      }
+
+      if (workingAPIs.isNotEmpty) {
+        Get.snackbar(
+          'API Test Successful! 🎉',
+          'Working APIs: ${workingAPIs.join(', ')}',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Get.theme.colorScheme.primary,
+          colorText: Get.theme.colorScheme.onPrimary,
+          duration: const Duration(seconds: 4),
+        );
+      } else {
+        Get.snackbar(
+          'API Test Results 📊',
+          'Using enhanced calculations. Failed: ${failedAPIs.join(', ')}',
+          snackPosition: SnackPosition.BOTTOM,
+          duration: const Duration(seconds: 4),
+        );
+      }
+    } on Exception catch (e) {
+      if (kDebugMode) {
+        print('[AnalysisController] Error testing API: $e');
+      }
+      Get.snackbar(
+        'API Test Error',
+        'Failed to test API connection: $e',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } finally {
+      isLoading.value = false;
+    }
   }
 }
