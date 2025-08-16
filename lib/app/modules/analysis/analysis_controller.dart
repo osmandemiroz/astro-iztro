@@ -24,6 +24,7 @@ class AnalysisController extends GetxController {
   final RxBool isCalculating = false.obs;
   final RxInt selectedYear = DateTime.now().year.obs;
   final RxString selectedAnalysisType = 'yearly'.obs;
+  final Rx<Map<String, dynamic>?> fortuneData = Rx<Map<String, dynamic>?>(null);
 
   // Display options
   final RxString displayLanguage = 'en'.obs;
@@ -171,20 +172,56 @@ class AnalysisController extends GetxController {
     }
   }
 
-  /// [selectYear] - Select year for fortune analysis
-  Future<void> selectYear(int year) async {
-    selectedYear.value = year;
-    // Trigger fortune calculation for new year
+  /// [calculateFortuneForSelectedYear] - Calculate fortune for the selected year
+  Future<void> calculateFortuneForSelectedYear() async {
+    if (currentProfile.value == null) {
+      Get.snackbar(
+        'No Profile',
+        'Please create a profile first',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      return;
+    }
+
     try {
       isCalculating.value = true;
-      await calculateFortuneForYear(year);
+      final year = selectedYear.value;
+      final fortuneData = await calculateFortuneForYear(year);
+      this.fortuneData.value = fortuneData;
+
+      if (kDebugMode) {
+        print(
+          '[AnalysisController] Fortune for year $year calculated successfully',
+        );
+      }
+      Get.snackbar(
+        'Success',
+        'Fortune for year $year calculated successfully!',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Get.theme.colorScheme.primary,
+        colorText: Get.theme.colorScheme.onPrimary,
+      );
     } on Exception catch (e) {
       if (kDebugMode) {
-        print('[AnalysisController] Error selecting year: $e');
+        print(
+          '[AnalysisController] Error calculating fortune for selected year: $e',
+        );
       }
+      Get.snackbar(
+        'Calculation Error',
+        'Failed to calculate fortune for selected year: $e',
+        snackPosition: SnackPosition.BOTTOM,
+      );
     } finally {
       isCalculating.value = false;
     }
+  }
+
+  /// [selectYear] - Select year for fortune analysis
+  Future<void> selectYear(int year) async {
+    selectedYear.value = year;
+    // Clear previous fortune data when year changes
+    fortuneData.value = null;
   }
 
   /// [selectAnalysisType] - Select analysis type (yearly/monthly/daily)
