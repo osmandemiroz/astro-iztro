@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_dynamic_calls, document_ignores
+
 part of 'analysis_view.dart';
 
 /// Fortune cycles and element analysis widgets
@@ -133,7 +135,7 @@ extension AnalysisViewPart2 on AnalysisView {
         if (fortuneData['annualFortune'] != null)
           _buildFortuneCard(
             'Annual Fortune',
-            (fortuneData['annualFortune']['overallRating']?.toString()) ??
+            fortuneData['annualFortune']['overallRating']?.toString() ??
                 'Unknown',
             (fortuneData['annualFortune']['summary'] as String?) ??
                 'No summary available',

@@ -4,7 +4,6 @@ import 'package:astro_iztro/core/constants/colors.dart';
 import 'package:astro_iztro/core/models/chart_data.dart';
 import 'package:astro_iztro/shared/themes/app_theme.dart';
 import 'package:astro_iztro/shared/widgets/element_strength_card.dart';
-import 'package:astro_iztro/shared/widgets/fortune_cycle_card.dart';
 import 'package:astro_iztro/shared/widgets/palace_influence_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
