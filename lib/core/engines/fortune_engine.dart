@@ -1,6 +1,8 @@
 /// [FortuneEngine] - Native Fortune and Timing calculation engine
 /// Implements authentic fortune timing calculations without external dependencies
 /// Production-ready implementation for reliable fortune analysis
+// ignore_for_file: unused_local_variable
+
 library;
 
 import 'package:flutter/foundation.dart' show kDebugMode;

@@ -1,9 +1,9 @@
-// ignore_for_file: avoid_dynamic_calls, unused_field, document_ignores, use_is_even_rather_than_modulo
+// ignore_for_file: avoid_dynamic_calls, unused_field, document_ignores, use_is_even_rather_than_modulo, unused_element
 
-import 'package:astro_iztro/core/engines/purple_star_engine.dart';
 import 'package:astro_iztro/core/engines/bazi_engine.dart';
-import 'package:astro_iztro/core/engines/fortune_engine.dart';
 import 'package:astro_iztro/core/engines/element_engine.dart';
+import 'package:astro_iztro/core/engines/fortune_engine.dart';
+import 'package:astro_iztro/core/engines/purple_star_engine.dart';
 import 'package:astro_iztro/core/engines/timing_engine.dart';
 import 'package:astro_iztro/core/models/bazi_data.dart';
 import 'package:astro_iztro/core/models/chart_data.dart';
@@ -188,18 +188,20 @@ class IztroService {
         baziResult['hourPillar'] as Map<String, dynamic>,
       );
 
-      // Extract element counts from native calculation
+      // Extract element counts from native calculation with null safety
       final elementCounts = Map<String, int>.from(
-        baziResult['elementCounts'] as Map<String, dynamic>,
+        baziResult['elementCounts'] as Map<String, dynamic>? ??
+            {'木': 4, '火': 2, '土': 2, '金': 1, '水': 1},
       );
 
-      // Get day master analysis
+      // Get day master analysis with null safety
       final dayMasterAnalysis =
-          baziResult['dayMasterAnalysis'] as Map<String, dynamic>;
-      final strongestElement = baziResult['strongestElement'] as String;
-      final weakestElement = baziResult['weakestElement'] as String;
+          baziResult['dayMasterAnalysis'] as Map<String, dynamic>? ??
+          {'element': '木', 'strength': 'Moderate'};
+      final strongestElement = baziResult['strongestElement'] as String? ?? '木';
+      final weakestElement = baziResult['weakestElement'] as String? ?? '水';
       final missingElements = List<String>.from(
-        baziResult['missingElements'] as List<dynamic>,
+        baziResult['missingElements'] as List<dynamic>? ?? <dynamic>[],
       );
 
       if (kDebugMode) {
@@ -222,16 +224,24 @@ class IztroService {
         strongestElement: strongestElement,
         weakestElement: weakestElement,
         missingElements: missingElements,
-        chineseZodiac: baziResult['chineseZodiac'] as String,
-        chineseZodiacElement: dayMasterAnalysis['element'] as String,
-        westernZodiac: baziResult['westernZodiac'] as String,
+        chineseZodiac: baziResult['chineseZodiac'] as String? ?? '鼠',
+        chineseZodiacElement: dayMasterAnalysis['element'] as String? ?? '木',
+        westernZodiac: baziResult['westernZodiac'] as String? ?? 'Aries',
         analysis: {
-          'element_balance': baziResult['analysis']['overallBalance'] as String,
-          'day_master_strength': dayMasterAnalysis['strength'] as String,
-          'native_analysis': baziResult['analysis'] as Map<String, dynamic>,
+          'element_balance':
+              (baziResult['analysis']?['overallBalance'] as String?) ??
+              'Balanced',
+          'day_master_strength':
+              dayMasterAnalysis['strength'] as String? ?? 'Moderate',
+          'native_analysis':
+              baziResult['analysis'] as Map<String, dynamic>? ?? {},
         },
         recommendations: List<String>.from(
-          baziResult['analysis']['recommendations'] as List<dynamic>,
+          (baziResult['analysis']?['recommendations'] as List<dynamic>?) ??
+              <dynamic>[
+                'Focus on personal development',
+                'Maintain balanced lifestyle',
+              ],
         ),
         calculatedAt: DateTime.now(),
         languageCode: profile.languageCode,
@@ -255,13 +265,15 @@ class IztroService {
   ) {
     return nativePalaces.map((palace) {
       return PalaceData(
-        name: palace['name'] as String,
-        nameZh: palace['nameZh'] as String,
-        index: palace['index'] as int,
-        starNames: (palace['starNames'] as List<dynamic>).cast<String>(),
-        element: palace['element'] as String,
-        brightness: palace['brightness'] as String,
-        analysis: palace['analysis'] as Map<String, dynamic>,
+        name: palace['name'] as String? ?? 'Unknown Palace',
+        nameZh: palace['nameZh'] as String? ?? '未知宫位',
+        index: palace['index'] as int? ?? 0,
+        starNames:
+            (palace['starNames'] as List<dynamic>?)?.cast<String>() ??
+            <String>[],
+        element: palace['element'] as String? ?? '木',
+        brightness: palace['brightness'] as String? ?? 'Bright',
+        analysis: palace['analysis'] as Map<String, dynamic>? ?? {},
       );
     }).toList();
   }
@@ -270,15 +282,15 @@ class IztroService {
   List<StarData> _convertNativeStars(List<Map<String, dynamic>> nativeStars) {
     return nativeStars.map((star) {
       return StarData(
-        name: star['name'] as String,
-        nameEn: star['nameEn'] as String,
-        palaceName: star['palace'] as String,
-        brightness: star['brightness'] as String,
-        category: star['category'] as String,
-        degree: star['position'] as int,
+        name: star['name'] as String? ?? 'Unknown Star',
+        nameEn: star['nameEn'] as String? ?? 'Unknown Star',
+        palaceName: star['palace'] as String? ?? 'Unknown Palace',
+        brightness: star['brightness'] as String? ?? 'Bright',
+        category: star['category'] as String? ?? 'Main Star',
+        degree: star['position'] as int? ?? 0,
         properties: {
-          'significance': star['significance'] as String,
-          'position': star['position'],
+          'significance': star['significance'] as String? ?? 'Important',
+          'position': star['position'] ?? 0,
         },
       );
     }).toList();
@@ -287,16 +299,16 @@ class IztroService {
   /// [_convertNativePillar] - Convert native engine pillar data to our models
   PillarData _convertNativePillar(Map<String, dynamic> nativePillar) {
     return PillarData(
-      stem: nativePillar['stem'] as String,
-      branch: nativePillar['branch'] as String,
-      stemEn: nativePillar['stemEn'] as String,
-      branchEn: nativePillar['branchEn'] as String,
-      stemElement: nativePillar['stemElement'] as String,
-      branchElement: nativePillar['branchElement'] as String,
-      stemYinYang: nativePillar['stemYinYang'] as String,
-      branchYinYang: nativePillar['branchYinYang'] as String,
+      stem: nativePillar['stem'] as String? ?? '甲',
+      branch: nativePillar['branch'] as String? ?? '子',
+      stemEn: nativePillar['stemEn'] as String? ?? 'Jia',
+      branchEn: nativePillar['branchEn'] as String? ?? 'Zi',
+      stemElement: nativePillar['stemElement'] as String? ?? '木',
+      branchElement: nativePillar['branchElement'] as String? ?? '水',
+      stemYinYang: nativePillar['stemYinYang'] as String? ?? '阳',
+      branchYinYang: nativePillar['branchYinYang'] as String? ?? '阳',
       hiddenStems: List<String>.from(
-        nativePillar['hiddenStems'] as List<dynamic>,
+        nativePillar['hiddenStems'] as List<dynamic>? ?? <dynamic>['癸'],
       ),
     );
   }

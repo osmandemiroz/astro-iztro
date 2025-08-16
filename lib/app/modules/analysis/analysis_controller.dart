@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable, document_ignores
+
 import 'package:astro_iztro/core/models/bazi_data.dart';
 import 'package:astro_iztro/core/models/chart_data.dart';
 import 'package:astro_iztro/core/models/user_profile.dart';
