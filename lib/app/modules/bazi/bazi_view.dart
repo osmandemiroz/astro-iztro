@@ -2,10 +2,12 @@ import 'package:astro_iztro/app/modules/bazi/bazi_controller.dart';
 import 'package:astro_iztro/core/constants/app_constants.dart';
 import 'package:astro_iztro/core/constants/colors.dart';
 import 'package:astro_iztro/shared/themes/app_theme.dart';
+import 'package:astro_iztro/shared/widgets/background_image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 /// [BaZiView] - Four Pillars BaZi analysis screen
+/// Enhanced with dark theme and liquid glass effects for modern UI
 class BaZiView extends GetView<BaZiController> {
   const BaZiView({super.key});
 
@@ -13,16 +15,24 @@ class BaZiView extends GetView<BaZiController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Obx(() => Text(controller.baziTitle)),
-        backgroundColor: AppColors.primaryGold,
-        foregroundColor: AppColors.white,
+        title: Obx(
+          () => Text(
+            controller.baziTitle,
+            style: const TextStyle(color: AppColors.darkTextPrimary),
+          ),
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
       ),
-      body: Obx(_buildBody),
+      body: BaZiBackground(
+        child: Obx(_buildBody),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: controller.hasBaZiData
             ? controller.refreshBaZi
             : controller.calculateBaZi,
-        backgroundColor: AppColors.primaryGold,
+        backgroundColor: AppColors.lightGold,
+        foregroundColor: AppColors.black,
         child: Obx(
           () => Icon(
             controller.isCalculating.value
@@ -43,10 +53,13 @@ class BaZiView extends GetView<BaZiController> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(AppColors.primaryGold),
+              valueColor: AlwaysStoppedAnimation<Color>(AppColors.lightGold),
             ),
             SizedBox(height: AppConstants.defaultPadding),
-            Text('Loading BaZi data...'),
+            Text(
+              'Loading BaZi data...',
+              style: TextStyle(color: AppColors.darkTextPrimary),
+            ),
           ],
         ),
       );
@@ -62,20 +75,20 @@ class BaZiView extends GetView<BaZiController> {
               const Icon(
                 Icons.view_column_outlined,
                 size: 80,
-                color: AppColors.grey400,
+                color: AppColors.darkTextTertiary,
               ),
               const SizedBox(height: AppConstants.defaultPadding),
               Text(
                 'No BaZi Available',
                 style: AppTheme.headingMedium.copyWith(
-                  color: AppColors.grey600,
+                  color: AppColors.darkTextPrimary,
                 ),
               ),
               const SizedBox(height: AppConstants.smallPadding),
               Text(
                 'Tap the calculate button to generate your Four Pillars chart',
                 style: AppTheme.bodyMedium.copyWith(
-                  color: AppColors.grey500,
+                  color: AppColors.darkTextSecondary,
                 ),
                 textAlign: TextAlign.center,
               ),

@@ -3,7 +3,9 @@ import 'package:astro_iztro/core/constants/app_constants.dart';
 import 'package:astro_iztro/core/constants/colors.dart';
 import 'package:astro_iztro/core/models/chart_data.dart';
 import 'package:astro_iztro/shared/themes/app_theme.dart';
+import 'package:astro_iztro/shared/widgets/background_image_widget.dart';
 import 'package:astro_iztro/shared/widgets/element_strength_card.dart';
+import 'package:astro_iztro/shared/widgets/liquid_glass_widget.dart';
 import 'package:astro_iztro/shared/widgets/palace_influence_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,6 +16,7 @@ part 'analysis_view_part3.dart';
 
 /// [AnalysisView] - Detailed astrological analysis screen
 /// Beautiful display of combined Purple Star and BaZi analysis
+/// Enhanced with dark theme and liquid glass effects for modern UI
 class AnalysisView extends GetView<AnalysisController> {
   const AnalysisView({super.key});
 
@@ -21,69 +24,89 @@ class AnalysisView extends GetView<AnalysisController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Obx(() => Text(controller.analysisTitle)),
+        title: Obx(
+          () => Text(
+            controller.analysisTitle,
+            style: const TextStyle(color: AppColors.darkTextPrimary),
+          ),
+        ),
         elevation: 0,
         backgroundColor: Colors.transparent,
         actions: [
           // Language toggle
           Obx(
-            () => IconButton(
-              onPressed: controller.toggleLanguage,
-              icon: Icon(
-                controller.showChineseNames.value
-                    ? Icons.translate
-                    : Icons.language,
-                color: AppColors.primaryPurple,
+            () => LiquidGlassWidget(
+              glassColor: AppColors.glassPrimary,
+              borderColor: AppColors.lightPurple,
+              borderRadius: BorderRadius.circular(20),
+              padding: const EdgeInsets.all(8),
+              child: IconButton(
+                onPressed: controller.toggleLanguage,
+                icon: Icon(
+                  controller.showChineseNames.value
+                      ? Icons.translate
+                      : Icons.language,
+                  color: AppColors.darkTextPrimary,
+                ),
+                tooltip: 'Toggle Language',
               ),
-              tooltip: 'Toggle Language',
             ),
           ),
 
           // Menu
-          PopupMenuButton<String>(
-            onSelected: (value) {
-              switch (value) {
-                case 'refresh':
-                  controller.refreshAnalysis();
-                case 'export':
-                  controller.exportAnalysis();
-              }
-            },
-            itemBuilder: (context) => [
-              const PopupMenuItem(
-                value: 'refresh',
-                child: ListTile(
-                  leading: Icon(Icons.refresh),
-                  title: Text('Refresh Analysis'),
-                  dense: true,
+          LiquidGlassWidget(
+            glassColor: AppColors.glassPrimary,
+            borderColor: AppColors.lightPurple,
+            borderRadius: BorderRadius.circular(20),
+            padding: const EdgeInsets.all(8),
+            child: PopupMenuButton<String>(
+              onSelected: (value) {
+                switch (value) {
+                  case 'refresh':
+                    controller.refreshAnalysis();
+                  case 'export':
+                    controller.exportAnalysis();
+                }
+              },
+              itemBuilder: (context) => [
+                const PopupMenuItem(
+                  value: 'refresh',
+                  child: ListTile(
+                    leading: Icon(Icons.refresh),
+                    title: Text('Refresh Analysis'),
+                    dense: true,
+                  ),
                 ),
-              ),
-              const PopupMenuItem(
-                value: 'test_api',
-                child: ListTile(
-                  leading: Icon(Icons.api),
-                  title: Text('Test API Connection'),
-                  dense: true,
+                const PopupMenuItem(
+                  value: 'test_api',
+                  child: ListTile(
+                    leading: Icon(Icons.api),
+                    title: Text('Test API Connection'),
+                    dense: true,
+                  ),
                 ),
-              ),
-              const PopupMenuItem(
-                value: 'export',
-                child: ListTile(
-                  leading: Icon(Icons.share),
-                  title: Text('Export Analysis'),
-                  dense: true,
+                const PopupMenuItem(
+                  value: 'export',
+                  child: ListTile(
+                    leading: Icon(Icons.share),
+                    title: Text('Export Analysis'),
+                    dense: true,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),
-      body: Obx(_buildBody),
+      body: DetailedAnalysisBackground(
+        child: Obx(_buildBody),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: controller.hasAnalysisData
             ? controller.refreshAnalysis
             : controller.calculateAnalysis,
-        backgroundColor: AppColors.primaryPurple,
+        backgroundColor: AppColors.lightPurple,
+        foregroundColor: AppColors.white,
         child: Obx(
           () => Icon(
             controller.isCalculating.value

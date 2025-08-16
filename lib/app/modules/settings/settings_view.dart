@@ -13,13 +13,19 @@ class SettingsView extends GetView<SettingsController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Settings'),
+        title: const Text(
+          'Settings',
+          style: TextStyle(color: AppColors.darkTextPrimary),
+        ),
         elevation: 0,
         backgroundColor: Colors.transparent,
         actions: [
           IconButton(
             onPressed: controller.resetToDefaults,
-            icon: const Icon(Icons.restore),
+            icon: const Icon(
+              Icons.restore,
+              color: AppColors.lightPurple,
+            ),
             tooltip: 'Reset to Defaults',
           ),
         ],

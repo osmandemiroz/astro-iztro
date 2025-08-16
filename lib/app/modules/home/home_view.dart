@@ -3,24 +3,22 @@ import 'package:astro_iztro/core/constants/app_constants.dart';
 import 'package:astro_iztro/core/constants/colors.dart';
 import 'package:astro_iztro/core/models/user_profile.dart';
 import 'package:astro_iztro/shared/themes/app_theme.dart';
+import 'package:astro_iztro/shared/widgets/background_image_widget.dart';
+import 'package:astro_iztro/shared/widgets/liquid_glass_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 /// [HomeView] - Main dashboard screen with Apple-inspired design
 /// Provides quick access to all astrology features and user profiles
+/// Enhanced with dark theme and liquid glass effects for modern UI
 class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Modern gradient background for visual appeal - Edge-to-edge design
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: AppColors.primaryGradient,
-        ),
-        // [HomeView] - Using custom SafeArea for Apple-style edge-to-edge design
-        // This allows the gradient to extend to the very top while protecting content
+      // Modern dark theme background with space gradient
+      body: HomeBackground(
         child: SafeArea(
           top: false, // Allow gradient to extend to status bar
           child: Obx(_buildBody),
@@ -55,6 +53,7 @@ class HomeView extends GetView<HomeController> {
 
   /// [buildAppBar] - Custom app bar with user greeting
   /// Edge-to-edge design with proper status bar spacing
+  /// Enhanced with liquid glass effects for modern appearance
   Widget _buildAppBar() {
     return SliverAppBar(
       expandedHeight: 140, // Increased to account for status bar
@@ -75,7 +74,7 @@ class HomeView extends GetView<HomeController> {
               child: Text(
                 'ASTRO IZTRO',
                 style: AppTheme.headingMedium.copyWith(
-                  color: AppColors.white,
+                  color: AppColors.darkTextPrimary,
                   fontFamily: AppConstants.decorativeFont,
                   fontWeight: FontWeight.w300,
                   letterSpacing: 2, // Apple-style letter spacing
@@ -89,7 +88,7 @@ class HomeView extends GetView<HomeController> {
             ),
             background: Container(
               decoration: const BoxDecoration(
-                gradient: AppColors.primaryGradient,
+                gradient: AppColors.darkSpaceGradient,
               ),
               child: _buildHeaderContent(),
             ),
@@ -102,12 +101,18 @@ class HomeView extends GetView<HomeController> {
           padding: EdgeInsets.only(
             top: MediaQuery.of(Get.context!).padding.top,
           ),
-          child: IconButton(
-            onPressed: controller.navigateToSettings,
-            icon: const Icon(
-              Icons.settings_outlined,
-              color: AppColors.white,
-              size: 24,
+          child: LiquidGlassWidget(
+            glassColor: AppColors.glassPrimary,
+            borderColor: AppColors.lightPurple,
+            borderRadius: BorderRadius.circular(20),
+            padding: const EdgeInsets.all(8),
+            child: IconButton(
+              onPressed: controller.navigateToSettings,
+              icon: const Icon(
+                Icons.settings_outlined,
+                color: AppColors.darkTextPrimary,
+                size: 24,
+              ),
             ),
           ),
         ),
@@ -142,7 +147,7 @@ class HomeView extends GetView<HomeController> {
                       ? 'Welcome back, ${profile.name ?? 'User'}!'
                       : 'Welcome to Astro Iztro!',
                   style: AppTheme.bodyLarge.copyWith(
-                    color: AppColors.white,
+                    color: AppColors.darkTextPrimary,
                     fontWeight: FontWeight.w800,
                   ),
                 );
@@ -188,13 +193,13 @@ class HomeView extends GetView<HomeController> {
         Icon(
           icon,
           size: 12,
-          color: AppColors.white.withValues(alpha: 0.8),
+          color: AppColors.darkTextSecondary.withValues(alpha: 0.8),
         ),
         const SizedBox(width: 4),
         Text(
           '$value $label',
           style: AppTheme.caption.copyWith(
-            color: AppColors.white.withValues(alpha: 0.8),
+            color: AppColors.darkTextSecondary.withValues(alpha: 0.8),
           ),
         ),
       ],
@@ -206,7 +211,7 @@ class HomeView extends GetView<HomeController> {
     return SliverToBoxAdapter(
       child: Container(
         decoration: const BoxDecoration(
-          color: AppColors.grey50,
+          color: AppColors.darkCard,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(AppConstants.borderRadius * 2),
             topRight: Radius.circular(AppConstants.borderRadius * 2),
@@ -240,36 +245,32 @@ class HomeView extends GetView<HomeController> {
         return _buildNoProfileCard();
       }
 
-      return Card(
-        elevation: AppConstants.cardElevation,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppConstants.borderRadius),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(AppConstants.defaultPadding),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Current Profile',
-                    style: AppTheme.headingSmall,
+      return LiquidGlassCard(
+        onTap: controller.navigateToInput,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Current Profile',
+                  style: AppTheme.headingSmall.copyWith(
+                    color: AppColors.darkTextPrimary,
                   ),
-                  IconButton(
-                    onPressed: controller.navigateToInput,
-                    icon: const Icon(
-                      Icons.edit_outlined,
-                      color: AppColors.primaryPurple,
-                    ),
+                ),
+                IconButton(
+                  onPressed: controller.navigateToInput,
+                  icon: const Icon(
+                    Icons.edit_outlined,
+                    color: AppColors.lightPurple,
                   ),
-                ],
-              ),
-              const SizedBox(height: AppConstants.smallPadding),
-              _buildProfileInfo(profile),
-            ],
-          ),
+                ),
+              ],
+            ),
+            const SizedBox(height: AppConstants.smallPadding),
+            _buildProfileInfo(profile),
+          ],
         ),
       );
     });
@@ -277,47 +278,37 @@ class HomeView extends GetView<HomeController> {
 
   /// [buildNoProfileCard] - Card shown when no profile exists
   Widget _buildNoProfileCard() {
-    return Card(
-      elevation: AppConstants.cardElevation,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppConstants.borderRadius),
-        side: const BorderSide(
-          color: AppColors.primaryPurple,
-          width: 2,
-        ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(AppConstants.defaultPadding),
-        child: Column(
-          children: [
-            Icon(
-              Icons.person_add_outlined,
-              size: 48,
-              color: AppColors.primaryPurple.withValues(alpha: 0.7),
+    return LiquidGlassCard(
+      onTap: controller.navigateToInput,
+      child: Column(
+        children: [
+          Icon(
+            Icons.person_add_outlined,
+            size: 48,
+            color: AppColors.lightPurple.withValues(alpha: 0.7),
+          ),
+          const SizedBox(height: AppConstants.smallPadding),
+          Text(
+            'Create Your First Profile',
+            style: AppTheme.headingSmall.copyWith(
+              color: AppColors.lightPurple,
             ),
-            const SizedBox(height: AppConstants.smallPadding),
-            Text(
-              'Create Your First Profile',
-              style: AppTheme.headingSmall.copyWith(
-                color: AppColors.primaryPurple,
-              ),
+          ),
+          const SizedBox(height: AppConstants.smallPadding),
+          Text(
+            'Start your astrological journey by creating a profile with your birth information.',
+            style: AppTheme.bodyMedium.copyWith(
+              color: AppColors.darkTextSecondary,
             ),
-            const SizedBox(height: AppConstants.smallPadding),
-            Text(
-              'Start your astrological journey by creating a profile with your birth information.',
-              style: AppTheme.bodyMedium.copyWith(
-                color: AppColors.grey600,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: AppConstants.defaultPadding),
-            ElevatedButton.icon(
-              onPressed: controller.navigateToInput,
-              icon: const Icon(Icons.add),
-              label: const Text('Create Profile'),
-            ),
-          ],
-        ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: AppConstants.defaultPadding),
+          ElevatedButton.icon(
+            onPressed: controller.navigateToInput,
+            icon: const Icon(Icons.add),
+            label: const Text('Create Profile'),
+          ),
+        ],
       ),
     );
   }
@@ -359,21 +350,23 @@ class HomeView extends GetView<HomeController> {
           Icon(
             icon,
             size: 20,
-            color: AppColors.grey500,
+            color: AppColors.darkTextTertiary,
           ),
           const SizedBox(width: AppConstants.smallPadding),
           Text(
             '$label:',
             style: AppTheme.bodyMedium.copyWith(
               fontWeight: FontWeight.w500,
-              color: AppColors.grey600,
+              color: AppColors.darkTextSecondary,
             ),
           ),
           const SizedBox(width: AppConstants.smallPadding),
           Expanded(
             child: Text(
               value,
-              style: AppTheme.bodyMedium,
+              style: AppTheme.bodyMedium.copyWith(
+                color: AppColors.darkTextPrimary,
+              ),
               overflow: TextOverflow.ellipsis,
             ),
           ),
@@ -389,7 +382,9 @@ class HomeView extends GetView<HomeController> {
       children: [
         Text(
           'Quick Actions',
-          style: AppTheme.headingSmall,
+          style: AppTheme.headingSmall.copyWith(
+            color: AppColors.darkTextPrimary,
+          ),
         ),
         const SizedBox(height: AppConstants.defaultPadding),
         Row(
@@ -400,7 +395,7 @@ class HomeView extends GetView<HomeController> {
                 title: 'Purple Star Chart',
                 subtitle: 'View your astrology chart',
                 onTap: controller.navigateToChart,
-                color: AppColors.primaryPurple,
+                color: AppColors.lightPurple,
               ),
             ),
             const SizedBox(width: AppConstants.defaultPadding),
@@ -410,7 +405,7 @@ class HomeView extends GetView<HomeController> {
                 title: 'BaZi Analysis',
                 subtitle: 'Four Pillars reading',
                 onTap: controller.navigateToBaZi,
-                color: AppColors.primaryGold,
+                color: AppColors.lightGold,
               ),
             ),
           ],
@@ -451,40 +446,33 @@ class HomeView extends GetView<HomeController> {
     required VoidCallback onTap,
     required Color color,
   }) {
-    return Card(
-      elevation: AppConstants.cardElevation,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppConstants.borderRadius),
-      ),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(AppConstants.borderRadius),
-        child: Padding(
-          padding: const EdgeInsets.all(AppConstants.defaultPadding),
-          child: Column(
-            children: [
-              Icon(
-                icon,
-                size: 32,
-                color: color,
-              ),
-              const SizedBox(height: AppConstants.smallPadding),
-              Text(
-                title,
-                style: AppTheme.bodyMedium.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 4),
-              Text(
-                subtitle,
-                style: AppTheme.caption,
-                textAlign: TextAlign.center,
-              ),
-            ],
+    return LiquidGlassCard(
+      onTap: onTap,
+      child: Column(
+        children: [
+          Icon(
+            icon,
+            size: 32,
+            color: color,
           ),
-        ),
+          const SizedBox(height: AppConstants.smallPadding),
+          Text(
+            title,
+            style: AppTheme.bodyMedium.copyWith(
+              fontWeight: FontWeight.w600,
+              color: AppColors.darkTextPrimary,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 4),
+          Text(
+            subtitle,
+            style: AppTheme.caption.copyWith(
+              color: AppColors.darkTextSecondary,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
       ),
     );
   }
@@ -504,11 +492,16 @@ class HomeView extends GetView<HomeController> {
             children: [
               Text(
                 'Recent Calculations',
-                style: AppTheme.headingSmall,
+                style: AppTheme.headingSmall.copyWith(
+                  color: AppColors.darkTextPrimary,
+                ),
               ),
               TextButton(
                 onPressed: controller.clearRecentCalculations,
-                child: const Text('Clear All'),
+                child: const Text(
+                  'Clear All',
+                  style: TextStyle(color: AppColors.lightPurple),
+                ),
               ),
             ],
           ),
@@ -527,13 +520,22 @@ class HomeView extends GetView<HomeController> {
     final profileName = calculation['profile_name'] as String;
     final calculatedAt = DateTime.parse(calculation['calculated_at'] as String);
 
-    return Card(
+    return LiquidGlassCard(
       margin: const EdgeInsets.only(bottom: AppConstants.smallPadding),
+      onTap: () {
+        // Navigate to appropriate screen based on type
+        if (type == 'chart') {
+          controller.navigateToChart();
+        } else {
+          controller.navigateToBaZi();
+        }
+      },
       child: ListTile(
+        contentPadding: EdgeInsets.zero,
         leading: CircleAvatar(
           backgroundColor: type == 'chart'
-              ? AppColors.primaryPurple
-              : AppColors.primaryGold,
+              ? AppColors.lightPurple
+              : AppColors.lightGold,
           child: Icon(
             type == 'chart'
                 ? Icons.circle_outlined
@@ -543,21 +545,21 @@ class HomeView extends GetView<HomeController> {
         ),
         title: Text(
           '$profileName - ${type == 'chart' ? 'Purple Star Chart' : 'BaZi Analysis'}',
-          style: AppTheme.bodyMedium.copyWith(fontWeight: FontWeight.w500),
+          style: AppTheme.bodyMedium.copyWith(
+            fontWeight: FontWeight.w500,
+            color: AppColors.darkTextPrimary,
+          ),
         ),
         subtitle: Text(
           'Calculated ${_formatTimeAgo(calculatedAt)}',
-          style: AppTheme.caption,
+          style: AppTheme.caption.copyWith(
+            color: AppColors.darkTextSecondary,
+          ),
         ),
-        trailing: const Icon(Icons.arrow_forward_ios),
-        onTap: () {
-          // Navigate to appropriate screen based on type
-          if (type == 'chart') {
-            controller.navigateToChart();
-          } else {
-            controller.navigateToBaZi();
-          }
-        },
+        trailing: const Icon(
+          Icons.arrow_forward_ios,
+          color: AppColors.darkTextTertiary,
+        ),
       ),
     );
   }
@@ -574,7 +576,9 @@ class HomeView extends GetView<HomeController> {
         children: [
           Text(
             'Saved Profiles',
-            style: AppTheme.headingSmall,
+            style: AppTheme.headingSmall.copyWith(
+              color: AppColors.darkTextPrimary,
+            ),
           ),
           const SizedBox(height: AppConstants.defaultPadding),
           ...controller.savedProfiles.map(
@@ -587,9 +591,11 @@ class HomeView extends GetView<HomeController> {
 
   /// [buildProfileCard] - Individual profile card
   Widget _buildProfileCard(UserProfile profile) {
-    return Card(
+    return LiquidGlassCard(
       margin: const EdgeInsets.only(bottom: AppConstants.smallPadding),
+      onTap: () => controller.setCurrentProfile(profile),
       child: ListTile(
+        contentPadding: EdgeInsets.zero,
         leading: CircleAvatar(
           backgroundColor: profile.gender == 'male'
               ? AppColors.lightGold
@@ -601,11 +607,16 @@ class HomeView extends GetView<HomeController> {
         ),
         title: Text(
           profile.name ?? 'Unknown',
-          style: AppTheme.bodyMedium.copyWith(fontWeight: FontWeight.w500),
+          style: AppTheme.bodyMedium.copyWith(
+            fontWeight: FontWeight.w500,
+            color: AppColors.darkTextPrimary,
+          ),
         ),
         subtitle: Text(
           '${profile.birthDate.day}/${profile.birthDate.month}/${profile.birthDate.year} - ${profile.formattedBirthTime}',
-          style: AppTheme.caption,
+          style: AppTheme.caption.copyWith(
+            color: AppColors.darkTextSecondary,
+          ),
         ),
         trailing: PopupMenuButton(
           itemBuilder: (context) => [
@@ -626,7 +637,6 @@ class HomeView extends GetView<HomeController> {
             }
           },
         ),
-        onTap: () => controller.setCurrentProfile(profile),
       ),
     );
   }
@@ -637,8 +647,8 @@ class HomeView extends GetView<HomeController> {
       onPressed: controller.navigateToInput,
       icon: const Icon(Icons.add),
       label: const Text('New Profile'),
-      backgroundColor: AppColors.primaryGold,
-      foregroundColor: AppColors.white,
+      backgroundColor: AppColors.lightGold,
+      foregroundColor: AppColors.black,
     );
   }
 
@@ -664,8 +674,9 @@ class HomeView extends GetView<HomeController> {
           }
         },
         type: BottomNavigationBarType.fixed,
-        selectedItemColor: AppColors.primaryPurple,
-        unselectedItemColor: AppColors.grey400,
+        selectedItemColor: AppColors.lightPurple,
+        unselectedItemColor: AppColors.darkTextTertiary,
+        backgroundColor: AppColors.darkSurface,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home_outlined),
@@ -717,21 +728,32 @@ class HomeView extends GetView<HomeController> {
   void _showDeleteProfileDialog(UserProfile profile) {
     Get.dialog<void>(
       AlertDialog(
-        title: const Text('Delete Profile'),
+        backgroundColor: AppColors.darkCard,
+        title: const Text(
+          'Delete Profile',
+          style: TextStyle(color: AppColors.darkTextPrimary),
+        ),
         content: Text(
           'Are you sure you want to delete ${profile.name ?? 'this profile'}?',
+          style: const TextStyle(color: AppColors.darkTextSecondary),
         ),
         actions: [
           TextButton(
             onPressed: () => Get.back<void>(),
-            child: const Text('Cancel'),
+            child: const Text(
+              'Cancel',
+              style: TextStyle(color: AppColors.darkTextTertiary),
+            ),
           ),
           TextButton(
             onPressed: () {
               Get.back<void>();
               controller.deleteProfile(profile);
             },
-            child: const Text('Delete'),
+            child: const Text(
+              'Delete',
+              style: TextStyle(color: AppColors.error),
+            ),
           ),
         ],
       ),

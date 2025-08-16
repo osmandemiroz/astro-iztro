@@ -22,6 +22,9 @@ dev_dependencies:
   very_good_analysis: ^9.0.0
 flutter:
   uses-material-design: true
+  assets:
+    - assets/images/
+   
   fonts:
     - family: SFProDisplay
       fonts:

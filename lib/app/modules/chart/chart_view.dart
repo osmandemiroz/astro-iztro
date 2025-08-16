@@ -3,12 +3,15 @@ import 'package:astro_iztro/core/constants/app_constants.dart';
 import 'package:astro_iztro/core/constants/colors.dart';
 import 'package:astro_iztro/shared/themes/app_theme.dart';
 import 'package:astro_iztro/shared/widgets/astro_chart_widget.dart';
+import 'package:astro_iztro/shared/widgets/background_image_widget.dart';
+import 'package:astro_iztro/shared/widgets/liquid_glass_widget.dart';
 import 'package:astro_iztro/shared/widgets/palace_detail_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 /// [ChartView] - Purple Star Astrology chart display screen
 /// Features circular palace layout with interactive elements following Apple HIG
+/// Enhanced with dark theme and liquid glass effects for modern UI
 class ChartView extends GetView<ChartController> {
   const ChartView({super.key});
 
@@ -16,7 +19,9 @@ class ChartView extends GetView<ChartController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _buildAppBar(),
-      body: Obx(_buildBody),
+      body: PurpleStarBackground(
+        child: Obx(_buildBody),
+      ),
       floatingActionButton: _buildFloatingActionButtons(),
     );
   }
@@ -24,76 +29,99 @@ class ChartView extends GetView<ChartController> {
   /// [buildAppBar] - App bar with chart controls
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
-      title: Obx(() => Text(controller.chartTitle)),
+      title: Obx(
+        () => Text(
+          controller.chartTitle,
+          style: const TextStyle(color: AppColors.darkTextPrimary),
+        ),
+      ),
       elevation: 0,
       backgroundColor: Colors.transparent,
       actions: [
         // Language toggle
         Obx(
-          () => IconButton(
-            onPressed: controller.toggleLanguage,
-            icon: Icon(
-              controller.showChineseNames.value
-                  ? Icons.translate
-                  : Icons.language,
-              color: AppColors.primaryPurple,
+          () => LiquidGlassWidget(
+            glassColor: AppColors.glassPrimary,
+            borderColor: AppColors.lightPurple,
+            borderRadius: BorderRadius.circular(20),
+            padding: const EdgeInsets.all(8),
+            child: IconButton(
+              onPressed: controller.toggleLanguage,
+              icon: Icon(
+                controller.showChineseNames.value
+                    ? Icons.translate
+                    : Icons.language,
+                color: AppColors.darkTextPrimary,
+              ),
+              tooltip: 'Toggle Language',
             ),
-            tooltip: 'Toggle Language',
           ),
         ),
 
         // Star details toggle
         Obx(
-          () => IconButton(
-            onPressed: controller.toggleStarDetails,
-            icon: Icon(
-              controller.showStarDetails.value
-                  ? Icons.visibility
-                  : Icons.visibility_off,
-              color: AppColors.primaryPurple,
+          () => LiquidGlassWidget(
+            glassColor: AppColors.glassPrimary,
+            borderColor: AppColors.lightPurple,
+            borderRadius: BorderRadius.circular(20),
+            padding: const EdgeInsets.all(8),
+            child: IconButton(
+              onPressed: controller.toggleStarDetails,
+              icon: Icon(
+                controller.showStarDetails.value
+                    ? Icons.visibility
+                    : Icons.visibility_off,
+                color: AppColors.darkTextPrimary,
+              ),
+              tooltip: 'Toggle Star Details',
             ),
-            tooltip: 'Toggle Star Details',
           ),
         ),
 
         // Menu
-        PopupMenuButton<String>(
-          onSelected: (value) {
-            switch (value) {
-              case 'refresh':
-                controller.refreshChart();
-              case 'export':
-                controller.exportChart();
-              case 'analysis':
-                controller.navigateToAnalysis();
-            }
-          },
-          itemBuilder: (context) => [
-            const PopupMenuItem(
-              value: 'refresh',
-              child: ListTile(
-                leading: Icon(Icons.refresh),
-                title: Text('Refresh Chart'),
-                dense: true,
+        LiquidGlassWidget(
+          glassColor: AppColors.glassPrimary,
+          borderColor: AppColors.lightPurple,
+          borderRadius: BorderRadius.circular(20),
+          padding: const EdgeInsets.all(8),
+          child: PopupMenuButton<String>(
+            onSelected: (value) {
+              switch (value) {
+                case 'refresh':
+                  controller.refreshChart();
+                case 'export':
+                  controller.exportChart();
+                case 'analysis':
+                  controller.navigateToAnalysis();
+              }
+            },
+            itemBuilder: (context) => [
+              const PopupMenuItem(
+                value: 'refresh',
+                child: ListTile(
+                  leading: Icon(Icons.refresh),
+                  title: Text('Refresh Chart'),
+                  dense: true,
+                ),
               ),
-            ),
-            const PopupMenuItem(
-              value: 'export',
-              child: ListTile(
-                leading: Icon(Icons.share),
-                title: Text('Export Chart'),
-                dense: true,
+              const PopupMenuItem(
+                value: 'export',
+                child: ListTile(
+                  leading: Icon(Icons.share),
+                  title: Text('Export Chart'),
+                  dense: true,
+                ),
               ),
-            ),
-            const PopupMenuItem(
-              value: 'analysis',
-              child: ListTile(
-                leading: Icon(Icons.analytics),
-                title: Text('Detailed Analysis'),
-                dense: true,
+              const PopupMenuItem(
+                value: 'analysis',
+                child: ListTile(
+                  leading: Icon(Icons.analytics),
+                  title: Text('Detailed Analysis'),
+                  dense: true,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ],
     );

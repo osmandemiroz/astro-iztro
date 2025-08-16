@@ -74,7 +74,7 @@ class AstroIztroApp extends StatelessWidget {
       initialBinding: InitialBinding(),
 
       // Theme configuration - Apple Human Interface Guidelines inspired
-      theme: AppTheme.lightTheme,
+      theme: AppTheme.darkTheme, // Use dark theme as default
       darkTheme: AppTheme.darkTheme,
       // Localization configuration for multi-language support
       locale: const Locale('en', 'US'),

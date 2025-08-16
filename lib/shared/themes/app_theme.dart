@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use, document_ignores
+
 import 'package:astro_iztro/core/constants/app_constants.dart';
 import 'package:astro_iztro/core/constants/colors.dart';
 import 'package:flutter/material.dart';
@@ -140,23 +142,24 @@ class AppTheme {
     );
   }
 
-  /// Dark theme configuration
+  /// Dark theme configuration - Enhanced with sophisticated colors and liquid glass effects
   static ThemeData get darkTheme {
     return ThemeData(
       useMaterial3: true,
       colorScheme: _darkColorScheme,
       fontFamily: AppConstants.primaryFont,
-
-      // AppBar theme for dark mode
+      brightness: Brightness.dark, // Explicitly set dark brightness
+      // AppBar theme for dark mode - Sleek and minimal
       appBarTheme: const AppBarTheme(
-        backgroundColor: AppColors.darkSurface,
+        backgroundColor:
+            Colors.transparent, // Transparent for background images
         elevation: 0,
         surfaceTintColor: Colors.transparent,
         titleTextStyle: TextStyle(
           fontFamily: AppConstants.primaryFont,
           fontSize: 20,
           fontWeight: FontWeight.w600,
-          color: AppColors.white,
+          color: AppColors.darkTextPrimary,
         ),
         iconTheme: IconThemeData(
           color: AppColors.lightPurple,
@@ -165,22 +168,23 @@ class AppTheme {
         systemOverlayStyle: SystemUiOverlayStyle.light,
       ),
 
-      // Card theme for dark mode
+      // Card theme for dark mode - Enhanced with glass effects
       cardTheme: CardThemeData(
-        elevation: AppConstants.cardElevation,
+        elevation: 0, // No elevation for modern flat design
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppConstants.borderRadius),
         ),
         color: AppColors.darkCard,
         surfaceTintColor: AppColors.darkPurple,
+        shadowColor: AppColors.black.withValues(alpha: 0.3),
       ),
 
-      // Elevated button theme for dark mode
+      // Elevated button theme for dark mode - Modern glass effect
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.lightPurple,
           foregroundColor: AppColors.white,
-          elevation: 2,
+          elevation: 0,
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppConstants.borderRadius),
@@ -193,17 +197,17 @@ class AppTheme {
         ),
       ),
 
-      // Input decoration theme for dark mode
+      // Input decoration theme for dark mode - Glass effect inputs
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: AppColors.grey800,
+        fillColor: AppColors.darkCardSecondary,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppConstants.borderRadius),
-          borderSide: const BorderSide(color: AppColors.grey600),
+          borderSide: const BorderSide(color: AppColors.darkBorder),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppConstants.borderRadius),
-          borderSide: const BorderSide(color: AppColors.grey600),
+          borderSide: const BorderSide(color: AppColors.darkBorder),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppConstants.borderRadius),
@@ -215,31 +219,41 @@ class AppTheme {
         ),
         labelStyle: const TextStyle(
           fontFamily: AppConstants.primaryFont,
-          color: AppColors.grey300,
+          color: AppColors.darkTextSecondary,
         ),
         hintStyle: const TextStyle(
           fontFamily: AppConstants.primaryFont,
-          color: AppColors.grey500,
+          color: AppColors.darkTextTertiary,
         ),
       ),
 
-      // Bottom navigation bar theme for dark mode
+      // Bottom navigation bar theme for dark mode - Glass effect
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: AppColors.darkSurface,
         selectedItemColor: AppColors.lightPurple,
-        unselectedItemColor: AppColors.grey500,
+        unselectedItemColor: AppColors.darkTextTertiary,
         type: BottomNavigationBarType.fixed,
-        elevation: 8,
+        elevation: 0,
       ),
 
-      // Dialog theme for dark mode
+      // Dialog theme for dark mode - Glass effect dialogs
       dialogTheme: DialogThemeData(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppConstants.borderRadius),
         ),
-        elevation: 8,
+        elevation: 0,
         backgroundColor: AppColors.darkCard,
+        surfaceTintColor: AppColors.darkPurple,
       ),
+
+      // Divider theme for dark mode
+      dividerTheme: const DividerThemeData(
+        color: AppColors.darkBorder,
+        thickness: 1,
+      ),
+
+      // Scaffold background color
+      scaffoldBackgroundColor: AppColors.darkBackground,
     );
   }
 
@@ -261,7 +275,7 @@ class AppTheme {
     outline: AppColors.grey300,
   );
 
-  /// Dark color scheme
+  /// Dark color scheme - Enhanced with sophisticated dark theme colors
   static const ColorScheme _darkColorScheme = ColorScheme(
     brightness: Brightness.dark,
     primary: AppColors.lightPurple,
@@ -273,10 +287,12 @@ class AppTheme {
     error: AppColors.error,
     onError: AppColors.white,
     surface: AppColors.darkSurface,
-    onSurface: AppColors.white,
+    onSurface: AppColors.darkTextPrimary,
     surfaceContainerHighest: AppColors.darkCard,
-    onSurfaceVariant: AppColors.grey300,
-    outline: AppColors.grey600,
+    onSurfaceVariant: AppColors.darkTextSecondary,
+    outline: AppColors.darkBorder,
+    background: AppColors.darkBackground,
+    onBackground: AppColors.darkTextPrimary,
   );
 
   /// Text styles for consistent typography

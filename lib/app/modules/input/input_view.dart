@@ -1,11 +1,13 @@
 import 'package:astro_iztro/app/modules/input/input_controller.dart';
 import 'package:astro_iztro/core/constants/app_constants.dart';
+import 'package:astro_iztro/core/constants/colors.dart';
 import 'package:astro_iztro/shared/themes/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 /// [InputView] - User input form screen for birth data entry
 /// Comprehensive form following Apple Human Interface Guidelines
+/// Enhanced with dark theme for modern UI
 class InputView extends GetView<InputController> {
   const InputView({super.key});
 
@@ -13,7 +15,10 @@ class InputView extends GetView<InputController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile Information'),
+        title: const Text(
+          'Profile Information',
+          style: TextStyle(color: AppColors.darkTextPrimary),
+        ),
         actions: [
           Obx(
             () => controller.isLoading.value
@@ -27,7 +32,10 @@ class InputView extends GetView<InputController> {
                   )
                 : TextButton(
                     onPressed: controller.saveProfile,
-                    child: const Text('Save'),
+                    child: const Text(
+                      'Save',
+                      style: TextStyle(color: AppColors.lightPurple),
+                    ),
                   ),
           ),
         ],
@@ -58,7 +66,12 @@ class InputView extends GetView<InputController> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Personal Information', style: AppTheme.headingSmall),
+        Text(
+          'Personal Information',
+          style: AppTheme.headingSmall.copyWith(
+            color: AppColors.darkTextPrimary,
+          ),
+        ),
         const SizedBox(height: AppConstants.defaultPadding),
         TextFormField(
           controller: controller.nameController,
@@ -94,7 +107,12 @@ class InputView extends GetView<InputController> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Birth Information', style: AppTheme.headingSmall),
+        Text(
+          'Birth Information',
+          style: AppTheme.headingSmall.copyWith(
+            color: AppColors.darkTextPrimary,
+          ),
+        ),
         const SizedBox(height: AppConstants.defaultPadding),
 
         // Date picker

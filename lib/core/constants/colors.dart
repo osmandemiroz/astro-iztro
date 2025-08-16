@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 /// [AppColors] - Core color constants for the Astro Iztro app
 /// Following Apple Human Interface Guidelines with deep purple and gold theme
+/// Enhanced with sophisticated dark theme colors and liquid glass effects
 class AppColors {
   // Primary Colors - Deep purple and gold theme
   static const Color primaryPurple = Color(0xFF6B46C1);
@@ -43,12 +44,28 @@ class AppColors {
   static const Color jade = Color(0xFF00A86B); // 玉色
   static const Color amber = Color(0xFFFFBF00); // 琥珀色
 
-  // Dark mode colors
-  static const Color darkBackground = Color(0xFF0F0F23);
-  static const Color darkSurface = Color(0xFF1A1A2E);
-  static const Color darkCard = Color(0xFF16213E);
+  // Enhanced Dark theme colors - Sophisticated and easy on the eyes
+  static const Color darkBackground = Color(0xFF0A0A0F); // Deep space black
+  static const Color darkSurface = Color(0xFF1A1A2E); // Dark navy
+  static const Color darkCard = Color(0xFF16213E); // Dark blue-grey
+  static const Color darkCardSecondary = Color(0xFF1E293B); // Lighter dark card
+  static const Color darkBorder = Color(0xFF334155); // Subtle borders
+  static const Color darkTextPrimary = Color(0xFFF1F5F9); // Soft white
+  static const Color darkTextSecondary = Color(0xFFCBD5E1); // Muted white
+  static const Color darkTextTertiary = Color(0xFF94A3B8); // Very muted white
 
-  // Gradient definitions
+  // Liquid Glass Effect Colors - Translucent and modern
+  static const Color glassPrimary = Color(0x1A6B46C1); // 10% opacity purple
+  static const Color glassSecondary = Color(0x1AF59E0B); // 10% opacity gold
+  static const Color glassSurface = Color(0x0DFFFFFF); // 5% opacity white
+  static const Color glassBorder = Color(
+    0x1AFFFFFF,
+  ); // 10% opacity white border
+  static const Color glassOverlay = Color(
+    0x0A000000,
+  ); // 4% opacity black overlay
+
+  // Gradient definitions - Enhanced for dark theme
   static const LinearGradient primaryGradient = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
@@ -65,5 +82,26 @@ class AppColors {
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
     colors: [ultraLightPurple, white],
+  );
+
+  // New sophisticated dark gradients
+  static const LinearGradient darkSpaceGradient = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [Color(0xFF0F0F23), Color(0xFF1A1A2E), Color(0xFF16213E)],
+    stops: [0.0, 0.5, 1.0],
+  );
+
+  static const LinearGradient glassGradient = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [glassPrimary, glassSecondary],
+  );
+
+  static const LinearGradient subtleGlowGradient = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [Color(0x0A6B46C1), Color(0x00FFFFFF), Color(0x0AF59E0B)],
+    stops: [0.0, 0.5, 1.0],
   );
 }
