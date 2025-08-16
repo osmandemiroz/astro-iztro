@@ -1,11 +1,10 @@
 import 'package:astro_iztro/app/modules/analysis/analysis_controller.dart';
 import 'package:astro_iztro/core/constants/app_constants.dart';
 import 'package:astro_iztro/core/constants/colors.dart';
-import 'package:astro_iztro/core/models/chart_data.dart';
 import 'package:astro_iztro/core/models/bazi_data.dart';
+import 'package:astro_iztro/core/models/chart_data.dart';
 import 'package:astro_iztro/shared/themes/app_theme.dart';
 import 'package:astro_iztro/shared/widgets/background_image_widget.dart';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -268,7 +267,7 @@ class AnalysisView extends GetView<AnalysisController> {
           // Animated loading container
           TweenAnimationBuilder<double>(
             duration: const Duration(seconds: 2),
-            tween: Tween(begin: 0.0, end: 1.0),
+            tween: Tween(begin: 0, end: 1),
             builder: (context, value, child) {
               return Transform.scale(
                 scale: 0.8 + (0.2 * value),
@@ -310,7 +309,7 @@ class AnalysisView extends GetView<AnalysisController> {
           // Animated text
           TweenAnimationBuilder<double>(
             duration: const Duration(milliseconds: 800),
-            tween: Tween(begin: 0.0, end: 1.0),
+            tween: Tween(begin: 0, end: 1),
             builder: (context, value, child) {
               return Opacity(
                 opacity: value,
@@ -332,7 +331,7 @@ class AnalysisView extends GetView<AnalysisController> {
 
           TweenAnimationBuilder<double>(
             duration: const Duration(milliseconds: 1200),
-            tween: Tween(begin: 0.0, end: 1.0),
+            tween: Tween(begin: 0, end: 1),
             builder: (context, value, child) {
               return Opacity(
                 opacity: value,
@@ -365,7 +364,7 @@ class AnalysisView extends GetView<AnalysisController> {
             // Animated icon container
             TweenAnimationBuilder<double>(
               duration: const Duration(seconds: 2),
-              tween: Tween(begin: 0.0, end: 1.0),
+              tween: Tween(begin: 0, end: 1),
               builder: (context, value, child) {
                 return Transform.scale(
                   scale: 0.5 + (0.5 * value),
@@ -409,7 +408,7 @@ class AnalysisView extends GetView<AnalysisController> {
             // Animated title
             TweenAnimationBuilder<double>(
               duration: const Duration(milliseconds: 800),
-              tween: Tween(begin: 0.0, end: 1.0),
+              tween: Tween(begin: 0, end: 1),
               builder: (context, value, child) {
                 return Opacity(
                   opacity: value,
@@ -432,7 +431,7 @@ class AnalysisView extends GetView<AnalysisController> {
             // Animated description
             TweenAnimationBuilder<double>(
               duration: const Duration(milliseconds: 1200),
-              tween: Tween(begin: 0.0, end: 1.0),
+              tween: Tween(begin: 0, end: 1),
               builder: (context, value, child) {
                 return Opacity(
                   opacity: value,
@@ -462,7 +461,7 @@ class AnalysisView extends GetView<AnalysisController> {
       padding: const EdgeInsets.symmetric(vertical: AppConstants.largePadding),
       child: TweenAnimationBuilder<double>(
         duration: const Duration(seconds: 2),
-        tween: Tween(begin: 0.0, end: 1.0),
+        tween: Tween(begin: 0, end: 1),
         builder: (context, value, child) {
           return Row(
             children: [

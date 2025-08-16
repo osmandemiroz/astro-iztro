@@ -35,7 +35,7 @@ extension AnalysisViewPart1 on AnalysisView {
           // Animated name with enhanced styling
           TweenAnimationBuilder<double>(
             duration: const Duration(milliseconds: 1000),
-            tween: Tween(begin: 0.0, end: 1.0),
+            tween: Tween(begin: 0, end: 1),
             builder: (context, value, child) {
               return Transform.scale(
                 scale: 0.8 + (0.2 * value),

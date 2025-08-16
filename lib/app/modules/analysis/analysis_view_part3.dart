@@ -75,7 +75,7 @@ extension AnalysisViewPart3 on AnalysisView {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.analytics_rounded,
                       color: AppColors.lightPurple,
                       size: 16,
@@ -206,7 +206,7 @@ extension AnalysisViewPart3 on AnalysisView {
                           child: Center(
                             child: Text(
                               palace.element,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontFamily: AppConstants.chineseFont,
                                 fontSize: 16,
                                 fontWeight: FontWeight.w700,
@@ -254,7 +254,7 @@ extension AnalysisViewPart3 on AnalysisView {
                                   child: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      Icon(
+                                      const Icon(
                                         Icons.star_rounded,
                                         color: AppColors.lightPurple,
                                         size: 16,
@@ -298,7 +298,7 @@ extension AnalysisViewPart3 on AnalysisView {
                 ),
               ),
             );
-          }).toList(),
+          }),
         ],
       ),
     );
@@ -306,7 +306,7 @@ extension AnalysisViewPart3 on AnalysisView {
 
   /// [showStarDetails] - Show star details in a dialog
   void _showStarDetails(StarData star, PalaceData palace) {
-    Get.dialog(
+    Get.dialog<void>(
       Dialog(
         backgroundColor: AppColors.darkCard.withValues(alpha: 0.95),
         shape: RoundedRectangleBorder(
@@ -321,7 +321,7 @@ extension AnalysisViewPart3 on AnalysisView {
               // Star header
               Row(
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.star_rounded,
                     color: AppColors.lightPurple,
                     size: 24,
@@ -356,7 +356,7 @@ extension AnalysisViewPart3 on AnalysisView {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () => Get.back(),
+                  onPressed: () => Get.back<void>(),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.lightPurple,
                     foregroundColor: AppColors.white,

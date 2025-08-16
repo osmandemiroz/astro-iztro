@@ -101,7 +101,7 @@ extension AnalysisViewPart2 on AnalysisView {
               // Animated star icons
               TweenAnimationBuilder<double>(
                 duration: const Duration(seconds: 3),
-                tween: Tween(begin: 0.0, end: 1.0),
+                tween: Tween(begin: 0, end: 1),
                 builder: (context, value, child) {
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -452,7 +452,7 @@ extension AnalysisViewPart2 on AnalysisView {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.analytics_rounded,
                       color: AppColors.lightPurple,
                       size: 16,
@@ -542,7 +542,7 @@ extension AnalysisViewPart2 on AnalysisView {
                     child: Center(
                       child: Text(
                         element,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: AppConstants.chineseFont,
                           fontSize: 18,
                           fontWeight: FontWeight.w700,
@@ -632,7 +632,7 @@ extension AnalysisViewPart2 on AnalysisView {
                 ],
               ),
             );
-          }).toList(),
+          }),
 
           const SizedBox(height: AppConstants.defaultPadding),
 
