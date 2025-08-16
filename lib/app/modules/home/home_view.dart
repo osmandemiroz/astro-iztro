@@ -68,8 +68,8 @@ class HomeView extends GetView<HomeController> {
 
           return FlexibleSpaceBar(
             title: Padding(
-              padding: const EdgeInsets.only(
-                bottom: AppConstants.defaultPadding,
+              padding: const EdgeInsets.symmetric(
+                vertical: AppConstants.defaultPadding,
               ),
               child: Text(
                 'ASTRO IZTRO',
@@ -153,56 +153,10 @@ class HomeView extends GetView<HomeController> {
                 );
               }),
               const SizedBox(height: 2),
-              Row(
-                children: [
-                  _buildQuickStat(
-                    icon: Icons.people_outline,
-                    label: 'Profiles',
-                    value: controller.savedProfiles.length.toString(),
-                  ),
-                  const SizedBox(width: AppConstants.defaultPadding),
-                  _buildQuickStat(
-                    icon: Icons.history,
-                    label: 'Recent',
-                    value: controller.recentCalculations.length.toString(),
-                  ),
-                  const SizedBox(width: AppConstants.defaultPadding),
-                  _buildQuickStat(
-                    icon: Icons.favorite_outline,
-                    label: 'Favorites',
-                    value: controller.favoriteCharts.length.toString(),
-                  ),
-                ],
-              ),
             ],
           ),
         );
       },
-    );
-  }
-
-  /// [buildQuickStat] - Small stat display widget
-  Widget _buildQuickStat({
-    required IconData icon,
-    required String label,
-    required String value,
-  }) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(
-          icon,
-          size: 12,
-          color: AppColors.darkTextSecondary.withValues(alpha: 0.8),
-        ),
-        const SizedBox(width: 4),
-        Text(
-          '$value $label',
-          style: AppTheme.caption.copyWith(
-            color: AppColors.darkTextSecondary.withValues(alpha: 0.8),
-          ),
-        ),
-      ],
     );
   }
 
@@ -393,7 +347,7 @@ class HomeView extends GetView<HomeController> {
               child: _buildActionCard(
                 icon: Icons.circle_outlined,
                 title: 'Purple Star Chart',
-                subtitle: 'View your astrology chart',
+                subtitle: 'View astrology chart',
                 onTap: controller.navigateToChart,
                 color: AppColors.lightPurple,
               ),
@@ -644,6 +598,15 @@ class HomeView extends GetView<HomeController> {
   /// [buildFloatingActionButton] - FAB for quick profile creation
   Widget _buildFloatingActionButton() {
     return FloatingActionButton.extended(
+      shape: const RoundedRectangleBorder(
+        side: BorderSide(
+          color: AppColors.darkTextPrimary,
+          width: 1.5,
+        ),
+        borderRadius: BorderRadius.all(
+          Radius.circular(AppConstants.borderRadius * 10),
+        ),
+      ),
       onPressed: controller.navigateToInput,
       icon: const Icon(Icons.add),
       label: const Text('New Profile'),

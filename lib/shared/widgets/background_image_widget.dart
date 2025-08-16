@@ -18,7 +18,7 @@ class BackgroundImageWidget extends StatelessWidget {
     required this.imagePath,
     required this.child,
     super.key,
-    this.blurRadius = 15.0,
+    this.blurRadius = 10,
     this.overlayColor,
     this.fit = BoxFit.cover,
     this.alignment = Alignment.center,
@@ -37,10 +37,7 @@ class BackgroundImageWidget extends StatelessWidget {
         // Blurred background image
         Positioned.fill(
           child: ImageFiltered(
-            imageFilter: ImageFilter.blur(
-              sigmaX: blurRadius,
-              sigmaY: blurRadius,
-            ),
+            imageFilter: ImageFilter.blur(),
             child: Image.asset(
               imagePath,
               fit: fit,
