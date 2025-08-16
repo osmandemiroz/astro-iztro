@@ -6,7 +6,7 @@ import 'package:astro_iztro/core/services/storage_service.dart';
 import 'package:astro_iztro/shared/themes/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 
@@ -15,9 +15,6 @@ import 'package:get/get.dart';
 void main() async {
   // Ensure Flutter binding is initialized
   WidgetsFlutterBinding.ensureInitialized();
-
-  // [main] - Load environment variables for API keys
-  await dotenv.load();
 
   // Initialize StorageService synchronously
   final storageService = StorageService();

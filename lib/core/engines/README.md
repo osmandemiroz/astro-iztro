@@ -78,7 +78,6 @@ final timingData = await iztroService.calculateTimingCycles(profile, 2024);
 ## Migration from RapidAPI
 
 The app has been completely migrated from RapidAPI to native engines:
-- ❌ Removed: `RapidApiService` and `RapidApiTester`
 - ✅ Added: Native calculation engines
 - ✅ Updated: All controllers to use native engines
 - ✅ Enhanced: Calculation accuracy and reliability
