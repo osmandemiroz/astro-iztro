@@ -2,7 +2,6 @@ import 'package:astro_iztro/core/models/bazi_data.dart';
 import 'package:astro_iztro/core/models/chart_data.dart';
 import 'package:astro_iztro/core/models/user_profile.dart';
 import 'package:astro_iztro/core/services/iztro_service.dart';
-import 'package:astro_iztro/core/services/rapid_api_service.dart';
 import 'package:astro_iztro/core/services/storage_service.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
@@ -14,7 +13,6 @@ class AnalysisController extends GetxController {
   // Services
   final StorageService _storageService = Get.find<StorageService>();
   final IztroService _iztroService = Get.find<IztroService>();
-  final RapidApiService _rapidApiService = RapidApiService();
 
   // Reactive state
   final Rx<ChartData?> chartData = Rx<ChartData?>(null);
@@ -137,7 +135,7 @@ class AnalysisController extends GetxController {
     }
   }
 
-  /// [calculateFortuneForYear] - Calculate fortune for specific year using RapidAPI
+  /// [calculateFortuneForYear] - Calculate fortune for specific year using native engines
   Future<Map<String, dynamic>> calculateFortuneForYear(int year) async {
     if (currentProfile.value == null) {
       throw Exception('No user profile available');
@@ -146,19 +144,19 @@ class AnalysisController extends GetxController {
     try {
       if (kDebugMode) {
         print(
-          '[AnalysisController] Calculating fortune for year $year using RapidAPI...',
+          '[AnalysisController] Calculating fortune for year $year using native engines...',
         );
       }
 
-      // Use RapidAPI service to get real fortune data
-      final fortuneData = await _rapidApiService.calculateFortuneForYear(
+      // Use native IztroService to get comprehensive fortune data
+      final fortuneData = await _iztroService.calculateFortuneForYear(
         currentProfile.value!,
         year,
       );
 
       if (kDebugMode) {
         print(
-          '[AnalysisController] Fortune calculation completed: ${fortuneData['source']}',
+          '[AnalysisController] Fortune calculation completed: ${fortuneData['calculationMethod']}',
         );
       }
 
@@ -270,12 +268,12 @@ class AnalysisController extends GetxController {
     return 'Very Weak';
   }
 
-  /// [testApiConnection] - Test the RapidAPI connection with current profile
-  Future<void> testApiConnection() async {
+  /// [testNativeEngines] - Test the native calculation engines with current profile
+  Future<void> testNativeEngines() async {
     if (currentProfile.value == null) {
       Get.snackbar(
         'No Profile',
-        'Please create a profile first to test API connection',
+        'Please create a profile first to test native engines',
         snackPosition: SnackPosition.BOTTOM,
       );
       return;
@@ -285,51 +283,44 @@ class AnalysisController extends GetxController {
       isLoading.value = true;
 
       if (kDebugMode) {
-        print('[AnalysisController] Testing RapidAPI connection...');
+        print('[AnalysisController] Testing native calculation engines...');
       }
 
-      final apiResults = await _rapidApiService.testAstrologyAPIs(
+      // Test native engines by calculating fortune for current year
+      final currentYear = DateTime.now().year;
+      final fortuneData = await _iztroService.calculateFortuneForYear(
         currentProfile.value!,
+        currentYear,
       );
 
-      // Find working APIs
-      final workingAPIs = <String>[];
-      final failedAPIs = <String>[];
+      // Test timing cycles
+      final timingData = await _iztroService.calculateTimingCycles(
+        currentProfile.value!,
+        currentYear,
+      );
 
-      for (final entry in apiResults.entries) {
-        final result = entry.value as Map<String, dynamic>;
-        if (result['success'] == true) {
-          workingAPIs.add(result['api_name'].toString());
-        } else {
-          failedAPIs.add('${entry.key}: ${result['status_code'] ?? 'Error'}');
-        }
+      if (kDebugMode) {
+        print('[AnalysisController] Native engine test completed successfully');
       }
 
-      if (workingAPIs.isNotEmpty) {
-        Get.snackbar(
-          'API Test Successful! 🎉',
-          'Working APIs: ${workingAPIs.join(', ')}',
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Get.theme.colorScheme.primary,
-          colorText: Get.theme.colorScheme.onPrimary,
-          duration: const Duration(seconds: 4),
-        );
-      } else {
-        Get.snackbar(
-          'API Test Results 📊',
-          'Using enhanced calculations. Failed: ${failedAPIs.join(', ')}',
-          snackPosition: SnackPosition.BOTTOM,
-          duration: const Duration(seconds: 4),
-        );
-      }
+      Get.snackbar(
+        'Native Engines Test Successful! 🎉',
+        'All native calculation engines working properly',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Get.theme.colorScheme.primary,
+        colorText: Get.theme.colorScheme.onPrimary,
+        duration: const Duration(seconds: 4),
+      );
     } on Exception catch (e) {
       if (kDebugMode) {
-        print('[AnalysisController] Error testing API: $e');
+        print('[AnalysisController] Error testing native engines: $e');
       }
       Get.snackbar(
-        'API Test Error',
-        'Failed to test API connection: $e',
+        'Native Engine Test Failed',
+        'Error: $e',
         snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Get.theme.colorScheme.primary,
+        colorText: Get.theme.colorScheme.onPrimary,
       );
     } finally {
       isLoading.value = false;

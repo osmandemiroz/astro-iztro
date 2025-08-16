@@ -48,8 +48,6 @@ class AnalysisView extends GetView<AnalysisController> {
                   controller.refreshAnalysis();
                 case 'export':
                   controller.exportAnalysis();
-                case 'test_api':
-                  controller.testApiConnection();
               }
             },
             itemBuilder: (context) => [

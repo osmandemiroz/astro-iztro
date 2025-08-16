@@ -1,6 +1,10 @@
 // ignore_for_file: avoid_dynamic_calls, unused_field, document_ignores, use_is_even_rather_than_modulo
 
 import 'package:astro_iztro/core/engines/purple_star_engine.dart';
+import 'package:astro_iztro/core/engines/bazi_engine.dart';
+import 'package:astro_iztro/core/engines/fortune_engine.dart';
+import 'package:astro_iztro/core/engines/element_engine.dart';
+import 'package:astro_iztro/core/engines/timing_engine.dart';
 import 'package:astro_iztro/core/models/bazi_data.dart';
 import 'package:astro_iztro/core/models/chart_data.dart';
 import 'package:astro_iztro/core/models/user_profile.dart';
@@ -138,7 +142,7 @@ class IztroService {
     }
   }
 
-  /// [calculateBaZi] - Calculate Four Pillars BaZi chart (simplified implementation)
+  /// [calculateBaZi] - Calculate Four Pillars BaZi chart using native BaZiEngine
   Future<BaZiData> calculateBaZi(UserProfile profile) async {
     try {
       // Ensure service is initialized
@@ -153,24 +157,58 @@ class IztroService {
 
       if (kDebugMode) {
         print(
-          '[IztroService] Calculating BaZi using simplified native method...',
+          '[IztroService] Calculating BaZi using native BaZiEngine...',
         );
       }
 
-      // Create basic BaZi data structure with simplified calculations
-      final birthDateTime = DateTime(
-        profile.birthDate.year,
-        profile.birthDate.month,
-        profile.birthDate.day,
-        profile.birthHour,
-        profile.birthMinute,
+      // Use native BaZiEngine for comprehensive calculations
+      final baziResult = BaZiEngine.calculateBaZi(
+        birthDate: profile.birthDate,
+        birthHour: profile.birthHour,
+        birthMinute: profile.birthMinute,
+        gender: profile.gender,
+        isLunarCalendar: profile.isLunarCalendar,
+        hasLeapMonth: profile.hasLeapMonth,
+        latitude: profile.latitude,
+        longitude: profile.longitude,
+        useTrueSolarTime: profile.useTrueSolarTime,
       );
 
-      // Simplified pillar calculations
-      final yearPillar = _calculateSimplePillar(birthDateTime.year, 'year');
-      final monthPillar = _calculateSimplePillar(birthDateTime.month, 'month');
-      final dayPillar = _calculateSimplePillar(birthDateTime.day, 'day');
-      final hourPillar = _calculateSimplePillar(birthDateTime.hour, 'hour');
+      // Convert native engine results to our BaZiData model
+      final yearPillar = _convertNativePillar(
+        baziResult['yearPillar'] as Map<String, dynamic>,
+      );
+      final monthPillar = _convertNativePillar(
+        baziResult['monthPillar'] as Map<String, dynamic>,
+      );
+      final dayPillar = _convertNativePillar(
+        baziResult['dayPillar'] as Map<String, dynamic>,
+      );
+      final hourPillar = _convertNativePillar(
+        baziResult['hourPillar'] as Map<String, dynamic>,
+      );
+
+      // Extract element counts from native calculation
+      final elementCounts = Map<String, int>.from(
+        baziResult['elementCounts'] as Map<String, dynamic>,
+      );
+
+      // Get day master analysis
+      final dayMasterAnalysis =
+          baziResult['dayMasterAnalysis'] as Map<String, dynamic>;
+      final strongestElement = baziResult['strongestElement'] as String;
+      final weakestElement = baziResult['weakestElement'] as String;
+      final missingElements = List<String>.from(
+        baziResult['missingElements'] as List<dynamic>,
+      );
+
+      if (kDebugMode) {
+        print('[IztroService] Native BaZi calculation completed successfully');
+        print('  Generated ${elementCounts.length} element counts');
+        print(
+          '  Day Master: ${dayMasterAnalysis['element']} (${dayMasterAnalysis['strength']})',
+        );
+      }
 
       return BaZiData(
         yearPillar: yearPillar,
@@ -180,29 +218,21 @@ class IztroService {
         birthDate: profile.birthDate,
         gender: profile.gender,
         isLunarCalendar: profile.isLunarCalendar,
-        elementCounts: _calculateElementCounts(
-          yearPillar,
-          monthPillar,
-          dayPillar,
-          hourPillar,
-        ),
-        strongestElement: '木',
-        weakestElement: '土',
-        missingElements: [],
-        chineseZodiac: _getChineseZodiac(profile.birthDate.year),
-        chineseZodiacElement: '木',
-        westernZodiac: _getWesternZodiac(
-          profile.birthDate.month,
-          profile.birthDate.day,
-        ),
+        elementCounts: elementCounts,
+        strongestElement: strongestElement,
+        weakestElement: weakestElement,
+        missingElements: missingElements,
+        chineseZodiac: baziResult['chineseZodiac'] as String,
+        chineseZodiacElement: dayMasterAnalysis['element'] as String,
+        westernZodiac: baziResult['westernZodiac'] as String,
         analysis: {
-          'element_balance': 'Balanced using native calculation',
-          'day_master_strength': 'Moderate',
+          'element_balance': baziResult['analysis']['overallBalance'] as String,
+          'day_master_strength': dayMasterAnalysis['strength'] as String,
+          'native_analysis': baziResult['analysis'] as Map<String, dynamic>,
         },
-        recommendations: [
-          'Continue personal development',
-          'Focus on balanced lifestyle',
-        ],
+        recommendations: List<String>.from(
+          baziResult['analysis']['recommendations'] as List<dynamic>,
+        ),
         calculatedAt: DateTime.now(),
         languageCode: profile.languageCode,
       );
@@ -252,6 +282,23 @@ class IztroService {
         },
       );
     }).toList();
+  }
+
+  /// [_convertNativePillar] - Convert native engine pillar data to our models
+  PillarData _convertNativePillar(Map<String, dynamic> nativePillar) {
+    return PillarData(
+      stem: nativePillar['stem'] as String,
+      branch: nativePillar['branch'] as String,
+      stemEn: nativePillar['stemEn'] as String,
+      branchEn: nativePillar['branchEn'] as String,
+      stemElement: nativePillar['stemElement'] as String,
+      branchElement: nativePillar['branchElement'] as String,
+      stemYinYang: nativePillar['stemYinYang'] as String,
+      branchYinYang: nativePillar['branchYinYang'] as String,
+      hiddenStems: List<String>.from(
+        nativePillar['hiddenStems'] as List<dynamic>,
+      ),
+    );
   }
 
   /// [_calculateSimplePillar] - Calculate simplified BaZi pillar
@@ -409,6 +456,143 @@ class IztroService {
       '亥': '水',
     };
     return branchElements[branch] ?? '木';
+  }
+
+  /// [calculateFortuneForYear] - Calculate fortune for specific year using native FortuneEngine
+  Future<Map<String, dynamic>> calculateFortuneForYear(
+    UserProfile profile,
+    int targetYear,
+  ) async {
+    try {
+      // Ensure service is initialized
+      if (!_isInitialized) {
+        await initialize();
+      }
+
+      // Validate profile data before calculation
+      if (!validateBirthData(profile)) {
+        throw IztroCalculationException('Invalid birth data provided');
+      }
+
+      if (kDebugMode) {
+        print(
+          '[IztroService] Calculating fortune for year $targetYear using native FortuneEngine...',
+        );
+      }
+
+      // Use native FortuneEngine for comprehensive fortune calculations
+      final fortuneResult = FortuneEngine.calculateFortuneForYear(
+        birthDate: profile.birthDate,
+        birthHour: profile.birthHour,
+        birthMinute: profile.birthMinute,
+        gender: profile.gender,
+        isLunarCalendar: profile.isLunarCalendar,
+        targetYear: targetYear,
+        latitude: profile.latitude,
+        longitude: profile.longitude,
+      );
+
+      if (kDebugMode) {
+        print(
+          '[IztroService] Native fortune calculation completed successfully',
+        );
+        print('  Source: ${fortuneResult['calculationMethod']}');
+      }
+
+      return fortuneResult;
+    } catch (e) {
+      if (kDebugMode) {
+        print('[IztroService] Fortune calculation failed: $e');
+      }
+      throw IztroCalculationException('Failed to calculate fortune: $e');
+    }
+  }
+
+  /// [analyzeElementBalance] - Analyze element balance using native ElementEngine
+  Future<Map<String, dynamic>> analyzeElementBalance(
+    UserProfile profile,
+    Map<String, int> elementCounts,
+    String dayMaster,
+  ) async {
+    try {
+      // Ensure service is initialized
+      if (!_isInitialized) {
+        await initialize();
+      }
+
+      if (kDebugMode) {
+        print(
+          '[IztroService] Analyzing element balance using native ElementEngine...',
+        );
+      }
+
+      // Use native ElementEngine for comprehensive element analysis
+      final elementResult = ElementEngine.analyzeElementBalance(
+        elementCounts: elementCounts,
+        dayMaster: dayMaster,
+        gender: profile.gender,
+        birthDate: profile.birthDate,
+      );
+
+      if (kDebugMode) {
+        print('[IztroService] Native element analysis completed successfully');
+      }
+
+      return elementResult;
+    } catch (e) {
+      if (kDebugMode) {
+        print('[IztroService] Element analysis failed: $e');
+      }
+      throw IztroCalculationException('Failed to analyze element balance: $e');
+    }
+  }
+
+  /// [calculateTimingCycles] - Calculate timing cycles using native TimingEngine
+  Future<Map<String, dynamic>> calculateTimingCycles(
+    UserProfile profile,
+    int targetYear,
+  ) async {
+    try {
+      // Ensure service is initialized
+      if (!_isInitialized) {
+        await initialize();
+      }
+
+      // Validate profile data before calculation
+      if (!validateBirthData(profile)) {
+        throw IztroCalculationException('Invalid birth data provided');
+      }
+
+      if (kDebugMode) {
+        print(
+          '[IztroService] Calculating timing cycles using native TimingEngine...',
+        );
+      }
+
+      // Use native TimingEngine for comprehensive timing calculations
+      final timingResult = TimingEngine.calculateTimingCycles(
+        birthDate: profile.birthDate,
+        birthHour: profile.birthHour,
+        birthMinute: profile.birthMinute,
+        gender: profile.gender,
+        targetYear: targetYear,
+        latitude: profile.latitude,
+        longitude: profile.longitude,
+      );
+
+      if (kDebugMode) {
+        print(
+          '[IztroService] Native timing calculation completed successfully',
+        );
+      }
+
+      return timingResult;
+    } catch (e) {
+      if (kDebugMode) {
+        print('[IztroService] Timing calculation failed: $e');
+      }
+      throw IztroCalculationException('Failed to calculate timing cycles: $e');
+    }
   }
 }
 

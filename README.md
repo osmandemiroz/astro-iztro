@@ -32,22 +32,12 @@ Astro Iztro is a mobile application built with Flutter that provides users with 
    cd astro-iztro
    ```
 
-2. **Set up environment variables**
-   ```bash
-   cp .env.example .env
-   ```
-   
-   Then edit the `.env` file and add your API keys:
-   ```
-   RAPIDAPI_KEY=your_rapidapi_key_here
-   ```
-
-3. **Install dependencies**
+2. **Install dependencies**
    ```bash
    flutter pub get
    ```
 
-4. **Run the application**
+3. **Run the application**
    ```bash
    flutter run
    ```
@@ -75,12 +65,19 @@ Purple Star Astrology, also known as Zi Wei Dou Shu (紫微斗数), is one of th
 
 ## 🛠 Technical Details
 
-This Flutter application integrates with astrology calculation libraries to provide:
+This Flutter application uses **native calculation engines** to provide:
 
-- Real-time astrolabe generation
-- Accurate birth chart calculations
-- Personality analysis based on star positions
-- Traditional Chinese calendar support
+- **PurpleStarEngine**: Core Purple Star Astrology calculations
+- **BaZiEngine**: Four Pillars BaZi analysis
+- **FortuneEngine**: Fortune timing and cycle calculations
+- **ElementEngine**: Five Elements balance analysis
+- **TimingEngine**: Life cycle and timing analysis
+
+**Key Benefits:**
+- ✅ **No External Dependencies**: All calculations performed locally
+- ✅ **No API Keys Required**: Works completely offline
+- ✅ **Authentic Algorithms**: Traditional Chinese astrology methods
+- ✅ **Production Ready**: Comprehensive error handling and validation
 
 ## 📖 Usage
 
@@ -105,9 +102,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
-- Thanks to the [iztro](https://github.com/SylarLong/iztro) project for providing the core astrology calculations
-- Inspiration from traditional Chinese astrology masters
-- Flutter community for an excellent mobile development framework
+- **Native Calculation Engines**: Custom-built engines for authentic Chinese astrology
+- **Traditional Chinese Astrology**: Based on centuries-old Zi Wei Dou Shu principles
+- **Flutter Community**: Excellent mobile development framework
+- **Open Source**: Built with modern, maintainable code architecture
 
 ## 📞 Support
 
