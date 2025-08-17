@@ -36,8 +36,16 @@ class InputController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    // Load existing profile if available
-    _loadExistingProfile();
+    // Check if we're creating a profile for someone else
+    final arguments = Get.arguments;
+    final isForOtherPerson =
+        arguments is Map<String, dynamic> &&
+        arguments['isForOtherPerson'] == true;
+
+    if (!isForOtherPerson) {
+      // Load existing profile if available (only when editing current profile)
+      _loadExistingProfile();
+    }
   }
 
   @override
@@ -99,18 +107,41 @@ class InputController extends GetxController {
         throw Exception('Invalid birth data provided');
       }
 
-      await _storageService.saveUserProfile(profile);
+      // Check if we're creating a profile for someone else
+      final arguments = Get.arguments;
+      final isForOtherPerson =
+          arguments is Map<String, dynamic> &&
+          arguments['isForOtherPerson'] == true;
 
-      Get
-        ..snackbar(
-          'Success',
-          'Profile saved successfully!',
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.green,
-          colorText: Colors.white,
-        )
-        // Go back to home
-        ..back(result: profile);
+      if (isForOtherPerson) {
+        // Save as a separate profile for other person (don't set as current user profile)
+        await _storageService.saveUserProfileAsOther(profile);
+
+        Get
+          ..snackbar(
+            'Success',
+            'Profile for other person saved successfully!',
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.green,
+            colorText: Colors.white,
+          )
+          // Go back to astro matcher with the new profile
+          ..back(result: profile);
+      } else {
+        // Save as current user profile
+        await _storageService.saveUserProfile(profile);
+
+        Get
+          ..snackbar(
+            'Success',
+            'Your profile saved successfully!',
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.green,
+            colorText: Colors.white,
+          )
+          // Go back to home
+          ..back(result: profile);
+      }
     } on Exception catch (e) {
       Get.snackbar(
         'Error',

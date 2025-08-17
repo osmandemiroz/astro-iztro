@@ -200,6 +200,32 @@ class StorageService {
     }
   }
 
+  /// [saveUserProfileAsOther] - Save a profile for someone else (adds to profiles list without setting as current)
+  Future<bool> saveUserProfileAsOther(UserProfile profile) async {
+    try {
+      // Load existing profiles
+      final existingProfiles = loadUserProfiles();
+
+      // Check if profile already exists (by comparing hash codes)
+      final existingIndex = existingProfiles.indexWhere(
+        (p) => p.hashCode == profile.hashCode,
+      );
+
+      if (existingIndex >= 0) {
+        // Update existing profile
+        existingProfiles[existingIndex] = profile;
+      } else {
+        // Add new profile
+        existingProfiles.add(profile);
+      }
+
+      // Save updated profiles list
+      return await saveUserProfiles(existingProfiles);
+    } on Exception catch (e) {
+      throw StorageException('Failed to save profile for other person: $e');
+    }
+  }
+
   /// [loadUserProfiles] - Load multiple user profiles
   List<UserProfile> loadUserProfiles() {
     try {

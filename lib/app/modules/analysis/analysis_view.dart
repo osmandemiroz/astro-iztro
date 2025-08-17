@@ -581,7 +581,7 @@ class AnalysisView extends GetView<AnalysisController> {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
+          const Icon(
             Icons.analytics_rounded,
             color: AppColors.lightPurple,
             size: 20,

@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_dynamic_calls, unused_field, document_ignores, use_is_even_rather_than_modulo, unused_element
 
+import 'package:astro_iztro/core/engines/astro_matcher_engine.dart';
 import 'package:astro_iztro/core/engines/bazi_engine.dart';
 import 'package:astro_iztro/core/engines/element_engine.dart';
 import 'package:astro_iztro/core/engines/fortune_engine.dart';
@@ -604,6 +605,60 @@ class IztroService {
         print('[IztroService] Timing calculation failed: $e');
       }
       throw IztroCalculationException('Failed to calculate timing cycles: $e');
+    }
+  }
+
+  /// [calculateAstroCompatibility] - Calculate astrological compatibility using native AstroMatcherEngine
+  Future<Map<String, dynamic>> calculateAstroCompatibility(
+    UserProfile profile1,
+    UserProfile profile2,
+  ) async {
+    try {
+      // Ensure service is initialized
+      if (!_isInitialized) {
+        await initialize();
+      }
+
+      // Validate both profiles before calculation
+      if (!validateBirthData(profile1) || !validateBirthData(profile2)) {
+        throw IztroCalculationException(
+          'Invalid birth data provided for one or both profiles',
+        );
+      }
+
+      if (kDebugMode) {
+        print(
+          '[IztroService] Calculating astrological compatibility using native AstroMatcherEngine...',
+        );
+        print('  Profile 1: ${profile1.name ?? 'Unknown'}');
+        print('  Profile 2: ${profile2.name ?? 'Unknown'}');
+      }
+
+      // Convert UserProfile objects to Map format for the engine
+      final profile1Map = profile1.toJson();
+      final profile2Map = profile2.toJson();
+
+      // Use native AstroMatcherEngine for comprehensive compatibility analysis
+      final compatibilityResult = AstroMatcherEngine.calculateCompatibility(
+        profile1: profile1Map,
+        profile2: profile2Map,
+      );
+
+      if (kDebugMode) {
+        print(
+          '[IztroService] Native compatibility calculation completed successfully',
+        );
+        print('  Overall Score: ${compatibilityResult['overallScore']}%');
+      }
+
+      return compatibilityResult;
+    } catch (e) {
+      if (kDebugMode) {
+        print('[IztroService] Compatibility calculation failed: $e');
+      }
+      throw IztroCalculationException(
+        'Failed to calculate astrological compatibility: $e',
+      );
     }
   }
 }

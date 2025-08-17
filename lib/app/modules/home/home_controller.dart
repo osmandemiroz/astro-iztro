@@ -317,6 +317,27 @@ class HomeController extends GetxController {
     }
   }
 
+  /// [clearCorruptedData] - Clear any corrupted recent calculations or profile data
+  void clearCorruptedData() {
+    try {
+      // Clear recent calculations
+      recentCalculations.clear();
+      _storageService.saveRecentCalculations([]);
+
+      // Reload profiles to ensure they're valid
+      final profiles = _storageService.loadUserProfiles();
+      savedProfiles.assignAll(profiles.where((p) => p.isValid));
+
+      if (kDebugMode) {
+        print('[HomeController] Cleared corrupted data and reloaded profiles');
+      }
+    } on Exception catch (e) {
+      if (kDebugMode) {
+        print('[HomeController] Error clearing corrupted data: $e');
+      }
+    }
+  }
+
   /// [exportUserData] - Export all user data
   String exportUserData() {
     try {
@@ -416,6 +437,11 @@ class HomeController extends GetxController {
   /// [navigateToSettings] - Navigate to settings screen
   void navigateToSettings() {
     Get.toNamed<void>('/settings');
+  }
+
+  /// [navigateToAstroMatcher] - Navigate to astro matcher screen
+  void navigateToAstroMatcher() {
+    Get.toNamed<void>('/astro_matcher');
   }
 
   /// [setBottomNavIndex] - Set bottom navigation index

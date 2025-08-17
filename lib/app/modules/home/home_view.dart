@@ -46,7 +46,52 @@ class HomeView extends GetView<HomeController> {
     return CustomScrollView(
       slivers: [
         _buildAppBar(),
-        _buildMainContent(),
+        Builder(
+          builder: (context) {
+            try {
+              return _buildMainContent();
+            } on Exception {
+              return SliverToBoxAdapter(
+                child: Container(
+                  padding: const EdgeInsets.all(AppConstants.defaultPadding),
+                  child: Column(
+                    children: [
+                      const Icon(
+                        Icons.error_outline,
+                        color: AppColors.error,
+                        size: 48,
+                      ),
+                      const SizedBox(height: AppConstants.defaultPadding),
+                      Text(
+                        'Error loading content',
+                        style: AppTheme.headingSmall.copyWith(
+                          color: AppColors.error,
+                        ),
+                      ),
+                      const SizedBox(height: AppConstants.smallPadding),
+                      Text(
+                        'There was an error loading the home screen content. This might be due to corrupted data.',
+                        style: AppTheme.bodyMedium.copyWith(
+                          color: AppColors.darkTextSecondary,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: AppConstants.defaultPadding),
+                      ElevatedButton(
+                        onPressed: controller.clearCorruptedData,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.error,
+                          foregroundColor: AppColors.white,
+                        ),
+                        child: const Text('Fix Data'),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
+          },
+        ),
       ],
     );
   }
@@ -179,10 +224,6 @@ class HomeView extends GetView<HomeController> {
               _buildCurrentProfileSection(),
               const SizedBox(height: AppConstants.largePadding),
               _buildQuickActionsSection(),
-              const SizedBox(height: AppConstants.largePadding),
-              _buildRecentCalculationsSection(),
-              const SizedBox(height: AppConstants.largePadding),
-              _buildSavedProfilesSection(),
             ],
           ),
         ),
@@ -379,11 +420,11 @@ class HomeView extends GetView<HomeController> {
             const SizedBox(width: AppConstants.defaultPadding),
             Expanded(
               child: _buildActionCard(
-                icon: Icons.person_add_outlined,
-                title: 'New Profile',
-                subtitle: 'Add family/friends',
-                onTap: controller.navigateToInput,
-                color: AppColors.success,
+                icon: Icons.favorite,
+                title: 'Astro Matcher',
+                subtitle: 'Compatibility analysis',
+                onTap: controller.navigateToAstroMatcher,
+                color: AppColors.lightPurple,
               ),
             ),
           ],
@@ -427,170 +468,6 @@ class HomeView extends GetView<HomeController> {
             textAlign: TextAlign.center,
           ),
         ],
-      ),
-    );
-  }
-
-  /// [buildRecentCalculationsSection] - Recent calculations list
-  Widget _buildRecentCalculationsSection() {
-    return Obx(() {
-      if (!controller.hasRecentCalculations) {
-        return const SizedBox.shrink();
-      }
-
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Recent Calculations',
-                style: AppTheme.headingSmall.copyWith(
-                  color: AppColors.darkTextPrimary,
-                ),
-              ),
-              TextButton(
-                onPressed: controller.clearRecentCalculations,
-                child: const Text(
-                  'Clear All',
-                  style: TextStyle(color: AppColors.lightPurple),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: AppConstants.defaultPadding),
-          ...controller.recentCalculations
-              .take(5)
-              .map(_buildRecentCalculationCard),
-        ],
-      );
-    });
-  }
-
-  /// [buildRecentCalculationCard] - Individual recent calculation card
-  Widget _buildRecentCalculationCard(Map<String, dynamic> calculation) {
-    final type = calculation['type'] as String;
-    final profileName = calculation['profile_name'] as String;
-    final calculatedAt = DateTime.parse(calculation['calculated_at'] as String);
-
-    return LiquidGlassCard(
-      margin: const EdgeInsets.only(bottom: AppConstants.smallPadding),
-      onTap: () {
-        // Navigate to appropriate screen based on type
-        if (type == 'chart') {
-          controller.navigateToChart();
-        } else {
-          controller.navigateToBaZi();
-        }
-      },
-      child: ListTile(
-        contentPadding: EdgeInsets.zero,
-        leading: CircleAvatar(
-          backgroundColor: type == 'chart'
-              ? AppColors.lightPurple
-              : AppColors.lightGold,
-          child: Icon(
-            type == 'chart'
-                ? Icons.circle_outlined
-                : Icons.view_column_outlined,
-            color: AppColors.white,
-          ),
-        ),
-        title: Text(
-          '$profileName - ${type == 'chart' ? 'Purple Star Chart' : 'BaZi Analysis'}',
-          style: AppTheme.bodyMedium.copyWith(
-            fontWeight: FontWeight.w500,
-            color: AppColors.darkTextPrimary,
-          ),
-        ),
-        subtitle: Text(
-          'Calculated ${_formatTimeAgo(calculatedAt)}',
-          style: AppTheme.caption.copyWith(
-            color: AppColors.darkTextSecondary,
-          ),
-        ),
-        trailing: const Icon(
-          Icons.arrow_forward_ios,
-          color: AppColors.darkTextTertiary,
-        ),
-      ),
-    );
-  }
-
-  /// [buildSavedProfilesSection] - Saved profiles section
-  Widget _buildSavedProfilesSection() {
-    return Obx(() {
-      if (!controller.hasSavedProfiles) {
-        return const SizedBox.shrink();
-      }
-
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Saved Profiles',
-            style: AppTheme.headingSmall.copyWith(
-              color: AppColors.darkTextPrimary,
-            ),
-          ),
-          const SizedBox(height: AppConstants.defaultPadding),
-          ...controller.savedProfiles.map(
-            _buildProfileCard,
-          ),
-        ],
-      );
-    });
-  }
-
-  /// [buildProfileCard] - Individual profile card
-  Widget _buildProfileCard(UserProfile profile) {
-    return LiquidGlassCard(
-      margin: const EdgeInsets.only(bottom: AppConstants.smallPadding),
-      onTap: () => controller.setCurrentProfile(profile),
-      child: ListTile(
-        contentPadding: EdgeInsets.zero,
-        leading: CircleAvatar(
-          backgroundColor: profile.gender == 'male'
-              ? AppColors.lightGold
-              : AppColors.lightPurple,
-          child: Icon(
-            profile.gender == 'male' ? Icons.male : Icons.female,
-            color: AppColors.white,
-          ),
-        ),
-        title: Text(
-          profile.name ?? 'Unknown',
-          style: AppTheme.bodyMedium.copyWith(
-            fontWeight: FontWeight.w500,
-            color: AppColors.darkTextPrimary,
-          ),
-        ),
-        subtitle: Text(
-          '${profile.birthDate.day}/${profile.birthDate.month}/${profile.birthDate.year} - ${profile.formattedBirthTime}',
-          style: AppTheme.caption.copyWith(
-            color: AppColors.darkTextSecondary,
-          ),
-        ),
-        trailing: PopupMenuButton(
-          itemBuilder: (context) => [
-            const PopupMenuItem(
-              value: 'use',
-              child: Text('Use Profile'),
-            ),
-            const PopupMenuItem(
-              value: 'delete',
-              child: Text('Delete'),
-            ),
-          ],
-          onSelected: (value) {
-            if (value == 'use') {
-              controller.setCurrentProfile(profile);
-            } else if (value == 'delete') {
-              _showDeleteProfileDialog(profile);
-            }
-          },
-        ),
       ),
     );
   }
@@ -665,58 +542,6 @@ class HomeView extends GetView<HomeController> {
             icon: Icon(Icons.settings_outlined),
             activeIcon: Icon(Icons.settings),
             label: 'Settings',
-          ),
-        ],
-      ),
-    );
-  }
-
-  /// Helper method to format time ago
-  String _formatTimeAgo(DateTime dateTime) {
-    final now = DateTime.now();
-    final difference = now.difference(dateTime);
-
-    if (difference.inDays > 0) {
-      return '${difference.inDays} day${difference.inDays > 1 ? 's' : ''} ago';
-    } else if (difference.inHours > 0) {
-      return '${difference.inHours} hour${difference.inHours > 1 ? 's' : ''} ago';
-    } else if (difference.inMinutes > 0) {
-      return '${difference.inMinutes} minute${difference.inMinutes > 1 ? 's' : ''} ago';
-    } else {
-      return 'Just now';
-    }
-  }
-
-  /// Show delete confirmation dialog
-  void _showDeleteProfileDialog(UserProfile profile) {
-    Get.dialog<void>(
-      AlertDialog(
-        backgroundColor: AppColors.darkCard,
-        title: const Text(
-          'Delete Profile',
-          style: TextStyle(color: AppColors.darkTextPrimary),
-        ),
-        content: Text(
-          'Are you sure you want to delete ${profile.name ?? 'this profile'}?',
-          style: const TextStyle(color: AppColors.darkTextSecondary),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Get.back<void>(),
-            child: const Text(
-              'Cancel',
-              style: TextStyle(color: AppColors.darkTextTertiary),
-            ),
-          ),
-          TextButton(
-            onPressed: () {
-              Get.back<void>();
-              controller.deleteProfile(profile);
-            },
-            child: const Text(
-              'Delete',
-              style: TextStyle(color: AppColors.error),
-            ),
           ),
         ],
       ),

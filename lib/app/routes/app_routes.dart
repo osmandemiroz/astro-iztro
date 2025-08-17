@@ -5,6 +5,7 @@ abstract class AppRoutes {
   static const chart = '/chart';
   static const bazi = '/bazi';
   static const analysis = '/analysis';
+  static const astroMatcher = '/astro_matcher';
   static const settings = '/settings';
   static const palaceDetail = '/palace_detail';
 }

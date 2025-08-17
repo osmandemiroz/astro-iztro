@@ -48,6 +48,16 @@ This directory contains native calculation engines that provide comprehensive as
   - Lunar phase influences
   - Daily timing patterns
 
+### 6. AstroMatcherEngine (`astro_matcher_engine.dart`)
+- **Purpose**: Astrological compatibility analysis
+- **Features**:
+  - Sun sign compatibility calculations
+  - Element compatibility analysis
+  - Timing and life cycle compatibility
+  - Relationship type classification
+  - Personalized recommendations
+  - Traditional astrological rules
+
 ## Benefits of Native Engines
 
 ✅ **No External Dependencies**: All calculations performed locally
@@ -73,6 +83,9 @@ final elementAnalysis = await iztroService.analyzeElementBalance(profile, elemen
 
 // Timing cycles
 final timingData = await iztroService.calculateTimingCycles(profile, 2024);
+
+// Astrological compatibility
+final compatibilityData = await iztroService.calculateAstroCompatibility(profile1, profile2);
 ```
 
 ## Migration from RapidAPI
@@ -81,6 +94,7 @@ The app has been completely migrated from RapidAPI to native engines:
 - ✅ Added: Native calculation engines
 - ✅ Updated: All controllers to use native engines
 - ✅ Enhanced: Calculation accuracy and reliability
+- ✅ Added: Astro Matcher compatibility engine
 
 ## Technical Details
 
@@ -97,3 +111,6 @@ The app has been completely migrated from RapidAPI to native engines:
 - Customizable calculation parameters
 - Performance optimization for complex charts
 - Additional traditional astrology methods
+- Enhanced compatibility algorithms with more astrological factors
+- Relationship timing predictions
+- Compatibility trend analysis over time

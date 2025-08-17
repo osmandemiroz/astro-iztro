@@ -11,13 +11,31 @@ import 'package:get/get.dart';
 class InputView extends GetView<InputController> {
   const InputView({super.key});
 
+  /// [_getTitle] - Get the appropriate title based on context
+  String _getTitle() {
+    final arguments = Get.arguments;
+    final isForOtherPerson =
+        arguments is Map<String, dynamic> &&
+        arguments['isForOtherPerson'] == true;
+    return isForOtherPerson
+        ? 'Create Profile for Other Person'
+        : 'Profile Information';
+  }
+
+  /// [_isForOtherPerson] - Check if creating profile for someone else
+  bool _isForOtherPerson() {
+    final arguments = Get.arguments;
+    return arguments is Map<String, dynamic> &&
+        arguments['isForOtherPerson'] == true;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Profile Information',
-          style: TextStyle(color: AppColors.darkTextPrimary),
+        title: Text(
+          _getTitle(),
+          style: const TextStyle(color: AppColors.darkTextPrimary),
         ),
         actions: [
           Obx(
@@ -32,9 +50,9 @@ class InputView extends GetView<InputController> {
                   )
                 : TextButton(
                     onPressed: controller.saveProfile,
-                    child: const Text(
-                      'Save',
-                      style: TextStyle(color: AppColors.lightPurple),
+                    child: Text(
+                      _isForOtherPerson() ? 'Create Profile' : 'Save',
+                      style: const TextStyle(color: AppColors.lightPurple),
                     ),
                   ),
           ),
@@ -67,7 +85,9 @@ class InputView extends GetView<InputController> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Personal Information',
+          _isForOtherPerson()
+              ? "Other Person's Information"
+              : 'Personal Information',
           style: AppTheme.headingSmall.copyWith(
             color: AppColors.darkTextPrimary,
           ),
@@ -108,7 +128,9 @@ class InputView extends GetView<InputController> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Birth Information',
+          _isForOtherPerson()
+              ? "Other Person's Birth Information"
+              : 'Birth Information',
           style: AppTheme.headingSmall.copyWith(
             color: AppColors.darkTextPrimary,
           ),

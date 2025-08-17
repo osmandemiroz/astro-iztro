@@ -1,5 +1,7 @@
 import 'package:astro_iztro/app/modules/analysis/analysis_binding.dart';
 import 'package:astro_iztro/app/modules/analysis/analysis_view.dart';
+import 'package:astro_iztro/app/modules/astro_matcher/astro_matcher_binding.dart';
+import 'package:astro_iztro/app/modules/astro_matcher/astro_matcher_view.dart';
 import 'package:astro_iztro/app/modules/bazi/bazi_binding.dart';
 import 'package:astro_iztro/app/modules/bazi/bazi_view.dart';
 import 'package:astro_iztro/app/modules/chart/chart_binding.dart';
@@ -44,6 +46,11 @@ abstract class AppPages {
       name: AppRoutes.analysis,
       page: () => const AnalysisView(),
       binding: AnalysisBinding(),
+    ),
+    GetPage<dynamic>(
+      name: AppRoutes.astroMatcher,
+      page: () => const AstroMatcherView(),
+      binding: AstroMatcherBinding(),
     ),
     GetPage<dynamic>(
       name: AppRoutes.settings,
