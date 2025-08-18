@@ -116,9 +116,13 @@ class IztroService {
         );
 
         if (kDebugMode) {
+          final moonPhaseValue = lunarData['moonPhase'];
+          final phaseText = moonPhaseValue is Map
+              ? (moonPhaseValue['phase'] ?? moonPhaseValue).toString()
+              : moonPhaseValue.toString();
           print(
             '[IztroService.calculateAstrolabe] Lunar data computed (phase: '
-            '${lunarData['moonPhase']?['phase'] ?? lunarData['moonPhase']})',
+            '$phaseText)',
           );
         }
       }
