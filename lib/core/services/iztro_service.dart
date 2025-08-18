@@ -1,9 +1,13 @@
 // ignore_for_file: avoid_dynamic_calls, unused_field, document_ignores, use_is_even_rather_than_modulo, unused_element
 
+import 'package:astro_iztro/core/engines/advanced_star_engine.dart';
 import 'package:astro_iztro/core/engines/astro_matcher_engine.dart';
 import 'package:astro_iztro/core/engines/bazi_engine.dart';
 import 'package:astro_iztro/core/engines/element_engine.dart';
+import 'package:astro_iztro/core/engines/enhanced_compatibility_engine.dart';
 import 'package:astro_iztro/core/engines/fortune_engine.dart';
+import 'package:astro_iztro/core/engines/lunar_calendar_engine.dart';
+import 'package:astro_iztro/core/engines/performance_engine.dart';
 import 'package:astro_iztro/core/engines/purple_star_engine.dart';
 import 'package:astro_iztro/core/engines/timing_engine.dart';
 import 'package:astro_iztro/core/models/bazi_data.dart';
@@ -33,6 +37,9 @@ class IztroService {
 
       // Native engine doesn't require external initialization
       _isInitialized = true;
+
+      // Preload cache for common calculations to improve perceived performance
+      PerformanceEngine.preloadCache();
 
       if (kDebugMode) {
         print('[IztroService] Native engine initialized successfully');
@@ -89,18 +96,60 @@ class IztroService {
         }
       }
 
-      // Use native Purple Star engine for calculation
-      final calculationResult = PurpleStarEngine.calculateAstrolabe(
-        birthDate: adjustedDateTime,
-        birthHour: adjustedDateTime.hour,
-        birthMinute: adjustedDateTime.minute,
-        gender: profile.gender,
-        isLunarCalendar: profile.isLunarCalendar,
-        hasLeapMonth: profile.hasLeapMonth,
-        latitude: profile.latitude,
-        longitude: profile.longitude,
-        useTrueSolarTime: profile.useTrueSolarTime,
-      );
+      // Optionally gather lunar data if requested (does not alter core behavior)
+      Map<String, dynamic>? lunarData;
+      if (profile.isLunarCalendar) {
+        lunarData = PerformanceEngine.optimizeCalculation<Map<String, dynamic>>(
+          operationName: 'lunar_date',
+          parameters: {
+            'year': adjustedDateTime.year,
+            'month': adjustedDateTime.month,
+            'day': adjustedDateTime.day,
+            'lat': profile.latitude,
+            'lng': profile.longitude,
+          },
+          calculation: () => LunarCalendarEngine.calculateLunarDate(
+            solarDate: adjustedDateTime,
+            latitude: profile.latitude,
+            longitude: profile.longitude,
+          ),
+        );
+
+        if (kDebugMode) {
+          print(
+            '[IztroService.calculateAstrolabe] Lunar data computed (phase: '
+            '${lunarData['moonPhase']?['phase'] ?? lunarData['moonPhase']})',
+          );
+        }
+      }
+
+      // Use native Purple Star engine for calculation (cached for performance)
+      final calculationResult =
+          PerformanceEngine.optimizeCalculation<Map<String, dynamic>>(
+            operationName: 'purple_star_native',
+            parameters: {
+              'date': adjustedDateTime.toIso8601String(),
+              'hour': adjustedDateTime.hour,
+              'minute': adjustedDateTime.minute,
+              'gender': profile.gender,
+              'isLunar': profile.isLunarCalendar,
+              'leap': profile.hasLeapMonth,
+              'lat': profile.latitude,
+              'lng': profile.longitude,
+              'trueSolar': profile.useTrueSolarTime,
+            },
+            calculation: () => PurpleStarEngine.calculateAstrolabe(
+              birthDate: adjustedDateTime,
+              birthHour: adjustedDateTime.hour,
+              birthMinute: adjustedDateTime.minute,
+              gender: profile.gender,
+              isLunarCalendar: profile.isLunarCalendar,
+              hasLeapMonth: profile.hasLeapMonth,
+              latitude: profile.latitude,
+              longitude: profile.longitude,
+              useTrueSolarTime: profile.useTrueSolarTime,
+            ),
+          );
 
       // Convert native engine results to our ChartData model
       final palaces = _convertNativePalaces(
@@ -162,18 +211,33 @@ class IztroService {
         );
       }
 
-      // Use native BaZiEngine for comprehensive calculations
-      final baziResult = BaZiEngine.calculateBaZi(
-        birthDate: profile.birthDate,
-        birthHour: profile.birthHour,
-        birthMinute: profile.birthMinute,
-        gender: profile.gender,
-        isLunarCalendar: profile.isLunarCalendar,
-        hasLeapMonth: profile.hasLeapMonth,
-        latitude: profile.latitude,
-        longitude: profile.longitude,
-        useTrueSolarTime: profile.useTrueSolarTime,
-      );
+      // Use native BaZiEngine for comprehensive calculations (cached)
+      final baziResult =
+          PerformanceEngine.optimizeCalculation<Map<String, dynamic>>(
+            operationName: 'bazi_native',
+            parameters: {
+              'date': profile.birthDate.toIso8601String(),
+              'hour': profile.birthHour,
+              'minute': profile.birthMinute,
+              'gender': profile.gender,
+              'isLunar': profile.isLunarCalendar,
+              'leap': profile.hasLeapMonth,
+              'lat': profile.latitude,
+              'lng': profile.longitude,
+              'trueSolar': profile.useTrueSolarTime,
+            },
+            calculation: () => BaZiEngine.calculateBaZi(
+              birthDate: profile.birthDate,
+              birthHour: profile.birthHour,
+              birthMinute: profile.birthMinute,
+              gender: profile.gender,
+              isLunarCalendar: profile.isLunarCalendar,
+              hasLeapMonth: profile.hasLeapMonth,
+              latitude: profile.latitude,
+              longitude: profile.longitude,
+              useTrueSolarTime: profile.useTrueSolarTime,
+            ),
+          );
 
       // Convert native engine results to our BaZiData model
       final yearPillar = _convertNativePillar(
@@ -493,17 +557,31 @@ class IztroService {
         );
       }
 
-      // Use native FortuneEngine for comprehensive fortune calculations
-      final fortuneResult = FortuneEngine.calculateFortuneForYear(
-        birthDate: profile.birthDate,
-        birthHour: profile.birthHour,
-        birthMinute: profile.birthMinute,
-        gender: profile.gender,
-        isLunarCalendar: profile.isLunarCalendar,
-        targetYear: targetYear,
-        latitude: profile.latitude,
-        longitude: profile.longitude,
-      );
+      // Use native FortuneEngine for comprehensive fortune calculations (cached)
+      final fortuneResult =
+          PerformanceEngine.optimizeCalculation<Map<String, dynamic>>(
+            operationName: 'fortune_year_native',
+            parameters: {
+              'date': profile.birthDate.toIso8601String(),
+              'hour': profile.birthHour,
+              'minute': profile.birthMinute,
+              'gender': profile.gender,
+              'isLunar': profile.isLunarCalendar,
+              'targetYear': targetYear,
+              'lat': profile.latitude,
+              'lng': profile.longitude,
+            },
+            calculation: () => FortuneEngine.calculateFortuneForYear(
+              birthDate: profile.birthDate,
+              birthHour: profile.birthHour,
+              birthMinute: profile.birthMinute,
+              gender: profile.gender,
+              isLunarCalendar: profile.isLunarCalendar,
+              targetYear: targetYear,
+              latitude: profile.latitude,
+              longitude: profile.longitude,
+            ),
+          );
 
       if (kDebugMode) {
         print(
@@ -539,13 +617,23 @@ class IztroService {
         );
       }
 
-      // Use native ElementEngine for comprehensive element analysis
-      final elementResult = ElementEngine.analyzeElementBalance(
-        elementCounts: elementCounts,
-        dayMaster: dayMaster,
-        gender: profile.gender,
-        birthDate: profile.birthDate,
-      );
+      // Use native ElementEngine for comprehensive element analysis (cached)
+      final elementResult =
+          PerformanceEngine.optimizeCalculation<Map<String, dynamic>>(
+            operationName: 'element_balance_native',
+            parameters: {
+              'date': profile.birthDate.toIso8601String(),
+              'gender': profile.gender,
+              'dayMaster': dayMaster,
+              'counts': elementCounts.toString(),
+            },
+            calculation: () => ElementEngine.analyzeElementBalance(
+              elementCounts: elementCounts,
+              dayMaster: dayMaster,
+              gender: profile.gender,
+              birthDate: profile.birthDate,
+            ),
+          );
 
       if (kDebugMode) {
         print('[IztroService] Native element analysis completed successfully');
@@ -582,16 +670,29 @@ class IztroService {
         );
       }
 
-      // Use native TimingEngine for comprehensive timing calculations
-      final timingResult = TimingEngine.calculateTimingCycles(
-        birthDate: profile.birthDate,
-        birthHour: profile.birthHour,
-        birthMinute: profile.birthMinute,
-        gender: profile.gender,
-        targetYear: targetYear,
-        latitude: profile.latitude,
-        longitude: profile.longitude,
-      );
+      // Use native TimingEngine for comprehensive timing calculations (cached)
+      final timingResult =
+          PerformanceEngine.optimizeCalculation<Map<String, dynamic>>(
+            operationName: 'timing_cycles_native',
+            parameters: {
+              'date': profile.birthDate.toIso8601String(),
+              'hour': profile.birthHour,
+              'minute': profile.birthMinute,
+              'gender': profile.gender,
+              'targetYear': targetYear,
+              'lat': profile.latitude,
+              'lng': profile.longitude,
+            },
+            calculation: () => TimingEngine.calculateTimingCycles(
+              birthDate: profile.birthDate,
+              birthHour: profile.birthHour,
+              birthMinute: profile.birthMinute,
+              gender: profile.gender,
+              targetYear: targetYear,
+              latitude: profile.latitude,
+              longitude: profile.longitude,
+            ),
+          );
 
       if (kDebugMode) {
         print(
@@ -638,11 +739,19 @@ class IztroService {
       final profile1Map = profile1.toJson();
       final profile2Map = profile2.toJson();
 
-      // Use native AstroMatcherEngine for comprehensive compatibility analysis
-      final compatibilityResult = AstroMatcherEngine.calculateCompatibility(
-        profile1: profile1Map,
-        profile2: profile2Map,
-      );
+      // Use native AstroMatcherEngine for comprehensive compatibility analysis (cached)
+      final compatibilityResult =
+          PerformanceEngine.optimizeCalculation<Map<String, dynamic>>(
+            operationName: 'compatibility_native',
+            parameters: {
+              'p1': profile1Map.toString(),
+              'p2': profile2Map.toString(),
+            },
+            calculation: () => AstroMatcherEngine.calculateCompatibility(
+              profile1: profile1Map,
+              profile2: profile2Map,
+            ),
+          );
 
       if (kDebugMode) {
         print(
@@ -658,6 +767,212 @@ class IztroService {
       }
       throw IztroCalculationException(
         'Failed to calculate astrological compatibility: $e',
+      );
+    }
+  }
+
+  /// [calculateLunarData] - Get lunar date and moon phase for the profile's birth date
+  Future<Map<String, dynamic>> calculateLunarData(UserProfile profile) async {
+    try {
+      if (!_isInitialized) {
+        await initialize();
+      }
+
+      if (kDebugMode) {
+        print(
+          '[IztroService] Calculating lunar data using LunarCalendarEngine...',
+        );
+      }
+
+      return PerformanceEngine.optimizeCalculation<Map<String, dynamic>>(
+        operationName: 'lunar_date',
+        parameters: {
+          'year': profile.birthDate.year,
+          'month': profile.birthDate.month,
+          'day': profile.birthDate.day,
+          'lat': profile.latitude,
+          'lng': profile.longitude,
+        },
+        calculation: () => LunarCalendarEngine.calculateLunarDate(
+          solarDate: profile.birthDate,
+          latitude: profile.latitude,
+          longitude: profile.longitude,
+        ),
+      );
+    } catch (e) {
+      if (kDebugMode) {
+        print('[IztroService] Lunar data calculation failed: $e');
+      }
+      throw IztroCalculationException('Failed to calculate lunar data: $e');
+    }
+  }
+
+  /// [calculateMoonPhase] - Get moon phase for a given date and location
+  Future<Map<String, dynamic>> calculateMoonPhase(
+    UserProfile profile, {
+    DateTime? date,
+  }) async {
+    try {
+      if (!_isInitialized) {
+        await initialize();
+      }
+
+      final targetDate = date ?? DateTime.now();
+
+      if (kDebugMode) {
+        print(
+          '[IztroService] Calculating moon phase using LunarCalendarEngine...',
+        );
+      }
+
+      return PerformanceEngine.optimizeCalculation<Map<String, dynamic>>(
+        operationName: 'moon_phase',
+        parameters: {
+          'date': targetDate.toIso8601String(),
+          'lat': profile.latitude,
+          'lng': profile.longitude,
+        },
+        calculation: () => LunarCalendarEngine.calculateMoonPhase(
+          date: targetDate,
+          latitude: profile.latitude,
+          longitude: profile.longitude,
+        ),
+      );
+    } catch (e) {
+      if (kDebugMode) {
+        print('[IztroService] Moon phase calculation failed: $e');
+      }
+      throw IztroCalculationException('Failed to calculate moon phase: $e');
+    }
+  }
+
+  /// [calculateRelationshipTiming] - Relationship timing predictions
+  Future<Map<String, dynamic>> calculateRelationshipTiming(
+    UserProfile profile1,
+    UserProfile profile2,
+    int targetYear,
+  ) async {
+    try {
+      if (!_isInitialized) {
+        await initialize();
+      }
+
+      final p1 = profile1.toJson();
+      final p2 = profile2.toJson();
+
+      if (kDebugMode) {
+        print('[IztroService] Calculating relationship timing (Enhanced)...');
+      }
+
+      return PerformanceEngine.optimizeCalculation<Map<String, dynamic>>(
+        operationName: 'relationship_timing_enhanced',
+        parameters: {
+          'p1': p1.toString(),
+          'p2': p2.toString(),
+          'year': targetYear,
+        },
+        calculation: () =>
+            EnhancedCompatibilityEngine.calculateRelationshipTiming(
+              profile1: p1,
+              profile2: p2,
+              targetYear: targetYear,
+            ),
+      );
+    } catch (e) {
+      if (kDebugMode) {
+        print('[IztroService] Relationship timing calculation failed: $e');
+      }
+      throw IztroCalculationException(
+        'Failed to calculate relationship timing: $e',
+      );
+    }
+  }
+
+  /// [analyzeCompatibilityTrends] - Compatibility trend analysis over time
+  Future<Map<String, dynamic>> analyzeCompatibilityTrends(
+    UserProfile profile1,
+    UserProfile profile2,
+    int startYear,
+    int endYear,
+  ) async {
+    try {
+      if (!_isInitialized) {
+        await initialize();
+      }
+
+      final p1 = profile1.toJson();
+      final p2 = profile2.toJson();
+
+      if (kDebugMode) {
+        print('[IztroService] Analyzing compatibility trends (Enhanced)...');
+      }
+
+      return PerformanceEngine.optimizeCalculation<Map<String, dynamic>>(
+        operationName: 'compatibility_trends_enhanced',
+        parameters: {
+          'p1': p1.toString(),
+          'p2': p2.toString(),
+          'start': startYear,
+          'end': endYear,
+        },
+        calculation: () =>
+            EnhancedCompatibilityEngine.analyzeCompatibilityTrends(
+              profile1: p1,
+              profile2: p2,
+              startYear: startYear,
+              endYear: endYear,
+            ),
+      );
+    } catch (e) {
+      if (kDebugMode) {
+        print('[IztroService] Compatibility trend analysis failed: $e');
+      }
+      throw IztroCalculationException(
+        'Failed to analyze compatibility trends: $e',
+      );
+    }
+  }
+
+  /// [calculateAdvancedStarPositions] - Advanced star positioning and analysis
+  Future<Map<String, dynamic>> calculateAdvancedStarPositions(
+    UserProfile profile,
+  ) async {
+    try {
+      if (!_isInitialized) {
+        await initialize();
+      }
+
+      if (kDebugMode) {
+        print('[IztroService] Calculating advanced star positions...');
+      }
+
+      return PerformanceEngine.optimizeCalculation<Map<String, dynamic>>(
+        operationName: 'advanced_star_positions',
+        parameters: {
+          'date': profile.birthDate.toIso8601String(),
+          'hour': profile.birthHour,
+          'minute': profile.birthMinute,
+          'gender': profile.gender,
+          'lat': profile.latitude,
+          'lng': profile.longitude,
+          'trueSolar': profile.useTrueSolarTime,
+        },
+        calculation: () => AdvancedStarEngine.calculateAdvancedStarPositions(
+          birthDate: profile.birthDate,
+          birthHour: profile.birthHour,
+          birthMinute: profile.birthMinute,
+          gender: profile.gender,
+          latitude: profile.latitude,
+          longitude: profile.longitude,
+          useTrueSolarTime: profile.useTrueSolarTime,
+        ),
+      );
+    } catch (e) {
+      if (kDebugMode) {
+        print('[IztroService] Advanced star positioning failed: $e');
+      }
+      throw IztroCalculationException(
+        'Failed to calculate advanced star positions: $e',
       );
     }
   }
