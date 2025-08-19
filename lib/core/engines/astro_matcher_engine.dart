@@ -43,10 +43,24 @@ class AstroMatcherEngine {
         birth2,
       );
       final timingCompatibility = _calculateTimingCompatibility(birth1, birth2);
+
+      // Enhanced: Chinese zodiac (year branch) and hour branch compatibilities
+      final zodiacCompatibility = _calculateChineseZodiacCompatibility(
+        birth1.year,
+        birth2.year,
+      );
+      final hourBranchCompatibility = _calculateHourBranchCompatibility(
+        hour1,
+        hour2,
+      );
+
+      // Overall score with updated weights
       final overallCompatibility = _calculateOverallCompatibility(
-        sunSignCompatibility,
-        elementCompatibility,
-        timingCompatibility,
+        sunSignScore: sunSignCompatibility,
+        elementScore: elementCompatibility,
+        timingScore: timingCompatibility,
+        zodiacScore: zodiacCompatibility,
+        hourScore: hourBranchCompatibility,
       );
 
       // Generate detailed analysis
@@ -73,6 +87,8 @@ class AstroMatcherEngine {
         'sunSignScore': sunSignCompatibility,
         'elementScore': elementCompatibility,
         'timingScore': timingCompatibility,
+        'zodiacScore': zodiacCompatibility,
+        'hourScore': hourBranchCompatibility,
         'analysis': analysis,
         'recommendations': _generateRecommendations(overallCompatibility),
         'calculatedAt': DateTime.now().toIso8601String(),
@@ -208,22 +224,30 @@ class AstroMatcherEngine {
   }
 
   /// [_calculateOverallCompatibility] - Calculate overall compatibility score
-  static double _calculateOverallCompatibility(
-    double sunSignScore,
-    double elementScore,
-    double timingScore,
-  ) {
+  static double _calculateOverallCompatibility({
+    required double sunSignScore,
+    required double elementScore,
+    required double timingScore,
+    required double zodiacScore,
+    required double hourScore,
+  }) {
     try {
-      // Weighted average of all compatibility factors
-      // Sun sign: 40%, Element: 35%, Timing: 25%
+      // Weighted average of all compatibility factors (sum to 1.0)
+      // Sun sign: 0.30, Element: 0.25, Timing: 0.20, Chinese Zodiac (year): 0.15, Hour Branch: 0.10
       final overall =
-          (sunSignScore * 0.4) + (elementScore * 0.35) + (timingScore * 0.25);
+          (sunSignScore * 0.30) +
+          (elementScore * 0.25) +
+          (timingScore * 0.20) +
+          (zodiacScore * 0.15) +
+          (hourScore * 0.10);
 
       if (kDebugMode) {
         print('[AstroMatcherEngine] Overall compatibility calculation:');
-        print('  Sun Sign (40%): ${sunSignScore.toStringAsFixed(1)}');
-        print('  Element (35%): ${elementScore.toStringAsFixed(1)}');
-        print('  Timing (25%): ${timingScore.toStringAsFixed(1)}');
+        print('  Sun Sign (30%): ${sunSignScore.toStringAsFixed(1)}');
+        print('  Element (25%): ${elementScore.toStringAsFixed(1)}');
+        print('  Timing (20%): ${timingScore.toStringAsFixed(1)}');
+        print('  Chinese Zodiac (15%): ${zodiacScore.toStringAsFixed(1)}');
+        print('  Hour Branch (10%): ${hourScore.toStringAsFixed(1)}');
         print('  Overall: ${overall.toStringAsFixed(1)}%');
       }
 
@@ -252,6 +276,10 @@ class AstroMatcherEngine {
       final sign2 = _getZodiacSign(birth2);
       final element1 = _getElement(birth1);
       final element2 = _getElement(birth2);
+      final animal1 = _getChineseZodiacAnimal(birth1.year);
+      final animal2 = _getChineseZodiacAnimal(birth2.year);
+      final branch1 = _getEarthlyBranchForHour(birth1.hour);
+      final branch2 = _getEarthlyBranchForHour(birth2.hour);
 
       return {
         'summary': _getCompatibilitySummary(overallScore),
@@ -262,6 +290,8 @@ class AstroMatcherEngine {
           elementScore,
         ),
         'timingAnalysis': _getTimingAnalysis(birth1, birth2, timingScore),
+        'zodiacAnalysis': _getZodiacAnalysis(animal1, animal2),
+        'hourBranchAnalysis': _getHourBranchAnalysis(branch1, branch2),
         'strengths': _getCompatibilityStrengths(
           sunSignScore,
           elementScore,
@@ -287,6 +317,167 @@ class AstroMatcherEngine {
         'error': 'Failed to generate analysis: $e',
       };
     }
+  }
+
+  /// Chinese zodiac animal by year
+  static String _getChineseZodiacAnimal(int year) {
+    // 0: Rat (Zi), 1: Ox (Chou), ... 11: Pig (Hai)
+    const animals = [
+      'Rat',
+      'Ox',
+      'Tiger',
+      'Rabbit',
+      'Dragon',
+      'Snake',
+      'Horse',
+      'Goat',
+      'Monkey',
+      'Rooster',
+      'Dog',
+      'Pig',
+    ];
+    final idx = (year - 4) % 12; // 1900 was Rat; common formula uses 4 offset
+    return animals[idx];
+  }
+
+  /// Calculate Chinese zodiac compatibility score (0-100)
+  static double _calculateChineseZodiacCompatibility(int year1, int year2) {
+    try {
+      final a1 = _getChineseZodiacAnimal(year1);
+      final a2 = _getChineseZodiacAnimal(year2);
+
+      // Trines (Shen San He):
+      const trines = [
+        {'Rat', 'Dragon', 'Monkey'},
+        {'Ox', 'Snake', 'Rooster'},
+        {'Tiger', 'Horse', 'Dog'},
+        {'Rabbit', 'Goat', 'Pig'},
+      ];
+
+      // Clashes (Liu Chong) opposite pairs
+      const clashes = {
+        'Rat': 'Horse',
+        'Ox': 'Goat',
+        'Tiger': 'Monkey',
+        'Rabbit': 'Rooster',
+        'Dragon': 'Dog',
+        'Snake': 'Pig',
+        'Horse': 'Rat',
+        'Goat': 'Ox',
+        'Monkey': 'Tiger',
+        'Rooster': 'Rabbit',
+        'Dog': 'Dragon',
+        'Pig': 'Snake',
+      };
+
+      // Same animal – often harmonious but can be intense
+      if (a1 == a2) return 80;
+
+      // Trine harmony
+      final inTrine = trines.any((t) => t.contains(a1) && t.contains(a2));
+      if (inTrine) return 90;
+
+      // Direct clash
+      if (clashes[a1] == a2) return 30;
+
+      // Semi-compatible (adjacent in zodiac wheel)
+      const order = [
+        'Rat',
+        'Ox',
+        'Tiger',
+        'Rabbit',
+        'Dragon',
+        'Snake',
+        'Horse',
+        'Goat',
+        'Monkey',
+        'Rooster',
+        'Dog',
+        'Pig',
+      ];
+      final i1 = order.indexOf(a1);
+      final i2 = order.indexOf(a2);
+      final diff = (i1 - i2).abs();
+      if (diff == 1 || diff == 11) return 70; // neighbors
+
+      return 60; // neutral
+    } on Exception catch (e) {
+      if (kDebugMode) {
+        print('[AstroMatcherEngine] Error in zodiac compatibility: $e');
+      }
+      return 50;
+    }
+  }
+
+  /// Earthly Branch for hour (Chinese double-hour)
+  static String _getEarthlyBranchForHour(int hour) {
+    // Zi(23-1), Chou(1-3), Yin(3-5), Mao(5-7), Chen(7-9), Si(9-11),
+    // Wu(11-13), Wei(13-15), Shen(15-17), You(17-19), Xu(19-21), Hai(21-23)
+    const branches = [
+      'Rat', // Zi
+      'Ox', // Chou
+      'Tiger', // Yin
+      'Rabbit', // Mao
+      'Dragon', // Chen
+      'Snake', // Si
+      'Horse', // Wu
+      'Goat', // Wei
+      'Monkey', // Shen
+      'Rooster', // You
+      'Dog', // Xu
+      'Pig', // Hai
+    ];
+    // Map hour to index
+    final idx = ((hour + 1) ~/ 2) % 12; // integer division
+    return branches[idx];
+  }
+
+  /// Hour branch compatibility using same rules as zodiac
+  static double _calculateHourBranchCompatibility(int hour1, int hour2) {
+    try {
+      final b1 = _getEarthlyBranchForHour(hour1);
+      final b2 = _getEarthlyBranchForHour(hour2);
+      // Calculate using the same trines/clashes logic
+      const trines = [
+        {'Rat', 'Dragon', 'Monkey'},
+        {'Ox', 'Snake', 'Rooster'},
+        {'Tiger', 'Horse', 'Dog'},
+        {'Rabbit', 'Goat', 'Pig'},
+      ];
+      const clashes = {
+        'Rat': 'Horse',
+        'Ox': 'Goat',
+        'Tiger': 'Monkey',
+        'Rabbit': 'Rooster',
+        'Dragon': 'Dog',
+        'Snake': 'Pig',
+        'Horse': 'Rat',
+        'Goat': 'Ox',
+        'Monkey': 'Tiger',
+        'Rooster': 'Rabbit',
+        'Dog': 'Dragon',
+        'Pig': 'Snake',
+      };
+
+      if (b1 == b2) return 80;
+      final inTrine = trines.any((t) => t.contains(b1) && t.contains(b2));
+      if (inTrine) return 85;
+      if (clashes[b1] == b2) return 35;
+      return 65;
+    } on Exception catch (e) {
+      if (kDebugMode) {
+        print('[AstroMatcherEngine] Error in hour branch compatibility: $e');
+      }
+      return 50;
+    }
+  }
+
+  static String _getZodiacAnalysis(String a1, String a2) {
+    return '$a1 and $a2 year signs reveal an added layer of ${a1 == a2 ? 'shared nature and rhythm' : 'dynamic interaction'} in this relationship. This influences instinctive compatibility and long-term harmony.';
+  }
+
+  static String _getHourBranchAnalysis(String b1, String b2) {
+    return 'Your hour branches ($b1 and $b2) describe your daily energy rhythms. This affects timing, routines, and how naturally your schedules and moods align.';
   }
 
   /// [_generateRecommendations] - Generate compatibility recommendations
