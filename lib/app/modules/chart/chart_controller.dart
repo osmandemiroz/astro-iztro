@@ -3,6 +3,7 @@ import 'package:astro_iztro/core/models/user_profile.dart';
 import 'package:astro_iztro/core/services/iztro_service.dart';
 import 'package:astro_iztro/core/services/storage_service.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 /// [ChartController] - Purple Star chart display and interaction controller
@@ -246,5 +247,151 @@ class ChartController extends GetxController {
   /// Get star name based on language preference
   String getStarName(StarData star) {
     return showChineseNames.value ? star.name : star.nameEn;
+  }
+
+  /// [showChartExplanation] - Present how the chart was calculated and what it means
+  /// Opens a bottom sheet aligned with our app's visual language and Apple HIG
+  void showChartExplanation() {
+    if (chartData.value == null) {
+      Get.snackbar(
+        'No Chart Data',
+        'Please calculate chart first',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      return;
+    }
+
+    final data = chartData.value!;
+
+    Get.bottomSheet<void>(
+      SafeArea(
+        child: Container(
+          decoration: BoxDecoration(
+            color: Get.theme.colorScheme.surface.withValues(alpha: 0.98),
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+          ),
+          padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: Container(
+                    width: 40,
+                    height: 4,
+                    margin: const EdgeInsets.only(bottom: 12),
+                    decoration: BoxDecoration(
+                      color: Get.theme.colorScheme.onSurface.withValues(
+                        alpha: 0.2,
+                      ),
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                ),
+                Text(
+                  'How this Purple Star chart was calculated',
+                  style: Get.textTheme.titleLarge,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Inputs used',
+                  style: Get.textTheme.titleMedium,
+                ),
+                const SizedBox(height: 6),
+                _bullet('Birth date/time: ${data.birthDate.toLocal()}'),
+                _bullet('Gender: ${data.gender}'),
+                _bullet(
+                  'Location: ${data.latitude.toStringAsFixed(4)}, ${data.longitude.toStringAsFixed(4)}',
+                ),
+                _bullet(
+                  'Time standard: ${data.useTrueSolarTime ? 'True Solar Time' : 'Standard Time'}',
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  'Computation steps',
+                  style: Get.textTheme.titleMedium,
+                ),
+                const SizedBox(height: 6),
+                _bullet(
+                  'Convert birth data to lunar calendrics and establish the astrolabe baseline.',
+                ),
+                _bullet(
+                  'Determine 12 palaces (Life, Siblings, Spouse, etc.) and their order starting from the Life palace.',
+                ),
+                _bullet(
+                  'Place major stars and auxiliaries into palaces based on birth hour/day/month/year rules.',
+                ),
+                _bullet(
+                  'Apply transformation stars (Lu, Quan, Ke, Ji) and compute fortune periods.',
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  'What it means',
+                  style: Get.textTheme.titleMedium,
+                ),
+                const SizedBox(height: 6),
+                _bullet(
+                  'Each labeled sector is a palace describing a life domain; highlighted stars modify its tone.',
+                ),
+                _bullet(
+                  'Gold accents indicate emphasis or selection; dots represent stars within that palace.',
+                ),
+                _bullet(
+                  'Use the Meaning cards below for quick reference of each palace.',
+                ),
+                const SizedBox(height: 16),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    _chip('Palaces: ${data.palaces.length}'),
+                    _chip('Stars: ${data.stars.length}'),
+                    _chip('Major stars: ${data.majorStars.length}'),
+                    _chip('Calculated at: ${data.calculatedAt.toLocal()}'),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+    );
+  }
+
+  // Small helpers for consistent bullets and chips
+  Widget _bullet(String text) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 3),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Padding(
+            padding: EdgeInsets.only(top: 6),
+            child: Icon(Icons.circle, size: 6),
+          ),
+          const SizedBox(width: 8),
+          Expanded(child: Text(text)),
+        ],
+      ),
+    );
+  }
+
+  Widget _chip(String label) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        color: Get.theme.colorScheme.primary.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: Get.theme.colorScheme.primary.withValues(alpha: 0.25),
+        ),
+      ),
+      child: Text(
+        label,
+        style: Get.textTheme.bodySmall,
+      ),
+    );
   }
 }

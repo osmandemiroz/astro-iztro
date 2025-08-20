@@ -530,12 +530,16 @@ class ChartView extends GetView<ChartController> {
           child: Obx(
             () => Transform.scale(
               scale: controller.chartScale.value,
-              child: AstroChartWidget(
-                chartData: controller.chartData.value!,
-                selectedPalaceIndex: controller.selectedPalaceIndex.value,
-                showStarDetails: controller.showStarDetails.value,
-                showChineseNames: controller.showChineseNames.value,
-                onPalaceTap: controller.selectPalace,
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: controller.showChartExplanation,
+                child: AstroChartWidget(
+                  chartData: controller.chartData.value!,
+                  selectedPalaceIndex: controller.selectedPalaceIndex.value,
+                  showStarDetails: controller.showStarDetails.value,
+                  showChineseNames: controller.showChineseNames.value,
+                  onPalaceTap: controller.selectPalace,
+                ),
               ),
             ),
           ),
