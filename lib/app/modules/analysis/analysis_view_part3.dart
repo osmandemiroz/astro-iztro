@@ -138,163 +138,178 @@ extension AnalysisViewPart3 on AnalysisView {
               padding: const EdgeInsets.only(
                 bottom: AppConstants.defaultPadding,
               ),
-              child: Container(
-                padding: const EdgeInsets.all(AppConstants.defaultPadding),
-                decoration: BoxDecoration(
-                  color: AppColors.darkBorder.withValues(alpha: 0.2),
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  onTap: () => _openPalaceInsight(palace),
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                    color: AppColors.lightPurple.withValues(alpha: 0.1),
-                  ),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Palace header row
-                    Row(
+                  child: Container(
+                    padding: const EdgeInsets.all(AppConstants.defaultPadding),
+                    decoration: BoxDecoration(
+                      color: AppColors.darkBorder.withValues(alpha: 0.2),
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                        color: AppColors.lightPurple.withValues(alpha: 0.1),
+                      ),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Palace name
-                        Expanded(
-                          child: Text(
-                            palace.name,
-                            style: AppTheme.bodyLarge.copyWith(
-                              color: AppColors.darkTextPrimary,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 18,
-                            ),
-                          ),
-                        ),
-
-                        // Star count badge
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: AppConstants.smallPadding,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            color: AppColors.lightPurple.withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(
-                              color: AppColors.lightPurple.withValues(
-                                alpha: 0.3,
+                        // Palace header row
+                        Row(
+                          children: [
+                            // Palace name
+                            Expanded(
+                              child: Text(
+                                palace.name,
+                                style: AppTheme.bodyLarge.copyWith(
+                                  color: AppColors.darkTextPrimary,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 18,
+                                ),
                               ),
                             ),
-                          ),
-                          child: Text(
-                            '$starCount ${starCount == 1 ? 'star' : 'stars'}',
-                            style: AppTheme.caption.copyWith(
-                              color: AppColors.lightPurple,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 12,
+
+                            // Star count badge
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: AppConstants.smallPadding,
+                                vertical: 4,
+                              ),
+                              decoration: BoxDecoration(
+                                color: AppColors.lightPurple.withValues(
+                                  alpha: 0.1,
+                                ),
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: AppColors.lightPurple.withValues(
+                                    alpha: 0.3,
+                                  ),
+                                ),
+                              ),
+                              child: Text(
+                                '$starCount ${starCount == 1 ? 'star' : 'stars'}',
+                                style: AppTheme.caption.copyWith(
+                                  color: AppColors.lightPurple,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 12,
+                                ),
+                              ),
                             ),
-                          ),
+
+                            const SizedBox(width: AppConstants.defaultPadding),
+
+                            // Element indicator
+                            Container(
+                              width: 40,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color: AppColors.lightGold.withValues(
+                                  alpha: 0.1,
+                                ),
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: AppColors.lightGold.withValues(
+                                    alpha: 0.3,
+                                  ),
+                                ),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  palace.element,
+                                  style: const TextStyle(
+                                    fontFamily: AppConstants.chineseFont,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700,
+                                    color: AppColors.lightGold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
 
-                        const SizedBox(width: AppConstants.defaultPadding),
+                        const SizedBox(height: AppConstants.smallPadding),
 
-                        // Element indicator
-                        Container(
-                          width: 40,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            color: AppColors.lightGold.withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(
-                              color: AppColors.lightGold.withValues(alpha: 0.3),
-                            ),
+                        // Star buttons row
+                        if (stars.isNotEmpty)
+                          Wrap(
+                            spacing: AppConstants.smallPadding,
+                            runSpacing: AppConstants.smallPadding,
+                            children: stars.map((star) {
+                              return Container(
+                                decoration: BoxDecoration(
+                                  color: AppColors.lightPurple.withValues(
+                                    alpha: 0.1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(
+                                    color: AppColors.lightPurple.withValues(
+                                      alpha: 0.3,
+                                    ),
+                                  ),
+                                ),
+                                child: Material(
+                                  color: Colors.transparent,
+                                  child: InkWell(
+                                    onTap: () {
+                                      // Show star details in a dialog instead of navigation
+                                      _showStarDetails(star, palace);
+                                    },
+                                    borderRadius: BorderRadius.circular(12),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: AppConstants.smallPadding,
+                                        vertical: 6,
+                                      ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          const Icon(
+                                            Icons.star_rounded,
+                                            color: AppColors.lightPurple,
+                                            size: 16,
+                                          ),
+                                          const SizedBox(width: 6),
+                                          Text(
+                                            star.nameEn,
+                                            style: AppTheme.caption.copyWith(
+                                              color: AppColors.lightPurple,
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }).toList(),
                           ),
-                          child: Center(
-                            child: Text(
-                              palace.element,
-                              style: const TextStyle(
-                                fontFamily: AppConstants.chineseFont,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                                color: AppColors.lightGold,
-                              ),
+
+                        const SizedBox(height: AppConstants.smallPadding),
+
+                        // Palace description
+                        Container(
+                          padding: const EdgeInsets.all(
+                            AppConstants.smallPadding,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppColors.darkCard.withValues(alpha: 0.3),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Text(
+                            'This palace contains $starCount star(s) affecting ${palace.name}',
+                            style: AppTheme.bodyMedium.copyWith(
+                              color: AppColors.darkTextSecondary,
+                              height: 1.4,
                             ),
                           ),
                         ),
                       ],
                     ),
-
-                    const SizedBox(height: AppConstants.smallPadding),
-
-                    // Star buttons row
-                    if (stars.isNotEmpty)
-                      Wrap(
-                        spacing: AppConstants.smallPadding,
-                        runSpacing: AppConstants.smallPadding,
-                        children: stars.map((star) {
-                          return Container(
-                            decoration: BoxDecoration(
-                              color: AppColors.lightPurple.withValues(
-                                alpha: 0.1,
-                              ),
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(
-                                color: AppColors.lightPurple.withValues(
-                                  alpha: 0.3,
-                                ),
-                              ),
-                            ),
-                            child: Material(
-                              color: Colors.transparent,
-                              child: InkWell(
-                                onTap: () {
-                                  // Show star details in a dialog instead of navigation
-                                  _showStarDetails(star, palace);
-                                },
-                                borderRadius: BorderRadius.circular(12),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: AppConstants.smallPadding,
-                                    vertical: 6,
-                                  ),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      const Icon(
-                                        Icons.star_rounded,
-                                        color: AppColors.lightPurple,
-                                        size: 16,
-                                      ),
-                                      const SizedBox(width: 6),
-                                      Text(
-                                        star.nameEn,
-                                        style: AppTheme.caption.copyWith(
-                                          color: AppColors.lightPurple,
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 12,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          );
-                        }).toList(),
-                      ),
-
-                    const SizedBox(height: AppConstants.smallPadding),
-
-                    // Palace description
-                    Container(
-                      padding: const EdgeInsets.all(AppConstants.smallPadding),
-                      decoration: BoxDecoration(
-                        color: AppColors.darkCard.withValues(alpha: 0.3),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Text(
-                        'This palace contains $starCount star(s) affecting ${palace.name}',
-                        style: AppTheme.bodyMedium.copyWith(
-                          color: AppColors.darkTextSecondary,
-                          height: 1.4,
-                        ),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ),
             );
@@ -374,6 +389,43 @@ extension AnalysisViewPart3 on AnalysisView {
           ),
         ),
       ),
+    );
+  }
+
+  // --- Explanations (Dialogs) ---
+  void _openPalaceInsight(PalaceData palace) {
+    final stars =
+        controller.chartData.value?.getStarsInPalace(palace.name) ?? [];
+
+    final details = <Widget>[
+      Text(
+        'This section summarizes how stars in the ${palace.name} palace affect that life area. The influence is derived from the number and type of stars placed here in your chart.',
+        style: AppTheme.bodyMedium.copyWith(
+          color: AppColors.darkTextSecondary,
+          height: 1.5,
+        ),
+      ),
+      const SizedBox(height: 8),
+      Text(
+        'Element: ${palace.element} • Stars: ${stars.length}',
+        style: AppTheme.bodyMedium.copyWith(
+          color: AppColors.darkTextPrimary,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+      if (stars.isNotEmpty) const SizedBox(height: 8),
+      if (stars.isNotEmpty)
+        Text(
+          'Stars: ${stars.map((e) => e.nameEn).join(', ')}',
+          style: AppTheme.bodyMedium.copyWith(
+            color: AppColors.darkTextSecondary,
+          ),
+        ),
+    ];
+
+    _showInsightDialog(
+      title: palace.name,
+      body: details,
     );
   }
 

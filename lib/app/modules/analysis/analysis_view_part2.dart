@@ -302,79 +302,86 @@ extension AnalysisViewPart2 on AnalysisView {
     String description,
     IconData icon,
   ) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: AppConstants.defaultPadding),
-      padding: const EdgeInsets.all(AppConstants.defaultPadding),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            AppColors.darkCard.withValues(alpha: 0.8),
-            AppColors.darkCardSecondary.withValues(alpha: 0.6),
-          ],
-        ),
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () => _openFortuneInsight(title),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: AppColors.lightPurple.withValues(alpha: 0.2),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.black.withValues(alpha: 0.1),
-            blurRadius: 15,
-            offset: const Offset(0, 5),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: AppColors.lightPurple.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: AppColors.lightPurple.withValues(alpha: 0.3),
-              ),
-            ),
-            child: Icon(
-              icon,
-              color: AppColors.lightPurple,
-              size: 28,
-            ),
-          ),
-          const SizedBox(width: AppConstants.defaultPadding),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: AppTheme.bodyMedium.copyWith(
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.darkTextPrimary,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  value,
-                  style: AppTheme.bodyLarge.copyWith(
-                    color: AppColors.lightPurple,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  description,
-                  style: AppTheme.bodyMedium.copyWith(
-                    color: AppColors.darkTextSecondary,
-                    height: 1.4,
-                  ),
-                ),
+        child: Container(
+          margin: const EdgeInsets.only(bottom: AppConstants.defaultPadding),
+          padding: const EdgeInsets.all(AppConstants.defaultPadding),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                AppColors.darkCard.withValues(alpha: 0.8),
+                AppColors.darkCardSecondary.withValues(alpha: 0.6),
               ],
             ),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: AppColors.lightPurple.withValues(alpha: 0.2),
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.black.withValues(alpha: 0.1),
+                blurRadius: 15,
+                offset: const Offset(0, 5),
+              ),
+            ],
           ),
-        ],
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: AppColors.lightPurple.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                    color: AppColors.lightPurple.withValues(alpha: 0.3),
+                  ),
+                ),
+                child: Icon(
+                  icon,
+                  color: AppColors.lightPurple,
+                  size: 28,
+                ),
+              ),
+              const SizedBox(width: AppConstants.defaultPadding),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: AppTheme.bodyMedium.copyWith(
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.darkTextPrimary,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      value,
+                      style: AppTheme.bodyLarge.copyWith(
+                        color: AppColors.lightPurple,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      description,
+                      style: AppTheme.bodyMedium.copyWith(
+                        color: AppColors.darkTextSecondary,
+                        height: 1.4,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -526,110 +533,123 @@ extension AnalysisViewPart2 on AnalysisView {
 
             return Padding(
               padding: const EdgeInsets.only(bottom: AppConstants.smallPadding),
-              child: Row(
-                children: [
-                  // Element symbol
-                  Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: AppColors.lightGold.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: AppColors.lightGold.withValues(alpha: 0.3),
-                      ),
-                    ),
-                    child: Center(
-                      child: Text(
-                        element,
-                        style: const TextStyle(
-                          fontFamily: AppConstants.chineseFont,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.lightGold,
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  onTap: () => _openElementInsight(
+                    element: element,
+                    elementName: elementName,
+                    count: count,
+                  ),
+                  borderRadius: BorderRadius.circular(12),
+                  child: Row(
+                    children: [
+                      // Element symbol
+                      Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: AppColors.lightGold.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: AppColors.lightGold.withValues(alpha: 0.3),
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            element,
+                            style: const TextStyle(
+                              fontFamily: AppConstants.chineseFont,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.lightGold,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
 
-                  const SizedBox(width: AppConstants.defaultPadding),
+                      const SizedBox(width: AppConstants.defaultPadding),
 
-                  // Progress bar
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      // Progress bar
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              elementName,
-                              style: AppTheme.bodyMedium.copyWith(
-                                color: AppColors.darkTextPrimary,
-                                fontWeight: FontWeight.w600,
-                              ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  elementName,
+                                  style: AppTheme.bodyMedium.copyWith(
+                                    color: AppColors.darkTextPrimary,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                Text(
+                                  '$count',
+                                  style: AppTheme.bodyMedium.copyWith(
+                                    color: AppColors.darkTextSecondary,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
                             ),
-                            Text(
-                              '$count',
-                              style: AppTheme.bodyMedium.copyWith(
-                                color: AppColors.darkTextSecondary,
-                                fontWeight: FontWeight.w600,
+                            const SizedBox(height: 6),
+                            Container(
+                              height: 8,
+                              decoration: BoxDecoration(
+                                color: AppColors.darkBorder.withValues(
+                                  alpha: 0.3,
+                                ),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              child: FractionallySizedBox(
+                                alignment: Alignment.centerLeft,
+                                widthFactor: (count / 5).clamp(0.0, 1.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        strengthColor,
+                                        strengthColor.withValues(alpha: 0.8),
+                                      ],
+                                    ),
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                ),
                               ),
                             ),
                           ],
                         ),
-                        const SizedBox(height: 6),
-                        Container(
-                          height: 8,
-                          decoration: BoxDecoration(
-                            color: AppColors.darkBorder.withValues(alpha: 0.3),
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          child: FractionallySizedBox(
-                            alignment: Alignment.centerLeft,
-                            widthFactor: (count / 5).clamp(0.0, 1.0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: [
-                                    strengthColor,
-                                    strengthColor.withValues(alpha: 0.8),
-                                  ],
-                                ),
-                                borderRadius: BorderRadius.circular(4),
-                              ),
-                            ),
+                      ),
+
+                      const SizedBox(width: AppConstants.defaultPadding),
+
+                      // Strength indicator
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: AppConstants.smallPadding,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: strengthColor.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: strengthColor.withValues(alpha: 0.3),
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-
-                  const SizedBox(width: AppConstants.defaultPadding),
-
-                  // Strength indicator
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppConstants.smallPadding,
-                      vertical: 4,
-                    ),
-                    decoration: BoxDecoration(
-                      color: strengthColor.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: strengthColor.withValues(alpha: 0.3),
+                        child: Text(
+                          strength,
+                          style: AppTheme.caption.copyWith(
+                            color: strengthColor,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 12,
+                          ),
+                        ),
                       ),
-                    ),
-                    child: Text(
-                      strength,
-                      style: AppTheme.caption.copyWith(
-                        color: strengthColor,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 12,
-                      ),
-                    ),
+                    ],
                   ),
-                ],
+                ),
               ),
             );
           }),
@@ -637,57 +657,64 @@ extension AnalysisViewPart2 on AnalysisView {
           const SizedBox(height: AppConstants.defaultPadding),
 
           // Summary section
-          Container(
-            padding: const EdgeInsets.all(AppConstants.defaultPadding),
-            decoration: BoxDecoration(
-              color: AppColors.darkBorder.withValues(alpha: 0.2),
+          Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: _openElementBalanceInsight,
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: AppColors.lightGold.withValues(alpha: 0.1),
-              ),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Summary',
-                  style: AppTheme.bodyMedium.copyWith(
-                    color: AppColors.lightGold,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 16,
+              child: Container(
+                padding: const EdgeInsets.all(AppConstants.defaultPadding),
+                decoration: BoxDecoration(
+                  color: AppColors.darkBorder.withValues(alpha: 0.2),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                    color: AppColors.lightGold.withValues(alpha: 0.1),
                   ),
                 ),
-
-                const SizedBox(height: AppConstants.smallPadding),
-
-                Row(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: _buildSummaryItem(
-                        'Strongest',
-                        baziData.strongestElement,
-                        AppColors.lightGold,
+                    Text(
+                      'Summary',
+                      style: AppTheme.bodyMedium.copyWith(
+                        color: AppColors.lightGold,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 16,
                       ),
                     ),
-                    const SizedBox(width: AppConstants.defaultPadding),
-                    Expanded(
-                      child: _buildSummaryItem(
-                        'Weakest',
-                        baziData.weakestElement,
-                        AppColors.error,
-                      ),
+
+                    const SizedBox(height: AppConstants.smallPadding),
+
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _buildSummaryItem(
+                            'Strongest',
+                            baziData.strongestElement,
+                            AppColors.lightGold,
+                          ),
+                        ),
+                        const SizedBox(width: AppConstants.defaultPadding),
+                        Expanded(
+                          child: _buildSummaryItem(
+                            'Weakest',
+                            baziData.weakestElement,
+                            AppColors.error,
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    const SizedBox(height: AppConstants.smallPadding),
+
+                    _buildSummaryItem(
+                      'Balance',
+                      '${baziData.elementBalanceScore}%',
+                      AppColors.success,
                     ),
                   ],
                 ),
-
-                const SizedBox(height: AppConstants.smallPadding),
-
-                _buildSummaryItem(
-                  'Balance',
-                  '${baziData.elementBalanceScore}%',
-                  AppColors.success,
-                ),
-              ],
+              ),
             ),
           ),
         ],
@@ -732,5 +759,139 @@ extension AnalysisViewPart2 on AnalysisView {
     if (count >= 3) return AppColors.lightGold;
     if (count >= 2) return AppColors.warning;
     return AppColors.error;
+  }
+
+  // --- Explanations (Dialogs) ---
+  void _openFortuneInsight(String sectionTitle) {
+    final data = controller.fortuneData.value ?? {};
+    final content = _buildFortuneInsightContent(
+      sectionTitle,
+      data,
+    );
+    _showInsightDialog(
+      title: sectionTitle,
+      body: content,
+    );
+  }
+
+  List<Widget> _buildFortuneInsightContent(
+    String section,
+    Map<String, dynamic> data,
+  ) {
+    final widgets = <Widget>[];
+
+    Text p0(String text) => Text(
+      text,
+      style: AppTheme.bodyMedium.copyWith(
+        color: AppColors.darkTextSecondary,
+        height: 1.5,
+      ),
+    );
+
+    if (section == 'Life Period') {
+      final p =
+          (data['lifePeriods'] as Map?)?.cast<String, dynamic>() ??
+          <String, dynamic>{};
+      widgets.addAll([
+        p0('Your current phase reflects your age and traditional life stages.'),
+        const SizedBox(height: 8),
+        p0('Focus: ${p['focus'] ?? '—'}'),
+        p0('Challenges: ${p['challenges'] ?? '—'}'),
+      ]);
+    } else if (section == 'Grand Limit Cycle') {
+      final g =
+          (data['grandLimit'] as Map?)?.cast<String, dynamic>() ??
+          <String, dynamic>{};
+      widgets.addAll([
+        p0('This runs in 10-year cycles derived from your age.'),
+        p0('Cycle: ${g['cycleStart'] ?? '—'}–${g['cycleEnd'] ?? '—'}'),
+        p0('Years remaining: ${g['yearsRemaining'] ?? '—'}'),
+      ]);
+    } else if (section == 'Small Limit Cycle') {
+      final s =
+          (data['smallLimit'] as Map?)?.cast<String, dynamic>() ??
+          <String, dynamic>{};
+      widgets.addAll([
+        p0('A 1-year focus within the grand cycle.'),
+        p0('Theme: ${s['yearName'] ?? '—'}'),
+        p0('Focus areas: ${(s['focus'] as List?)?.join(', ') ?? '—'}'),
+      ]);
+    } else if (section == 'Annual Fortune') {
+      final a =
+          (data['annualFortune'] as Map?)?.cast<String, dynamic>() ??
+          <String, dynamic>{};
+      final m =
+          (data['monthlyFortune'] as Map?)?.cast<String, dynamic>() ??
+          <String, dynamic>{};
+      final best = (m['bestMonths'] as List?)?.join(', ');
+      final ch = (m['challengingMonths'] as List?)?.join(', ');
+      widgets.addAll([
+        p0(
+          'Overall rating combines year element relations, lucky aspects and challenges.',
+        ),
+        const SizedBox(height: 8),
+        p0('Year element: ${a['yearElement'] ?? '—'}'),
+        p0('Relation to birth year: ${a['relationship']?['type'] ?? '—'}'),
+        if (best != null) p0('Best months: $best'),
+        if (ch != null) p0('Challenging months: $ch'),
+      ]);
+    } else {
+      widgets.add(
+        p0('This card summarizes calculated insights for your selected year.'),
+      );
+    }
+
+    return widgets;
+  }
+
+  void _openElementInsight({
+    required String element,
+    required String elementName,
+    required int count,
+  }) {
+    _showInsightDialog(
+      title: '$element • $elementName',
+      body: [
+        Text(
+          'Strength is based on how many times this element appears across your four pillars.',
+          style: AppTheme.bodyMedium.copyWith(
+            color: AppColors.darkTextSecondary,
+            height: 1.5,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          'Count: $count (0–5 scale) → ${_getElementStrength(count)}',
+          style: AppTheme.bodyMedium.copyWith(
+            color: AppColors.darkTextPrimary,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ],
+    );
+  }
+
+  void _openElementBalanceInsight() {
+    final data = controller.baziData.value!;
+    _showInsightDialog(
+      title: 'Element Balance',
+      body: [
+        Text(
+          'Balance score reflects how even your five elements are. We compute a simple ratio between the least and most frequent elements.',
+          style: AppTheme.bodyMedium.copyWith(
+            color: AppColors.darkTextSecondary,
+            height: 1.5,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          'Score = floor(minCount / maxCount × 100). Your score: ${data.elementBalanceScore}%',
+          style: AppTheme.bodyMedium.copyWith(
+            color: AppColors.darkTextPrimary,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ],
+    );
   }
 }

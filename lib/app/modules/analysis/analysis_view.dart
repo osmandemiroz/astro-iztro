@@ -598,4 +598,90 @@ class AnalysisView extends GetView<AnalysisController> {
       ),
     );
   }
+
+  /// [showInsightDialog] - Lightweight, elegant explanation dialog
+  /// Displays a friendly description of what a card/graph means and how it is derived
+  void _showInsightDialog({
+    required String title,
+    required List<Widget> body,
+  }) {
+    Get.dialog<void>(
+      Dialog(
+        backgroundColor: AppColors.darkCard.withValues(alpha: 0.95),
+        insetPadding: const EdgeInsets.symmetric(
+          horizontal: 20,
+          vertical: 24,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Container(
+          padding: const EdgeInsets.all(AppConstants.largePadding),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: AppColors.lightPurple.withValues(alpha: 0.2),
+            ),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const Icon(
+                    Icons.info_outline_rounded,
+                    color: AppColors.lightPurple,
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      title,
+                      style: AppTheme.headingMedium.copyWith(
+                        color: AppColors.darkTextPrimary,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () => Get.back<void>(),
+                    icon: const Icon(
+                      Icons.close_rounded,
+                      color: AppColors.darkTextSecondary,
+                    ),
+                    tooltip: 'Close',
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: AppConstants.defaultPadding),
+
+              ...body,
+
+              const SizedBox(height: AppConstants.defaultPadding),
+
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () => Get.back<void>(),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.lightPurple,
+                    foregroundColor: AppColors.white,
+                    padding: const EdgeInsets.symmetric(
+                      vertical: AppConstants.defaultPadding,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                  ),
+                  child: const Text('Got it'),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      barrierColor: AppColors.black.withValues(alpha: 0.5),
+    );
+  }
 }
