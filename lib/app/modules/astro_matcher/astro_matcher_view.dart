@@ -530,6 +530,8 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
           _buildDetailedAnalysisCard(),
           const SizedBox(height: AppConstants.defaultPadding),
           _buildRecommendationsCard(),
+          const SizedBox(height: AppConstants.defaultPadding),
+          _buildFutureInsightsCard(),
         ],
       );
     });
@@ -537,37 +539,43 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
 
   /// [buildOverallScoreCard] - Overall compatibility score display
   Widget _buildOverallScoreCard() {
-    return LiquidGlassWidget(
-      glassColor: AppColors.glassPrimary,
-      borderColor: AppColors.lightPurple,
-      borderRadius: BorderRadius.circular(16),
-      padding: const EdgeInsets.all(AppConstants.defaultPadding),
-      child: Column(
-        children: [
-          Text(
-            'Your Overall Compatibility',
-            style: AppTheme.bodyMedium.copyWith(
-              color: AppColors.darkTextSecondary,
+    return _insightInk(
+      onTap: () => _openInsight(
+        title: 'Overall Compatibility',
+        body: _overallScoreExplanation(),
+      ),
+      child: LiquidGlassWidget(
+        glassColor: AppColors.glassPrimary,
+        borderColor: AppColors.lightPurple,
+        borderRadius: BorderRadius.circular(16),
+        padding: const EdgeInsets.all(AppConstants.defaultPadding),
+        child: Column(
+          children: [
+            Text(
+              'Your Overall Compatibility',
+              style: AppTheme.bodyMedium.copyWith(
+                color: AppColors.darkTextSecondary,
+              ),
             ),
-          ),
-          const SizedBox(height: AppConstants.smallPadding),
-          Text(
-            controller.getCompatibilityScore(),
-            style: AppTheme.headingLarge.copyWith(
-              color: AppColors.lightPurple,
-              fontWeight: FontWeight.w700,
+            const SizedBox(height: AppConstants.smallPadding),
+            Text(
+              controller.getCompatibilityScore(),
+              style: AppTheme.headingLarge.copyWith(
+                color: AppColors.lightPurple,
+                fontWeight: FontWeight.w700,
+              ),
             ),
-          ),
-          const SizedBox(height: AppConstants.smallPadding),
-          Text(
-            controller.getCompatibilitySummary(),
-            style: AppTheme.bodyMedium.copyWith(
-              color: AppColors.darkTextPrimary,
-              fontWeight: FontWeight.w500,
+            const SizedBox(height: AppConstants.smallPadding),
+            Text(
+              controller.getCompatibilitySummary(),
+              style: AppTheme.bodyMedium.copyWith(
+                color: AppColors.darkTextPrimary,
+                fontWeight: FontWeight.w500,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -577,48 +585,57 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
     final analysis = controller.getCompatibilityAnalysis();
     if (analysis == null) return const SizedBox.shrink();
 
-    return LiquidGlassWidget(
-      glassColor: AppColors.glassPrimary,
-      borderColor: AppColors.lightPurple,
-      borderRadius: BorderRadius.circular(16),
-      padding: const EdgeInsets.all(AppConstants.defaultPadding),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Your Detailed Analysis',
-            style: AppTheme.bodyMedium.copyWith(
-              color: AppColors.darkTextPrimary,
-              fontWeight: FontWeight.w600,
+    return _insightInk(
+      onTap: () => _openInsight(
+        title: 'Detailed Analysis',
+        body: _detailedAnalysisExplanation(analysis),
+      ),
+      child: LiquidGlassWidget(
+        glassColor: AppColors.glassPrimary,
+        borderColor: AppColors.lightPurple,
+        borderRadius: BorderRadius.circular(16),
+        padding: const EdgeInsets.all(AppConstants.defaultPadding),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Your Detailed Analysis',
+              style: AppTheme.bodyMedium.copyWith(
+                color: AppColors.darkTextPrimary,
+                fontWeight: FontWeight.w600,
+              ),
             ),
-          ),
-          const SizedBox(height: AppConstants.smallPadding),
+            const SizedBox(height: AppConstants.smallPadding),
 
-          _buildAnalysisItem(
-            'Sun Sign',
-            (analysis['sunSignAnalysis'] as String?) ?? 'No analysis available',
-            Icons.wb_sunny,
-            AppColors.lightGold,
-          ),
+            _buildAnalysisItem(
+              'Sun Sign',
+              (analysis['sunSignAnalysis'] as String?) ??
+                  'No analysis available',
+              Icons.wb_sunny,
+              AppColors.lightGold,
+            ),
 
-          const SizedBox(height: AppConstants.smallPadding),
+            const SizedBox(height: AppConstants.smallPadding),
 
-          _buildAnalysisItem(
-            'Element',
-            (analysis['elementAnalysis'] as String?) ?? 'No analysis available',
-            Icons.local_fire_department,
-            AppColors.lightPurple,
-          ),
+            _buildAnalysisItem(
+              'Element',
+              (analysis['elementAnalysis'] as String?) ??
+                  'No analysis available',
+              Icons.local_fire_department,
+              AppColors.lightPurple,
+            ),
 
-          const SizedBox(height: AppConstants.smallPadding),
+            const SizedBox(height: AppConstants.smallPadding),
 
-          _buildAnalysisItem(
-            'Timing',
-            (analysis['timingAnalysis'] as String?) ?? 'No analysis available',
-            Icons.schedule,
-            AppColors.success,
-          ),
-        ],
+            _buildAnalysisItem(
+              'Timing',
+              (analysis['timingAnalysis'] as String?) ??
+                  'No analysis available',
+              Icons.schedule,
+              AppColors.success,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -671,48 +688,480 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
     final recommendations = controller.getRecommendations();
     if (recommendations.isEmpty) return const SizedBox.shrink();
 
-    return LiquidGlassWidget(
-      glassColor: AppColors.glassPrimary,
-      borderColor: AppColors.lightPurple,
-      borderRadius: BorderRadius.circular(16),
-      padding: const EdgeInsets.all(AppConstants.defaultPadding),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+    return _insightInk(
+      onTap: () => _openInsight(
+        title: 'Recommendations',
+        body: _recommendationsExplanation(),
+      ),
+      child: LiquidGlassWidget(
+        glassColor: AppColors.glassPrimary,
+        borderColor: AppColors.lightPurple,
+        borderRadius: BorderRadius.circular(16),
+        padding: const EdgeInsets.all(AppConstants.defaultPadding),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Your Relationship Recommendations',
+              style: AppTheme.bodyMedium.copyWith(
+                color: AppColors.darkTextPrimary,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: AppConstants.smallPadding),
+            ...recommendations.map(
+              (recommendation) => Padding(
+                padding: const EdgeInsets.only(
+                  bottom: AppConstants.smallPadding,
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Icon(
+                      Icons.lightbulb_outline,
+                      color: AppColors.lightGold,
+                      size: 16,
+                    ),
+                    const SizedBox(width: AppConstants.smallPadding),
+                    Expanded(
+                      child: Text(
+                        recommendation,
+                        style: AppTheme.bodyMedium.copyWith(
+                          color: AppColors.darkTextPrimary,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // --- Future insights card and explanation helpers ---
+  Widget _buildFutureInsightsCard() {
+    final yearly = controller.getYearlyScores();
+    final prediction = controller.getPredictionLabel();
+    if (yearly.isEmpty &&
+        (prediction.isEmpty || prediction == 'No prediction available')) {
+      return const SizedBox.shrink();
+    }
+
+    final years = yearly.keys.toList()..sort();
+    return _insightInk(
+      onTap: () => _openInsight(
+        title: 'Future Compatibility Insights',
+        body: _futureInsightsExplanation(yearly, prediction),
+      ),
+      child: LiquidGlassWidget(
+        glassColor: AppColors.glassPrimary,
+        borderColor: AppColors.lightPurple,
+        borderRadius: BorderRadius.circular(16),
+        padding: const EdgeInsets.all(AppConstants.defaultPadding),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Future Insights',
+              style: AppTheme.bodyMedium.copyWith(
+                color: AppColors.darkTextPrimary,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: AppConstants.smallPadding),
+            if (years.isNotEmpty)
+              Column(
+                children: years.map((y) {
+                  final score = yearly[y] ?? 0;
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: 54,
+                          child: Text(
+                            '$y',
+                            style: AppTheme.caption.copyWith(
+                              color: AppColors.darkTextSecondary,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              final breakdown = controller.getYearBreakdown(y);
+                              final body = _yearBreakdownExplanation(
+                                y,
+                                breakdown,
+                                score,
+                              );
+                              _openInsight(title: 'Year $y', body: body);
+                            },
+                            child: Container(
+                              height: 8,
+                              decoration: BoxDecoration(
+                                color: AppColors.glassSecondary,
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: FractionallySizedBox(
+                                alignment: Alignment.centerLeft,
+                                widthFactor: (score / 100).clamp(0.0, 1.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: AppColors.lightPurple,
+                                    borderRadius: BorderRadius.circular(6),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        SizedBox(
+                          width: 44,
+                          child: Text(
+                            '${score.toStringAsFixed(0)}%',
+                            style: AppTheme.caption.copyWith(
+                              color: AppColors.darkTextPrimary,
+                            ),
+                            textAlign: TextAlign.right,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }).toList(),
+              ),
+            const SizedBox(height: AppConstants.smallPadding),
+            Row(
+              children: [
+                const Icon(
+                  Icons.auto_awesome,
+                  color: AppColors.lightGold,
+                  size: 16,
+                ),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: Text(
+                    prediction,
+                    style: AppTheme.caption.copyWith(
+                      color: AppColors.darkTextSecondary,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  List<Widget> _overallScoreExplanation() {
+    return [
+      Text(
+        'Overall score blends Sun Sign (30%), Element (25%), Timing (20%), Chinese Zodiac Year (15%), and Hour Branch (10%).',
+        style: AppTheme.bodyMedium.copyWith(
+          color: AppColors.darkTextSecondary,
+          height: 1.5,
+        ),
+      ),
+      const SizedBox(height: 8),
+      Text(
+        controller.getCompatibilitySummary(),
+        style: AppTheme.bodyMedium.copyWith(
+          color: AppColors.darkTextPrimary,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    ];
+  }
+
+  List<Widget> _detailedAnalysisExplanation(Map<String, dynamic> analysis) {
+    return [
+      _explainLine('Sun Sign', 'Traditional Western zodiac matrix scoring.'),
+      const SizedBox(height: 6),
+      _explainLine(
+        'Element',
+        'Five-element interaction table (Wood, Fire, Earth, Metal, Water).',
+      ),
+      const SizedBox(height: 6),
+      _explainLine('Timing', 'Age gap, seasonal rhythm, and cycle alignment.'),
+    ];
+  }
+
+  List<Widget> _recommendationsExplanation() {
+    return [
+      Text(
+        'Suggestions are derived from your overall score to amplify strengths and address challenges.',
+        style: AppTheme.bodyMedium.copyWith(
+          color: AppColors.darkTextSecondary,
+          height: 1.5,
+        ),
+      ),
+    ];
+  }
+
+  List<Widget> _futureInsightsExplanation(
+    Map<int, double> yearly,
+    String prediction,
+  ) {
+    return [
+      Text(
+        'We compute yearly projections from trend analysis over multiple years and highlight peaks and dips.',
+        style: AppTheme.bodyMedium.copyWith(
+          color: AppColors.darkTextSecondary,
+          height: 1.5,
+        ),
+      ),
+      const SizedBox(height: 8),
+      Text(
+        'Prediction: $prediction',
+        style: AppTheme.bodyMedium.copyWith(
+          color: AppColors.darkTextPrimary,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    ];
+  }
+
+  List<Widget> _yearBreakdownExplanation(
+    int year,
+    Map<String, dynamic>? breakdown,
+    double score,
+  ) {
+    final reasons = (breakdown?['reasons'] as Map?)?.cast<String, dynamic>();
+    final scores = (reasons?['scores'] as Map?)?.cast<String, dynamic>();
+    final weights = (reasons?['weights'] as Map?)?.cast<String, dynamic>();
+    final timing = (reasons?['timing'] as Map?)?.cast<String, dynamic>();
+    final yearElement = reasons?['yearElement']?.toString();
+    final yearAnimal = reasons?['yearAnimal']?.toString();
+    final pairElements = (reasons?['pairElements'] as List?)?.join(' & ');
+    final pairAnimals = (reasons?['pairAnimals'] as List?)?.join(' & ');
+
+    List<Widget> row(String label, String value) => [
+      Row(
         children: [
           Text(
-            'Your Relationship Recommendations',
+            '$label: ',
             style: AppTheme.bodyMedium.copyWith(
-              color: AppColors.darkTextPrimary,
+              color: AppColors.darkTextSecondary,
               fontWeight: FontWeight.w600,
             ),
           ),
-          const SizedBox(height: AppConstants.smallPadding),
-          ...recommendations.map(
-            (recommendation) => Padding(
-              padding: const EdgeInsets.only(bottom: AppConstants.smallPadding),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Icon(
-                    Icons.lightbulb_outline,
-                    color: AppColors.lightGold,
-                    size: 16,
-                  ),
-                  const SizedBox(width: AppConstants.smallPadding),
-                  Expanded(
-                    child: Text(
-                      recommendation,
-                      style: AppTheme.bodyMedium.copyWith(
-                        color: AppColors.darkTextPrimary,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ),
-                ],
+          Expanded(
+            child: Text(
+              value,
+              style: AppTheme.bodyMedium.copyWith(
+                color: AppColors.darkTextPrimary,
               ),
             ),
           ),
         ],
+      ),
+      const SizedBox(height: 6),
+    ];
+
+    return [
+      Text(
+        'Composed yearly score with explicit contributions.',
+        style: AppTheme.bodyMedium.copyWith(
+          color: AppColors.darkTextSecondary,
+          height: 1.5,
+        ),
+      ),
+      const SizedBox(height: 8),
+      ...row('Overall', '${score.toStringAsFixed(1)}%'),
+      if (yearElement != null)
+        ...row('Year Element', '$yearElement vs $pairElements'),
+      if (yearAnimal != null)
+        ...row('Year Animal', '$yearAnimal vs $pairAnimals'),
+      if (scores != null && weights != null)
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Components',
+              style: AppTheme.bodyMedium.copyWith(
+                color: AppColors.darkTextPrimary,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: 6),
+            _componentLine('Baseline pair', scores['base'], weights['base']),
+            _componentLine(
+              'Year element support',
+              scores['yearElementSupport'],
+              weights['elementYear'],
+            ),
+            _componentLine(
+              'Year animal support',
+              scores['yearAnimalSupport'],
+              weights['zodiacYear'],
+            ),
+            _componentLine(
+              'Timing synergy',
+              scores['timingSynergy'],
+              weights['synergy'],
+            ),
+          ],
+        ),
+      if (timing != null) ...[
+        const SizedBox(height: 8),
+        Text(
+          'Timing',
+          style: AppTheme.bodyMedium.copyWith(
+            color: AppColors.darkTextPrimary,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        const SizedBox(height: 6),
+        Text(
+          'Energy levels: ${(timing['energy1'] as num?)?.toStringAsFixed(0)} & ${(timing['energy2'] as num?)?.toStringAsFixed(0)} • Synergy ${(timing['synergyScore'] as num?)?.toStringAsFixed(0)}',
+          style: AppTheme.bodyMedium.copyWith(
+            color: AppColors.darkTextSecondary,
+          ),
+        ),
+      ],
+    ];
+  }
+
+  Widget _componentLine(String name, dynamic score, dynamic weight) {
+    final s = (score is num) ? score.toDouble() : 0.0;
+    final w = (weight is num) ? weight.toDouble() : 0.0;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 4),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              name,
+              style: AppTheme.caption.copyWith(
+                color: AppColors.darkTextSecondary,
+              ),
+            ),
+          ),
+          Text(
+            '${s.toStringAsFixed(0)} × ${w.toStringAsFixed(2)}',
+            style: AppTheme.caption.copyWith(color: AppColors.darkTextPrimary),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _explainLine(String title, String body) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Icon(Icons.analytics, color: AppColors.lightPurple, size: 16),
+        const SizedBox(width: 8),
+        Expanded(
+          child: RichText(
+            text: TextSpan(
+              style: AppTheme.bodyMedium.copyWith(
+                color: AppColors.darkTextSecondary,
+              ),
+              children: [
+                TextSpan(
+                  text: '$title: ',
+                  style: AppTheme.bodyMedium.copyWith(
+                    color: AppColors.darkTextPrimary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                TextSpan(text: body),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  void _openInsight({required String title, required List<Widget> body}) {
+    Get.dialog<void>(
+      Dialog(
+        backgroundColor: AppColors.darkCard.withValues(alpha: 0.95),
+        insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        child: Container(
+          padding: const EdgeInsets.all(AppConstants.defaultPadding),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: AppColors.lightPurple.withValues(alpha: 0.2),
+            ),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const Icon(
+                    Icons.info_outline_rounded,
+                    color: AppColors.lightPurple,
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      title,
+                      style: AppTheme.headingMedium.copyWith(
+                        color: AppColors.darkTextPrimary,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () => Get.back<void>(),
+                    icon: const Icon(
+                      Icons.close_rounded,
+                      color: AppColors.darkTextSecondary,
+                    ),
+                    tooltip: 'Close',
+                  ),
+                ],
+              ),
+              const SizedBox(height: AppConstants.defaultPadding),
+              ...body,
+              const SizedBox(height: AppConstants.defaultPadding),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () => Get.back<void>(),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.lightPurple,
+                    foregroundColor: AppColors.white,
+                    padding: const EdgeInsets.symmetric(
+                      vertical: AppConstants.defaultPadding,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                  ),
+                  child: const Text('Got it'),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      barrierColor: AppColors.black.withValues(alpha: 0.5),
+    );
+  }
+
+  Widget _insightInk({required Widget child, required VoidCallback onTap}) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(16),
+        child: child,
       ),
     );
   }

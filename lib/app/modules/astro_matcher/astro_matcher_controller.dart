@@ -24,6 +24,12 @@ class AstroMatcherController extends GetxController {
   final RxBool hasResult = false.obs;
   final RxString errorMessage = ''.obs;
 
+  // Future insights (trends and timing)
+  final Rx<Map<String, dynamic>?> trendData = Rx<Map<String, dynamic>?>(null);
+  final Rx<Map<String, dynamic>?> timingData = Rx<Map<String, dynamic>?>(null);
+  final RxInt trendStartYear = DateTime.now().year.obs;
+  final RxInt trendEndYear = (DateTime.now().year + 5).obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -161,6 +167,12 @@ class AstroMatcherController extends GetxController {
 
       // Save to recent calculations
       await _saveToRecentCalculations(result);
+
+      // Kick off future insights calculation (non-blocking)
+      // [calculateCompatibility] -> computeFutureInsights
+      // This enhances UX by presenting upcoming-year trends without changing core flow
+      // ignore: unawaited_futures
+      computeFutureInsights();
     } on Exception catch (e) {
       if (kDebugMode) {
         print('[AstroMatcherController] Error calculating compatibility: $e');
@@ -224,6 +236,8 @@ class AstroMatcherController extends GetxController {
     compatibilityResult.value = null;
     hasResult.value = false;
     errorMessage.value = '';
+    trendData.value = null;
+    timingData.value = null;
   }
 
   /// [getCompatibilityScore] - Get formatted compatibility score
@@ -270,6 +284,82 @@ class AstroMatcherController extends GetxController {
     return selectedProfile1.value != null &&
         selectedProfile2.value != null &&
         selectedProfile1.value != selectedProfile2.value;
+  }
+
+  /// [computeFutureInsights] - Calculate future-oriented insights (trends and timing)
+  Future<void> computeFutureInsights() async {
+    if (selectedProfile1.value == null || selectedProfile2.value == null) {
+      return;
+    }
+    try {
+      final start = DateTime.now().year;
+      final end = start + 5;
+      trendStartYear.value = start;
+      trendEndYear.value = end;
+
+      if (kDebugMode) {
+        print(
+          '[AstroMatcherController.computeFutureInsights] start=$start end=$end',
+        );
+      }
+
+      final trends = await _iztroService.analyzeCompatibilityTrends(
+        selectedProfile1.value!,
+        selectedProfile2.value!,
+        start,
+        end,
+      );
+      trendData.value = trends;
+
+      final timing = await _iztroService.calculateRelationshipTiming(
+        selectedProfile1.value!,
+        selectedProfile2.value!,
+        start,
+      );
+      timingData.value = timing;
+    } on Exception catch (e) {
+      if (kDebugMode) {
+        print('[AstroMatcherController] Future insights error: $e');
+      }
+      // Soft-fail; keep compatibility result visible even if insights fail
+    }
+  }
+
+  /// [getYearlyScores] - Extract year->score map from trend data in a typed way
+  Map<int, double> getYearlyScores() {
+    final data = trendData.value;
+    if (data == null) return {};
+    final raw = data['yearlyScores'];
+    if (raw is Map) {
+      return raw.map((key, value) {
+        final year = int.tryParse(key.toString()) ?? 0;
+        final score = (value as num).toDouble();
+        return MapEntry(year, score);
+      });
+    }
+    return {};
+  }
+
+  /// [getYearBreakdown] - Get full breakdown for a given year (scores, reasons)
+  Map<String, dynamic>? getYearBreakdown(int year) {
+    final data = trendData.value;
+    if (data == null) return null;
+    final map = data['yearlyBreakdown'];
+    if (map is Map) {
+      final entry = map['$year'];
+      if (entry is Map) return entry.cast<String, dynamic>();
+    }
+    return null;
+  }
+
+  /// [getPredictionLabel] - Short prediction text for UI
+  String getPredictionLabel() {
+    final pred = trendData.value?['predictions'] as Map?;
+    final p = pred?.cast<String, dynamic>();
+    final text = p?['prediction']?.toString();
+    final confidence = p?['confidence']?.toString();
+    if (text == null) return 'No prediction available';
+    return confidence == null ? text : '$text • $confidence confidence';
   }
 
   /// [_refreshAvailableProfiles] - Refresh available profiles for Profile 2 selection
