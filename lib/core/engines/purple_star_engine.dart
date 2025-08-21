@@ -1,12 +1,20 @@
 /// [PurpleStarEngine] - Native Purple Star Astrology calculation engine
 /// Implements authentic Purple Star calculations without external dependencies
 /// Production-ready implementation for reliable astrological computations
+// ignore_for_file: unused_element
+
 library;
 
+import 'dart:math' as math;
+
+import 'package:astro_iztro/core/engines/lunar_calendar_engine.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 
 /// [PurpleStarEngine] - Core calculation engine for Purple Star Astrology
 class PurpleStarEngine {
+  // Simple in-memory cache to avoid recomputation for identical inputs
+  static final Map<String, Map<String, dynamic>> _cache = {};
+
   /// [calculateAstrolabe] - Calculate complete Purple Star chart
   static Map<String, dynamic> calculateAstrolabe({
     required DateTime birthDate,
@@ -28,11 +36,65 @@ class PurpleStarEngine {
         print('  IsLunar: $isLunarCalendar');
       }
 
+      // If date is lunar, convert to solar first (approximate)
+      final baseDate = isLunarCalendar
+          ? LunarCalendarEngine.convertLunarToSolar(
+              lunarYear: birthDate.year,
+              lunarMonth: birthDate.month,
+              lunarDay: birthDate.day,
+              isLeapMonth: hasLeapMonth,
+            )
+          : birthDate;
+
+      // Caching key using solar date and all relevant inputs
+      final cacheKey = [
+        baseDate.toIso8601String(),
+        birthHour,
+        birthMinute,
+        gender,
+        isLunarCalendar,
+        hasLeapMonth,
+        latitude.toStringAsFixed(4),
+        longitude.toStringAsFixed(4),
+        useTrueSolarTime,
+      ].join('|');
+      if (_cache.containsKey(cacheKey)) {
+        if (kDebugMode) {
+          print('[PurpleStarEngine] Cache hit, returning cached result');
+        }
+        return _cache[cacheKey]!;
+      }
+
+      // Adjust time for True Solar Time if requested
+      final adjustedDateTime = useTrueSolarTime
+          ? _adjustToTrueSolarTime(
+              baseDate,
+              birthHour,
+              birthMinute,
+              longitude,
+            )
+          : DateTime(
+              baseDate.year,
+              baseDate.month,
+              baseDate.day,
+              birthHour,
+              birthMinute,
+            );
+
+      // Using adjustedDateTime directly for GanZhi and branches
+
+      // Calculate Heavenly Stems and Earthly Branches (干支) for Y/M/D/H
+      final stemBranch = _calculateGanZhi(adjustedDateTime);
+      final yearStem = stemBranch['yearStemIndex']!;
+      final yearBranch = stemBranch['yearBranchIndex']!;
+      final monthStem = stemBranch['monthStemIndex']!;
+      final monthBranch = stemBranch['monthBranchIndex']!;
+      final dayStem = stemBranch['dayStemIndex']!;
+      final dayBranch = stemBranch['dayBranchIndex']!;
+      final timeBranch = stemBranch['timeBranchIndex']!;
+
       // Calculate birth time branch (地支)
-      final timeBranch = _calculateTimeBranch(birthHour);
-      final dayBranch = _calculateDayBranch(birthDate);
-      final monthBranch = _calculateMonthBranch(birthDate.month);
-      final yearBranch = _calculateYearBranch(birthDate.year);
+      // NOTE: The above GanZhi calculation supersedes the legacy branch helpers
 
       if (kDebugMode) {
         print('[PurpleStarEngine] Time calculations:');
@@ -42,7 +104,7 @@ class PurpleStarEngine {
         print('  Year Branch: $yearBranch');
       }
 
-      // Calculate main star positions
+      // Calculate main and auxiliary star positions with Si Hua transformations
       final mainStars = _calculateMainStars(
         timeBranch: timeBranch,
         dayBranch: dayBranch,
@@ -50,32 +112,58 @@ class PurpleStarEngine {
         yearBranch: yearBranch,
         isMale: gender.toLowerCase() == 'male',
       );
+      final auxiliaryStars = _calculateAuxiliaryStars(
+        yearStemIndex: yearStem,
+        yearBranchIndex: yearBranch,
+        monthBranchIndex: monthBranch,
+        dayStemIndex: dayStem,
+        dayBranchIndex: dayBranch,
+        timeBranchIndex: timeBranch,
+      );
+      final allStars = [...mainStars, ...auxiliaryStars];
 
       // Calculate palaces
-      final palaces = _calculatePalaces(mainStars);
+      final palaces = _calculatePalaces(allStars);
 
       // Calculate fortune periods
-      final fortuneData = _calculateFortuneData(birthDate, gender);
+      final fortuneData = _calculateFortuneData(
+        birthDate,
+        gender,
+        yearStem,
+        yearBranch,
+        monthBranch,
+        dayStem,
+      );
 
       // Generate analysis
-      final analysisData = _generateAnalysis(mainStars, palaces);
+      final analysisData = _generateAnalysis(allStars, palaces);
 
       if (kDebugMode) {
         print('[PurpleStarEngine] Native calculation completed successfully');
       }
 
-      return {
+      final result = {
         'palaces': palaces,
-        'stars': mainStars,
+        'stars': allStars,
         'fortuneData': fortuneData,
         'analysisData': analysisData,
         'timeBranch': timeBranch,
         'dayBranch': dayBranch,
         'monthBranch': monthBranch,
         'yearBranch': yearBranch,
+        'yearStem': yearStem,
+        'monthStem': monthStem,
+        'dayStem': dayStem,
+        'trueSolarTime': useTrueSolarTime
+            ? '${adjustedDateTime.hour.toString().padLeft(2, '0')}:${adjustedDateTime.minute.toString().padLeft(2, '0')}'
+            : null,
         'calculationMethod': 'native',
         'timestamp': DateTime.now().toIso8601String(),
       };
+
+      // Store in cache
+      _cache[cacheKey] = result;
+      return result;
     } catch (e) {
       if (kDebugMode) {
         print('[PurpleStarEngine] Calculation failed: $e');
@@ -105,6 +193,56 @@ class PurpleStarEngine {
 
     return hour % 12; // Fallback
   }
+
+  /// [_adjustToTrueSolarTime] - Adjust local time to True Solar Time using Equation of Time
+  static DateTime _adjustToTrueSolarTime(
+    DateTime date,
+    int hour,
+    int minute,
+    double longitude,
+  ) {
+    // Local Standard Time Meridian (LSTM) based on timezone hours
+    final tzOffsetHours = date.timeZoneOffset.inMinutes / 60.0;
+    final lstm = 15.0 * tzOffsetHours; // degrees
+
+    // Day of year
+    final dayOfYear = date.difference(DateTime(date.year)).inDays + 1;
+
+    // Equation of Time (in minutes)
+    final b = (2 * 3.141592653589793 * (dayOfYear - 81)) / 364.0;
+    final eot = 9.87 * _sin(2 * b) - 7.53 * _cos(b) - 1.5 * _sin(b);
+
+    // Time correction (in minutes)
+    final timeCorrection = eot + 4.0 * (longitude - lstm);
+
+    // Convert local time to minutes and add correction
+    final localMinutes = hour * 60 + minute;
+    final trueSolarMinutes = (localMinutes + timeCorrection).round();
+
+    final adjusted = DateTime(
+      date.year,
+      date.month,
+      date.day,
+      date.hour,
+      date.minute,
+    ).add(Duration(minutes: trueSolarMinutes));
+
+    if (kDebugMode) {
+      print('[PurpleStarEngine] True Solar Time adjustment:');
+      print('  TZ offset (h): ${tzOffsetHours.toStringAsFixed(2)}');
+      print('  LSTM: ${lstm.toStringAsFixed(2)}°');
+      print('  EoT: ${eot.toStringAsFixed(2)} min');
+      print('  Correction: ${timeCorrection.toStringAsFixed(2)} min');
+      print(
+        '  Adjusted Time: ${adjusted.hour.toString().padLeft(2, '0')}:${adjusted.minute.toString().padLeft(2, '0')}',
+      );
+    }
+
+    return adjusted;
+  }
+
+  static double _sin(double x) => math.sin(x);
+  static double _cos(double x) => math.cos(x);
 
   /// [_calculateDayBranch] - Calculate day branch from date
   static int _calculateDayBranch(DateTime date) {
@@ -139,6 +277,43 @@ class PurpleStarEngine {
   static int _calculateYearBranch(int year) {
     // Year branch calculation: (year - 4) % 12
     return (year - 4) % 12;
+  }
+
+  /// [_calculateGanZhi] - Calculate Heavenly Stem and Earthly Branch indices for Y/M/D/H
+  /// Indices: Stem 0..9 (甲乙丙丁戊己庚辛壬癸), Branch 0..11 (子丑寅卯辰巳午未申酉戌亥)
+  static Map<String, int> _calculateGanZhi(DateTime dateTime) {
+    final date = DateTime(dateTime.year, dateTime.month, dateTime.day);
+    final jd = _dateToJulian(date);
+
+    // Year Stem/Branch (by solar year, approximate)
+    final yIndex = (date.year - 4) % 60;
+    final yearStemIndex = yIndex % 10;
+    final yearBranchIndex = yIndex % 12;
+
+    // Month Branch (寅为正月)
+    final monthBranchIndex = _calculateMonthBranch(date.month);
+    // Month Stem: (yearStem*2 + monthIndex) % 10, where monthIndex starts at 1 for 寅
+    final monthIndexFromYin =
+        ((monthBranchIndex - 2) % 12 + 12) % 12 + 1; // 1..12
+    final monthStemIndex = (yearStemIndex * 2 + monthIndexFromYin) % 10;
+
+    // Day Stem/Branch using Julian Day offset from a known base (1900-01-01 ~ 2415021)
+    final dayIndex = (jd - 2415021) % 60;
+    final dayStemIndex = dayIndex % 10;
+    final dayBranchIndex = dayIndex % 12;
+
+    // Time Branch based on true solar hour
+    final timeBranchIndex = _calculateTimeBranch(dateTime.hour);
+
+    return {
+      'yearStemIndex': yearStemIndex,
+      'yearBranchIndex': yearBranchIndex,
+      'monthStemIndex': monthStemIndex,
+      'monthBranchIndex': monthBranchIndex,
+      'dayStemIndex': dayStemIndex,
+      'dayBranchIndex': dayBranchIndex,
+      'timeBranchIndex': timeBranchIndex,
+    };
   }
 
   /// [_dateToJulian] - Convert date to Julian day number
@@ -237,6 +412,9 @@ class PurpleStarEngine {
       yearBranch,
       isMale,
     );
+
+    // Apply Four Transformations (四化) based on Year Heavenly Stem
+    _applyFourTransformations(stars, yearBranch);
 
     return stars;
   }
@@ -394,9 +572,12 @@ class PurpleStarEngine {
           .where((star) => star['position'] == i)
           .toList();
 
+      final trigram = _palaceTrigram(i);
+
       palaces.add({
         'name': palace['name'],
         'nameZh': palace['nameZh'],
+        'nameTr': _palaceNameTr(i),
         'index': i,
         'description': palace['description'],
         'stars': starsInPalace,
@@ -405,6 +586,9 @@ class PurpleStarEngine {
         'brightness': starsInPalace.isNotEmpty
             ? starsInPalace[0]['brightness']
             : '平',
+        'relationships': _calculatePalaceRelationships(i),
+        'trigram': trigram['trigram'],
+        'trigramZh': trigram['trigramZh'],
         'analysis': _generatePalaceAnalysis(
           palace['name']!,
           starsInPalace,
@@ -413,6 +597,74 @@ class PurpleStarEngine {
     }
 
     return palaces;
+  }
+
+  /// [_palaceTrigram] - Get trigram for palace index
+  static Map<String, String> _palaceTrigram(int index) {
+    const trigramsZh = ['乾', '兑', '离', '震', '巽', '坎', '艮', '坤'];
+    const trigramsEn = [
+      'Qian',
+      'Dui',
+      'Li',
+      'Zhen',
+      'Xun',
+      'Kan',
+      'Gen',
+      'Kun',
+    ];
+    final tIndex = (index ~/ 2) % 8; // simple mapping
+    return {'trigram': trigramsEn[tIndex], 'trigramZh': trigramsZh[tIndex]};
+  }
+
+  static String _palaceNameTr(int index) {
+    const namesTr = [
+      'Yaşam',
+      'Kardeşler',
+      'Eş',
+      'Çocuklar',
+      'Servet',
+      'Sağlık',
+      'Seyahat',
+      'Dostlar',
+      'Kariyer',
+      'Mülk',
+      'Talih',
+      'Ebeveynler',
+    ];
+    return namesTr[index % 12];
+  }
+
+  /// [_calculatePalaceRelationships] - 三方四正 relationships for a palace index
+  static Map<String, List<int>> _calculatePalaceRelationships(int index) {
+    // 三合 groups: 水(申0? see mapping below), 木, 火, 金 based on Earthly Branch cycles
+    // Using indices 0..11 mapping to: 子0 丑1 寅2 卯3 辰4 巳5 午6 未7 申8 酉9 戌10 亥11
+    final threeHarmony = <List<int>>[
+      [0, 4, 8], // 子 辰 申 - 水局
+      [3, 7, 11], // 卯 未 亥 - 木局
+      [2, 6, 10], // 寅 午 戌 - 火局
+      [1, 5, 9], // 丑 巳 酉 - 金局
+    ];
+
+    List<int> findThreeHarmony(int i) {
+      for (final g in threeHarmony) {
+        if (g.contains(i)) return g;
+      }
+      return [];
+    }
+
+    final opposite = (index + 6) % 12; // 对宫
+    final fourCardinal = [
+      index,
+      (index + 3) % 12,
+      (index + 6) % 12,
+      (index + 9) % 12,
+    ];
+
+    return {
+      'threeHarmony': findThreeHarmony(index),
+      'fourCardinal': fourCardinal,
+      'opposite': [opposite],
+    };
   }
 
   /// [_calculatePalaceElement] - Calculate palace element
@@ -502,9 +754,20 @@ class PurpleStarEngine {
   static Map<String, dynamic> _calculateFortuneData(
     DateTime birthDate,
     String gender,
+    int yearStemIndex,
+    int yearBranchIndex,
+    int monthBranchIndex,
+    int dayStemIndex,
   ) {
     final age = DateTime.now().year - birthDate.year;
     final currentDecade = (age ~/ 10) * 10;
+
+    final daXian = _calculateDaXian(
+      birthDate,
+      gender,
+      yearStemIndex,
+      yearBranchIndex,
+    );
 
     return {
       'currentAge': age,
@@ -513,6 +776,8 @@ class PurpleStarEngine {
       'annualFortune': _calculateAnnualFortune(DateTime.now().year),
       'monthlyFortune': _calculateMonthlyFortune(DateTime.now().month),
       'fortuneCycle': _calculateFortuneCycle(birthDate, gender),
+      'daXian': daXian,
+      'siHuaYear': _fourTransformationsForStem(yearStemIndex),
     };
   }
 
@@ -610,6 +875,38 @@ class PurpleStarEngine {
     return cycles;
   }
 
+  /// [_calculateDaXian] - Calculate 12 major fortune periods (大限)
+  static List<Map<String, dynamic>> _calculateDaXian(
+    DateTime birthDate,
+    String gender,
+    int yearStemIndex,
+    int yearBranchIndex,
+  ) {
+    final results = <Map<String, dynamic>>[];
+    final isMale = gender.toLowerCase() == 'male';
+
+    // Determine direction by Yin/Yang of Year Stem (奇阳偶阴): 甲丙戊庚壬(0,2,4,6,8)阳
+    final isYangYear = [0, 2, 4, 6, 8].contains(yearStemIndex);
+    final forward = (isMale && isYangYear) || (!isMale && !isYangYear);
+
+    // Start age commonly computed via days to next solar term/5; here approximate start at age 0-1
+    const startAge = 1; // Placeholder conservative start
+
+    for (var i = 0; i < 12; i++) {
+      final periodIndex = forward ? i : (12 - i) % 12;
+      final from = startAge + i * 10;
+      final to = from + 9;
+      results.add({
+        'index': periodIndex,
+        'palace': _getPalaceName(periodIndex),
+        'fromAge': from,
+        'toAge': to,
+      });
+    }
+
+    return results;
+  }
+
   /// [_generateAnalysis] - Generate comprehensive analysis
   static Map<String, dynamic> _generateAnalysis(
     List<Map<String, dynamic>> stars,
@@ -633,6 +930,213 @@ class PurpleStarEngine {
       'yearlyOutlook': _generateYearlyOutlook(stars),
       'strengthsAndChallenges': _analyzeStrengthsAndChallenges(stars, palaces),
     };
+  }
+
+  /// =====================
+  /// Auxiliary Stars & Si Hua
+  /// =====================
+
+  /// [_calculateAuxiliaryStars] - Calculate auxiliary/assistant/malefic stars
+  static List<Map<String, dynamic>> _calculateAuxiliaryStars({
+    required int yearStemIndex,
+    required int yearBranchIndex,
+    required int monthBranchIndex,
+    required int dayStemIndex,
+    required int dayBranchIndex,
+    required int timeBranchIndex,
+  }) {
+    final stars = <Map<String, dynamic>>[];
+
+    // 左辅右弼 positions relative to month branch (simplified)
+    final zuoFuPos = (monthBranchIndex + 4) % 12;
+    final youBiPos = (monthBranchIndex + 8) % 12;
+    stars.addAll([
+      {
+        'name': '左辅',
+        'nameEn': 'Left Assistant',
+        'position': zuoFuPos,
+        'palace': _getPalaceName(zuoFuPos),
+        'brightness': _calculateBrightness(zuoFuPos, '左辅'),
+        'category': '吉星',
+        'significance': 'Supportive benefic star',
+      },
+      {
+        'name': '右弼',
+        'nameEn': 'Right Support',
+        'position': youBiPos,
+        'palace': _getPalaceName(youBiPos),
+        'brightness': _calculateBrightness(youBiPos, '右弼'),
+        'category': '吉星',
+        'significance': 'Supportive benefic star',
+      },
+    ]);
+
+    // 文昌文曲 relative to day stem (simplified mapping)
+    final wenChangPos = (dayStemIndex + 1) % 12;
+    final wenQuPos = (dayStemIndex + 7) % 12;
+    stars.addAll([
+      {
+        'name': '文昌',
+        'nameEn': 'Wenchang',
+        'position': wenChangPos,
+        'palace': _getPalaceName(wenChangPos),
+        'brightness': _calculateBrightness(wenChangPos, '文昌'),
+        'category': '吉星',
+        'significance': 'Literary and academic achievements',
+      },
+      {
+        'name': '文曲',
+        'nameEn': 'Wenqu',
+        'position': wenQuPos,
+        'palace': _getPalaceName(wenQuPos),
+        'brightness': _calculateBrightness(wenQuPos, '文曲'),
+        'category': '吉星',
+        'significance': 'Artistic and musical talents',
+      },
+    ]);
+
+    // 禄存 relative to year stem
+    final luCunPos = (yearStemIndex + 5) % 12;
+    stars.add({
+      'name': '禄存',
+      'nameEn': 'Lu Cun',
+      'position': luCunPos,
+      'palace': _getPalaceName(luCunPos),
+      'brightness': _calculateBrightness(luCunPos, '禄存'),
+      'category': '吉星',
+      'significance': 'Wealth preservation',
+    });
+
+    // 擎羊 陀罗 malefics relative to lu cun (simplified)
+    final qingYangPos = (luCunPos + 1) % 12;
+    final tuoLuoPos = (luCunPos + 11) % 12;
+    stars.addAll([
+      {
+        'name': '擎羊',
+        'nameEn': 'Qingyang',
+        'position': qingYangPos,
+        'palace': _getPalaceName(qingYangPos),
+        'brightness': _calculateBrightness(qingYangPos, '擎羊'),
+        'category': '凶星',
+        'significance': 'Obstacles and sharp challenges',
+      },
+      {
+        'name': '陀罗',
+        'nameEn': 'Tuoluo',
+        'position': tuoLuoPos,
+        'palace': _getPalaceName(tuoLuoPos),
+        'brightness': _calculateBrightness(tuoLuoPos, '陀罗'),
+        'category': '凶星',
+        'significance': 'Entanglements and delays',
+      },
+    ]);
+
+    // 火星 铃星 simplified based on time branch
+    final huoXingPos = (timeBranchIndex + 2) % 12;
+    final lingXingPos = (timeBranchIndex + 8) % 12;
+    stars.addAll([
+      {
+        'name': '火星',
+        'nameEn': 'Mars (Huo Xing)',
+        'position': huoXingPos,
+        'palace': _getPalaceName(huoXingPos),
+        'brightness': _calculateBrightness(huoXingPos, '火星'),
+        'category': '凶星',
+        'significance': 'Impulsiveness and accidents',
+      },
+      {
+        'name': '铃星',
+        'nameEn': 'Bell Star',
+        'position': lingXingPos,
+        'palace': _getPalaceName(lingXingPos),
+        'brightness': _calculateBrightness(lingXingPos, '铃星'),
+        'category': '凶星',
+        'significance': 'Sudden disturbances',
+      },
+    ]);
+
+    // 地空 地劫 relative to day branch
+    final diKongPos = (dayBranchIndex + 3) % 12;
+    final diJiePos = (dayBranchIndex + 9) % 12;
+    stars.addAll([
+      {
+        'name': '地空',
+        'nameEn': 'Dikong',
+        'position': diKongPos,
+        'palace': _getPalaceName(diKongPos),
+        'brightness': _calculateBrightness(diKongPos, '地空'),
+        'category': '凶星',
+        'significance': 'Emptiness and loss',
+      },
+      {
+        'name': '地劫',
+        'nameEn': 'Dijie',
+        'position': diJiePos,
+        'palace': _getPalaceName(diJiePos),
+        'brightness': _calculateBrightness(diJiePos, '地劫'),
+        'category': '凶星',
+        'significance': 'Sudden setbacks',
+      },
+    ]);
+
+    // 天马 relative to year branch
+    final tianMaPos = (yearBranchIndex + 6) % 12;
+    stars.add({
+      'name': '天马',
+      'nameEn': 'Heavenly Horse',
+      'position': tianMaPos,
+      'palace': _getPalaceName(tianMaPos),
+      'brightness': _calculateBrightness(tianMaPos, '天马'),
+      'category': '动星',
+      'significance': 'Movement and travel',
+    });
+
+    return stars;
+  }
+
+  /// [_applyFourTransformations] - Assign 化禄/化权/化科/化忌 tags to stars based on Year Stem
+  static void _applyFourTransformations(
+    List<Map<String, dynamic>> stars,
+    int yearStemIndex,
+  ) {
+    final mapping = _fourTransformationsForStem(yearStemIndex);
+    for (final s in stars) {
+      final name = s['name'] as String;
+      mapping.forEach((transform, starName) {
+        if (name == starName) {
+          s['transformation'] = transform; // e.g., 化禄/化权/化科/化忌
+        }
+      });
+    }
+  }
+
+  /// Return Si Hua mapping for a given Heavenly Stem index
+  static Map<String, String> _fourTransformationsForStem(int stemIndex) {
+    // stemIndex: 0..9 -> 甲乙丙丁戊己庚辛壬癸
+    // The mapping below follows a common Zi Wei school reference
+    const maps = [
+      // 甲
+      {'化禄': '廉貞', '化权': '破軍', '化科': '武曲', '化忌': '太陽'},
+      // 乙
+      {'化禄': '天機', '化权': '太陰', '化科': '貪狼', '化忌': '巨門'},
+      // 丙
+      {'化禄': '天同', '化权': '天機', '化科': '右弼', '化忌': '文昌'},
+      // 丁
+      {'化禄': '太陰', '化权': '天同', '化科': '天魁', '化忌': '文曲'},
+      // 戊
+      {'化禄': '貪狼', '化权': '太陽', '化科': '天梁', '化忌': '紫微'},
+      // 己
+      {'化禄': '武曲', '化权': '貪狼', '化科': '天相', '化忌': '太陰'},
+      // 庚
+      {'化禄': '太陽', '化权': '武曲', '化科': '文昌', '化忌': '天機'},
+      // 辛
+      {'化禄': '巨門', '化权': '紫微', '化科': '文曲', '化忌': '破軍'},
+      // 壬
+      {'化禄': '天梁', '化权': '天馬', '化科': '紫微', '化忌': '武曲'},
+      // 癸
+      {'化禄': '破軍', '化权': '巨門', '化科': '太陰', '化忌': '貪狼'},
+    ];
+    return maps[stemIndex % maps.length];
   }
 
   /// [_analyzeOverallFortune] - Analyze overall fortune

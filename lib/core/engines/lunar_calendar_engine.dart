@@ -9,6 +9,26 @@ import 'package:flutter/foundation.dart' show kDebugMode;
 
 /// [LunarCalendarEngine] - Core calculation engine for Lunar Calendar and Moon Phase Analysis
 class LunarCalendarEngine {
+  /// [convertLunarToSolar] - Approximate conversion from lunar to solar date
+  /// Note: For production-grade accuracy, replace with astronomical new-moon and solar term calculations
+  static DateTime convertLunarToSolar({
+    required int lunarYear,
+    required int lunarMonth,
+    required int lunarDay,
+    required bool isLeapMonth,
+  }) {
+    // Approximate: assume lunar new year ~ late Jan to mid Feb; use a rough epoch (1900-01-31)
+    // and advance by lunar months/days.
+    final base = DateTime(1900, 1, 31);
+    final monthsSince1900 = (lunarYear - 1900) * 12 + (lunarMonth - 1);
+    final leapAdjustment = isLeapMonth
+        ? 29
+        : 0; // crude: add one lunar month length for leap
+    final totalDays =
+        (monthsSince1900 * 29.53058867).round() + lunarDay - 1 + leapAdjustment;
+    return base.add(Duration(days: totalDays));
+  }
+
   /// [calculateLunarDate] - Convert solar date to lunar date
   static Map<String, dynamic> calculateLunarDate({
     required DateTime solarDate,
@@ -216,13 +236,13 @@ class LunarCalendarEngine {
 
   /// [_calculateJulianDay] - Convert DateTime to Julian Day Number
   static double _calculateJulianDay(DateTime date) {
-    final year = date.year;
-    final month = date.month;
+    var year = date.year;
+    var month = date.month;
     final day = date.day;
 
     if (month <= 2) {
-      final year = date.year - 1;
-      final month = date.month + 12;
+      year -= 1;
+      month += 12;
     }
 
     final a = (year / 100).floor();

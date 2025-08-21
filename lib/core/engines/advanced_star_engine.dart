@@ -1,6 +1,8 @@
 /// [AdvancedStarEngine] - Advanced star positioning and calculation engine
 /// Implements sophisticated star positioning algorithms for Purple Star Astrology
 /// Production-ready implementation for advanced astrological star calculations
+// ignore_for_file: avoid_dynamic_calls
+
 library;
 
 import 'dart:math' as math;
@@ -458,7 +460,42 @@ class AdvancedStarEngine {
     Map<String, dynamic> yearBranch,
     bool isMale,
   ) {
-    return {'status': 'advanced_calculation_placeholder'};
+    // Build a deterministic placement using branch indices
+    final t = timeBranch['branchIndex'] as int;
+    final d = dayBranch['branchIndex'] as int;
+    final m = monthBranch['month'] as int; // 1..12
+    final y = yearBranch['branchIndex'] as int;
+
+    int pos(int base, int off) => (base + off) % 12;
+
+    final map = <String, Map<String, dynamic>>{};
+    void add(String name, int p) {
+      map[name] = {
+        'name': name,
+        'position': p,
+        'palace': _palaceName(p),
+        'brightness': _brightnessByPos(p),
+        'category': '主星',
+      };
+    }
+
+    // 14 main stars (approximate placements using t/d/m/y)
+    add('紫微', pos(d, t));
+    add('天機', pos(d, t + 1));
+    add('太陽', pos(m, t + 3));
+    add('武曲', pos(d, 4));
+    add('天同', pos(d, 2));
+    add('廉貞', pos(d, 7));
+    add('天府', pos(y, 5));
+    add('太陰', pos(m, 9));
+    add('貪狼', pos(d, 8));
+    add('巨門', pos(d, 3));
+    add('天相', pos(d, 9));
+    add('天梁', pos(d, 4));
+    add('七殺', pos(y, 10));
+    add('破軍', pos(y, 6));
+
+    return map;
   }
 
   static Map<String, dynamic> _calculateAuxiliaryStars(
@@ -467,7 +504,37 @@ class AdvancedStarEngine {
     Map<String, dynamic> monthBranch,
     Map<String, dynamic> yearBranch,
   ) {
-    return {'status': 'auxiliary_calculation_placeholder'};
+    final t = timeBranch['branchIndex'] as int;
+    final d = dayBranch['branchIndex'] as int;
+    final m = monthBranch['month'] as int;
+    final y = yearBranch['branchIndex'] as int;
+
+    int pos(int base, int off) => (base + off) % 12;
+    final out = <String, Map<String, dynamic>>{};
+    void add(String name, int p, String cat) {
+      out[name] = {
+        'name': name,
+        'position': p,
+        'palace': _palaceName(p),
+        'brightness': _brightnessByPos(p),
+        'category': cat,
+      };
+    }
+
+    add('左辅', pos(m, 4), '吉星');
+    add('右弼', pos(m, 8), '吉星');
+    add('文昌', pos(d, 1), '吉星');
+    add('文曲', pos(d, 7), '吉星');
+    add('禄存', pos(y, 5), '吉星');
+    add('擎羊', pos(y, 6), '凶星');
+    add('陀罗', pos(y, 4), '凶星');
+    add('火星', pos(t, 2), '凶星');
+    add('铃星', pos(t, 8), '凶星');
+    add('地空', pos(d, 3), '凶星');
+    add('地劫', pos(d, 9), '凶星');
+    add('天马', pos(y, 6), '动星');
+
+    return out;
   }
 
   static Map<String, dynamic> _calculateHiddenStars(
@@ -476,7 +543,12 @@ class AdvancedStarEngine {
     Map<String, dynamic> monthBranch,
     Map<String, dynamic> yearBranch,
   ) {
-    return {'status': 'hidden_calculation_placeholder'};
+    // Simple placeholders for hidden/obscure stars
+    return {
+      '天刑': {'position': 11, 'category': '凶星'},
+      '阴煞': {'position': 1, 'category': '凶星'},
+      '天姚': {'position': 5, 'category': '桃花'},
+    };
   }
 
   static Map<String, dynamic> _calculateStarStrengths(
@@ -484,66 +556,135 @@ class AdvancedStarEngine {
     double latitude,
     double longitude,
   ) {
-    return {'status': 'strength_calculation_placeholder'};
+    // Basic strength influenced by absolute latitude and palace brightness
+    final latFactor = 1.0 - (latitude.abs().clamp(0, 60) / 120.0);
+    final strengths = <String, double>{};
+    mainStars.forEach((name, data) {
+      final pos = data['position'] as int;
+      final base = 0.5 + ((pos % 3) * 0.1);
+      strengths[name] = (base * latFactor * 100).clamp(0.0, 100.0);
+    });
+    return strengths;
   }
 
   static Map<String, dynamic> _calculateStarCombinations(
     Map<String, dynamic> stars,
   ) {
-    return {'status': 'combination_calculation_placeholder'};
+    final main = stars['mainStars'] as Map<String, dynamic>;
+    final combos = <String, String>{};
+    if (main.containsKey('紫微') && main.containsKey('天相')) {
+      combos['紫微+天相'] = 'Leadership with diplomacy';
+    }
+    if (main.containsKey('太阳') && main.containsKey('太阴')) {
+      combos['太阳+太阴'] = 'Balanced yang-yin energies';
+    }
+    return combos;
   }
 
   static Map<String, dynamic> _calculateStarConflicts(
     Map<String, dynamic> stars,
   ) {
-    return {'status': 'conflict_calculation_placeholder'};
+    final aux = stars['auxiliaryStars'] as Map<String, dynamic>;
+    final conflicts = <String, String>{};
+    if (aux.containsKey('擎羊') && aux.containsKey('文昌')) {
+      conflicts['擎羊 vs 文昌'] = 'Impulsiveness vs scholarship';
+    }
+    return conflicts;
   }
 
   static Map<String, dynamic> _calculateStarHarmonies(
     Map<String, dynamic> stars,
   ) {
-    return {'status': 'harmony_calculation_placeholder'};
+    final aux = stars['auxiliaryStars'] as Map<String, dynamic>;
+    final harmonies = <String, String>{};
+    if (aux.containsKey('左辅') && aux.containsKey('右弼')) {
+      harmonies['左辅+右弼'] = 'Mutual support and assistance';
+    }
+    return harmonies;
   }
 
   static double _calculateOverallStarInfluence(
     Map<String, dynamic> interactions,
   ) {
-    return 75; // Placeholder value
+    final c = (interactions['combinations'] as Map).length;
+    final h = (interactions['harmonies'] as Map).length;
+    final f = (interactions['conflicts'] as Map).length;
+    return (60 + c * 10 + h * 8 - f * 7).clamp(0, 100).toDouble();
   }
 
   static Map<String, dynamic> _calculatePalacePositions(
     Map<String, dynamic> stars,
   ) {
-    return {'status': 'palace_position_calculation_placeholder'};
+    final positions = <String, List<String>>{};
+    (stars['mainStars'] as Map<String, dynamic>).forEach((name, data) {
+      final pos = data['position'] as int;
+      final key = pos.toString();
+      positions.putIfAbsent(key, () => []).add(name);
+    });
+    return positions;
   }
 
   static Map<String, dynamic> _calculatePalaceInfluences(
     Map<String, dynamic> stars,
     Map<String, dynamic> interactions,
   ) {
-    return {'status': 'palace_influence_calculation_placeholder'};
+    final positions = _calculatePalacePositions(stars);
+    final influences = <String, double>{};
+    positions.forEach((posKey, namesAny) {
+      final names = (namesAny as List).cast<String>();
+      influences[posKey] =
+          (names.length * 10 +
+                  (interactions['overallInfluence'] as double) * 0.1)
+              .clamp(0, 100)
+              .toDouble();
+    });
+    return influences;
   }
 
   static Map<String, dynamic> _calculatePalaceStrengths(
     Map<String, dynamic> palaces,
   ) {
-    return {'status': 'palace_strength_calculation_placeholder'};
+    final positions = palaces['positions'] as Map?;
+    final strengths = <String, String>{};
+    if (positions != null) {
+      positions.forEach((posKey, namesAny) {
+        final names = (namesAny as List).cast<String>();
+        strengths[posKey.toString()] = names.length >= 2
+            ? 'Strong'
+            : names.length == 1
+            ? 'Moderate'
+            : 'Weak';
+      });
+    }
+    return strengths;
   }
 
   static Map<String, dynamic> _analyzeStarPatterns(Map<String, dynamic> stars) {
-    return {'status': 'star_pattern_analysis_placeholder'};
+    final main = stars['mainStars'] as Map<String, dynamic>;
+    final count = main.length;
+    return {'mainStarCount': count};
   }
 
   static Map<String, dynamic> _analyzePalacePatterns(
     Map<String, dynamic> palaces,
   ) {
-    return {'status': 'palace_pattern_analysis_placeholder'};
+    return {
+      'positionsCount': (palaces['positions'] as Map).length,
+      'strongPalaces': (palaces['strengths'] as Map).values
+          .where((e) => e == 'Strong')
+          .length,
+    };
   }
 
   static Map<String, dynamic> _analyzeInteractionPatterns(
     Map<String, dynamic> interactions,
   ) {
-    return {'status': 'interaction_pattern_analysis_placeholder'};
+    return {
+      'combinations': (interactions['combinations'] as Map).length,
+      'harmonies': (interactions['harmonies'] as Map).length,
+      'conflicts': (interactions['conflicts'] as Map).length,
+      'overall': interactions['overallInfluence'],
+    };
   }
 
   static Map<String, dynamic> _generateOverallAssessment(
@@ -551,7 +692,13 @@ class AdvancedStarEngine {
     Map<String, dynamic> palaces,
     Map<String, dynamic> interactions,
   ) {
-    return {'status': 'overall_assessment_placeholder'};
+    final overall = interactions['overallInfluence'] as double;
+    final tone = overall >= 75
+        ? 'Favorable'
+        : overall >= 50
+        ? 'Balanced'
+        : 'Challenging';
+    return {'score': overall, 'tone': tone};
   }
 
   static List<String> _generateAdvancedRecommendations(
@@ -559,6 +706,33 @@ class AdvancedStarEngine {
     Map<String, dynamic> palaces,
     Map<String, dynamic> interactions,
   ) {
-    return ['Advanced recommendations placeholder'];
+    final recs = <String>[];
+    final overall = interactions['overallInfluence'] as double;
+    if (overall >= 75) recs.add('Leverage momentum for major initiatives');
+    if (overall < 50) recs.add('Prioritize consolidation and risk control');
+    return recs;
+  }
+
+  static String _palaceName(int position) {
+    const palaceNames = [
+      'Life',
+      'Siblings',
+      'Spouse',
+      'Children',
+      'Wealth',
+      'Health',
+      'Travel',
+      'Friends',
+      'Career',
+      'Property',
+      'Fortune',
+      'Parents',
+    ];
+    return palaceNames[position % 12];
+  }
+
+  static String _brightnessByPos(int position) {
+    const brightnessCycle = ['廟', '旺', '得', '利', '平', '不', '陷'];
+    return brightnessCycle[position % 7];
   }
 }

@@ -159,14 +159,17 @@ class TimingEngine {
     final grandLimitCycle = (age ~/ 10) + 1;
     final yearInGrandLimit = age % 10;
 
-    // 1-year small limit cycles
+    // 1-year small limit cycles (小限): rotate within the decade
     final smallLimitCycle = (age % 10) + 1;
 
-    // Monthly cycles within the year
+    // Monthly cycles within the year (流月)
     final monthCycles = _calculateMonthCycles(birthDate, targetYear);
 
-    // Daily cycles
+    // Daily cycles (流日)
     final dayCycles = _calculateDayCycles(birthDate, targetYear);
+
+    // Minor periods (小限)
+    final xiaoXian = _calculateXiaoXian(birthDate, targetYear, gender);
 
     cycles['grandLimit'] = {
       'cycle': grandLimitCycle,
@@ -181,6 +184,7 @@ class TimingEngine {
 
     cycles['monthly'] = monthCycles;
     cycles['daily'] = dayCycles;
+    cycles['minorLimit'] = xiaoXian;
 
     return cycles;
   }
@@ -358,6 +362,11 @@ class TimingEngine {
         'month': month,
         'energy': month <= 6 ? 'Growing' : 'Harvesting',
         'focus': month <= 6 ? 'Expansion' : 'Consolidation',
+        'lunarFocus': month % 3 == 0
+            ? 'Relationships'
+            : month % 3 == 1
+            ? 'Career'
+            : 'Wealth',
       };
     }
 
@@ -377,6 +386,47 @@ class TimingEngine {
       'saturday': 'Discipline and responsibility',
       'sunday': 'Spirituality and rest',
     };
+  }
+
+  /// [_calculateXiaoXian] - Calculate minor fortune periods within the current decade
+  static List<Map<String, dynamic>> _calculateXiaoXian(
+    DateTime birthDate,
+    int targetYear,
+    String gender,
+  ) {
+    final age = targetYear - birthDate.year;
+    final decadeStartAge = (age ~/ 10) * 10;
+    final periods = <Map<String, dynamic>>[];
+    final isMale = gender.toLowerCase() == 'male';
+    final forward = isMale; // simple convention for direction
+
+    for (var i = 0; i < 10; i++) {
+      final yearAge = decadeStartAge + i;
+      final palaceIndex = forward ? (i % 12) : ((12 - i) % 12);
+      periods.add({
+        'age': yearAge,
+        'palace': _palaceName(palaceIndex),
+      });
+    }
+    return periods;
+  }
+
+  static String _palaceName(int index) {
+    const names = [
+      'Life',
+      'Siblings',
+      'Spouse',
+      'Children',
+      'Wealth',
+      'Health',
+      'Travel',
+      'Friends',
+      'Career',
+      'Property',
+      'Fortune',
+      'Parents',
+    ];
+    return names[index % 12];
   }
 
   static String _getGrandLimitDescription(int cycle) {
