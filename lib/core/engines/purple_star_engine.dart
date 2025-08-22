@@ -172,6 +172,93 @@ class PurpleStarEngine {
     }
   }
 
+  /// [calculatePredictions] - Calculate comprehensive predictions for specific time periods
+  static Map<String, dynamic> calculatePredictions({
+    required DateTime birthDate,
+    required String gender,
+    required DateTime targetDate,
+    required List<Map<String, dynamic>> stars,
+    required List<Map<String, dynamic>> palaces,
+  }) {
+    try {
+      if (kDebugMode) {
+        print('[PurpleStarEngine] Starting prediction calculation...');
+        print(
+          '  Target Date: ${targetDate.year}-${targetDate.month}-${targetDate.day}',
+        );
+      }
+
+      // Calculate time-based influences
+      final timeInfluences = _calculateTimeInfluences(
+        birthDate,
+        targetDate,
+        gender,
+      );
+
+      // Calculate star transits
+      final starTransits = _calculateStarTransits(stars, targetDate, birthDate);
+
+      // Calculate palace activations
+      final palaceActivations = _calculatePalaceActivations(
+        palaces,
+        targetDate,
+        birthDate,
+      );
+
+      // Calculate daily predictions
+      final dailyPredictions = _calculateDailyPredictions(
+        stars,
+        palaces,
+        targetDate,
+        timeInfluences,
+      );
+
+      // Calculate monthly predictions
+      final monthlyPredictions = _calculateMonthlyPredictions(
+        stars,
+        palaces,
+        targetDate,
+        timeInfluences,
+      );
+
+      // Calculate yearly predictions
+      final yearlyPredictions = _calculateYearlyPredictions(
+        stars,
+        palaces,
+        targetDate,
+        timeInfluences,
+      );
+
+      if (kDebugMode) {
+        print(
+          '[PurpleStarEngine] Prediction calculation completed successfully',
+        );
+      }
+
+      return {
+        'targetDate': targetDate.toIso8601String(),
+        'timeInfluences': timeInfluences,
+        'starTransits': starTransits,
+        'palaceActivations': palaceActivations,
+        'dailyPredictions': dailyPredictions,
+        'monthlyPredictions': monthlyPredictions,
+        'yearlyPredictions': yearlyPredictions,
+        'overallPrediction': _generateOverallPrediction(
+          dailyPredictions,
+          monthlyPredictions,
+          yearlyPredictions,
+        ),
+        'calculationMethod': 'prediction_engine',
+        'timestamp': DateTime.now().toIso8601String(),
+      };
+    } catch (e) {
+      if (kDebugMode) {
+        print('[PurpleStarEngine] Prediction calculation failed: $e');
+      }
+      rethrow;
+    }
+  }
+
   /// [_calculateTimeBranch] - Convert hour to traditional Chinese time branch
   static int _calculateTimeBranch(int hour) {
     // Traditional Chinese time system (12 time branches)
@@ -769,6 +856,11 @@ class PurpleStarEngine {
       yearBranchIndex,
     );
 
+    final xiaoXian = _calculateXiaoXian(birthDate, gender, age);
+    final liuNian = _calculateLiuNian(birthDate, DateTime.now().year, gender);
+    final liuYue = _calculateLiuYue(birthDate, DateTime.now().month, gender);
+    final liuRi = _calculateLiuRi(birthDate, DateTime.now(), gender);
+
     return {
       'currentAge': age,
       'currentDecade': '$currentDecade-${currentDecade + 9} years',
@@ -777,7 +869,12 @@ class PurpleStarEngine {
       'monthlyFortune': _calculateMonthlyFortune(DateTime.now().month),
       'fortuneCycle': _calculateFortuneCycle(birthDate, gender),
       'daXian': daXian,
+      'xiaoXian': xiaoXian,
+      'liuNian': liuNian,
+      'liuYue': liuYue,
+      'liuRi': liuRi,
       'siHuaYear': _fourTransformationsForStem(yearStemIndex),
+      'fortuneAnalysis': _analyzeFortunePeriods(daXian, xiaoXian, liuNian),
     };
   }
 
@@ -907,6 +1004,298 @@ class PurpleStarEngine {
     return results;
   }
 
+  /// [_calculateXiaoXian] - Calculate minor fortune periods (小限)
+  static List<Map<String, dynamic>> _calculateXiaoXian(
+    DateTime birthDate,
+    String gender,
+    int currentAge,
+  ) {
+    final periods = <Map<String, dynamic>>[];
+    final isMale = gender.toLowerCase() == 'male';
+
+    // Xiao Xian rotates within the current decade
+    final decadeStartAge = (currentAge ~/ 10) * 10;
+    final yearInDecade = currentAge % 10;
+
+    for (var i = 0; i < 10; i++) {
+      final yearAge = decadeStartAge + i;
+      final palaceIndex = isMale ? (i % 12) : ((i + 6) % 12);
+      final isCurrent = i == yearInDecade;
+
+      periods.add({
+        'age': yearAge,
+        'palace': _getPalaceName(palaceIndex),
+        'palaceIndex': palaceIndex,
+        'element': _calculatePalaceElement(palaceIndex),
+        'isCurrent': isCurrent,
+        'description': _getXiaoXianDescription(i),
+      });
+    }
+
+    return periods;
+  }
+
+  /// [_calculateLiuNian] - Calculate annual fortune (流年)
+  static Map<String, dynamic> _calculateLiuNian(
+    DateTime birthDate,
+    int targetYear,
+    String gender,
+  ) {
+    final age = targetYear - birthDate.year;
+    final isMale = gender.toLowerCase() == 'male';
+
+    // Liu Nian palace based on age and gender
+    final palaceIndex = isMale ? (age % 12) : ((age + 6) % 12);
+
+    return {
+      'year': targetYear,
+      'age': age,
+      'palace': _getPalaceName(palaceIndex),
+      'palaceIndex': palaceIndex,
+      'element': _calculatePalaceElement(palaceIndex),
+      'fortune': _getLiuNianFortune(age),
+      'focus': _getLiuNianFocus(palaceIndex),
+    };
+  }
+
+  /// [_calculateLiuYue] - Calculate monthly fortune (流月)
+  static Map<String, dynamic> _calculateLiuYue(
+    DateTime birthDate,
+    int targetMonth,
+    String gender,
+  ) {
+    final currentYear = DateTime.now().year;
+    final age = currentYear - birthDate.year;
+    final isMale = gender.toLowerCase() == 'male';
+
+    // Liu Yue palace based on age, month, and gender
+    final basePalaceIndex = isMale ? (age % 12) : ((age + 6) % 12);
+    final monthPalaceIndex = (basePalaceIndex + targetMonth - 1) % 12;
+
+    return {
+      'month': targetMonth,
+      'palace': _getPalaceName(monthPalaceIndex),
+      'palaceIndex': monthPalaceIndex,
+      'element': _calculatePalaceElement(monthPalaceIndex),
+      'energy': _getMonthlyEnergy(targetMonth),
+    };
+  }
+
+  /// [_calculateLiuRi] - Calculate daily fortune (流日)
+  static Map<String, dynamic> _calculateLiuRi(
+    DateTime birthDate,
+    DateTime targetDate,
+    String gender,
+  ) {
+    final age = targetDate.year - birthDate.year;
+    final isMale = gender.toLowerCase() == 'male';
+
+    // Liu Ri palace based on age, day of year, and gender
+    final basePalaceIndex = isMale ? (age % 12) : ((age + 6) % 12);
+    final dayOfYear = targetDate.difference(DateTime(targetDate.year)).inDays;
+    final dayPalaceIndex = (basePalaceIndex + dayOfYear) % 12;
+
+    return {
+      'date': targetDate.toIso8601String(),
+      'palace': _getPalaceName(dayPalaceIndex),
+      'palaceIndex': dayPalaceIndex,
+      'element': _calculatePalaceElement(dayPalaceIndex),
+      'dailyEnergy': _getDailyEnergy(dayOfYear),
+    };
+  }
+
+  /// [_analyzeFortunePeriods] - Analyze fortune period interactions
+  static Map<String, dynamic> _analyzeFortunePeriods(
+    List<Map<String, dynamic>> daXian,
+    List<Map<String, dynamic>> xiaoXian,
+    Map<String, dynamic> liuNian,
+  ) {
+    final analysis = <String, dynamic>{};
+
+    // Find current periods
+    final currentDaXian = daXian.firstWhere(
+      (d) => d['isCurrent'] == true,
+      orElse: () => daXian.first,
+    );
+    final currentXiaoXian = xiaoXian.firstWhere(
+      (x) => x['isCurrent'] == true,
+      orElse: () => xiaoXian.first,
+    );
+
+    // Analyze period harmony
+    final daXianPalace = currentDaXian['palace'] as String;
+    final xiaoXianPalace = currentXiaoXian['palace'] as String;
+    final liuNianPalace = liuNian['palace'] as String;
+
+    final harmony = _calculatePeriodHarmony(
+      daXianPalace,
+      xiaoXianPalace,
+      liuNianPalace,
+    );
+
+    analysis['currentPeriods'] = {
+      'daXian': currentDaXian,
+      'xiaoXian': currentXiaoXian,
+      'liuNian': liuNian,
+    };
+    analysis['harmony'] = harmony;
+    analysis['recommendations'] = _generatePeriodRecommendations(
+      harmony,
+      currentDaXian,
+      currentXiaoXian,
+    );
+
+    return analysis;
+  }
+
+  /// [_calculatePeriodHarmony] - Calculate harmony between different fortune periods
+  static Map<String, dynamic> _calculatePeriodHarmony(
+    String daXianPalace,
+    String xiaoXianPalace,
+    String liuNianPalace,
+  ) {
+    final harmony = <String, dynamic>{};
+
+    // Check for palace conflicts and harmonies
+    final conflicts = <String>[];
+    final harmonies = <String>[];
+
+    // Same palace in multiple periods indicates strong focus
+    if (daXianPalace == xiaoXianPalace) {
+      harmonies.add(
+        'Da Xian and Xiao Xian in same palace: Strong focus on $daXianPalace',
+      );
+    }
+    if (xiaoXianPalace == liuNianPalace) {
+      harmonies.add(
+        'Xiao Xian and Liu Nian in same palace: Monthly focus on $xiaoXianPalace',
+      );
+    }
+
+    // Opposite palaces indicate challenges
+    final daXianIndex = _getPalaceIndex(daXianPalace);
+    final xiaoXianIndex = _getPalaceIndex(xiaoXianPalace);
+    if ((daXianIndex + 6) % 12 == xiaoXianIndex) {
+      conflicts.add(
+        'Da Xian and Xiao Xian in opposite palaces: Potential conflicts',
+      );
+    }
+
+    harmony['conflicts'] = conflicts;
+    harmony['harmonies'] = harmonies;
+    harmony['overall'] = harmonies.length > conflicts.length
+        ? 'Harmonious'
+        : 'Challenging';
+
+    return harmony;
+  }
+
+  /// [_generatePeriodRecommendations] - Generate recommendations based on fortune periods
+  static List<String> _generatePeriodRecommendations(
+    Map<String, dynamic> harmony,
+    Map<String, dynamic> currentDaXian,
+    Map<String, dynamic> currentXiaoXian,
+  ) {
+    final recommendations = <String>[];
+
+    final overall = harmony['overall'] as String;
+    if (overall == 'Harmonious') {
+      recommendations.add('Excellent period for major initiatives and growth');
+    } else {
+      recommendations.add('Focus on consolidation and careful planning');
+    }
+
+    final daXianPalace = currentDaXian['palace'] as String;
+    recommendations.add('Major life focus: $daXianPalace palace themes');
+
+    final xiaoXianPalace = currentXiaoXian['palace'] as String;
+    recommendations.add(
+      'Current year focus: $xiaoXianPalace palace development',
+    );
+
+    return recommendations;
+  }
+
+  /// [_getXiaoXianDescription] - Get description for Xiao Xian period
+  static String _getXiaoXianDescription(int periodIndex) {
+    const descriptions = [
+      'New beginnings and opportunities',
+      'Partnerships and cooperation',
+      'Communication and learning',
+      'Foundation building',
+      'Freedom and adventure',
+      'Responsibility and service',
+      'Spiritual growth',
+      'Achievement and recognition',
+      'Completion and preparation',
+      'Mastery and leadership',
+    ];
+    return descriptions[periodIndex % descriptions.length];
+  }
+
+  /// [_getLiuNianFortune] - Get annual fortune description
+  static String _getLiuNianFortune(int age) {
+    if (age % 12 == 0) return 'Year of new beginnings and fresh starts';
+    if (age % 12 == 3) return 'Year of growth and expansion';
+    if (age % 12 == 6) return 'Year of challenges and transformation';
+    if (age % 12 == 9) return 'Year of completion and harvest';
+    return 'Year of steady progress and development';
+  }
+
+  /// [_getLiuNianFocus] - Get focus areas for Liu Nian
+  static List<String> _getLiuNianFocus(int palaceIndex) {
+    const palaceFocuses = [
+      ['Self-discovery', 'Personal development'],
+      ['Siblings', 'Close friendships'],
+      ['Relationships', 'Partnerships'],
+      ['Creativity', 'Children'],
+      ['Wealth', 'Financial growth'],
+      ['Health', 'Wellness'],
+      ['Travel', 'Learning'],
+      ['Networking', 'Social connections'],
+      ['Career', 'Professional growth'],
+      ['Property', 'Stability'],
+      ['Spirituality', 'Inner peace'],
+      ['Authority', 'Guidance'],
+    ];
+    return palaceFocuses[palaceIndex % 12];
+  }
+
+  /// [_getMonthlyEnergy] - Get monthly energy description
+  static String _getMonthlyEnergy(int month) {
+    if (month <= 3) return 'Spring energy: New beginnings and growth';
+    if (month <= 6) return 'Summer energy: Expansion and creativity';
+    if (month <= 9) return 'Autumn energy: Harvest and reflection';
+    return 'Winter energy: Rest and preparation';
+  }
+
+  /// [_getDailyEnergy] - Get daily energy description
+  static String _getDailyEnergy(int dayOfYear) {
+    if (dayOfYear <= 90) return 'Spring daily energy: Fresh and active';
+    if (dayOfYear <= 180) return 'Summer daily energy: Peak performance';
+    if (dayOfYear <= 270) return 'Autumn daily energy: Balanced and reflective';
+    return 'Winter daily energy: Contemplative and restful';
+  }
+
+  /// [_getPalaceIndex] - Get palace index from palace name
+  static int _getPalaceIndex(String palaceName) {
+    const palaceNames = [
+      'Life',
+      'Siblings',
+      'Spouse',
+      'Children',
+      'Wealth',
+      'Health',
+      'Travel',
+      'Friends',
+      'Career',
+      'Property',
+      'Fortune',
+      'Parents',
+    ];
+    return palaceNames.indexOf(palaceName);
+  }
+
   /// [_generateAnalysis] - Generate comprehensive analysis
   static Map<String, dynamic> _generateAnalysis(
     List<Map<String, dynamic>> stars,
@@ -929,7 +1318,160 @@ class PurpleStarEngine {
       'personalityTraits': _analyzePersonality(lifePalace),
       'yearlyOutlook': _generateYearlyOutlook(stars),
       'strengthsAndChallenges': _analyzeStrengthsAndChallenges(stars, palaces),
+      'compatibilityAnalysis': _analyzeCompatibility(stars, palaces),
+      'lifePathAnalysis': _analyzeLifePath(stars, palaces),
+      'destinyIndicators': _analyzeDestinyIndicators(stars, palaces),
     };
+  }
+
+  /// [_analyzeCompatibility] - Analyze compatibility with other charts
+  static Map<String, dynamic> _analyzeCompatibility(
+    List<Map<String, dynamic>> stars,
+    List<Map<String, dynamic>> palaces,
+  ) {
+    final analysis = <String, dynamic>{};
+
+    // Analyze star combinations for compatibility
+    final compatibilityStars = <String>[];
+    final challengingStars = <String>[];
+
+    // Check for harmonious star combinations
+    if (stars.any((s) => s['name'] == '紫微') &&
+        stars.any((s) => s['name'] == '天相')) {
+      compatibilityStars.add(
+        'Emperor-Minister combination: Excellent leadership compatibility',
+      );
+    }
+    if (stars.any((s) => s['name'] == '太陽') &&
+        stars.any((s) => s['name'] == '太陰')) {
+      compatibilityStars.add(
+        'Sun-Moon balance: Harmonious relationship potential',
+      );
+    }
+    if (stars.any((s) => s['name'] == '武曲') &&
+        stars.any((s) => s['name'] == '天府')) {
+      compatibilityStars.add(
+        'Military-Mansion: Strong financial compatibility',
+      );
+    }
+
+    // Check for challenging combinations
+    if (stars.any((s) => s['name'] == '火星') &&
+        stars.any((s) => s['name'] == '鈴星')) {
+      challengingStars.add(
+        'Fire-Bell stars: Potential conflicts and impulsiveness',
+      );
+    }
+    if (stars.any((s) => s['name'] == '擎羊') &&
+        stars.any((s) => s['name'] == '文昌')) {
+      challengingStars.add(
+        'Obstacle-Scholar: Learning challenges and conflicts',
+      );
+    }
+
+    analysis['compatibilityStars'] = compatibilityStars;
+    analysis['challengingStars'] = challengingStars;
+    analysis['overallCompatibility'] =
+        compatibilityStars.length > challengingStars.length
+        ? 'High'
+        : 'Moderate';
+
+    return analysis;
+  }
+
+  /// [_analyzeLifePath] - Analyze life path and destiny
+  static Map<String, dynamic> _analyzeLifePath(
+    List<Map<String, dynamic>> stars,
+    List<Map<String, dynamic>> palaces,
+  ) {
+    final analysis = <String, dynamic>{};
+
+    // Analyze life path based on major stars
+    final lifePath = <String>[];
+    final destiny = <String>[];
+
+    if (stars.any((s) => s['name'] == '紫微')) {
+      lifePath.add('Leadership path with authority and recognition');
+      destiny.add('Natural leader destined for positions of influence');
+    }
+    if (stars.any((s) => s['name'] == '天機')) {
+      lifePath.add('Intellectual path with wisdom and strategy');
+      destiny.add('Destined for knowledge-based achievements');
+    }
+    if (stars.any((s) => s['name'] == '武曲')) {
+      lifePath.add('Financial path with wealth accumulation');
+      destiny.add('Destined for financial success and business');
+    }
+    if (stars.any((s) => s['name'] == '天同')) {
+      lifePath.add('Harmonious path with peace and cooperation');
+      destiny.add('Destined for bringing harmony to others');
+    }
+
+    // Analyze palace influences on life path
+    final lifePalace = palaces.firstWhere((p) => p['name'] == 'Life');
+    final lifeStars = lifePalace['stars'] as List<Map<String, dynamic>>;
+
+    if (lifeStars.any((s) => s['name'] == '紫微')) {
+      destiny.add('Life palace with Purple Star: Core destiny of leadership');
+    }
+    if (lifeStars.any((s) => s['name'] == '天機')) {
+      destiny.add('Life palace with Sky Mechanism: Core destiny of wisdom');
+    }
+
+    analysis['lifePath'] = lifePath;
+    analysis['destiny'] = destiny;
+    analysis['pathStrength'] = lifePath.length >= 2 ? 'Strong' : 'Moderate';
+
+    return analysis;
+  }
+
+  /// [_analyzeDestinyIndicators] - Analyze destiny indicators and life purpose
+  static Map<String, dynamic> _analyzeDestinyIndicators(
+    List<Map<String, dynamic>> stars,
+    List<Map<String, dynamic>> palaces,
+  ) {
+    final analysis = <String, dynamic>{};
+
+    // Analyze destiny indicators
+    final indicators = <String>[];
+    final purpose = <String>[];
+
+    // Check for destiny stars
+    if (stars.any((s) => s['name'] == '紫微')) {
+      indicators.add('Emperor Star: Natural authority and leadership destiny');
+      purpose.add('Lead and inspire others in your field');
+    }
+    if (stars.any((s) => s['name'] == '天機')) {
+      indicators.add('Sky Mechanism: Intellectual and strategic destiny');
+      purpose.add('Share wisdom and strategic insights');
+    }
+    if (stars.any((s) => s['name'] == '太陽')) {
+      indicators.add('Sun Star: Bright and optimistic destiny');
+      purpose.add('Bring light and energy to others');
+    }
+    if (stars.any((s) => s['name'] == '太陰')) {
+      indicators.add('Moon Star: Intuitive and nurturing destiny');
+      purpose.add('Provide emotional support and intuition');
+    }
+
+    // Analyze palace destiny indicators
+    final careerPalace = palaces.firstWhere((p) => p['name'] == 'Career');
+    final careerStars = careerPalace['stars'] as List<Map<String, dynamic>>;
+
+    if (careerStars.any((s) => s['name'] == '紫微')) {
+      indicators.add(
+        'Career palace with Purple Star: Professional leadership destiny',
+      );
+      purpose.add('Excel in management and executive roles');
+    }
+
+    analysis['destinyIndicators'] = indicators;
+    analysis['lifePurpose'] = purpose;
+    analysis['destinyStrength'] = indicators.length >= 3
+        ? 'Very Strong'
+        : 'Moderate';
+
+    return analysis;
   }
 
   /// =====================
@@ -1296,5 +1838,520 @@ class PurpleStarEngine {
       'strengths': strengths,
       'challenges': challenges,
     };
+  }
+
+  /// [_calculateTimeInfluences] - Calculate time-based influences
+  static Map<String, dynamic> _calculateTimeInfluences(
+    DateTime birthDate,
+    DateTime targetDate,
+    String gender,
+  ) {
+    final influences = <String, dynamic>{};
+
+    // Calculate age at target date
+    final age = targetDate.year - birthDate.year;
+
+    // Calculate current Da Xian and Xiao Xian
+    final daXianIndex = (age ~/ 10) % 12;
+    final xiaoXianIndex = age % 10;
+
+    // Calculate seasonal influences
+    final season = _getSeason(targetDate.month);
+    final seasonalInfluence = _getSeasonalInfluence(season, birthDate.month);
+
+    // Calculate lunar phase influence
+    final lunarInfluence = _calculateLunarInfluence(targetDate);
+
+    influences['age'] = age;
+    influences['daXianIndex'] = daXianIndex;
+    influences['xiaoXianIndex'] = xiaoXianIndex;
+    influences['season'] = season;
+    influences['seasonalInfluence'] = seasonalInfluence;
+    influences['lunarInfluence'] = lunarInfluence;
+
+    return influences;
+  }
+
+  /// [_calculateStarTransits] - Calculate star transits and influences
+  static Map<String, dynamic> _calculateStarTransits(
+    List<Map<String, dynamic>> stars,
+    DateTime targetDate,
+    DateTime birthDate,
+  ) {
+    final transits = <String, dynamic>{};
+
+    // Calculate which stars are active on target date
+    final activeStars = <String>[];
+    final transitInfluences = <String, String>{};
+
+    for (final star in stars) {
+      final starName = star['name'] as String;
+      final position = star['position'] as int;
+
+      // Check if star is in a favorable position for the target date
+      final dayOfYear = targetDate.difference(DateTime(targetDate.year)).inDays;
+      final starActivity = _calculateStarActivity(position, dayOfYear);
+
+      if (starActivity > 0.7) {
+        activeStars.add(starName);
+        transitInfluences[starName] = _getStarTransitInfluence(
+          starName,
+          starActivity,
+        );
+      }
+    }
+
+    transits['activeStars'] = activeStars;
+    transits['transitInfluences'] = transitInfluences;
+    transits['overallTransitStrength'] = _calculateTransitStrength(
+      activeStars.length,
+    );
+
+    return transits;
+  }
+
+  /// [_calculatePalaceActivations] - Calculate palace activations
+  static Map<String, dynamic> _calculatePalaceActivations(
+    List<Map<String, dynamic>> palaces,
+    DateTime targetDate,
+    DateTime birthDate,
+  ) {
+    final activations = <String, dynamic>{};
+
+    // Calculate which palaces are most active on target date
+    final activePalaces = <String>[];
+    final palaceInfluences = <String, String>{};
+
+    final dayOfYear = targetDate.difference(DateTime(targetDate.year)).inDays;
+
+    for (final palace in palaces) {
+      final palaceName = palace['name'] as String;
+      final palaceIndex = palace['index'] as int;
+
+      // Check palace activation based on day of year and palace index
+      final activationLevel = _calculatePalaceActivation(
+        palaceIndex,
+        dayOfYear,
+      );
+
+      if (activationLevel > 0.6) {
+        activePalaces.add(palaceName);
+        palaceInfluences[palaceName] = _getPalaceActivationInfluence(
+          palaceName,
+          activationLevel,
+        );
+      }
+    }
+
+    activations['activePalaces'] = activePalaces;
+    activations['palaceInfluences'] = palaceInfluences;
+    activations['overallActivation'] = _calculateActivationStrength(
+      activePalaces.length,
+    );
+
+    return activations;
+  }
+
+  /// [_calculateDailyPredictions] - Calculate daily predictions
+  static Map<String, dynamic> _calculateDailyPredictions(
+    List<Map<String, dynamic>> stars,
+    List<Map<String, dynamic>> palaces,
+    DateTime targetDate,
+    Map<String, dynamic> timeInfluences,
+  ) {
+    final predictions = <String, dynamic>{};
+
+    // Daily energy prediction
+    final dayOfYear = targetDate.difference(DateTime(targetDate.year)).inDays;
+    final dailyEnergy = _getDailyEnergy(dayOfYear);
+
+    // Daily focus areas
+    final focusAreas = _getDailyFocusAreas(stars, palaces, targetDate);
+
+    // Daily challenges and opportunities
+    final challenges = _getDailyChallenges(timeInfluences, stars);
+    final opportunities = _getDailyOpportunities(timeInfluences, stars);
+
+    predictions['energy'] = dailyEnergy;
+    predictions['focusAreas'] = focusAreas;
+    predictions['challenges'] = challenges;
+    predictions['opportunities'] = opportunities;
+    predictions['overall'] = _assessDailyOutlook(challenges, opportunities);
+
+    return predictions;
+  }
+
+  /// [_calculateMonthlyPredictions] - Calculate monthly predictions
+  static Map<String, dynamic> _calculateMonthlyPredictions(
+    List<Map<String, dynamic>> stars,
+    List<Map<String, dynamic>> palaces,
+    DateTime targetDate,
+    Map<String, dynamic> timeInfluences,
+  ) {
+    final predictions = <String, dynamic>{};
+
+    // Monthly theme
+    final monthTheme = _getMonthlyTheme(targetDate.month, timeInfluences);
+
+    // Monthly focus areas
+    final focusAreas = _getMonthlyFocusAreas(stars, palaces, targetDate);
+
+    // Monthly challenges and opportunities
+    final challenges = _getMonthlyChallenges(timeInfluences, stars);
+    final opportunities = _getMonthlyOpportunities(timeInfluences, stars);
+
+    predictions['theme'] = monthTheme;
+    predictions['focusAreas'] = focusAreas;
+    predictions['challenges'] = challenges;
+    predictions['opportunities'] = opportunities;
+    predictions['overall'] = _assessMonthlyOutlook(challenges, opportunities);
+
+    return predictions;
+  }
+
+  /// [_calculateYearlyPredictions] - Calculate yearly predictions
+  static Map<String, dynamic> _calculateYearlyPredictions(
+    List<Map<String, dynamic>> stars,
+    List<Map<String, dynamic>> palaces,
+    DateTime targetDate,
+    Map<String, dynamic> timeInfluences,
+  ) {
+    final predictions = <String, dynamic>{};
+
+    // Yearly theme
+    final yearTheme = _getYearlyTheme(targetDate.year, timeInfluences);
+
+    // Yearly focus areas
+    final focusAreas = _getYearlyFocusAreas(stars, palaces, targetDate);
+
+    // Yearly challenges and opportunities
+    final challenges = _getYearlyChallenges(timeInfluences, stars);
+    final opportunities = _getYearlyOpportunities(timeInfluences, stars);
+
+    predictions['theme'] = yearTheme;
+    predictions['focusAreas'] = focusAreas;
+    predictions['challenges'] = challenges;
+    predictions['opportunities'] = opportunities;
+    predictions['overall'] = _assessYearlyOutlook(challenges, opportunities);
+
+    return predictions;
+  }
+
+  /// [_generateOverallPrediction] - Generate overall prediction summary
+  static Map<String, dynamic> _generateOverallPrediction(
+    Map<String, dynamic> daily,
+    Map<String, dynamic> monthly,
+    Map<String, dynamic> yearly,
+  ) {
+    final overall = <String, dynamic>{};
+
+    // Combine predictions from all time periods
+    final allChallenges = <String>[];
+    final allOpportunities = <String>[];
+
+    allChallenges
+      ..addAll((daily['challenges'] as List).cast<String>())
+      ..addAll((monthly['challenges'] as List).cast<String>())
+      ..addAll((yearly['challenges'] as List).cast<String>());
+
+    allOpportunities
+      ..addAll((daily['opportunities'] as List).cast<String>())
+      ..addAll((monthly['opportunities'] as List).cast<String>())
+      ..addAll((yearly['opportunities'] as List).cast<String>());
+
+    // Overall assessment
+    final challengeCount = allChallenges.length;
+    final opportunityCount = allOpportunities.length;
+
+    String overallOutlook;
+    if (opportunityCount > challengeCount * 2) {
+      overallOutlook = 'Very Favorable';
+    } else if (opportunityCount > challengeCount) {
+      overallOutlook = 'Favorable';
+    } else if (opportunityCount == challengeCount) {
+      overallOutlook = 'Balanced';
+    } else {
+      overallOutlook = 'Challenging';
+    }
+
+    overall['outlook'] = overallOutlook;
+    overall['challenges'] = allChallenges;
+    overall['opportunities'] = allOpportunities;
+    overall['recommendations'] = _generatePredictionRecommendations(
+      overallOutlook,
+      allChallenges,
+      allOpportunities,
+    );
+
+    return overall;
+  }
+
+  // Helper methods for predictions
+  static String _getSeason(int month) {
+    if (month <= 3) return 'Spring';
+    if (month <= 6) return 'Summer';
+    if (month <= 9) return 'Autumn';
+    return 'Winter';
+  }
+
+  static String _getSeasonalInfluence(String season, int birthMonth) {
+    final birthSeason = _getSeason(birthMonth);
+    if (season == birthSeason) return 'Harmonious';
+    if ((season == 'Spring' && birthSeason == 'Autumn') ||
+        (season == 'Summer' && birthSeason == 'Winter')) {
+      return 'Complementary';
+    }
+    return 'Challenging';
+  }
+
+  static Map<String, dynamic> _calculateLunarInfluence(DateTime date) {
+    // Simplified lunar influence calculation
+    final dayOfYear = date.difference(DateTime(date.year)).inDays;
+    final lunarPhase = (dayOfYear % 29.5).round();
+
+    if (lunarPhase <= 7) {
+      return {'phase': 'New Moon', 'energy': 'New beginnings'};
+    }
+    if (lunarPhase <= 14) return {'phase': 'Waxing', 'energy': 'Growth'};
+    if (lunarPhase <= 21) {
+      return {'phase': 'Full Moon', 'energy': 'Peak energy'};
+    }
+    return {'phase': 'Waning', 'energy': 'Release'};
+  }
+
+  static double _calculateStarActivity(int position, int dayOfYear) {
+    // Simplified star activity calculation
+    return 0.5 + (0.5 * math.sin((dayOfYear + position) * 0.1));
+  }
+
+  static String _getStarTransitInfluence(String starName, double activity) {
+    if (activity > 0.8) return 'Very active and influential';
+    if (activity > 0.6) return 'Moderately active';
+    return 'Slightly active';
+  }
+
+  static String _calculateTransitStrength(int activeStarCount) {
+    if (activeStarCount >= 5) return 'Very Strong';
+    if (activeStarCount >= 3) return 'Strong';
+    if (activeStarCount >= 1) return 'Moderate';
+    return 'Weak';
+  }
+
+  static double _calculatePalaceActivation(int palaceIndex, int dayOfYear) {
+    // Simplified palace activation calculation
+    return 0.4 + (0.6 * math.cos((dayOfYear + palaceIndex) * 0.1));
+  }
+
+  static String _getPalaceActivationInfluence(
+    String palaceName,
+    double activation,
+  ) {
+    if (activation > 0.8) return 'Highly activated and influential';
+    if (activation > 0.6) return 'Moderately activated';
+    return 'Slightly activated';
+  }
+
+  static String _calculateActivationStrength(int activePalaceCount) {
+    if (activePalaceCount >= 4) return 'Very Strong';
+    if (activePalaceCount >= 2) return 'Strong';
+    if (activePalaceCount >= 1) return 'Moderate';
+    return 'Weak';
+  }
+
+  static List<String> _getDailyFocusAreas(
+    List<Map<String, dynamic>> stars,
+    List<Map<String, dynamic>> palaces,
+    DateTime targetDate,
+  ) {
+    final focusAreas = <String>[];
+    final dayOfYear = targetDate.difference(DateTime(targetDate.year)).inDays;
+
+    // Focus areas based on day of year and active stars
+    if (dayOfYear % 30 < 10) focusAreas.add('New beginnings and planning');
+    if (dayOfYear % 30 >= 10 && dayOfYear % 30 < 20) {
+      focusAreas.add('Action and implementation');
+    }
+    if (dayOfYear % 30 >= 20) focusAreas.add('Review and completion');
+
+    return focusAreas;
+  }
+
+  static List<String> _getDailyChallenges(
+    Map<String, dynamic> timeInfluences,
+    List<Map<String, dynamic>> stars,
+  ) {
+    final challenges = <String>[];
+
+    // Challenges based on time influences
+    final seasonalInfluence = timeInfluences['seasonalInfluence'] as String;
+    if (seasonalInfluence == 'Challenging') {
+      challenges.add('Seasonal challenges require adaptation');
+    }
+
+    return challenges;
+  }
+
+  static List<String> _getDailyOpportunities(
+    Map<String, dynamic> timeInfluences,
+    List<Map<String, dynamic>> stars,
+  ) {
+    final opportunities = <String>[];
+
+    // Opportunities based on time influences
+    final seasonalInfluence = timeInfluences['seasonalInfluence'] as String;
+    if (seasonalInfluence == 'Harmonious') {
+      opportunities.add('Seasonal harmony supports growth');
+    }
+
+    return opportunities;
+  }
+
+  static String _assessDailyOutlook(
+    List<String> challenges,
+    List<String> opportunities,
+  ) {
+    if (opportunities.length > challenges.length * 2) return 'Very Favorable';
+    if (opportunities.length > challenges.length) return 'Favorable';
+    if (opportunities.length == challenges.length) return 'Balanced';
+    return 'Challenging';
+  }
+
+  static String _getMonthlyTheme(
+    int month,
+    Map<String, dynamic> timeInfluences,
+  ) {
+    if (month <= 3) return 'Spring Renewal and Growth';
+    if (month <= 6) return 'Summer Expansion and Creativity';
+    if (month <= 9) return 'Autumn Harvest and Reflection';
+    return 'Winter Rest and Preparation';
+  }
+
+  static List<String> _getMonthlyFocusAreas(
+    List<Map<String, dynamic>> stars,
+    List<Map<String, dynamic>> palaces,
+    DateTime targetDate,
+  ) {
+    final focusAreas = <String>[];
+    final month = targetDate.month;
+
+    if (month <= 3) focusAreas.add('Planning and preparation');
+    if (month <= 6) focusAreas.add('Action and growth');
+    if (month <= 9) focusAreas.add('Harvest and results');
+    if (month <= 12) focusAreas.add('Reflection and planning');
+
+    return focusAreas;
+  }
+
+  static List<String> _getMonthlyChallenges(
+    Map<String, dynamic> timeInfluences,
+    List<Map<String, dynamic>> stars,
+  ) {
+    return ['Monthly planning and organization'];
+  }
+
+  static List<String> _getMonthlyOpportunities(
+    Map<String, dynamic> timeInfluences,
+    List<Map<String, dynamic>> stars,
+  ) {
+    return ['Monthly growth and development'];
+  }
+
+  static String _assessMonthlyOutlook(
+    List<String> challenges,
+    List<String> opportunities,
+  ) {
+    if (opportunities.length > challenges.length) return 'Favorable';
+    if (opportunities.length == challenges.length) return 'Balanced';
+    return 'Challenging';
+  }
+
+  static String _getYearlyTheme(int year, Map<String, dynamic> timeInfluences) {
+    final yearBranch = (year - 4) % 12;
+    const themes = [
+      'Year of New Beginnings',
+      'Year of Growth',
+      'Year of Change',
+      'Year of Stability',
+      'Year of Progress',
+      'Year of Challenges',
+      'Year of Opportunities',
+      'Year of Transformation',
+      'Year of Harvest',
+      'Year of Planning',
+      'Year of Action',
+      'Year of Completion',
+    ];
+    return themes[yearBranch];
+  }
+
+  static List<String> _getYearlyFocusAreas(
+    List<Map<String, dynamic>> stars,
+    List<Map<String, dynamic>> palaces,
+    DateTime targetDate,
+  ) {
+    final focusAreas = <String>[];
+    final year = targetDate.year;
+    final yearBranch = (year - 4) % 12;
+
+    if (yearBranch % 3 == 0) focusAreas.add('Major new initiatives');
+    if (yearBranch % 3 == 1) focusAreas.add('Steady development');
+    if (yearBranch % 3 == 2) focusAreas.add('Consolidation and review');
+
+    return focusAreas;
+  }
+
+  static List<String> _getYearlyChallenges(
+    Map<String, dynamic> timeInfluences,
+    List<Map<String, dynamic>> stars,
+  ) {
+    return ['Annual planning and long-term vision'];
+  }
+
+  static List<String> _getYearlyOpportunities(
+    Map<String, dynamic> timeInfluences,
+    List<Map<String, dynamic>> stars,
+  ) {
+    return ['Annual growth and major achievements'];
+  }
+
+  static String _assessYearlyOutlook(
+    List<String> challenges,
+    List<String> opportunities,
+  ) {
+    if (opportunities.length > challenges.length) return 'Favorable';
+    if (opportunities.length == challenges.length) return 'Balanced';
+    return 'Challenging';
+  }
+
+  static List<String> _generatePredictionRecommendations(
+    String outlook,
+    List<String> challenges,
+    List<String> opportunities,
+  ) {
+    final recommendations = <String>[];
+
+    if (outlook == 'Very Favorable') {
+      recommendations
+        ..add(
+          'Excellent time for major initiatives and bold actions',
+        )
+        ..add('Leverage all opportunities for maximum growth');
+    } else if (outlook == 'Favorable') {
+      recommendations
+        ..add('Good time for steady progress and development')
+        ..add(
+          'Focus on key opportunities while managing challenges',
+        );
+    } else if (outlook == 'Balanced') {
+      recommendations
+        ..add('Maintain balance between action and reflection')
+        ..add('Use challenges as opportunities for growth');
+    } else {
+      recommendations
+        ..add('Focus on consolidation and careful planning')
+        ..add('Use this time for preparation and skill building');
+    }
+
+    return recommendations;
   }
 }
