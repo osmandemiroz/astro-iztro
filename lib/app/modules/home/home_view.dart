@@ -512,7 +512,7 @@ class HomeView extends GetView<HomeController> {
     );
   }
 
-  /// [buildBottomNavigationBar] - Bottom navigation bar
+  /// [buildBottomNavigationBar] - Bottom navigation bar with iztro and tarot sections
   Widget _buildBottomNavigationBar() {
     return Obx(
       () => BottomNavigationBar(
@@ -521,16 +521,11 @@ class HomeView extends GetView<HomeController> {
           controller.setBottomNavIndex(index);
           switch (index) {
             case 0:
-              // Already on home
+              // Already on home (iztro)
               break;
             case 1:
-              controller.navigateToChart();
-            case 2:
-              controller.navigateToBaZi();
-            case 3:
-              controller.navigateToAnalysis();
-            case 4:
-              controller.navigateToSettings();
+              controller.navigateToTarot();
+              break;
           }
         },
         type: BottomNavigationBarType.fixed,
@@ -538,96 +533,59 @@ class HomeView extends GetView<HomeController> {
         unselectedItemColor: AppColors.darkTextTertiary,
         backgroundColor: AppColors.darkSurface,
         items: [
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            activeIcon: Icon(Icons.home),
-            label: 'Home',
-          ),
           BottomNavigationBarItem(
             icon: Image.asset(
-              'assets/images/icon/ic_astrology_chart.png',
+              'assets/images/icon/ic_iztro.png',
               width: 28,
               height: 28,
               errorBuilder: (context, error, stackTrace) {
                 return const Icon(
-                  Icons.circle_outlined,
+                  Icons.home_outlined,
                   size: 28,
                   color: AppColors.darkTextTertiary,
                 );
               },
             ),
             activeIcon: Image.asset(
-              'assets/images/icon/ic_astrology_chart.png',
+              'assets/images/icon/ic_iztro.png',
               width: 28,
               height: 28,
               errorBuilder: (context, error, stackTrace) {
                 return const Icon(
-                  Icons.circle,
+                  Icons.home,
                   size: 28,
                   color: AppColors.lightPurple,
                 );
               },
             ),
-            label: 'Chart',
+            label: 'iztro',
           ),
           BottomNavigationBarItem(
             icon: Image.asset(
-              'assets/images/icon/ic_analyze.png',
+              'assets/images/icon/ic_tarot.png',
               width: 28,
               height: 28,
               errorBuilder: (context, error, stackTrace) {
                 return const Icon(
-                  Icons.view_column_outlined,
+                  Icons.auto_awesome_outlined,
                   size: 28,
                   color: AppColors.darkTextTertiary,
                 );
               },
             ),
             activeIcon: Image.asset(
-              'assets/images/icon/ic_analyze.png',
+              'assets/images/icon/ic_tarot.png',
               width: 28,
               height: 28,
               errorBuilder: (context, error, stackTrace) {
                 return const Icon(
-                  Icons.view_column,
+                  Icons.auto_awesome,
                   size: 28,
                   color: AppColors.lightPurple,
                 );
               },
             ),
-            label: 'BaZi',
-          ),
-          BottomNavigationBarItem(
-            icon: Image.asset(
-              'assets/images/icon/ic_detailed_analyze.png',
-              width: 28,
-              height: 28,
-              errorBuilder: (context, error, stackTrace) {
-                return const Icon(
-                  Icons.analytics_outlined,
-                  size: 28,
-                  color: AppColors.darkTextTertiary,
-                );
-              },
-            ),
-            activeIcon: Image.asset(
-              'assets/images/icon/ic_detailed_analyze.png',
-              width: 28,
-              height: 28,
-              errorBuilder: (context, error, stackTrace) {
-                return const Icon(
-                  Icons.analytics,
-                  size: 28,
-                  color: AppColors.lightPurple,
-                );
-              },
-            ),
-            label: 'Analysis',
-          ),
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.settings_outlined),
-            activeIcon: Icon(Icons.settings),
-            label: 'Settings',
+            label: 'tarot',
           ),
         ],
       ),

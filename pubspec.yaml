@@ -25,6 +25,7 @@ flutter:
   assets:
     - assets/images/
     - assets/images/icon/
+    - assets/tarot_cards.json
    
   fonts:
     - family: SFProDisplay

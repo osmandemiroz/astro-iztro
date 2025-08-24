@@ -14,6 +14,8 @@ import 'package:astro_iztro/app/modules/palace_detail/palace_detail_binding.dart
 import 'package:astro_iztro/app/modules/palace_detail/palace_detail_view.dart';
 import 'package:astro_iztro/app/modules/settings/settings_binding.dart';
 import 'package:astro_iztro/app/modules/settings/settings_view.dart';
+import 'package:astro_iztro/app/modules/tarot/tarot_binding.dart';
+import 'package:astro_iztro/app/modules/tarot/tarot_view.dart';
 import 'package:astro_iztro/app/routes/app_routes.dart';
 import 'package:get/get.dart';
 
@@ -51,6 +53,11 @@ abstract class AppPages {
       name: AppRoutes.astroMatcher,
       page: () => const AstroMatcherView(),
       binding: AstroMatcherBinding(),
+    ),
+    GetPage<dynamic>(
+      name: AppRoutes.tarot,
+      page: () => const TarotView(),
+      binding: TarotBinding(),
     ),
     GetPage<dynamic>(
       name: AppRoutes.settings,
