@@ -371,6 +371,7 @@ class HomeView extends GetView<HomeController> {
   }
 
   /// [buildQuickActionsSection] - Quick action buttons
+  /// Uses custom icon assets for enhanced visual appeal
   Widget _buildQuickActionsSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -386,7 +387,7 @@ class HomeView extends GetView<HomeController> {
           children: [
             Expanded(
               child: _buildActionCard(
-                icon: Icons.circle_outlined,
+                iconAsset: 'assets/images/icon/ic_astrology_chart.png',
                 title: 'Purple Star Chart',
                 subtitle: 'View astrology chart',
                 onTap: controller.navigateToChart,
@@ -396,7 +397,7 @@ class HomeView extends GetView<HomeController> {
             const SizedBox(width: AppConstants.defaultPadding),
             Expanded(
               child: _buildActionCard(
-                icon: Icons.view_column_outlined,
+                iconAsset: 'assets/images/icon/ic_analyze.png',
                 title: 'BaZi Analysis',
                 subtitle: 'Four Pillars reading',
                 onTap: controller.navigateToBaZi,
@@ -410,7 +411,7 @@ class HomeView extends GetView<HomeController> {
           children: [
             Expanded(
               child: _buildActionCard(
-                icon: Icons.analytics_outlined,
+                iconAsset: 'assets/images/icon/ic_detailed_analyze.png',
                 title: 'Detailed Analysis',
                 subtitle: 'In-depth interpretation',
                 onTap: controller.navigateToAnalysis,
@@ -420,7 +421,7 @@ class HomeView extends GetView<HomeController> {
             const SizedBox(width: AppConstants.defaultPadding),
             Expanded(
               child: _buildActionCard(
-                icon: Icons.favorite,
+                iconAsset: 'assets/images/icon/ic_matcher.png',
                 title: 'Astro Matcher',
                 subtitle: 'Compatibility analysis',
                 onTap: controller.navigateToAstroMatcher,
@@ -434,22 +435,41 @@ class HomeView extends GetView<HomeController> {
   }
 
   /// [buildActionCard] - Individual action card
+  /// Enhanced to support both icon assets and Material icons for flexibility
   Widget _buildActionCard({
-    required IconData icon,
     required String title,
     required String subtitle,
     required VoidCallback onTap,
     required Color color,
+    String? iconAsset,
+    IconData? icon,
   }) {
     return LiquidGlassCard(
       onTap: onTap,
       child: Column(
         children: [
-          Icon(
-            icon,
-            size: 32,
-            color: color,
-          ),
+          // Display icon asset if provided, otherwise fall back to Material icon
+          if (iconAsset != null)
+            Image.asset(
+              iconAsset,
+              width: 40,
+              height: 40,
+              // Note: PNG files don't support color tinting, so we don't use the color parameter
+              errorBuilder: (context, error, stackTrace) {
+                // Fallback to a default icon if asset loading fails
+                return const Icon(
+                  Icons.error_outline,
+                  size: 40,
+                  color: AppColors.error,
+                );
+              },
+            )
+          else if (icon != null)
+            Icon(
+              icon,
+              size: 40,
+              color: color,
+            ),
           const SizedBox(height: AppConstants.smallPadding),
           Text(
             title,
@@ -517,28 +537,94 @@ class HomeView extends GetView<HomeController> {
         selectedItemColor: AppColors.lightPurple,
         unselectedItemColor: AppColors.darkTextTertiary,
         backgroundColor: AppColors.darkSurface,
-        items: const [
-          BottomNavigationBarItem(
+        items: [
+          const BottomNavigationBarItem(
             icon: Icon(Icons.home_outlined),
             activeIcon: Icon(Icons.home),
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.circle_outlined),
-            activeIcon: Icon(Icons.circle),
+            icon: Image.asset(
+              'assets/images/icon/ic_astrology_chart.png',
+              width: 28,
+              height: 28,
+              errorBuilder: (context, error, stackTrace) {
+                return const Icon(
+                  Icons.circle_outlined,
+                  size: 28,
+                  color: AppColors.darkTextTertiary,
+                );
+              },
+            ),
+            activeIcon: Image.asset(
+              'assets/images/icon/ic_astrology_chart.png',
+              width: 28,
+              height: 28,
+              errorBuilder: (context, error, stackTrace) {
+                return const Icon(
+                  Icons.circle,
+                  size: 28,
+                  color: AppColors.lightPurple,
+                );
+              },
+            ),
             label: 'Chart',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.view_column_outlined),
-            activeIcon: Icon(Icons.view_column),
+            icon: Image.asset(
+              'assets/images/icon/ic_analyze.png',
+              width: 28,
+              height: 28,
+              errorBuilder: (context, error, stackTrace) {
+                return const Icon(
+                  Icons.view_column_outlined,
+                  size: 28,
+                  color: AppColors.darkTextTertiary,
+                );
+              },
+            ),
+            activeIcon: Image.asset(
+              'assets/images/icon/ic_analyze.png',
+              width: 28,
+              height: 28,
+              errorBuilder: (context, error, stackTrace) {
+                return const Icon(
+                  Icons.view_column,
+                  size: 28,
+                  color: AppColors.lightPurple,
+                );
+              },
+            ),
             label: 'BaZi',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.analytics_outlined),
-            activeIcon: Icon(Icons.analytics),
+            icon: Image.asset(
+              'assets/images/icon/ic_detailed_analyze.png',
+              width: 28,
+              height: 28,
+              errorBuilder: (context, error, stackTrace) {
+                return const Icon(
+                  Icons.analytics_outlined,
+                  size: 28,
+                  color: AppColors.darkTextTertiary,
+                );
+              },
+            ),
+            activeIcon: Image.asset(
+              'assets/images/icon/ic_detailed_analyze.png',
+              width: 28,
+              height: 28,
+              errorBuilder: (context, error, stackTrace) {
+                return const Icon(
+                  Icons.analytics,
+                  size: 28,
+                  color: AppColors.lightPurple,
+                );
+              },
+            ),
             label: 'Analysis',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.settings_outlined),
             activeIcon: Icon(Icons.settings),
             label: 'Settings',
