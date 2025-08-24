@@ -395,6 +395,11 @@ class HomeController extends GetxController {
     Get.toNamed<void>('/input');
   }
 
+  /// [navigateToNewProfile] - Navigate to create new profile screen
+  void navigateToNewProfile() {
+    Get.toNamed<void>('/input');
+  }
+
   /// [navigateToChart] - Navigate to chart screen
   void navigateToChart() {
     if (currentProfile.value != null) {

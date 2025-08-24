@@ -5,6 +5,7 @@ import 'package:astro_iztro/core/models/user_profile.dart';
 import 'package:astro_iztro/shared/themes/app_theme.dart';
 import 'package:astro_iztro/shared/widgets/background_image_widget.dart';
 import 'package:astro_iztro/shared/widgets/liquid_glass_widget.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -24,9 +25,6 @@ class HomeView extends GetView<HomeController> {
           child: Obx(_buildBody),
         ),
       ),
-
-      // Floating action button for quick profile creation
-      floatingActionButton: _buildFloatingActionButton(),
 
       // Bottom navigation for main app sections
       bottomNavigationBar: _buildBottomNavigationBar(),
@@ -422,10 +420,10 @@ class HomeView extends GetView<HomeController> {
             Expanded(
               child: _buildActionCard(
                 iconAsset: 'assets/images/icon/ic_matcher.png',
-                title: 'Astro Matcher',
-                subtitle: 'Compatibility analysis',
-                onTap: controller.navigateToAstroMatcher,
-                color: AppColors.lightPurple,
+                title: 'New Profile',
+                subtitle: 'Create profile',
+                onTap: controller.navigateToNewProfile,
+                color: AppColors.lightGold,
               ),
             ),
           ],
@@ -450,19 +448,30 @@ class HomeView extends GetView<HomeController> {
         children: [
           // Display icon asset if provided, otherwise fall back to Material icon
           if (iconAsset != null)
-            Image.asset(
-              iconAsset,
+            Container(
               width: 40,
               height: 40,
-              // Note: PNG files don't support color tinting, so we don't use the color parameter
-              errorBuilder: (context, error, stackTrace) {
-                // Fallback to a default icon if asset loading fails
-                return const Icon(
-                  Icons.error_outline,
-                  size: 40,
-                  color: AppColors.error,
-                );
-              },
+              decoration: BoxDecoration(
+                color: color.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: Image.asset(
+                  iconAsset,
+                  width: 24,
+                  height: 24,
+                  // Note: PNG files don't support color tinting, so we use background color instead
+                  errorBuilder: (context, error, stackTrace) {
+                    // Fallback to a default icon if asset loading fails
+                    return Icon(
+                      icon ?? Icons.error_outline,
+                      size: 24,
+                      color: color,
+                    );
+                  },
+                ),
+              ),
             )
           else if (icon != null)
             Icon(
@@ -492,26 +501,6 @@ class HomeView extends GetView<HomeController> {
     );
   }
 
-  /// [buildFloatingActionButton] - FAB for quick profile creation
-  Widget _buildFloatingActionButton() {
-    return FloatingActionButton.extended(
-      shape: const RoundedRectangleBorder(
-        side: BorderSide(
-          color: AppColors.darkTextPrimary,
-          width: 1.5,
-        ),
-        borderRadius: BorderRadius.all(
-          Radius.circular(AppConstants.borderRadius * 10),
-        ),
-      ),
-      onPressed: controller.navigateToInput,
-      icon: const Icon(Icons.add),
-      label: const Text('New Profile'),
-      backgroundColor: AppColors.lightGold,
-      foregroundColor: AppColors.black,
-    );
-  }
-
   /// [buildBottomNavigationBar] - Bottom navigation bar with iztro and tarot sections
   Widget _buildBottomNavigationBar() {
     return Obx(
@@ -533,56 +522,84 @@ class HomeView extends GetView<HomeController> {
         backgroundColor: AppColors.darkSurface,
         items: [
           BottomNavigationBarItem(
-            icon: Image.asset(
-              'assets/images/icon/ic_iztro.png',
-              width: 28,
-              height: 28,
-              errorBuilder: (context, error, stackTrace) {
-                return const Icon(
-                  Icons.home_outlined,
-                  size: 28,
-                  color: AppColors.darkTextTertiary,
-                );
-              },
+            icon: SizedBox(
+              width: 24,
+              height: 24,
+              child: Image.asset(
+                'assets/images/icon/ic_iztro.png',
+                fit: BoxFit.contain,
+                errorBuilder: (context, error, stackTrace) {
+                  if (kDebugMode) {
+                    print('[HomeView] Error loading ic_iztro.png: $error');
+                  }
+                  return const Icon(
+                    Icons.home_outlined,
+                    size: 24,
+                    color: AppColors.darkTextTertiary,
+                  );
+                },
+              ),
             ),
-            activeIcon: Image.asset(
-              'assets/images/icon/ic_iztro.png',
-              width: 28,
-              height: 28,
-              errorBuilder: (context, error, stackTrace) {
-                return const Icon(
-                  Icons.home,
-                  size: 28,
-                  color: AppColors.lightPurple,
-                );
-              },
+            activeIcon: SizedBox(
+              width: 24,
+              height: 24,
+              child: Image.asset(
+                'assets/images/icon/ic_iztro.png',
+                fit: BoxFit.contain,
+                errorBuilder: (context, error, stackTrace) {
+                  if (kDebugMode) {
+                    print(
+                      '[HomeView] Error loading ic_iztro.png (active): $error',
+                    );
+                  }
+                  return const Icon(
+                    Icons.home,
+                    size: 24,
+                    color: AppColors.lightPurple,
+                  );
+                },
+              ),
             ),
             label: 'iztro',
           ),
           BottomNavigationBarItem(
-            icon: Image.asset(
-              'assets/images/icon/ic_tarot.png',
-              width: 28,
-              height: 28,
-              errorBuilder: (context, error, stackTrace) {
-                return const Icon(
-                  Icons.auto_awesome_outlined,
-                  size: 28,
-                  color: AppColors.darkTextTertiary,
-                );
-              },
+            icon: SizedBox(
+              width: 24,
+              height: 24,
+              child: Image.asset(
+                'assets/images/icon/ic_tarot.png',
+                fit: BoxFit.contain,
+                errorBuilder: (context, error, stackTrace) {
+                  if (kDebugMode) {
+                    print('[HomeView] Error loading ic_tarot.png: $error');
+                  }
+                  return const Icon(
+                    Icons.auto_awesome_outlined,
+                    size: 24,
+                    color: AppColors.darkTextTertiary,
+                  );
+                },
+              ),
             ),
-            activeIcon: Image.asset(
-              'assets/images/icon/ic_tarot.png',
-              width: 28,
-              height: 28,
-              errorBuilder: (context, error, stackTrace) {
-                return const Icon(
-                  Icons.auto_awesome,
-                  size: 28,
-                  color: AppColors.lightPurple,
-                );
-              },
+            activeIcon: SizedBox(
+              width: 24,
+              height: 24,
+              child: Image.asset(
+                'assets/images/icon/ic_tarot.png',
+                fit: BoxFit.contain,
+                errorBuilder: (context, error, stackTrace) {
+                  if (kDebugMode) {
+                    print(
+                      '[HomeView] Error loading ic_tarot.png (active): $error',
+                    );
+                  }
+                  return const Icon(
+                    Icons.auto_awesome,
+                    size: 24,
+                    color: AppColors.lightPurple,
+                  );
+                },
+              ),
             ),
             label: 'tarot',
           ),

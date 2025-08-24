@@ -13,7 +13,7 @@ import 'package:get/get.dart';
 class TarotView extends GetView<TarotController> {
   const TarotView({super.key});
 
-    @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       // Modern dark theme background with mystical gradient
@@ -39,26 +39,13 @@ class TarotView extends GetView<TarotController> {
   /// Edge-to-edge design with mystical elements and proper spacing
   Widget _buildAppBar() {
     return SliverAppBar(
-      expandedHeight: 120,
+      expandedHeight: 180, // Increased height to accommodate more top spacing
       pinned: true,
       backgroundColor: Colors.transparent,
       elevation: 0,
       stretch: true, // Apple-style stretch effect
+      // Remove the title from here to avoid duplication
       flexibleSpace: FlexibleSpaceBar(
-        title: Text(
-          'Tarot Reading',
-          style: AppTheme.headingMedium.copyWith(
-            color: AppColors.darkTextPrimary,
-            fontFamily: AppConstants.decorativeFont,
-            fontWeight: FontWeight.w300,
-            letterSpacing: 2, // Apple-style letter spacing
-          ),
-        ),
-        titlePadding: const EdgeInsets.only(
-          left: 16,
-          bottom: AppConstants.largePadding,
-          top: 16,
-        ),
         background: Container(
           decoration: const BoxDecoration(
             gradient: AppColors.darkSpaceGradient,
@@ -70,27 +57,68 @@ class TarotView extends GetView<TarotController> {
   }
 
   /// [buildHeaderContent] - Header with mystical elements and description
+  /// Clean, user-friendly design with single, prominent title
   Widget _buildHeaderContent() {
     return Padding(
       padding: const EdgeInsets.all(AppConstants.defaultPadding),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisAlignment:
+            MainAxisAlignment.center, // Center the title vertically
         children: [
-          Text(
-            'Divine Guidance & Insight',
-            style: AppTheme.bodyLarge.copyWith(
-              color: AppColors.darkTextPrimary,
-              fontWeight: FontWeight.w600,
-            ),
+          const SizedBox(
+            height: AppConstants.largePadding * 2,
+          ), // Much more top spacing for better breathing room
+          // Main title with clean, centered positioning and better readability
+          TweenAnimationBuilder<double>(
+            duration: const Duration(milliseconds: 800),
+            tween: Tween(begin: 0, end: 1),
+            builder: (context, value, child) {
+              return Opacity(
+                opacity: value,
+                child: Transform.translate(
+                  offset: Offset(0, 20 * (1 - value)),
+                  child: Text(
+                    'TAROT READING',
+                    style: AppTheme.headingLarge.copyWith(
+                      color: AppColors.darkTextPrimary,
+                      fontFamily: AppConstants.decorativeFont,
+                      fontWeight: FontWeight
+                          .w400, // Slightly bolder for better readability
+                      letterSpacing:
+                          4, // Increased letter spacing for elegance and clarity
+                      fontSize: 36, // Larger font size for better visibility
+                    ),
+                  ),
+                ),
+              );
+            },
           ),
-          const SizedBox(height: 4),
-          Text(
-            'Discover the wisdom of the cards through mystical readings',
-            style: AppTheme.bodyMedium.copyWith(
-              color: AppColors.darkTextSecondary,
-            ),
+          const SizedBox(height: 12), // Space between title and subtitle
+          // Subtle subtitle for better user guidance
+          TweenAnimationBuilder<double>(
+            duration: const Duration(
+              milliseconds: 1000,
+            ), // Slightly delayed animation
+            tween: Tween(begin: 0, end: 1),
+            builder: (context, value, child) {
+              return Opacity(
+                opacity: value,
+                child: Transform.translate(
+                  offset: Offset(0, 15 * (1 - value)),
+                  child: Text(
+                    'Discover your path through mystical wisdom',
+                    style: AppTheme.bodyMedium.copyWith(
+                      color: AppColors.darkTextSecondary,
+                      fontWeight: FontWeight.w400,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                ),
+              );
+            },
           ),
+          const SizedBox(height: AppConstants.defaultPadding), // Bottom spacing
         ],
       ),
     );
@@ -99,36 +127,62 @@ class TarotView extends GetView<TarotController> {
   /// [buildMainContent] - Main scrollable content with tarot features
   Widget _buildMainContent() {
     return SliverToBoxAdapter(
-      child: Container(
-        decoration: const BoxDecoration(
-          color: AppColors.darkCard,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(AppConstants.borderRadius * 2),
-            topRight: Radius.circular(AppConstants.borderRadius * 2),
-          ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(AppConstants.defaultPadding),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildReadingTypeSelector(),
-              const SizedBox(height: AppConstants.largePadding),
-              _buildQuestionInput(),
-              const SizedBox(height: AppConstants.largePadding),
-              _buildReadingButton(),
-              const SizedBox(height: AppConstants.largePadding),
-              _buildSelectedCards(),
-              const SizedBox(height: AppConstants.largePadding),
-              _buildReadingInterpretation(),
-            ],
-          ),
-        ),
+      child: TweenAnimationBuilder<double>(
+        duration: const Duration(milliseconds: 600),
+        tween: Tween(begin: 0, end: 1),
+        builder: (context, value, child) {
+          return Transform.translate(
+            offset: Offset(0, 30 * (1 - value)),
+            child: Opacity(
+              opacity: value,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: AppColors.darkCard,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(AppConstants.borderRadius * 2),
+                    topRight: Radius.circular(AppConstants.borderRadius * 2),
+                  ),
+                  // Add subtle shadow for better visual separation
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.black.withValues(alpha: 0.1),
+                      blurRadius: 20,
+                      offset: const Offset(0, -5),
+                    ),
+                  ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(AppConstants.defaultPadding),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        height: AppConstants.largePadding,
+                      ), // Increased top spacing for better separation
+                      _buildReadingTypeSelector(),
+                      const SizedBox(height: AppConstants.largePadding),
+                      _buildQuestionInput(),
+                      const SizedBox(height: AppConstants.largePadding),
+                      _buildReadingButton(),
+                      const SizedBox(height: AppConstants.largePadding),
+                      _buildSelectedCards(),
+                      const SizedBox(height: AppConstants.largePadding),
+                      _buildReadingInterpretation(),
+                      const SizedBox(
+                        height: AppConstants.defaultPadding,
+                      ), // Bottom spacing
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }
 
-    /// [buildReadingTypeSelector] - Reading type selection with beautiful cards
+  /// [buildReadingTypeSelector] - Reading type selection with beautiful cards
   Widget _buildReadingTypeSelector() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -153,11 +207,15 @@ class TarotView extends GetView<TarotController> {
           itemBuilder: (context, index) {
             final readingType = controller.readingTypes[index];
             return Obx(() {
-              final isSelected = controller.selectedReadingType.value == readingType;
+              final isSelected =
+                  controller.selectedReadingType.value == readingType;
               return _buildReadingTypeCard(readingType, isSelected);
             });
           },
         ),
+        const SizedBox(
+          height: AppConstants.smallPadding,
+        ), // Additional bottom spacing
       ],
     );
   }
@@ -266,27 +324,50 @@ class TarotView extends GetView<TarotController> {
         ),
         const SizedBox(height: AppConstants.defaultPadding),
         LiquidGlassCard(
-          child: TextField(
-            onChanged: controller.setQuestion,
-            maxLines: 3,
-            style: AppTheme.bodyMedium.copyWith(
-              color: AppColors.darkTextPrimary,
-            ),
-            decoration: InputDecoration(
-              hintText: 'Ask the cards for guidance...',
-              hintStyle: AppTheme.bodyMedium.copyWith(
-                color: AppColors.darkTextSecondary,
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(AppConstants.borderRadius),
+              border: Border.all(
+                color: AppColors.lightPurple.withValues(alpha: 0.3),
               ),
-              border: InputBorder.none,
-              contentPadding: const EdgeInsets.all(AppConstants.defaultPadding),
+            ),
+            child: TextField(
+              onChanged: controller.setQuestion,
+              maxLines: 3,
+              style: AppTheme.bodyMedium.copyWith(
+                color: AppColors.darkTextPrimary,
+              ),
+              decoration: InputDecoration(
+                hintText: 'Ask the cards for guidance...',
+                hintStyle: AppTheme.bodyMedium.copyWith(
+                  color: AppColors.darkTextSecondary,
+                ),
+                border: InputBorder.none,
+                contentPadding: const EdgeInsets.all(
+                  AppConstants.defaultPadding,
+                ),
+                // Add subtle focus effect
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(
+                    AppConstants.borderRadius,
+                  ),
+                  borderSide: BorderSide(
+                    color: AppColors.lightPurple.withValues(alpha: 0.5),
+                    width: 2,
+                  ),
+                ),
+              ),
             ),
           ),
         ),
+        const SizedBox(
+          height: AppConstants.smallPadding,
+        ), // Additional bottom spacing
       ],
     );
   }
 
-    /// [buildReadingButton] - Perform reading button with mystical effects
+  /// [buildReadingButton] - Perform reading button with mystical effects
   Widget _buildReadingButton() {
     return LiquidGlassCard(
       onTap: () {
@@ -300,41 +381,45 @@ class TarotView extends GetView<TarotController> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Obx(() => controller.isReadingInProgress.value
-                ? const SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        AppColors.lightPurple,
+            Obx(
+              () => controller.isReadingInProgress.value
+                  ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          AppColors.lightPurple,
+                        ),
                       ),
+                    )
+                  : const Icon(
+                      Icons.auto_awesome,
+                      color: AppColors.lightPurple,
+                      size: 20,
                     ),
-                  )
-                : const Icon(
-                    Icons.auto_awesome,
-                    color: AppColors.lightPurple,
-                    size: 20,
-                  )),
+            ),
             const SizedBox(width: AppConstants.smallPadding),
-                            Obx(() => Text(
-                  controller.isReadingInProgress.value
-                      ? 'Reading Cards...'
-                      : 'Perform Reading',
-                  style: AppTheme.bodyLarge.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: controller.currentQuestion.value.isNotEmpty
-                        ? AppColors.lightPurple
-                        : AppColors.darkTextTertiary,
-                  ),
-                )),
+            Obx(
+              () => Text(
+                controller.isReadingInProgress.value
+                    ? 'Reading Cards...'
+                    : 'Perform Reading',
+                style: AppTheme.bodyLarge.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: controller.currentQuestion.value.isNotEmpty
+                      ? AppColors.lightPurple
+                      : AppColors.darkTextTertiary,
+                ),
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 
-    /// [buildSelectedCards] - Display selected cards with beautiful animations
+  /// [buildSelectedCards] - Display selected cards with beautiful animations
   Widget _buildSelectedCards() {
     return Obx(() {
       if (!controller.hasSelectedCards) return const SizedBox.shrink();
@@ -368,7 +453,7 @@ class TarotView extends GetView<TarotController> {
     });
   }
 
-    /// [buildCardsGrid] - Grid layout for displaying selected cards
+  /// [buildCardsGrid] - Grid layout for displaying selected cards
   Widget _buildCardsGrid() {
     return Obx(() {
       final cards = controller.selectedCards;
@@ -482,10 +567,12 @@ class TarotView extends GetView<TarotController> {
     );
   }
 
-    /// [buildReadingInterpretation] - Display reading interpretation with mystical styling
+  /// [buildReadingInterpretation] - Display reading interpretation with mystical styling
   Widget _buildReadingInterpretation() {
     return Obx(() {
-      if (controller.readingInterpretation.value.isEmpty) return const SizedBox.shrink();
+      if (controller.readingInterpretation.value.isEmpty) {
+        return const SizedBox.shrink();
+      }
 
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
