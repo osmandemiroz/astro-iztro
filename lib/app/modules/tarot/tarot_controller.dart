@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:math';
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
@@ -33,20 +34,35 @@ class TarotController extends GetxController {
   void onInit() {
     super.onInit();
     // [TarotController.onInit] - Loading tarot card data on initialization
+    // Initialize with empty data first to prevent null access errors
+    selectedCards.clear();
+    selectedReadingType.value = 'single_card';
+    isReadingInProgress.value = false;
+    isCardReversed.value = false;
+    currentQuestion.value = '';
+    readingInterpretation.value = '';
+    
+    // Load tarot cards data
     _loadTarotCards();
   }
 
   /// [loadTarotCards] - Load tarot card data from JSON assets
   Future<void> _loadTarotCards() async {
     try {
+      // Ensure lists are properly initialized
+      majorArcana.clear();
+      minorArcana.clear();
+      allCards.clear();
+      
       // Load tarot cards data from assets
-      final String jsonString = await rootBundle.loadString(
+      final jsonString = await rootBundle.loadString(
         'assets/tarot_cards.json',
       );
-      final Map<String, dynamic> jsonData = json.decode(jsonString);
+      // Decode the JSON string and ensure the result is a Map<String, dynamic>
+      final jsonData = json.decode(jsonString) as Map<String, dynamic>;
 
-      // Extract major arcana cards
-      final List<dynamic> majorArcanaData = jsonData['major_arcana'] ?? [];
+      // Extract major arcana cards safely as a List<dynamic>
+      final majorArcanaData = jsonData['major_arcana'] as List<dynamic>? ?? [];
       for (final card in majorArcanaData) {
         if (card is Map<String, dynamic>) {
           majorArcana.add(Map<String, dynamic>.from(card));
@@ -54,9 +70,10 @@ class TarotController extends GetxController {
       }
 
       // Extract minor arcana cards
-      final Map<String, dynamic> minorArcanaData =
-          jsonData['minor_arcana'] ?? {};
-      final List<Map<String, dynamic>> allMinorCards = [];
+      final minorArcanaData =
+          jsonData['minor_arcana'] as Map<String, dynamic>? ??
+          <String, dynamic>{};
+      final allMinorCards = <Map<String, dynamic>>[];
 
       // Combine all minor arcana suits
       for (final entry in minorArcanaData.entries) {
@@ -74,11 +91,15 @@ class TarotController extends GetxController {
       // Combine all cards for general use
       allCards.assignAll([...majorArcana, ...minorArcana]);
 
-      print(
-        '[TarotController] Loaded ${allCards.length} tarot cards successfully',
-      );
-    } catch (e) {
-      print('[TarotController] Error loading tarot cards: $e');
+      if (kDebugMode) {
+        print(
+          '[TarotController] Loaded ${allCards.length} tarot cards successfully',
+        );
+      }
+    } on Exception catch (e) {
+      if (kDebugMode) {
+        print('[TarotController] Error loading tarot cards: $e');
+      }
       Get.snackbar(
         'Error',
         'Failed to load tarot cards: $e',
@@ -93,14 +114,18 @@ class TarotController extends GetxController {
       selectedReadingType.value = readingType;
       // Clear previous reading when changing type
       _clearCurrentReading();
-      print('[TarotController] Reading type set to: $readingType');
+      if (kDebugMode) {
+        print('[TarotController] Reading type set to: $readingType');
+      }
     }
   }
 
   /// [setQuestion] - Set the question for the tarot reading
   void setQuestion(String question) {
     currentQuestion.value = question.trim();
-    print('[TarotController] Question set: $question');
+    if (kDebugMode) {
+      print('[TarotController] Question set: $question');
+    }
   }
 
   /// [performReading] - Perform the selected type of tarot reading
@@ -126,9 +151,13 @@ class TarotController extends GetxController {
       // Generate interpretation
       await _generateReadingInterpretation();
 
-      print('[TarotController] Reading completed successfully');
-    } catch (e) {
-      print('[TarotController] Error performing reading: $e');
+      if (kDebugMode) {
+        print('[TarotController] Reading completed successfully');
+      }
+    } on Exception catch (e) {
+      if (kDebugMode) {
+        print('[TarotController] Error performing reading: $e');
+      }
       Get.snackbar(
         'Reading Error',
         'Failed to complete reading: $e',
@@ -142,21 +171,21 @@ class TarotController extends GetxController {
   /// [selectCardsForReading] - Select appropriate number of cards for the reading type
   Future<void> _selectCardsForReading() async {
     final random = Random();
-    final int numberOfCards = _getNumberOfCardsForReadingType();
+    final numberOfCards = _getNumberOfCardsForReadingType();
 
     // Create a copy of all cards to avoid modifying the original list
-    final List<Map<String, dynamic>> availableCards = List.from(allCards);
-    final List<Map<String, dynamic>> selected = [];
+    final availableCards = List<Map<String, dynamic>>.from(allCards);
+    final selected = <Map<String, dynamic>>[];
 
-    for (int i = 0; i < numberOfCards && availableCards.isNotEmpty; i++) {
+    for (var i = 0; i < numberOfCards && availableCards.isNotEmpty; i++) {
       // Randomly select a card
-      final int randomIndex = random.nextInt(availableCards.length);
-      final Map<String, dynamic> selectedCard = availableCards.removeAt(
+      final randomIndex = random.nextInt(availableCards.length);
+      final selectedCard = availableCards.removeAt(
         randomIndex,
       );
 
       // Determine if card is reversed (50% chance)
-      final bool isReversed = random.nextBool();
+      final isReversed = random.nextBool();
 
       // Add card with orientation information
       selected.add({
@@ -167,9 +196,11 @@ class TarotController extends GetxController {
     }
 
     selectedCards.assignAll(selected);
-    print(
-      '[TarotController] Selected ${selectedCards.length} cards for reading',
-    );
+    if (kDebugMode) {
+      print(
+        '[TarotController] Selected ${selectedCards.length} cards for reading',
+      );
+    }
   }
 
   /// [getNumberOfCardsForReadingType] - Get the number of cards needed for the reading type
@@ -194,26 +225,34 @@ class TarotController extends GetxController {
   Future<void> _generateReadingInterpretation() async {
     if (selectedCards.isEmpty) return;
 
-    final StringBuffer interpretation = StringBuffer();
-
-    // Add reading type description
-    interpretation.writeln(_getReadingTypeDescription());
-    interpretation.writeln();
-
-    // Add question
-    interpretation.writeln('Question: ${currentQuestion.value}');
-    interpretation.writeln();
+    final interpretation = StringBuffer()
+      // Add reading type description
+      ..writeln(_getReadingTypeDescription())
+      ..writeln()
+      // Add question
+      ..writeln('Question: ${currentQuestion.value}')
+      ..writeln();
 
     // Add card interpretations
-    for (final Map<String, dynamic> card in selectedCards) {
-      final String cardName = card['name'] ?? 'Unknown Card';
-      final bool isReversed = card['is_reversed'] ?? false;
-      final int position = card['position'] ?? 1;
+    for (final card in selectedCards) {
+      // Safely extract card name, ensuring it's a String
+      final cardName = card['name'] is String
+          ? card['name'] as String
+          : 'Unknown Card';
 
-      interpretation.writeln('Card $position: $cardName');
-      interpretation.writeln(
-        'Orientation: ${isReversed ? 'Reversed' : 'Upright'}',
-      );
+      // Safely extract isReversed, ensuring it's a bool
+      // [isReversed] - Ensure isReversed is a bool, defaulting to false if not present or not a bool
+      final isReversed =
+          card['is_reversed'] is bool && card['is_reversed'] as bool;
+
+      // Safely extract position, ensuring it's an int
+      final position = card['position'] is int ? card['position'] as int : 1;
+
+      interpretation
+        ..writeln('Card $position: $cardName')
+        ..writeln(
+          'Orientation: ${isReversed ? 'Reversed' : 'Upright'}',
+        );
 
       if (isReversed) {
         interpretation.writeln(
@@ -225,15 +264,17 @@ class TarotController extends GetxController {
         );
       }
 
-      interpretation.writeln(
-        'Description: ${card['description'] ?? 'No description available'}',
-      );
-      interpretation.writeln();
+      interpretation
+        ..writeln(
+          'Description: ${card['description'] ?? 'No description available'}',
+        )
+        ..writeln();
     }
 
     // Add overall interpretation
-    interpretation.writeln('Overall Interpretation:');
-    interpretation.writeln(_generateOverallInterpretation());
+    interpretation
+      ..writeln('Overall Interpretation:')
+      ..writeln(_generateOverallInterpretation());
 
     readingInterpretation.value = interpretation.toString();
   }
@@ -261,10 +302,10 @@ class TarotController extends GetxController {
     if (selectedCards.isEmpty) return 'No cards selected for interpretation.';
 
     // Count upright vs reversed cards
-    int uprightCount = 0;
-    int reversedCount = 0;
+    var uprightCount = 0;
+    var reversedCount = 0;
 
-    for (final Map<String, dynamic> card in selectedCards) {
+    for (final card in selectedCards) {
       if (card['is_reversed'] == true) {
         reversedCount++;
       } else {
@@ -286,20 +327,24 @@ class TarotController extends GetxController {
   void _clearCurrentReading() {
     selectedCards.clear();
     readingInterpretation.value = '';
-    print('[TarotController] Current reading cleared');
+    if (kDebugMode) {
+      print('[TarotController] Current reading cleared');
+    }
   }
 
   /// [clearReading] - Public method to clear the current reading
   void clearReading() {
     _clearCurrentReading();
     currentQuestion.value = '';
-    print('[TarotController] Reading cleared by user');
+    if (kDebugMode) {
+      print('[TarotController] Reading cleared by user');
+    }
   }
 
   /// [getCardImage] - Get the image asset path for a card
   String getCardImage(String cardName) {
     // Convert card name to image asset path
-    final String imageName = cardName
+    final imageName = cardName
         .toLowerCase()
         .replaceAll(' ', '_')
         .replaceAll('the_', '');
@@ -308,12 +353,16 @@ class TarotController extends GetxController {
 
   /// [getCardKeywords] - Get keywords for a specific card
   List<String> getCardKeywords(String cardName) {
-    final Map<String, dynamic>? card = allCards.firstWhereOrNull(
+    final card = allCards.firstWhereOrNull(
       (card) => card['name'] == cardName,
     );
 
     if (card != null && card['keywords'] != null) {
-      return List<String>.from(card['keywords']);
+      // Ensure 'keywords' is an Iterable before converting to List<String>
+      final keywords = card['keywords'];
+      if (keywords is Iterable) {
+        return List<String>.from(keywords);
+      }
     }
 
     return [];
@@ -324,11 +373,11 @@ class TarotController extends GetxController {
     if (allCards.isEmpty) return null;
 
     final random = Random();
-    final int randomIndex = random.nextInt(allCards.length);
-    final Map<String, dynamic> card = allCards[randomIndex];
+    final randomIndex = random.nextInt(allCards.length);
+    final card = allCards[randomIndex];
 
     // Determine if card is reversed
-    final bool isReversed = random.nextBool();
+    final isReversed = random.nextBool();
 
     return {
       ...card,

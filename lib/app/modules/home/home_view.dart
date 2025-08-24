@@ -525,7 +525,6 @@ class HomeView extends GetView<HomeController> {
               break;
             case 1:
               controller.navigateToTarot();
-              break;
           }
         },
         type: BottomNavigationBarType.fixed,
