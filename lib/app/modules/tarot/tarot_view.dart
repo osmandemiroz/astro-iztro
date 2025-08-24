@@ -13,19 +13,8 @@ import 'package:get/get.dart';
 class TarotView extends GetView<TarotController> {
   const TarotView({super.key});
 
-  @override
+    @override
   Widget build(BuildContext context) {
-    // Ensure the controller is properly initialized
-    if (!Get.isRegistered<TarotController>()) {
-      return const Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(
-            color: AppColors.lightPurple,
-          ),
-        ),
-      );
-    }
-    
     return Scaffold(
       // Modern dark theme background with mystical gradient
       body: HomeBackground(
@@ -139,7 +128,7 @@ class TarotView extends GetView<TarotController> {
     );
   }
 
-  /// [buildReadingTypeSelector] - Reading type selection with beautiful cards
+    /// [buildReadingTypeSelector] - Reading type selection with beautiful cards
   Widget _buildReadingTypeSelector() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -151,35 +140,22 @@ class TarotView extends GetView<TarotController> {
           ),
         ),
         const SizedBox(height: AppConstants.defaultPadding),
-        Obx(
-          () {
-            // Safety check to ensure controller is properly initialized
-            if (!Get.isRegistered<TarotController>()) {
-              return const Center(
-                child: CircularProgressIndicator(
-                  color: AppColors.lightPurple,
-                ),
-              );
-            }
-            
-            return GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: AppConstants.defaultPadding,
-                mainAxisSpacing: AppConstants.defaultPadding,
-                childAspectRatio: 1.2,
-              ),
-              itemCount: controller.readingTypes.length,
-              itemBuilder: (context, index) {
-                final readingType = controller.readingTypes[index];
-                final isSelected =
-                    controller.selectedReadingType.value == readingType;
-
-                return _buildReadingTypeCard(readingType, isSelected);
-              },
-            );
+        GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: AppConstants.defaultPadding,
+            mainAxisSpacing: AppConstants.defaultPadding,
+            childAspectRatio: 1.2,
+          ),
+          itemCount: controller.readingTypes.length,
+          itemBuilder: (context, index) {
+            final readingType = controller.readingTypes[index];
+            return Obx(() {
+              final isSelected = controller.selectedReadingType.value == readingType;
+              return _buildReadingTypeCard(readingType, isSelected);
+            });
           },
         ),
       ],
@@ -310,31 +286,22 @@ class TarotView extends GetView<TarotController> {
     );
   }
 
-  /// [buildReadingButton] - Perform reading button with mystical effects
+    /// [buildReadingButton] - Perform reading button with mystical effects
   Widget _buildReadingButton() {
-    return Obx(
-      () {
-        // Safety check to ensure controller is properly initialized
-        if (!Get.isRegistered<TarotController>()) {
-          return const LiquidGlassCard(
-            child: Center(
-              child: CircularProgressIndicator(
-                color: AppColors.lightPurple,
-              ),
-            ),
-          );
+    return LiquidGlassCard(
+      onTap: () {
+        if (controller.currentQuestion.value.isNotEmpty) {
+          controller.performReading();
         }
-        
-        return LiquidGlassCard(
-          onTap: controller.hasQuestion ? controller.performReading : null,
-          child: Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(AppConstants.defaultPadding),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                if (controller.isReadingInProgress.value)
-                  const SizedBox(
+      },
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(AppConstants.defaultPadding),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Obx(() => controller.isReadingInProgress.value
+                ? const SizedBox(
                     width: 20,
                     height: 20,
                     child: CircularProgressIndicator(
@@ -344,40 +311,32 @@ class TarotView extends GetView<TarotController> {
                       ),
                     ),
                   )
-                else
-                  const Icon(
+                : const Icon(
                     Icons.auto_awesome,
                     color: AppColors.lightPurple,
                     size: 20,
-                  ),
-                const SizedBox(width: AppConstants.smallPadding),
-                Text(
+                  )),
+            const SizedBox(width: AppConstants.smallPadding),
+                            Obx(() => Text(
                   controller.isReadingInProgress.value
                       ? 'Reading Cards...'
                       : 'Perform Reading',
                   style: AppTheme.bodyLarge.copyWith(
                     fontWeight: FontWeight.w600,
-                    color: controller.hasQuestion
+                    color: controller.currentQuestion.value.isNotEmpty
                         ? AppColors.lightPurple
                         : AppColors.darkTextTertiary,
                   ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
+                )),
+          ],
+        ),
+      ),
     );
   }
 
-  /// [buildSelectedCards] - Display selected cards with beautiful animations
+    /// [buildSelectedCards] - Display selected cards with beautiful animations
   Widget _buildSelectedCards() {
     return Obx(() {
-      // Safety check to ensure controller is properly initialized
-      if (!Get.isRegistered<TarotController>()) {
-        return const SizedBox.shrink();
-      }
-      
       if (!controller.hasSelectedCards) return const SizedBox.shrink();
 
       return Column(
@@ -409,14 +368,9 @@ class TarotView extends GetView<TarotController> {
     });
   }
 
-  /// [buildCardsGrid] - Grid layout for displaying selected cards
+    /// [buildCardsGrid] - Grid layout for displaying selected cards
   Widget _buildCardsGrid() {
     return Obx(() {
-      // Safety check to ensure controller is properly initialized
-      if (!Get.isRegistered<TarotController>()) {
-        return const SizedBox.shrink();
-      }
-      
       final cards = controller.selectedCards;
       final crossAxisCount = cards.length <= 3 ? cards.length : 3;
 
@@ -528,15 +482,10 @@ class TarotView extends GetView<TarotController> {
     );
   }
 
-  /// [buildReadingInterpretation] - Display reading interpretation with mystical styling
+    /// [buildReadingInterpretation] - Display reading interpretation with mystical styling
   Widget _buildReadingInterpretation() {
     return Obx(() {
-      // Safety check to ensure controller is properly initialized
-      if (!Get.isRegistered<TarotController>()) {
-        return const SizedBox.shrink();
-      }
-      
-      if (!controller.hasInterpretation) return const SizedBox.shrink();
+      if (controller.readingInterpretation.value.isEmpty) return const SizedBox.shrink();
 
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,

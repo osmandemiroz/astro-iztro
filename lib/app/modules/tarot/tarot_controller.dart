@@ -41,7 +41,7 @@ class TarotController extends GetxController {
     isCardReversed.value = false;
     currentQuestion.value = '';
     readingInterpretation.value = '';
-    
+
     // Load tarot cards data
     _loadTarotCards();
   }
@@ -53,7 +53,7 @@ class TarotController extends GetxController {
       majorArcana.clear();
       minorArcana.clear();
       allCards.clear();
-      
+
       // Load tarot cards data from assets
       final jsonString = await rootBundle.loadString(
         'assets/tarot_cards.json',
@@ -401,8 +401,6 @@ class TarotController extends GetxController {
 
   /// Getters for computed values
   bool get hasSelectedCards => selectedCards.isNotEmpty;
-  bool get hasQuestion => currentQuestion.value.isNotEmpty;
-  bool get hasInterpretation => readingInterpretation.value.isNotEmpty;
   int get totalCardsLoaded => allCards.length;
   int get majorArcanaCount => majorArcana.length;
   int get minorArcanaCount => minorArcana.length;
