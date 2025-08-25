@@ -520,11 +520,25 @@ class HomeView extends GetView<HomeController> {
         selectedItemColor: AppColors.lightPurple,
         unselectedItemColor: AppColors.darkTextTertiary,
         backgroundColor: AppColors.darkSurface,
+        elevation: 12, // Enhanced elevation for modern depth
+        selectedFontSize: 11, // Optimized font size for better fit
+        unselectedFontSize: 11, // Consistent font sizing
+        showUnselectedLabels: true, // Always show labels for better UX
+        selectedLabelStyle: AppTheme.caption.copyWith(
+          fontWeight: FontWeight.w600,
+          letterSpacing: 0.5,
+          color: AppColors.lightPurple,
+        ), // Enhanced selected label styling
+        unselectedLabelStyle: AppTheme.caption.copyWith(
+          fontWeight: FontWeight.w400,
+          letterSpacing: 0.3,
+          color: AppColors.darkTextTertiary,
+        ), // Consistent unselected label styling
         items: [
           BottomNavigationBarItem(
             icon: SizedBox(
-              width: 24,
-              height: 24,
+              width: 28,
+              height: 28,
               child: Image.asset(
                 'assets/images/icon/ic_iztro.png',
                 fit: BoxFit.contain,
@@ -534,15 +548,15 @@ class HomeView extends GetView<HomeController> {
                   }
                   return const Icon(
                     Icons.home_outlined,
-                    size: 24,
+                    size: 28,
                     color: AppColors.darkTextTertiary,
                   );
                 },
               ),
             ),
             activeIcon: SizedBox(
-              width: 24,
-              height: 24,
+              width: 32,
+              height: 32,
               child: Image.asset(
                 'assets/images/icon/ic_iztro.png',
                 fit: BoxFit.contain,
@@ -560,12 +574,12 @@ class HomeView extends GetView<HomeController> {
                 },
               ),
             ),
-            label: 'iztro',
+            label: 'Iztro',
           ),
           BottomNavigationBarItem(
             icon: SizedBox(
-              width: 24,
-              height: 24,
+              width: 28,
+              height: 28,
               child: Image.asset(
                 'assets/images/icon/ic_tarot.png',
                 fit: BoxFit.contain,
@@ -575,15 +589,15 @@ class HomeView extends GetView<HomeController> {
                   }
                   return const Icon(
                     Icons.auto_awesome_outlined,
-                    size: 24,
+                    size: 28,
                     color: AppColors.darkTextTertiary,
                   );
                 },
               ),
             ),
             activeIcon: SizedBox(
-              width: 24,
-              height: 24,
+              width: 32,
+              height: 32,
               child: Image.asset(
                 'assets/images/icon/ic_tarot.png',
                 fit: BoxFit.contain,
@@ -601,7 +615,7 @@ class HomeView extends GetView<HomeController> {
                 },
               ),
             ),
-            label: 'tarot',
+            label: 'Tarot',
           ),
         ],
       ),

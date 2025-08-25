@@ -742,7 +742,7 @@ class TarotView extends GetView<TarotController> {
         return Center(
           child: SizedBox(
             width: 200,
-            height: 280,
+            height: 405,
             child: _buildCardDisplay(cards.first, 0, isLarge: true),
           ),
         );
@@ -772,8 +772,8 @@ class TarotView extends GetView<TarotController> {
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: crossAxisCount,
             crossAxisSpacing: AppConstants.defaultPadding,
-            mainAxisSpacing: AppConstants.defaultPadding,
-            childAspectRatio: 0.7,
+            mainAxisSpacing: AppConstants.smallPadding,
+            childAspectRatio: 0.50,
           ),
           itemCount: cards.length,
           itemBuilder: (context, index) {
