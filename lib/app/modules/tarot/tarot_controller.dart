@@ -1,0 +1,555 @@
+// ignore_for_file: avoid_dynamic_calls, document_ignores
+
+import 'dart:convert';
+import 'dart:math';
+
+import 'package:astro_iztro/core/engines/tarot_response_engine.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
+import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+
+/// [TarotController] - Controller for Tarot card readings and interpretations
+/// Manages card selection, reading types, and provides card data and meanings
+class TarotController extends GetxController {
+  // Reactive state variables for tarot functionality
+  final RxList<Map<String, dynamic>> selectedCards =
+      <Map<String, dynamic>>[].obs;
+  final RxString selectedReadingType = 'single_card'.obs;
+  final RxBool isReadingInProgress = false.obs;
+  final RxBool isCardReversed = false.obs;
+  final RxString currentQuestion = ''.obs;
+  final RxString readingInterpretation = ''.obs;
+
+  // Enhanced reading data from TarotResponseEngine
+  final RxMap<String, dynamic> enhancedReadingData = <String, dynamic>{}.obs;
+
+  // Tarot card data
+  final RxList<Map<String, dynamic>> allCards = <Map<String, dynamic>>[].obs;
+  final RxList<Map<String, dynamic>> majorArcana = <Map<String, dynamic>>[].obs;
+  final RxList<Map<String, dynamic>> minorArcana = <Map<String, dynamic>>[].obs;
+
+  // Reading types available
+  final List<String> readingTypes = [
+    'single_card',
+    'three_card',
+    'celtic_cross',
+    'horseshoe',
+    'daily_draw',
+  ];
+
+  @override
+  void onInit() {
+    super.onInit();
+    // [TarotController.onInit] - Loading tarot card data on initialization
+    // Initialize with empty data first to prevent null access errors
+    selectedCards.clear();
+    selectedReadingType.value = 'single_card';
+    isReadingInProgress.value = false;
+    isCardReversed.value = false;
+    currentQuestion.value = '';
+    readingInterpretation.value = '';
+
+    // Load tarot cards data
+    _loadTarotCards();
+  }
+
+  /// [loadTarotCards] - Load tarot card data from JSON assets
+  Future<void> _loadTarotCards() async {
+    try {
+      // Ensure lists are properly initialized
+      majorArcana.clear();
+      minorArcana.clear();
+      allCards.clear();
+
+      // Load tarot cards data from assets
+      final jsonString = await rootBundle.loadString(
+        'assets/tarot_cards.json',
+      );
+      // Decode the JSON string and ensure the result is a Map<String, dynamic>
+      final jsonData = json.decode(jsonString) as Map<String, dynamic>;
+
+      // Extract major arcana cards safely as a List<dynamic>
+      final majorArcanaData = jsonData['major_arcana'] as List<dynamic>? ?? [];
+      for (final card in majorArcanaData) {
+        if (card is Map<String, dynamic>) {
+          majorArcana.add(Map<String, dynamic>.from(card));
+        }
+      }
+
+      // Extract minor arcana cards
+      final minorArcanaData =
+          jsonData['minor_arcana'] as Map<String, dynamic>? ??
+          <String, dynamic>{};
+      final allMinorCards = <Map<String, dynamic>>[];
+
+      // Combine all minor arcana suits
+      for (final entry in minorArcanaData.entries) {
+        final cards = entry.value;
+        if (cards is List) {
+          for (final card in cards) {
+            if (card is Map<String, dynamic>) {
+              allMinorCards.add(Map<String, dynamic>.from(card));
+            }
+          }
+        }
+      }
+      minorArcana.assignAll(allMinorCards);
+
+      // Combine all cards for general use
+      allCards.assignAll([...majorArcana, ...minorArcana]);
+
+      if (kDebugMode) {
+        print(
+          '[TarotController] Loaded ${allCards.length} tarot cards successfully',
+        );
+      }
+    } on Exception catch (e) {
+      if (kDebugMode) {
+        print('[TarotController] Error loading tarot cards: $e');
+      }
+      Get.snackbar(
+        'Error',
+        'Failed to load tarot cards: $e',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
+  }
+
+  /// [setReadingType] - Set the type of tarot reading to perform
+  void setReadingType(String readingType) {
+    if (readingTypes.contains(readingType)) {
+      selectedReadingType.value = readingType;
+      // Clear previous reading when changing type
+      _clearCurrentReading();
+      if (kDebugMode) {
+        print('[TarotController] Reading type set to: $readingType');
+      }
+    }
+  }
+
+  /// [setQuestion] - Set the question for the tarot reading
+  void setQuestion(String question) {
+    currentQuestion.value = question.trim();
+    if (kDebugMode) {
+      print('[TarotController] Question set: $question');
+    }
+  }
+
+  /// [performReading] - Perform the selected type of tarot reading
+  Future<void> performReading() async {
+    if (currentQuestion.value.isEmpty) {
+      Get.snackbar(
+        'Question Required',
+        'Please enter a question for your reading',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      return;
+    }
+
+    try {
+      isReadingInProgress.value = true;
+
+      // Clear previous reading
+      _clearCurrentReading();
+
+      // Select cards based on reading type
+      await _selectCardsForReading();
+
+      // Generate interpretation
+      await _generateReadingInterpretation();
+
+      if (kDebugMode) {
+        print('[TarotController] Reading completed successfully');
+      }
+    } on Exception catch (e) {
+      if (kDebugMode) {
+        print('[TarotController] Error performing reading: $e');
+      }
+      Get.snackbar(
+        'Reading Error',
+        'Failed to complete reading: $e',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } finally {
+      isReadingInProgress.value = false;
+    }
+  }
+
+  /// [selectCardsForReading] - Select appropriate number of cards for the reading type
+  Future<void> _selectCardsForReading() async {
+    final random = Random();
+    final numberOfCards = _getNumberOfCardsForReadingType();
+
+    // Create a copy of all cards to avoid modifying the original list
+    final availableCards = List<Map<String, dynamic>>.from(allCards);
+    final selected = <Map<String, dynamic>>[];
+
+    for (var i = 0; i < numberOfCards && availableCards.isNotEmpty; i++) {
+      // Randomly select a card
+      final randomIndex = random.nextInt(availableCards.length);
+      final selectedCard = availableCards.removeAt(
+        randomIndex,
+      );
+
+      // Determine if card is reversed (50% chance)
+      final isReversed = random.nextBool();
+
+      // Add card with orientation information
+      selected.add({
+        ...selectedCard,
+        'is_reversed': isReversed,
+        'position': i + 1,
+      });
+    }
+
+    selectedCards.assignAll(selected);
+    if (kDebugMode) {
+      print(
+        '[TarotController] Selected ${selectedCards.length} cards for reading',
+      );
+    }
+  }
+
+  /// [getNumberOfCardsForReadingType] - Get the number of cards needed for the reading type
+  int _getNumberOfCardsForReadingType() {
+    switch (selectedReadingType.value) {
+      case 'single_card':
+        return 1;
+      case 'three_card':
+        return 3;
+      case 'celtic_cross':
+        return 10;
+      case 'horseshoe':
+        return 7;
+      case 'daily_draw':
+        return 1;
+      default:
+        return 1;
+    }
+  }
+
+  /// [generateReadingInterpretation] - Generate interpretation for the selected cards
+  Future<void> _generateReadingInterpretation() async {
+    if (selectedCards.isEmpty) return;
+
+    try {
+      // Use the new TarotResponseEngine to generate contextual reading
+      final response = TarotResponseEngine.generateContextualReading(
+        question: currentQuestion.value,
+        selectedCards: selectedCards,
+        readingType: selectedReadingType.value,
+      );
+
+      // Store the enhanced reading data for the enhanced widget
+      enhancedReadingData.assignAll(response);
+
+      // Generate the interpretation using the response engine
+      final interpretation = StringBuffer()
+        // Add the contextual interpretation from the engine
+        ..writeln(response['contextualInterpretation'] as String)
+        ..writeln();
+
+      // Add actionable guidance section
+      final guidance = response['guidance'] as Map<String, dynamic>;
+      if (guidance['actions']?.isNotEmpty == true) {
+        interpretation.writeln('**Actionable Guidance:**');
+        for (final action in guidance['actions'] as List<dynamic>) {
+          interpretation.writeln('• $action');
+        }
+        interpretation.writeln();
+      }
+
+      // Add affirmations section
+      if (guidance['affirmations']?.isNotEmpty == true) {
+        interpretation.writeln('**Affirmations:**');
+        for (final affirmation in guidance['affirmations'] as List<dynamic>) {
+          interpretation.writeln('• $affirmation');
+        }
+        interpretation.writeln();
+      }
+
+      // Add warnings section
+      if (guidance['warnings']?.isNotEmpty == true) {
+        interpretation.writeln('**Considerations:**');
+        for (final warning in guidance['warnings'] as List<dynamic>) {
+          interpretation.writeln('• $warning');
+        }
+        interpretation.writeln();
+      }
+
+      // Add focus areas section
+      if (guidance['focusAreas']?.isNotEmpty == true) {
+        interpretation.writeln('**Focus Areas:**');
+        for (final focusArea in guidance['focusAreas'] as List<dynamic>) {
+          interpretation.writeln('• $focusArea');
+        }
+        interpretation.writeln();
+      }
+
+      // Add timing insights section
+      final timingInsights = response['timingInsights'] as Map<String, dynamic>;
+      if (timingInsights['timeframes']?.isNotEmpty == true) {
+        interpretation.writeln('**Timing Insights:**');
+        for (final timeframe in timingInsights['timeframes'] as List<dynamic>) {
+          interpretation.writeln('• $timeframe');
+        }
+        interpretation.writeln();
+      }
+
+      if (timingInsights['bestTimes']?.isNotEmpty == true) {
+        interpretation.writeln('**Best Times for Action:**');
+        for (final bestTime in timingInsights['bestTimes'] as List<dynamic>) {
+          interpretation.writeln('• $bestTime');
+        }
+        interpretation.writeln();
+      }
+
+      readingInterpretation.value = interpretation.toString();
+
+      if (kDebugMode) {
+        print(
+          '[TarotController] Enhanced reading interpretation generated using TarotResponseEngine',
+        );
+        print(
+          '[TarotController] Question analysis: ${response['questionAnalysis']}',
+        );
+        print('[TarotController] Card analysis: ${response['cardAnalysis']}');
+      }
+    } on Exception catch (e) {
+      if (kDebugMode) {
+        print('[TarotController] Error generating enhanced reading: $e');
+      }
+      // Fallback to basic interpretation if engine fails
+      _generateBasicInterpretation();
+    }
+  }
+
+  /// [_generateBasicInterpretation] - Fallback basic interpretation method
+  void _generateBasicInterpretation() {
+    final interpretation = StringBuffer()
+      // Add reading type description
+      ..writeln(_getReadingTypeDescription())
+      ..writeln()
+      // Add question
+      ..writeln('Question: ${currentQuestion.value}')
+      ..writeln();
+
+    // Add card interpretations
+    for (final card in selectedCards) {
+      // Safely extract card name, ensuring it's a String
+      final cardName = card['name'] is String
+          ? card['name'] as String
+          : 'Unknown Card';
+
+      // Safely extract isReversed, ensuring it's a bool
+      final isReversed =
+          card['is_reversed'] is bool && card['is_reversed'] as bool;
+
+      // Safely extract position, ensuring it's an int
+      final position = card['position'] is int ? card['position'] as int : 1;
+
+      interpretation
+        ..writeln('Card $position: $cardName')
+        ..writeln(
+          'Orientation: ${isReversed ? 'Reversed' : 'Upright'}',
+        );
+
+      if (isReversed) {
+        interpretation.writeln(
+          'Meaning: ${card['reversed_meaning'] ?? 'No reversed meaning available'}',
+        );
+      } else {
+        interpretation.writeln(
+          'Meaning: ${card['upright_meaning'] ?? 'No upright meaning available'}',
+        );
+      }
+
+      interpretation
+        ..writeln(
+          'Description: ${card['description'] ?? 'No description available'}',
+        )
+        ..writeln();
+    }
+
+    // Add overall interpretation
+    interpretation
+      ..writeln('Overall Interpretation:')
+      ..writeln(_generateOverallInterpretation());
+
+    readingInterpretation.value = interpretation.toString();
+  }
+
+  /// [getReadingTypeDescription] - Get description for the selected reading type
+  String _getReadingTypeDescription() {
+    switch (selectedReadingType.value) {
+      case 'single_card':
+        return 'Single Card Reading - A focused insight into your question';
+      case 'three_card':
+        return 'Three Card Reading - Past, Present, and Future perspectives';
+      case 'celtic_cross':
+        return 'Celtic Cross Reading - Comprehensive insight into complex situations';
+      case 'horseshoe':
+        return 'Horseshoe Reading - Guidance on timing and progression of events';
+      case 'daily_draw':
+        return 'Daily Draw - Daily guidance and reflection';
+      default:
+        return 'Tarot Reading - Divine guidance and insight';
+    }
+  }
+
+  /// [generateOverallInterpretation] - Generate overall interpretation based on selected cards
+  String _generateOverallInterpretation() {
+    if (selectedCards.isEmpty) return 'No cards selected for interpretation.';
+
+    // Count upright vs reversed cards
+    var uprightCount = 0;
+    var reversedCount = 0;
+
+    for (final card in selectedCards) {
+      if (card['is_reversed'] == true) {
+        reversedCount++;
+      } else {
+        uprightCount++;
+      }
+    }
+
+    // Generate interpretation based on card orientations
+    if (reversedCount > uprightCount) {
+      return 'The predominance of reversed cards suggests internal challenges and the need for introspection. Consider what aspects of your life need attention and transformation.';
+    } else if (uprightCount > reversedCount) {
+      return 'The predominance of upright cards indicates positive energy and clear direction. You are on the right path, and your intentions are well-aligned.';
+    } else {
+      return 'The balance of upright and reversed cards suggests a period of transition and growth. Embrace change while maintaining your core values and intentions.';
+    }
+  }
+
+  /// [clearCurrentReading] - Clear the current reading and reset state
+  void _clearCurrentReading() {
+    selectedCards.clear();
+    readingInterpretation.value = '';
+    enhancedReadingData.clear();
+    if (kDebugMode) {
+      print('[TarotController] Current reading cleared');
+    }
+  }
+
+  /// [clearReading] - Public method to clear the current reading
+  void clearReading() {
+    _clearCurrentReading();
+    currentQuestion.value = '';
+    if (kDebugMode) {
+      print('[TarotController] Reading cleared by user');
+    }
+  }
+
+  /// [getCardImage] - Get the image asset path for a card
+  String getCardImage(String cardName) {
+    // Convert card name to image asset path
+    final imageName = cardName
+        .toLowerCase()
+        .replaceAll(' ', '_')
+        .replaceAll('the_', '');
+    return 'assets/images/tarot/$imageName.png';
+  }
+
+  /// [getCardKeywords] - Get keywords for a specific card
+  List<String> getCardKeywords(String cardName) {
+    final card = allCards.firstWhereOrNull(
+      (card) => card['name'] == cardName,
+    );
+
+    if (card != null && card['keywords'] != null) {
+      // Ensure 'keywords' is an Iterable before converting to List<String>
+      final keywords = card['keywords'];
+      if (keywords is Iterable) {
+        return List<String>.from(keywords);
+      }
+    }
+
+    return [];
+  }
+
+  /// [getRandomCard] - Get a random card for daily draws or inspiration
+  Map<String, dynamic>? getRandomCard() {
+    if (allCards.isEmpty) return null;
+
+    final random = Random();
+    final randomIndex = random.nextInt(allCards.length);
+    final card = allCards[randomIndex];
+
+    // Determine if card is reversed
+    final isReversed = random.nextBool();
+
+    return {
+      ...card,
+      'is_reversed': isReversed,
+    };
+  }
+
+  /// [toggleCardSelection] - Toggle card selection for manual card picking
+  /// Allows users to manually select specific cards for their reading
+  void toggleCardSelection(Map<String, dynamic> card) {
+    final existingIndex = selectedCards.indexWhere(
+      (selectedCard) => selectedCard['id'] == card['id'],
+    );
+
+    if (existingIndex >= 0) {
+      // Remove card if already selected
+      selectedCards.removeAt(existingIndex);
+      if (kDebugMode) {
+        print('[TarotController] Card removed: ${card['name']}');
+      }
+    } else {
+      // Add card if not selected
+      final cardWithPosition = {
+        ...card,
+        'position': selectedCards.length + 1,
+        'is_reversed': Random().nextBool(), // Random orientation
+      };
+      selectedCards.add(cardWithPosition);
+      if (kDebugMode) {
+        print('[TarotController] Card added: ${card['name']}');
+      }
+    }
+  }
+
+  // Card section expansion state management
+  final RxMap<String, bool> _expandedSections = <String, bool>{}.obs;
+
+  /// [isCardSectionExpanded] - Check if a card section is expanded
+  bool isCardSectionExpanded(String sectionTitle) {
+    return _expandedSections[sectionTitle] ?? false;
+  }
+
+  /// [toggleCardSectionExpansion] - Toggle expansion state of a card section
+  void toggleCardSectionExpansion(String sectionTitle) {
+    _expandedSections[sectionTitle] =
+        !(_expandedSections[sectionTitle] ?? false);
+    if (kDebugMode) {
+      print(
+        '[TarotController] Section $sectionTitle expansion toggled to ${_expandedSections[sectionTitle]}',
+      );
+    }
+  }
+
+  /// [getCardsBySuit] - Get all cards of a specific suit
+  List<Map<String, dynamic>> getCardsBySuit(String suit) {
+    if (suit.toLowerCase() == 'major arcana') {
+      return List.from(majorArcana);
+    } else {
+      return List.from(
+        minorArcana.where(
+          (card) =>
+              card['suit']?.toString().toLowerCase() == suit.toLowerCase(),
+        ),
+      );
+    }
+  }
+
+  /// Getters for computed values
+  bool get hasSelectedCards => selectedCards.isNotEmpty;
+  bool get hasEnhancedReadingData => enhancedReadingData.isNotEmpty;
+  int get totalCardsLoaded => allCards.length;
+  int get majorArcanaCount => majorArcana.length;
+  int get minorArcanaCount => minorArcana.length;
+}

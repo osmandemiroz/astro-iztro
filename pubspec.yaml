@@ -5,6 +5,7 @@ environment:
   sdk: ^3.8.1
 description: A comprehensive Purple Star Astrology and BaZi calculation app
 dependencies:
+  cached_network_image: ^3.3.1
   cupertino_icons: ^1.0.8
   flutter:
     sdk: flutter
@@ -25,6 +26,7 @@ flutter:
   assets:
     - assets/images/
     - assets/images/icon/
+    - assets/tarot_cards.json
    
   fonts:
     - family: SFProDisplay

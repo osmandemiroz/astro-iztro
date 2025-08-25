@@ -395,6 +395,11 @@ class HomeController extends GetxController {
     Get.toNamed<void>('/input');
   }
 
+  /// [navigateToNewProfile] - Navigate to create new profile screen
+  void navigateToNewProfile() {
+    Get.toNamed<void>('/input');
+  }
+
   /// [navigateToChart] - Navigate to chart screen
   void navigateToChart() {
     if (currentProfile.value != null) {
@@ -444,9 +449,14 @@ class HomeController extends GetxController {
     Get.toNamed<void>('/astro_matcher');
   }
 
+  /// [navigateToTarot] - Navigate to tarot screen
+  void navigateToTarot() {
+    Get.toNamed<void>('/tarot');
+  }
+
   /// [setBottomNavIndex] - Set bottom navigation index
   void setBottomNavIndex(int index) {
-    if (index < 0 || index > 3) {
+    if (index < 0 || index > 1) {
       return;
     }
     selectedBottomNavIndex.value = index;
