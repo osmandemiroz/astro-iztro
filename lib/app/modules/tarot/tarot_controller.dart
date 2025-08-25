@@ -385,6 +385,52 @@ class TarotController extends GetxController {
     };
   }
 
+  /// [toggleCardSelection] - Toggle card selection for manual card picking
+  /// Allows users to manually select specific cards for their reading
+  void toggleCardSelection(Map<String, dynamic> card) {
+    final existingIndex = selectedCards.indexWhere(
+      (selectedCard) => selectedCard['id'] == card['id'],
+    );
+
+    if (existingIndex >= 0) {
+      // Remove card if already selected
+      selectedCards.removeAt(existingIndex);
+      if (kDebugMode) {
+        print('[TarotController] Card removed: ${card['name']}');
+      }
+    } else {
+      // Add card if not selected
+      final cardWithPosition = {
+        ...card,
+        'position': selectedCards.length + 1,
+        'is_reversed': Random().nextBool(), // Random orientation
+      };
+      selectedCards.add(cardWithPosition);
+      if (kDebugMode) {
+        print('[TarotController] Card added: ${card['name']}');
+      }
+    }
+  }
+
+  // Card section expansion state management
+  final RxMap<String, bool> _expandedSections = <String, bool>{}.obs;
+
+  /// [isCardSectionExpanded] - Check if a card section is expanded
+  bool isCardSectionExpanded(String sectionTitle) {
+    return _expandedSections[sectionTitle] ?? false;
+  }
+
+  /// [toggleCardSectionExpansion] - Toggle expansion state of a card section
+  void toggleCardSectionExpansion(String sectionTitle) {
+    _expandedSections[sectionTitle] =
+        !(_expandedSections[sectionTitle] ?? false);
+    if (kDebugMode) {
+      print(
+        '[TarotController] Section $sectionTitle expansion toggled to ${_expandedSections[sectionTitle]}',
+      );
+    }
+  }
+
   /// [getCardsBySuit] - Get all cards of a specific suit
   List<Map<String, dynamic>> getCardsBySuit(String suit) {
     if (suit.toLowerCase() == 'major arcana') {

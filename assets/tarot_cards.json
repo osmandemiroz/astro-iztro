@@ -7,7 +7,8 @@
             "keywords": ["innocence", "new beginnings", "adventure", "spontaneity"],
             "upright_meaning": "New beginnings, innocence, spontaneity, free spirit, adventure",
             "reversed_meaning": "Recklessness, risk-taking, inconsideration, foolishness",
-            "description": "The Fool represents new beginnings, innocence, and the start of a journey. It symbolizes taking a leap of faith and embracing the unknown with childlike wonder."
+            "description": "The Fool represents new beginnings, innocence, and the start of a journey. It symbolizes taking a leap of faith and embracing the unknown with childlike wonder.",
+            "image_url": "https://www.thetarotguide.com/wp-content/uploads/2023/08/0-The-Fool.jpg"
         },
         {
             "id": 1,
@@ -17,7 +18,8 @@
             "keywords": ["manifestation", "power", "skill", "concentration"],
             "upright_meaning": "Manifestation, resourcefulness, power, inspired action, skill",
             "reversed_meaning": "Manipulation, poor planning, untapped talents, lack of resources",
-            "description": "The Magician represents the power to manifest your desires through focused will and skill. It's about taking action and using your talents effectively."
+            "description": "The Magician represents the power to manifest your desires through focused will and skill. It's about taking action and using your talents effectively.",
+            "image_url": "https://www.thetarotguide.com/wp-content/uploads/2023/08/1-The-Magician.jpg"
         },
         {
             "id": 2,
@@ -27,7 +29,8 @@
             "keywords": ["intuition", "mystery", "spirituality", "inner knowledge"],
             "upright_meaning": "Intuition, sacred knowledge, divine feminine, subconscious mind",
             "reversed_meaning": "Secrets, disconnected from intuition, withdrawal, silence",
-            "description": "The High Priestess represents intuition, inner knowledge, and the mysteries of the subconscious. She encourages you to trust your inner voice."
+            "description": "The High Priestess represents intuition, inner knowledge, and the mysteries of the subconscious. She encourages you to trust your inner voice.",
+            "image_url": "https://www.thetarotguide.com/wp-content/uploads/2023/08/2-The-High-Priestess.jpg"
         },
         {
             "id": 3,
@@ -37,7 +40,9 @@
             "keywords": ["fertility", "nurturing", "abundance", "sensuality"],
             "upright_meaning": "Fertility, nurturing, abundance, sensuality, nature, beauty",
             "reversed_meaning": "Creative block, dependence on others, emptiness, lack of growth",
-            "description": "The Empress represents abundance, nurturing energy, and creative fertility. She embodies the power of nature and the divine feminine."
+            "description": "The Empress represents abundance, nurturing energy, and creative fertility. She embodies the power of nature and the divine feminine.",
+            "image_url": "https://www.thetarotguide.com/wp-content/uploads/2023/08/3-The-Empress.jpg"
+
         },
         {
             "id": 4,
@@ -47,7 +52,8 @@
             "keywords": ["authority", "structure", "control", "fatherhood"],
             "upright_meaning": "Authority, structure, control, fatherhood, stability, power",
             "reversed_meaning": "Domination, excessive control, rigidity, inflexibility",
-            "description": "The Emperor represents authority, structure, and control. He embodies leadership, stability, and the power to create order from chaos."
+            "description": "The Emperor represents authority, structure, and control. He embodies leadership, stability, and the power to create order from chaos.",
+            "image_url": "https://www.thetarotguide.com/wp-content/uploads/2023/08/4-The-Emperor.jpg"
         },
         {
             "id": 5,
@@ -57,7 +63,8 @@
             "keywords": ["tradition", "conformity", "morality", "ethics"],
             "upright_meaning": "Tradition, conformity, morality, ethics, education, guidance",
             "reversed_meaning": "Questioning beliefs, unconventionality, rebellion, personal beliefs",
-            "description": "The Hierophant represents tradition, conformity, and spiritual guidance. He represents established institutions and conventional wisdom."
+            "description": "The Hierophant represents tradition, conformity, and spiritual guidance. He represents established institutions and conventional wisdom.",
+            "image_url": "https://www.thetarotguide.com/wp-content/uploads/2023/08/5-The-Hierophant.jpg"
         },
         {
             "id": 6,
@@ -67,7 +74,8 @@
             "keywords": ["love", "harmony", "relationships", "choices"],
             "upright_meaning": "Love, harmony, relationships, choices, alignment of values",
             "reversed_meaning": "Disharmony, imbalance, misalignment of values, discord",
-            "description": "The Lovers represent love, harmony, and important choices. They symbolize the alignment of values and the power of love to unite."
+            "description": "The Lovers represent love, harmony, and important choices. They symbolize the alignment of values and the power of love to unite.",
+            "image_url": "https://www.thetarotguide.com/wp-content/uploads/2023/08/6-The-Lovers.jpg"
         },
         {
             "id": 7,
@@ -77,7 +85,8 @@
             "keywords": ["control", "willpower", "victory", "determination"],
             "upright_meaning": "Control, willpower, victory, determination, success, action",
             "reversed_meaning": "Lack of control, lack of direction, aggression, defeat",
-            "description": "The Chariot represents control, willpower, and victory through determination. It symbolizes the triumph of will over obstacles."
+            "description": "The Chariot represents control, willpower, and victory through determination. It symbolizes the triumph of will over obstacles.",
+            "image_url": "https://www.thetarotguide.com/wp-content/uploads/2023/08/7-The-Chariot.jpg"
         },
         {
             "id": 8,
@@ -87,7 +96,8 @@
             "keywords": ["strength", "courage", "patience", "control"],
             "upright_meaning": "Strength, courage, patience, control, compassion, influence",
             "reversed_meaning": "Inner strength, self-doubt, low energy, raw emotion",
-            "description": "Strength represents inner strength, courage, and patience. It's about controlling your emotions and finding power through gentleness."
+            "description": "Strength represents inner strength, courage, and patience. It's about controlling your emotions and finding power through gentleness.",
+            "image_url": "https://www.thetarotguide.com/wp-content/uploads/2023/08/8-Strength.jpg"
         },
         {
             "id": 9,
@@ -97,7 +107,8 @@
             "keywords": ["introspection", "solitude", "guidance", "searching"],
             "upright_meaning": "Introspection, solitude, guidance, inner wisdom, soul searching",
             "reversed_meaning": "Isolation, loneliness, withdrawal, rejection",
-            "description": "The Hermit represents introspection, solitude, and the search for inner wisdom. He guides you to look within for answers."
+            "description": "The Hermit represents introspection, solitude, and the search for inner wisdom. He guides you to look within for answers.",
+            "image_url": "https://www.thetarotguide.com/wp-content/uploads/2023/08/9-The-Hermit.jpg"
         },
         {
             "id": 10,
@@ -107,7 +118,8 @@
             "keywords": ["change", "cycles", "fate", "turning point"],
             "upright_meaning": "Change, cycles, fate, turning point, karma, destiny",
             "reversed_meaning": "Bad luck, resistance to change, breaking cycles, lack of control",
-            "description": "The Wheel of Fortune represents change, cycles, and the turning points in life. It reminds us that life is constantly in motion."
+            "description": "The Wheel of Fortune represents change, cycles, and the turning points in life. It reminds us that life is constantly in motion.",
+            "image_url": "https://www.thetarotguide.com/wp-content/uploads/2023/08/10-Wheel-of-Fortune.jpg"
         },
         {
             "id": 11,
@@ -117,7 +129,8 @@
             "keywords": ["justice", "fairness", "truth", "cause and effect"],
             "upright_meaning": "Justice, fairness, truth, cause and effect, law, balance",
             "reversed_meaning": "Unfairness, lack of accountability, dishonesty, imbalance",
-            "description": "Justice represents fairness, truth, and the balance of cause and effect. It's about accountability and making fair decisions."
+            "description": "Justice represents fairness, truth, and the balance of cause and effect. It's about accountability and making fair decisions.",
+            "image_url": "https://www.thetarotguide.com/wp-content/uploads/2023/08/11-Justice.jpg"
         },
         {
             "id": 12,
@@ -127,7 +140,8 @@
             "keywords": ["surrender", "letting go", "new perspective", "enlightenment"],
             "upright_meaning": "Surrender, letting go, new perspective, enlightenment, sacrifice",
             "reversed_meaning": "Stalling, needless sacrifice, fear of sacrifice, stalling",
-            "description": "The Hanged Man represents surrender, letting go, and seeing things from a new perspective. It's about sacrifice for greater understanding."
+            "description": "The Hanged Man represents surrender, letting go, and seeing things from a new perspective. It's about sacrifice for greater understanding.",
+            "image_url": "https://www.thetarotguide.com/wp-content/uploads/2023/08/12-The-Hanged-Man.jpg"
         },
         {
             "id": 13,
@@ -137,7 +151,8 @@
             "keywords": ["endings", "change", "transformation", "transition"],
             "upright_meaning": "Endings, change, transformation, transition, letting go",
             "reversed_meaning": "Resistance to change, inability to move on, stagnation, decay",
-            "description": "Death represents endings, change, and transformation. It's about letting go of the old to make way for the new."
+            "description": "Death represents endings, change, and transformation. It's about letting go of the old to make way for the new.",
+            "image_url": "https://www.thetarotguide.com/wp-content/uploads/2023/08/13-Death.jpg"
         },
         {
             "id": 14,
@@ -147,7 +162,8 @@
             "keywords": ["balance", "moderation", "patience", "purpose"],
             "upright_meaning": "Balance, moderation, patience, purpose, meaning, alignment",
             "reversed_meaning": "Imbalance, excess, lack of harmony, hastiness",
-            "description": "Temperance represents balance, moderation, and patience. It's about finding harmony and purpose in life."
+            "description": "Temperance represents balance, moderation, and patience. It's about finding harmony and purpose in life.",
+            "image_url": "https://www.thetarotguide.com/wp-content/uploads/2023/08/14-Temperance.jpg"
         },
         {
             "id": 15,
@@ -157,7 +173,8 @@
             "keywords": ["shadow self", "attachment", "addiction", "restriction"],
             "upright_meaning": "Shadow self, attachment, addiction, restriction, sexuality",
             "reversed_meaning": "Releasing limiting beliefs, exploring dark thoughts, detachment",
-            "description": "The Devil represents the shadow self, attachments, and limiting beliefs. It's about recognizing what holds us back."
+            "description": "The Devil represents the shadow self, attachments, and limiting beliefs. It's about recognizing what holds us back.",
+            "image_url": "https://www.thetarotguide.com/wp-content/uploads/2023/08/15-The-Devil.jpg"
         },
         {
             "id": 16,
@@ -167,7 +184,8 @@
             "keywords": ["sudden change", "upheaval", "chaos", "revelation"],
             "upright_meaning": "Sudden change, upheaval, chaos, revelation, awakening",
             "reversed_meaning": "Fear of change, avoiding disaster, delaying the inevitable",
-            "description": "The Tower represents sudden change, upheaval, and revelation. It's about breaking down old structures to build new ones."
+            "description": "The Tower represents sudden change, upheaval, and revelation. It's about breaking down old structures to build new ones.",
+            "image_url": "https://www.thetarotguide.com/wp-content/uploads/2023/08/16-The-Tower.jpg"
         },
         {
             "id": 17,
@@ -177,7 +195,8 @@
             "keywords": ["hope", "faith", "purpose", "renewal"],
             "upright_meaning": "Hope, faith, purpose, renewal, spirituality, inspiration",
             "reversed_meaning": "Lack of faith, despair, disconnection, discouragement",
-            "description": "The Star represents hope, faith, and spiritual renewal. It brings inspiration and guidance in dark times."
+            "description": "The Star represents hope, faith, and spiritual renewal. It brings inspiration and guidance in dark times.",
+            "image_url": "https://www.thetarotguide.com/wp-content/uploads/2023/08/17-The-Star.jpg"
         },
         {
             "id": 18,
@@ -187,7 +206,8 @@
             "keywords": ["illusion", "fear", "anxiety", "subconscious"],
             "upright_meaning": "Illusion, fear, anxiety, subconscious, intuition, mystery",
             "reversed_meaning": "Release of fear, repressed emotion, inner confusion, clarity",
-            "description": "The Moon represents illusion, fear, and the subconscious mind. It reveals hidden truths and inner fears."
+            "description": "The Moon represents illusion, fear, and the subconscious mind. It reveals hidden truths and inner fears.",
+            "image_url": "https://www.thetarotguide.com/wp-content/uploads/2023/08/18-The-Moon.jpg"
         },
         {
             "id": 19,
@@ -197,7 +217,8 @@
             "keywords": ["positivity", "fun", "warmth", "success"],
             "upright_meaning": "Positivity, fun, warmth, success, vitality, joy",
             "reversed_meaning": "Inner child, feeling down, overly optimistic, pessimism",
-            "description": "The Sun represents positivity, joy, and success. It brings warmth, vitality, and the energy of the inner child."
+            "description": "The Sun represents positivity, joy, and success. It brings warmth, vitality, and the energy of the inner child.",
+            "image_url": "https://www.thetarotguide.com/wp-content/uploads/2023/08/19-The-Sun.jpg"
         },
         {
             "id": 20,
@@ -207,7 +228,8 @@
             "keywords": ["judgement", "rebirth", "inner calling", "absolution"],
             "upright_meaning": "Judgement, rebirth, inner calling, absolution, awakening",
             "reversed_meaning": "Self-doubt, inner critic, ignoring the call, self-judgement",
-            "description": "Judgement represents rebirth, inner calling, and spiritual awakening. It's about answering your higher purpose."
+            "description": "Judgement represents rebirth, inner calling, and spiritual awakening. It's about answering your higher purpose.",
+            "image_url": "https://www.thetarotguide.com/wp-content/uploads/2023/08/20-Judgement.jpg"
         },
         {
             "id": 21,
@@ -217,7 +239,8 @@
             "keywords": ["completion", "integration", "accomplishment", "travel"],
             "upright_meaning": "Completion, integration, accomplishment, travel, wholeness",
             "reversed_meaning": "Lack of completion, lack of closure, delay, imperfection",
-            "description": "The World represents completion, integration, and wholeness. It symbolizes the successful completion of a journey."
+            "description": "The World represents completion, integration, and wholeness. It symbolizes the successful completion of a journey.",
+            "image_url": "https://www.thetarotguide.com/wp-content/uploads/2023/08/21-The-World.jpg"
         }
     ],
     "minor_arcana": {
@@ -229,7 +252,8 @@
                 "keywords": ["creation", "willpower", "inspiration", "desire"],
                 "upright_meaning": "Creation, willpower, inspiration, desire, new opportunities",
                 "reversed_meaning": "Lack of energy, lack of passion, delays, missed opportunities",
-                "description": "The Ace of Wands represents new creative opportunities and the spark of inspiration. It's about taking action on your ideas."
+                "description": "The Ace of Wands represents new creative opportunities and the spark of inspiration. It's about taking action on your ideas.",
+                "image_url": "https://www.thetarotguide.com/wp-content/uploads/2023/09/1-Ace-of-Wands.jpg"
             },
             {
                 "id": "wands_two",
@@ -239,7 +263,8 @@
                 "keywords": ["planning", "making decisions", "leaving comfort zone"],
                 "upright_meaning": "Planning, making decisions, leaving comfort zone, discovery",
                 "reversed_meaning": "Fear of unknown, playing safe, bad planning, overanalysis",
-                "description": "The Two of Wands represents planning and making important decisions. It's about stepping out of your comfort zone."
+                "description": "The Two of Wands represents planning and making important decisions. It's about stepping out of your comfort zone.",
+                "image_url": "https://www.thetarotguide.com/wp-content/uploads/2023/09/2-Two-of-Wands.jpg"
             }
         ],
         "cups": [{
@@ -250,7 +275,8 @@
                 "keywords": ["new feelings", "spirituality", "intuition", "love"],
                 "upright_meaning": "New feelings, spirituality, intuition, love, compassion",
                 "reversed_meaning": "Emotional loss, blocked creativity, emptiness, lack of inspiration",
-                "description": "The Ace of Cups represents new emotional beginnings and spiritual awakening. It brings love and compassion."
+                "description": "The Ace of Cups represents new emotional beginnings and spiritual awakening. It brings love and compassion.",
+                "image_url": "https://www.thetarotguide.com/wp-content/uploads/2023/09/1-Ace-of-cups.jpg"
             },
             {
                 "id": "cups_two",
@@ -260,7 +286,8 @@
                 "keywords": ["unity", "partnership", "connection", "mutual attraction"],
                 "upright_meaning": "Unity, partnership, connection, mutual attraction, understanding",
                 "reversed_meaning": "Broken relationships, disharmony, distrust, lack of support",
-                "description": "The Two of Cups represents unity, partnership, and deep connection. It symbolizes mutual understanding and attraction."
+                "description": "The Two of Cups represents unity, partnership, and deep connection. It symbolizes mutual understanding and attraction.",
+                "image_url": "https://www.thetarotguide.com/wp-content/uploads/2023/09/2-Two-of-Cups.jpg"
             }
         ],
         "swords": [{
@@ -271,7 +298,8 @@
                 "keywords": ["breakthrough", "clarity", "sharp mind", "new ideas"],
                 "upright_meaning": "Breakthrough, clarity, sharp mind, new ideas, triumph",
                 "reversed_meaning": "Lack of clarity, confusion, brutality, chaos",
-                "description": "The Ace of Swords represents mental clarity and breakthrough insights. It brings sharp thinking and new ideas."
+                "description": "The Ace of Swords represents mental clarity and breakthrough insights. It brings sharp thinking and new ideas.",
+                "image_url": "https://www.thetarotguide.com/wp-content/uploads/2023/09/1-Ace-of-Swords.jpg"
             },
             {
                 "id": "swords_two",
@@ -281,7 +309,8 @@
                 "keywords": ["difficult decisions", "indecision", "stalemate", "blocked emotions"],
                 "upright_meaning": "Difficult decisions, indecision, stalemate, blocked emotions",
                 "reversed_meaning": "Release of tension, indecision, confusion, no right choice",
-                "description": "The Two of Swords represents difficult decisions and inner conflict. It's about finding balance between opposing forces."
+                "description": "The Two of Swords represents difficult decisions and inner conflict. It's about finding balance between opposing forces.",
+                "image_url": "https://www.thetarotguide.com/wp-content/uploads/2023/09/2-Two-of-Swords.jpg"
             }
         ],
         "pentacles": [{
@@ -292,7 +321,8 @@
                 "keywords": ["new financial opportunity", "physical opportunity", "manifestation"],
                 "upright_meaning": "New financial opportunity, physical opportunity, manifestation",
                 "reversed_meaning": "Missed opportunity, scarcity mindset, lack of planning",
-                "description": "The Ace of Pentacles represents new financial and physical opportunities. It's about manifesting abundance in the material world."
+                "description": "The Ace of Pentacles represents new financial and physical opportunities. It's about manifesting abundance in the material world.",
+                "image_url": "https://www.thetarotguide.com/wp-content/uploads/2023/09/1-Ace-of-Pentacles.jpg"
             },
             {
                 "id": "pentacles_two",
@@ -302,7 +332,8 @@
                 "keywords": ["balance", "adaptability", "time management", "prioritization"],
                 "upright_meaning": "Balance, adaptability, time management, prioritization",
                 "reversed_meaning": "Imbalance, disorganization, reprioritization, over-commitment",
-                "description": "The Two of Pentacles represents balance and adaptability. It's about managing multiple priorities effectively."
+                "description": "The Two of Pentacles represents balance and adaptability. It's about managing multiple priorities effectively.",
+                "image_url": "https://www.thetarotguide.com/wp-content/uploads/2023/09/2-Two-of-Pentacles.jpg"
             }
         ]
     },

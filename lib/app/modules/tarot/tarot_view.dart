@@ -4,6 +4,8 @@ import 'package:astro_iztro/core/constants/colors.dart';
 import 'package:astro_iztro/shared/themes/app_theme.dart';
 import 'package:astro_iztro/shared/widgets/background_image_widget.dart';
 import 'package:astro_iztro/shared/widgets/liquid_glass_widget.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -161,6 +163,8 @@ class TarotView extends GetView<TarotController> {
                       ), // Increased top spacing for better separation
                       _buildReadingTypeSelector(),
                       const SizedBox(height: AppConstants.largePadding),
+                      _buildCardSelectionInterface(),
+                      const SizedBox(height: AppConstants.largePadding),
                       _buildQuestionInput(),
                       const SizedBox(height: AppConstants.largePadding),
                       _buildReadingButton(),
@@ -311,6 +315,279 @@ class TarotView extends GetView<TarotController> {
     );
   }
 
+  /// [buildCardSelectionInterface] - Beautiful card selection interface
+  /// Shows available cards with mystical styling and selection states
+  Widget _buildCardSelectionInterface() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Available Cards',
+              style: AppTheme.headingSmall.copyWith(
+                color: AppColors.darkTextPrimary,
+              ),
+            ),
+            Obx(
+              () => Text(
+                '${controller.selectedCards.length} selected',
+                style: AppTheme.caption.copyWith(
+                  color: AppColors.lightPurple,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: AppConstants.defaultPadding),
+
+        // Major Arcana section
+        _buildCardSection('Major Arcana', controller.majorArcana),
+        const SizedBox(height: AppConstants.defaultPadding),
+
+        // Minor Arcana section
+        _buildCardSection('Minor Arcana', controller.minorArcana),
+      ],
+    );
+  }
+
+  /// [buildCardSection] - Build a section of cards using responsive grid layout
+  /// Prevents overflow and provides better space utilization
+  Widget _buildCardSection(String title, RxList<Map<String, dynamic>> cards) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: AppTheme.bodyMedium.copyWith(
+            color: AppColors.darkTextSecondary,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        const SizedBox(height: AppConstants.smallPadding),
+
+        // Responsive grid layout that adapts to screen width
+        LayoutBuilder(
+          builder: (context, constraints) {
+            // Calculate optimal grid layout based on available width
+            final availableWidth = constraints.maxWidth;
+            const cardWidth = 70.0; // Smaller card width
+            const cardHeight = 90.0; // Smaller card height
+            const spacing = AppConstants.smallPadding;
+
+            // Calculate how many cards can fit in a row
+            final crossAxisCount =
+                ((availableWidth + spacing) / (cardWidth + spacing)).floor();
+            final effectiveCrossAxisCount = crossAxisCount > 0
+                ? crossAxisCount
+                : 1;
+
+            // Show only first 12 cards initially to prevent overflow
+            final initialCardCount =
+                effectiveCrossAxisCount * 2; // Show 2 rows initially
+            final shouldShowMore = cards.length > initialCardCount;
+
+            return Column(
+              children: [
+                // Wrap only the GridView with Obx to make it reactive to expansion state
+                Obx(() {
+                  final isExpanded = controller.isCardSectionExpanded(title);
+                  final itemCount = isExpanded
+                      ? cards.length
+                      : initialCardCount;
+
+                  // Debug logging
+                  if (kDebugMode) {
+                    print('[TarotView] Section: $title');
+                    print('[TarotView] Total cards: ${cards.length}');
+                    print(
+                      '[TarotView] Cards per row: $effectiveCrossAxisCount',
+                    );
+                    print('[TarotView] Initial count: $initialCardCount');
+                    print('[TarotView] Should show more: $shouldShowMore');
+                    print('[TarotView] Is expanded: $isExpanded');
+                    print('[TarotView] Item count: $itemCount');
+                  }
+
+                  return GridView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: effectiveCrossAxisCount,
+                      crossAxisSpacing: spacing,
+                      mainAxisSpacing: spacing,
+                      childAspectRatio: cardWidth / cardHeight,
+                    ),
+                    itemCount: itemCount,
+                    itemBuilder: (context, index) {
+                      final card = cards[index];
+                      return _buildSelectableCard(
+                        card,
+                        controller.selectedCards.any(
+                          (selectedCard) => selectedCard['id'] == card['id'],
+                        ),
+                        cardWidth,
+                        cardHeight,
+                      );
+                    },
+                  );
+                }),
+
+                // Show more/less button if there are more cards
+                if (shouldShowMore)
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: AppConstants.smallPadding,
+                    ),
+                    child: _buildExpandableCardsButton(
+                      title,
+                      cards,
+                      effectiveCrossAxisCount,
+                      cardWidth,
+                      cardHeight,
+                      spacing,
+                    ),
+                  ),
+              ],
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  /// [buildSelectableCard] - Individual selectable card with beautiful styling
+  /// Supports dynamic sizing for responsive grid layout
+  Widget _buildSelectableCard(
+    Map<String, dynamic> card,
+    bool isSelected,
+    double width,
+    double height,
+  ) {
+    final cardName = (card['name'] as String?) ?? 'Unknown Card';
+
+    return GestureDetector(
+      onTap: () => controller.toggleCardSelection(card),
+      child: SizedBox(
+        width: width,
+        child: Column(
+          children: [
+            // Card image with selection state
+            Container(
+              width: width,
+              height: height,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                  color: isSelected
+                      ? AppColors.lightPurple
+                      : AppColors.darkBorder,
+                  width: isSelected ? 3 : 1,
+                ),
+                boxShadow: isSelected
+                    ? [
+                        BoxShadow(
+                          color: AppColors.lightPurple.withValues(alpha: 0.3),
+                          blurRadius: 8,
+                          spreadRadius: 2,
+                        ),
+                      ]
+                    : null,
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(6),
+                child: _buildCardImage(card, false, width, height),
+              ),
+            ),
+            const SizedBox(height: 6),
+
+            // Card name with proportional font size
+            Text(
+              cardName,
+              style: AppTheme.caption.copyWith(
+                color: isSelected
+                    ? AppColors.lightPurple
+                    : AppColors.darkTextSecondary,
+                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                fontSize: width * 0.12, // Proportional font size
+              ),
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// [buildExpandableCardsButton] - Button to expand/collapse card sections
+  /// Provides better UX by preventing overwhelming card displays
+  Widget _buildExpandableCardsButton(
+    String title,
+    RxList<Map<String, dynamic>> cards,
+    int crossAxisCount,
+    double cardWidth,
+    double cardHeight,
+    double spacing,
+  ) {
+    return Obx(() {
+      final isExpanded = controller.isCardSectionExpanded(title);
+      final buttonText = isExpanded ? 'Show Less' : 'Show More';
+      final iconData = isExpanded ? Icons.expand_less : Icons.expand_more;
+
+      return GestureDetector(
+        onTap: () {
+          if (kDebugMode) {
+            print('[TarotView] Button tapped for section: $title');
+            print(
+              '[TarotView] Current expanded state: ${controller.isCardSectionExpanded(title)}',
+            );
+          }
+          controller.toggleCardSectionExpansion(title);
+          if (kDebugMode) {
+            print(
+              '[TarotView] After toggle, expanded state: ${controller.isCardSectionExpanded(title)}',
+            );
+          }
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppConstants.defaultPadding,
+            vertical: AppConstants.smallPadding,
+          ),
+          decoration: BoxDecoration(
+            color: AppColors.lightPurple.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: AppColors.lightPurple.withValues(alpha: 0.3),
+            ),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                buttonText,
+                style: AppTheme.caption.copyWith(
+                  color: AppColors.lightPurple,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(width: 4),
+              Icon(
+                iconData,
+                size: 16,
+                color: AppColors.lightPurple,
+              ),
+            ],
+          ),
+        ),
+      );
+    });
+  }
+
   /// [buildQuestionInput] - Question input field with mystical styling
   Widget _buildQuestionInput() {
     return Column(
@@ -453,35 +730,76 @@ class TarotView extends GetView<TarotController> {
     });
   }
 
-  /// [buildCardsGrid] - Grid layout for displaying selected cards
+  /// [buildCardsGrid] - Grid layout for displaying selected cards with dynamic sizing
+  /// Shows larger images for fewer cards and maintains beautiful proportions
   Widget _buildCardsGrid() {
     return Obx(() {
       final cards = controller.selectedCards;
-      final crossAxisCount = cards.length <= 3 ? cards.length : 3;
 
-      return GridView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: crossAxisCount,
-          crossAxisSpacing: AppConstants.defaultPadding,
-          mainAxisSpacing: AppConstants.defaultPadding,
-          childAspectRatio: 0.7,
-        ),
-        itemCount: cards.length,
-        itemBuilder: (context, index) {
-          final card = cards[index];
-          return _buildCardDisplay(card, index);
-        },
-      );
+      // Dynamic sizing based on number of cards for better visual hierarchy
+      if (cards.length == 1) {
+        // Single card - show large and prominent
+        return Center(
+          child: SizedBox(
+            width: 200,
+            height: 280,
+            child: _buildCardDisplay(cards.first, 0, isLarge: true),
+          ),
+        );
+      } else if (cards.length == 2) {
+        // Two cards - show side by side with medium size
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            SizedBox(
+              width: 140,
+              height: 196,
+              child: _buildCardDisplay(cards[0], 0),
+            ),
+            SizedBox(
+              width: 140,
+              height: 196,
+              child: _buildCardDisplay(cards[1], 1),
+            ),
+          ],
+        );
+      } else {
+        // Three or more cards - use grid layout
+        final crossAxisCount = cards.length <= 3 ? cards.length : 3;
+        return GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: crossAxisCount,
+            crossAxisSpacing: AppConstants.defaultPadding,
+            mainAxisSpacing: AppConstants.defaultPadding,
+            childAspectRatio: 0.7,
+          ),
+          itemCount: cards.length,
+          itemBuilder: (context, index) {
+            final card = cards[index];
+            return _buildCardDisplay(card, index);
+          },
+        );
+      }
     });
   }
 
   /// [buildCardDisplay] - Individual card display with mystical styling
-  Widget _buildCardDisplay(Map<String, dynamic> card, int index) {
+  /// Supports both large and standard sizes for optimal visual hierarchy
+  Widget _buildCardDisplay(
+    Map<String, dynamic> card,
+    int index, {
+    bool isLarge = false,
+  }) {
     final cardName = (card['name'] as String?) ?? 'Unknown Card';
     final isReversed = (card['is_reversed'] as bool?) ?? false;
     final position = (card['position'] as int?) ?? 1;
+
+    // Dynamic sizing based on isLarge parameter
+    final cardWidth = isLarge ? 200.0 : 60.0;
+    final cardHeight = isLarge ? 280.0 : 80.0;
+    final fontSize = isLarge ? 16.0 : 12.0;
 
     return LiquidGlassCard(
       child: Column(
@@ -506,22 +824,20 @@ class TarotView extends GetView<TarotController> {
           ),
           const SizedBox(height: AppConstants.smallPadding),
 
-          // Card image placeholder (you can replace with actual card images)
+          // Card image from URL with beautiful styling and fallback
           Container(
-            width: 60,
-            height: 80,
+            width: cardWidth,
+            height: cardHeight,
             decoration: BoxDecoration(
-              color: AppColors.darkSurface,
               borderRadius: BorderRadius.circular(8),
               border: Border.all(
                 color: isReversed ? AppColors.lightGold : AppColors.lightPurple,
                 width: 2,
               ),
             ),
-            child: Icon(
-              isReversed ? Icons.rotate_right : Icons.auto_awesome,
-              color: isReversed ? AppColors.lightGold : AppColors.lightPurple,
-              size: 24,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(6),
+              child: _buildCardImage(card, isReversed, cardWidth, cardHeight),
             ),
           ),
 
@@ -533,10 +849,10 @@ class TarotView extends GetView<TarotController> {
             style: AppTheme.bodyMedium.copyWith(
               fontWeight: FontWeight.w600,
               color: AppColors.darkTextPrimary,
-              fontSize: 12,
+              fontSize: fontSize,
             ),
             textAlign: TextAlign.center,
-            maxLines: 2,
+            maxLines: isLarge ? 3 : 2,
             overflow: TextOverflow.ellipsis,
           ),
 
@@ -558,11 +874,91 @@ class TarotView extends GetView<TarotController> {
               isReversed ? 'Reversed' : 'Upright',
               style: AppTheme.caption.copyWith(
                 color: isReversed ? AppColors.lightGold : AppColors.lightPurple,
-                fontSize: 10,
+                fontSize: fontSize * 0.8,
               ),
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  /// [buildCardImage] - Build tarot card image with network loading and fallback
+  /// Uses cached network image for performance with beautiful loading states
+  Widget _buildCardImage(
+    Map<String, dynamic> card,
+    bool isReversed,
+    double width,
+    double height,
+  ) {
+    final imageUrl = card['image_url'] as String?;
+
+    if (imageUrl == null || imageUrl.isEmpty) {
+      // Fallback to placeholder with mystical styling
+      return Container(
+        width: width,
+        height: height,
+        decoration: BoxDecoration(
+          color: AppColors.darkSurface,
+          borderRadius: BorderRadius.circular(6),
+        ),
+        child: Icon(
+          isReversed ? Icons.rotate_right : Icons.auto_awesome,
+          color: isReversed ? AppColors.lightGold : AppColors.lightPurple,
+          size: width * 0.4, // Proportional icon size
+        ),
+      );
+    }
+
+    // Load actual tarot card image with beautiful loading states
+    return CachedNetworkImage(
+      imageUrl: imageUrl,
+      width: width,
+      height: height,
+      fit: BoxFit.cover,
+      placeholder: (context, url) => Container(
+        width: width,
+        height: height,
+        decoration: BoxDecoration(
+          color: AppColors.darkSurface,
+          borderRadius: BorderRadius.circular(6),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: width * 0.3,
+              height: width * 0.3,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                valueColor: AlwaysStoppedAnimation<Color>(
+                  isReversed ? AppColors.lightGold : AppColors.lightPurple,
+                ),
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              'Loading...',
+              style: AppTheme.caption.copyWith(
+                color: AppColors.darkTextTertiary,
+                fontSize: width * 0.1,
+              ),
+            ),
+          ],
+        ),
+      ),
+      errorWidget: (context, url, error) => Container(
+        width: width,
+        height: height,
+        decoration: BoxDecoration(
+          color: AppColors.darkSurface,
+          borderRadius: BorderRadius.circular(6),
+        ),
+        child: Icon(
+          Icons.error_outline,
+          color: AppColors.error,
+          size: width * 0.3,
+        ),
       ),
     );
   }

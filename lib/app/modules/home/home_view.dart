@@ -420,9 +420,9 @@ class HomeView extends GetView<HomeController> {
             Expanded(
               child: _buildActionCard(
                 iconAsset: 'assets/images/icon/ic_matcher.png',
-                title: 'New Profile',
-                subtitle: 'Create profile',
-                onTap: controller.navigateToNewProfile,
+                title: 'Astro Matcher',
+                subtitle: 'Find compatibility',
+                onTap: controller.navigateToAstroMatcher,
                 color: AppColors.lightGold,
               ),
             ),
