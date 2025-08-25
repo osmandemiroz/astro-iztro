@@ -1,5 +1,9 @@
+// ignore_for_file: avoid_dynamic_calls, document_ignores
+
 import 'dart:convert';
 import 'dart:math';
+
+import 'package:astro_iztro/core/engines/tarot_response_engine.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -15,6 +19,9 @@ class TarotController extends GetxController {
   final RxBool isCardReversed = false.obs;
   final RxString currentQuestion = ''.obs;
   final RxString readingInterpretation = ''.obs;
+
+  // Enhanced reading data from TarotResponseEngine
+  final RxMap<String, dynamic> enhancedReadingData = <String, dynamic>{}.obs;
 
   // Tarot card data
   final RxList<Map<String, dynamic>> allCards = <Map<String, dynamic>>[].obs;
@@ -225,6 +232,100 @@ class TarotController extends GetxController {
   Future<void> _generateReadingInterpretation() async {
     if (selectedCards.isEmpty) return;
 
+    try {
+      // Use the new TarotResponseEngine to generate contextual reading
+      final response = TarotResponseEngine.generateContextualReading(
+        question: currentQuestion.value,
+        selectedCards: selectedCards,
+        readingType: selectedReadingType.value,
+      );
+
+      // Store the enhanced reading data for the enhanced widget
+      enhancedReadingData.assignAll(response);
+
+      // Generate the interpretation using the response engine
+      final interpretation = StringBuffer()
+        // Add the contextual interpretation from the engine
+        ..writeln(response['contextualInterpretation'] as String)
+        ..writeln();
+
+      // Add actionable guidance section
+      final guidance = response['guidance'] as Map<String, dynamic>;
+      if (guidance['actions']?.isNotEmpty == true) {
+        interpretation.writeln('**Actionable Guidance:**');
+        for (final action in guidance['actions'] as List<dynamic>) {
+          interpretation.writeln('• $action');
+        }
+        interpretation.writeln();
+      }
+
+      // Add affirmations section
+      if (guidance['affirmations']?.isNotEmpty == true) {
+        interpretation.writeln('**Affirmations:**');
+        for (final affirmation in guidance['affirmations'] as List<dynamic>) {
+          interpretation.writeln('• $affirmation');
+        }
+        interpretation.writeln();
+      }
+
+      // Add warnings section
+      if (guidance['warnings']?.isNotEmpty == true) {
+        interpretation.writeln('**Considerations:**');
+        for (final warning in guidance['warnings'] as List<dynamic>) {
+          interpretation.writeln('• $warning');
+        }
+        interpretation.writeln();
+      }
+
+      // Add focus areas section
+      if (guidance['focusAreas']?.isNotEmpty == true) {
+        interpretation.writeln('**Focus Areas:**');
+        for (final focusArea in guidance['focusAreas'] as List<dynamic>) {
+          interpretation.writeln('• $focusArea');
+        }
+        interpretation.writeln();
+      }
+
+      // Add timing insights section
+      final timingInsights = response['timingInsights'] as Map<String, dynamic>;
+      if (timingInsights['timeframes']?.isNotEmpty == true) {
+        interpretation.writeln('**Timing Insights:**');
+        for (final timeframe in timingInsights['timeframes'] as List<dynamic>) {
+          interpretation.writeln('• $timeframe');
+        }
+        interpretation.writeln();
+      }
+
+      if (timingInsights['bestTimes']?.isNotEmpty == true) {
+        interpretation.writeln('**Best Times for Action:**');
+        for (final bestTime in timingInsights['bestTimes'] as List<dynamic>) {
+          interpretation.writeln('• $bestTime');
+        }
+        interpretation.writeln();
+      }
+
+      readingInterpretation.value = interpretation.toString();
+
+      if (kDebugMode) {
+        print(
+          '[TarotController] Enhanced reading interpretation generated using TarotResponseEngine',
+        );
+        print(
+          '[TarotController] Question analysis: ${response['questionAnalysis']}',
+        );
+        print('[TarotController] Card analysis: ${response['cardAnalysis']}');
+      }
+    } on Exception catch (e) {
+      if (kDebugMode) {
+        print('[TarotController] Error generating enhanced reading: $e');
+      }
+      // Fallback to basic interpretation if engine fails
+      _generateBasicInterpretation();
+    }
+  }
+
+  /// [_generateBasicInterpretation] - Fallback basic interpretation method
+  void _generateBasicInterpretation() {
     final interpretation = StringBuffer()
       // Add reading type description
       ..writeln(_getReadingTypeDescription())
@@ -241,7 +342,6 @@ class TarotController extends GetxController {
           : 'Unknown Card';
 
       // Safely extract isReversed, ensuring it's a bool
-      // [isReversed] - Ensure isReversed is a bool, defaulting to false if not present or not a bool
       final isReversed =
           card['is_reversed'] is bool && card['is_reversed'] as bool;
 
@@ -327,6 +427,7 @@ class TarotController extends GetxController {
   void _clearCurrentReading() {
     selectedCards.clear();
     readingInterpretation.value = '';
+    enhancedReadingData.clear();
     if (kDebugMode) {
       print('[TarotController] Current reading cleared');
     }
@@ -447,6 +548,7 @@ class TarotController extends GetxController {
 
   /// Getters for computed values
   bool get hasSelectedCards => selectedCards.isNotEmpty;
+  bool get hasEnhancedReadingData => enhancedReadingData.isNotEmpty;
   int get totalCardsLoaded => allCards.length;
   int get majorArcanaCount => majorArcana.length;
   int get minorArcanaCount => minorArcana.length;

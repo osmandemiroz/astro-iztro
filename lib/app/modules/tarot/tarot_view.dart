@@ -3,6 +3,7 @@ import 'package:astro_iztro/core/constants/app_constants.dart';
 import 'package:astro_iztro/core/constants/colors.dart';
 import 'package:astro_iztro/shared/themes/app_theme.dart';
 import 'package:astro_iztro/shared/widgets/background_image_widget.dart';
+import 'package:astro_iztro/shared/widgets/enhanced_tarot_reading_widget.dart';
 import 'package:astro_iztro/shared/widgets/liquid_glass_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
@@ -963,13 +964,29 @@ class TarotView extends GetView<TarotController> {
     );
   }
 
-  /// [buildReadingInterpretation] - Display reading interpretation with mystical styling
+  /// [buildReadingInterpretation] - Display enhanced reading interpretation with mystical styling
   Widget _buildReadingInterpretation() {
     return Obx(() {
       if (controller.readingInterpretation.value.isEmpty) {
         return const SizedBox.shrink();
       }
 
+      // Try to parse the enhanced reading data if available
+      try {
+        // Check if we have enhanced reading data from the controller
+        if (controller.hasEnhancedReadingData) {
+          return EnhancedTarotReadingWidget(
+            readingData: controller.enhancedReadingData,
+            onClearReading: controller.clearReading,
+          );
+        }
+      } on Exception catch (e) {
+        if (kDebugMode) {
+          print('[TarotView] Error displaying enhanced reading: $e');
+        }
+      }
+
+      // Fallback to basic interpretation display
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
