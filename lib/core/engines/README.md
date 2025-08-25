@@ -58,6 +58,18 @@ This directory contains native calculation engines that provide comprehensive as
   - Personalized recommendations
   - Traditional astrological rules
 
+### 7. TarotResponseEngine (`tarot_response_engine.dart`)
+- **Purpose**: Intelligent tarot reading and interpretation
+- **Features**:
+  - Question intent analysis and categorization
+  - Contextual card interpretation based on user questions
+  - Card relationship and pattern analysis
+  - Actionable guidance generation
+  - Timing insights and optimal action periods
+  - Emotional tone and energy balance analysis
+  - Position-based interpretations for multi-card spreads
+  - Category-specific insights (love, career, finance, etc.)
+
 ## Benefits of Native Engines
 
 ✅ **No External Dependencies**: All calculations performed locally
@@ -159,6 +171,14 @@ The app has been completely migrated from RapidAPI to native engines:
 - **Personal Cycles**: Life period and energy level calculations
 - **Synergy Scoring**: Relationship synergy and timing alignment
 
+### Tarot Response Engine
+- **Question Intelligence**: Automatic categorization and emotional tone analysis
+- **Contextual Interpretation**: Position-based and category-specific card meanings
+- **Pattern Recognition**: Card relationship analysis and energy balance calculation
+- **Actionable Guidance**: Specific actions, affirmations, and focus areas
+- **Timing Insights**: Lunar cycles, seasonal timing, and optimal action periods
+- **Multi-Spread Support**: Single card, three card, Celtic Cross, and custom spreads
+
 ## Implementation Status
 
 - ✅ **Completed**: All future enhancement engines implemented
@@ -166,6 +186,7 @@ The app has been completely migrated from RapidAPI to native engines:
 - ✅ **Native Implementation**: No external dependencies required
 - ✅ **Performance Optimized**: Caching and memoization included
 - ✅ **Extensible**: Easy to add new calculation methods
+- ✅ **Tarot Integration**: Intelligent response engine for contextual readings
 
 ## Usage Examples
 
@@ -208,4 +229,17 @@ final trends = await EnhancedCompatibilityEngine.analyzeCompatibilityTrends(
   startYear: 2020,
   endYear: 2030,
 );
+
+// Tarot reading and interpretation
+final tarotReading = TarotResponseEngine.generateContextualReading(
+  question: 'Will I find love this year?',
+  selectedCards: selectedCards,
+  readingType: 'three_card',
+);
+
+// Extract insights from the reading
+final questionAnalysis = tarotReading['questionAnalysis'];
+final contextualInterpretation = tarotReading['contextualInterpretation'];
+final actionableGuidance = tarotReading['guidance'];
+final timingInsights = tarotReading['timingInsights'];
 ```

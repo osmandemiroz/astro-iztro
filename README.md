@@ -10,10 +10,11 @@ Astro Iztro is a mobile application built with Flutter that provides users with 
 
 - **Astrolabe Generation**: Create detailed Purple Star Astrology charts
 - **Horoscope Analysis**: Get personalized horoscope readings and personality analysis
+- **Tarot Reading System**: Intelligent tarot card interpretations with contextual guidance
 - **Multi-language Support**: Available in multiple languages
 - **Cross-platform**: Runs on both iOS and Android devices
 - **Traditional Chinese Astrology**: Based on the authentic Zi Wei Dou Shu system
-- **User-friendly Interface**: Clean and intuitive mobile UI design
+- **User-friendly Interface**: Clean and intuitive mobile UI design with Apple-inspired aesthetics
 
 ## 🚀 Getting Started
 
@@ -63,6 +64,18 @@ Purple Star Astrology, also known as Zi Wei Dou Shu (紫微斗数), is one of th
 - 12 palaces representing different life aspects
 - Complex calculations to determine personality traits and life predictions
 
+## 🔮 Tarot Reading System
+
+The app features an **intelligent Tarot Response Engine** that provides:
+
+- **Contextual Interpretations**: Card meanings tailored to your specific question
+- **Question Intelligence**: Automatic categorization and emotional tone analysis
+- **Pattern Recognition**: Analysis of card relationships and energy balance
+- **Actionable Guidance**: Specific actions, affirmations, and focus areas
+- **Timing Insights**: Lunar cycles, seasonal timing, and optimal action periods
+- **Multiple Spreads**: Support for various reading types and custom spreads
+- **Beautiful Interface**: Apple-inspired design with smooth animations and mystical aesthetics
+
 ## 🛠 Technical Details
 
 This Flutter application uses **native calculation engines** to provide:
@@ -72,19 +85,30 @@ This Flutter application uses **native calculation engines** to provide:
 - **FortuneEngine**: Fortune timing and cycle calculations
 - **ElementEngine**: Five Elements balance analysis
 - **TimingEngine**: Life cycle and timing analysis
+- **TarotResponseEngine**: Intelligent tarot reading and interpretation system
 
 **Key Benefits:**
 - ✅ **No External Dependencies**: All calculations performed locally
 - ✅ **No API Keys Required**: Works completely offline
 - ✅ **Authentic Algorithms**: Traditional Chinese astrology methods
+- ✅ **Intelligent Tarot System**: Contextual interpretations and actionable guidance
 - ✅ **Production Ready**: Comprehensive error handling and validation
+- ✅ **Beautiful UI**: Apple-inspired design with smooth animations
 
 ## 📖 Usage
 
+### Astrology Features
 1. **Input Birth Information**: Enter your birth date, time, and location
 2. **Generate Astrolabe**: The app calculates your Purple Star Astrology chart
 3. **View Analysis**: Read detailed personality insights and predictions
 4. **Explore Features**: Navigate through different aspects of your astrological profile
+
+### Tarot Reading System
+1. **Ask a Question**: Enter your specific question or concern
+2. **Select Reading Type**: Choose from single card, three card, Celtic Cross, or custom spreads
+3. **Receive Intelligent Interpretation**: Get contextual insights based on your question and selected cards
+4. **Actionable Guidance**: Receive specific actions, affirmations, and focus areas
+5. **Timing Insights**: Learn about optimal timing and natural cycles for your situation
 
 ## 🤝 Contributing
 
@@ -103,6 +127,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🙏 Acknowledgments
 
 - **Native Calculation Engines**: Custom-built engines for authentic Chinese astrology
+- **Tarot Response Engine**: Intelligent interpretation system for contextual readings
 - **Traditional Chinese Astrology**: Based on centuries-old Zi Wei Dou Shu principles
 - **Flutter Community**: Excellent mobile development framework
 - **Open Source**: Built with modern, maintainable code architecture
