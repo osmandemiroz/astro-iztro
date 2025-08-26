@@ -26,6 +26,7 @@ flutter:
   assets:
     - assets/images/
     - assets/images/icon/
+    - assets/marketing/
     - assets/tarot_cards.json
    
   fonts:
