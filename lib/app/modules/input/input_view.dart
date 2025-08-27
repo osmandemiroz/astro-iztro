@@ -2,8 +2,10 @@ import 'package:astro_iztro/app/modules/input/input_controller.dart';
 import 'package:astro_iztro/core/constants/app_constants.dart';
 import 'package:astro_iztro/core/constants/colors.dart';
 import 'package:astro_iztro/shared/themes/app_theme.dart';
+import 'package:astro_iztro/shared/widgets/location_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:latlong2/latlong.dart';
 
 /// [InputView] - User input form screen for birth data entry
 /// Comprehensive form following Apple Human Interface Guidelines
@@ -206,6 +208,27 @@ class InputView extends GetView<InputController> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('Location Information', style: AppTheme.headingSmall),
+        const SizedBox(height: AppConstants.defaultPadding),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: OutlinedButton.icon(
+            icon: const Icon(Icons.map_outlined),
+            label: const Text('Pick on Map'),
+            onPressed: () async {
+              // Open map picker and update latitude/longitude when returned
+              final picked = await Get.to<LatLng?>(
+                () => const LocationPicker(),
+                transition: Transition.cupertino,
+              );
+              if (picked != null) {
+                controller.latitudeController.text = picked.latitude
+                    .toStringAsFixed(6);
+                controller.longitudeController.text = picked.longitude
+                    .toStringAsFixed(6);
+              }
+            },
+          ),
+        ),
         const SizedBox(height: AppConstants.defaultPadding),
         TextFormField(
           controller: controller.locationController,
