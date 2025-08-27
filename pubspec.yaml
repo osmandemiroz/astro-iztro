@@ -18,11 +18,17 @@ dependencies:
   latlong2: ^0.9.1
   shared_preferences: ^2.2.2
 dev_dependencies:
+  flutter_launcher_icons: ^0.14.4
   flutter_lints: ^3.0.1
   flutter_test:
     sdk: flutter
   pubspec_dependency_sorter: ^1.0.5
   very_good_analysis: ^9.0.0
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/marketing/app_logo.png"
+  remove_alpha_ios: true
 flutter:
   uses-material-design: true
   assets:
