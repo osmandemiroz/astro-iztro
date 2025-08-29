@@ -2,6 +2,7 @@ import 'package:astro_iztro/app/modules/home/home_controller.dart';
 import 'package:astro_iztro/core/constants/app_constants.dart';
 import 'package:astro_iztro/core/constants/colors.dart';
 import 'package:astro_iztro/core/models/user_profile.dart';
+import 'package:astro_iztro/core/utils/iz_animated_widgets.dart';
 import 'package:astro_iztro/shared/themes/app_theme.dart';
 import 'package:astro_iztro/shared/widgets/background_image_widget.dart';
 import 'package:astro_iztro/shared/widgets/liquid_glass_widget.dart';
@@ -139,22 +140,25 @@ class HomeView extends GetView<HomeController> {
         },
       ),
       actions: [
-        // Settings button with proper status bar spacing
+        // Settings button with proper status bar spacing and tap animation
         Padding(
           padding: EdgeInsets.only(
             top: MediaQuery.of(Get.context!).padding.top,
           ),
-          child: LiquidGlassWidget(
-            glassColor: AppColors.glassPrimary,
-            borderColor: AppColors.lightPurple,
-            borderRadius: BorderRadius.circular(20),
-            padding: const EdgeInsets.all(8),
-            child: IconButton(
-              onPressed: controller.navigateToSettings,
-              icon: const Icon(
-                Icons.settings_outlined,
-                color: AppColors.darkTextPrimary,
-                size: 24,
+          child: IzTapScale(
+            onTap: controller.navigateToSettings,
+            child: LiquidGlassWidget(
+              glassColor: AppColors.glassPrimary,
+              borderColor: AppColors.lightPurple,
+              borderRadius: BorderRadius.circular(20),
+              padding: const EdgeInsets.all(8),
+              child: IconButton(
+                onPressed: controller.navigateToSettings,
+                icon: const Icon(
+                  Icons.settings_outlined,
+                  color: AppColors.darkTextPrimary,
+                  size: 24,
+                ),
               ),
             ),
           ),
@@ -219,9 +223,17 @@ class HomeView extends GetView<HomeController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildCurrentProfileSection(),
+              // Animate profile section with slide-in effect
+              IzSlideFadeIn(
+                offset: const Offset(0, 20),
+                child: _buildCurrentProfileSection(),
+              ),
               const SizedBox(height: AppConstants.largePadding),
-              _buildQuickActionsSection(),
+              // Animate quick actions with staggered effect
+              IzSlideFadeIn(
+                delay: const Duration(milliseconds: 150),
+                child: _buildQuickActionsSection(),
+              ),
             ],
           ),
         ),
@@ -238,32 +250,35 @@ class HomeView extends GetView<HomeController> {
         return _buildNoProfileCard();
       }
 
-      return LiquidGlassCard(
+      return IzTapScale(
         onTap: controller.navigateToInput,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Current Profile',
-                  style: AppTheme.headingSmall.copyWith(
-                    color: AppColors.darkTextPrimary,
+        child: LiquidGlassCard(
+          onTap: controller.navigateToInput,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Current Profile',
+                    style: AppTheme.headingSmall.copyWith(
+                      color: AppColors.darkTextPrimary,
+                    ),
                   ),
-                ),
-                IconButton(
-                  onPressed: controller.navigateToInput,
-                  icon: const Icon(
-                    Icons.edit_outlined,
-                    color: AppColors.lightPurple,
+                  IconButton(
+                    onPressed: controller.navigateToInput,
+                    icon: const Icon(
+                      Icons.edit_outlined,
+                      color: AppColors.lightPurple,
+                    ),
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(height: AppConstants.smallPadding),
-            _buildProfileInfo(profile),
-          ],
+                ],
+              ),
+              const SizedBox(height: AppConstants.smallPadding),
+              _buildProfileInfo(profile),
+            ],
+          ),
         ),
       );
     });
@@ -271,37 +286,40 @@ class HomeView extends GetView<HomeController> {
 
   /// [buildNoProfileCard] - Card shown when no profile exists
   Widget _buildNoProfileCard() {
-    return LiquidGlassCard(
+    return IzTapScale(
       onTap: controller.navigateToInput,
-      child: Column(
-        children: [
-          Icon(
-            Icons.person_add_outlined,
-            size: 48,
-            color: AppColors.lightPurple.withValues(alpha: 0.7),
-          ),
-          const SizedBox(height: AppConstants.smallPadding),
-          Text(
-            'Create Your First Profile',
-            style: AppTheme.headingSmall.copyWith(
-              color: AppColors.lightPurple,
+      child: LiquidGlassCard(
+        onTap: controller.navigateToInput,
+        child: Column(
+          children: [
+            Icon(
+              Icons.person_add_outlined,
+              size: 48,
+              color: AppColors.lightPurple.withValues(alpha: 0.7),
             ),
-          ),
-          const SizedBox(height: AppConstants.smallPadding),
-          Text(
-            'Start your astrological journey by creating a profile with your birth information.',
-            style: AppTheme.bodyMedium.copyWith(
-              color: AppColors.darkTextSecondary,
+            const SizedBox(height: AppConstants.smallPadding),
+            Text(
+              'Create Your First Profile',
+              style: AppTheme.headingSmall.copyWith(
+                color: AppColors.lightPurple,
+              ),
             ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: AppConstants.defaultPadding),
-          ElevatedButton.icon(
-            onPressed: controller.navigateToInput,
-            icon: const Icon(Icons.add),
-            label: const Text('Create Profile'),
-          ),
-        ],
+            const SizedBox(height: AppConstants.smallPadding),
+            Text(
+              'Start your astrological journey by creating a profile with your birth information.',
+              style: AppTheme.bodyMedium.copyWith(
+                color: AppColors.darkTextSecondary,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: AppConstants.defaultPadding),
+            ElevatedButton.icon(
+              onPressed: controller.navigateToInput,
+              icon: const Icon(Icons.add),
+              label: const Text('Create Profile'),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -374,56 +392,78 @@ class HomeView extends GetView<HomeController> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Quick Actions',
-          style: AppTheme.headingSmall.copyWith(
-            color: AppColors.darkTextPrimary,
+        // Animate section title with fade-in
+        IzFadeIn(
+          delay: const Duration(milliseconds: 100),
+          child: Text(
+            'Quick Actions',
+            style: AppTheme.headingSmall.copyWith(
+              color: AppColors.darkTextPrimary,
+            ),
           ),
         ),
         const SizedBox(height: AppConstants.defaultPadding),
+        // First row with staggered animation
         Row(
           children: [
             Expanded(
-              child: _buildActionCard(
-                iconAsset: 'assets/images/icon/ic_astrology_chart.png',
-                title: 'Purple Star Chart',
-                subtitle: 'View astrology chart',
-                onTap: controller.navigateToChart,
-                color: AppColors.lightPurple,
+              child: IzSlideFadeIn(
+                offset: const Offset(-20, 0),
+                delay: const Duration(milliseconds: 200),
+                child: _buildActionCard(
+                  iconAsset: 'assets/images/icon/ic_astrology_chart.png',
+                  title: 'Purple Star Chart',
+                  subtitle: 'View astrology chart',
+                  onTap: controller.navigateToChart,
+                  color: AppColors.lightPurple,
+                ),
               ),
             ),
             const SizedBox(width: AppConstants.defaultPadding),
             Expanded(
-              child: _buildActionCard(
-                iconAsset: 'assets/images/icon/ic_analyze.png',
-                title: 'BaZi Analysis',
-                subtitle: 'Four Pillars reading',
-                onTap: controller.navigateToBaZi,
-                color: AppColors.lightGold,
+              child: IzSlideFadeIn(
+                offset: const Offset(20, 0),
+                delay: const Duration(milliseconds: 250),
+                child: _buildActionCard(
+                  iconAsset: 'assets/images/icon/ic_analyze.png',
+                  title: 'BaZi Analysis',
+                  subtitle: 'Four Pillars reading',
+                  onTap: controller.navigateToBaZi,
+                  color: AppColors.lightGold,
+                ),
               ),
             ),
           ],
         ),
         const SizedBox(height: AppConstants.defaultPadding),
+        // Second row with staggered animation
         Row(
           children: [
             Expanded(
-              child: _buildActionCard(
-                iconAsset: 'assets/images/icon/ic_detailed_analyze.png',
-                title: 'Detailed Analysis',
-                subtitle: 'In-depth interpretation',
-                onTap: controller.navigateToAnalysis,
-                color: AppColors.lightPurple,
+              child: IzSlideFadeIn(
+                offset: const Offset(-20, 0),
+                delay: const Duration(milliseconds: 300),
+                child: _buildActionCard(
+                  iconAsset: 'assets/images/icon/ic_detailed_analyze.png',
+                  title: 'Detailed Analysis',
+                  subtitle: 'In-depth interpretation',
+                  onTap: controller.navigateToAnalysis,
+                  color: AppColors.lightPurple,
+                ),
               ),
             ),
             const SizedBox(width: AppConstants.defaultPadding),
             Expanded(
-              child: _buildActionCard(
-                iconAsset: 'assets/images/icon/ic_matcher.png',
-                title: 'Astro Matcher',
-                subtitle: 'Find compatibility',
-                onTap: controller.navigateToAstroMatcher,
-                color: AppColors.lightGold,
+              child: IzSlideFadeIn(
+                offset: const Offset(20, 0),
+                delay: const Duration(milliseconds: 350),
+                child: _buildActionCard(
+                  iconAsset: 'assets/images/icon/ic_matcher.png',
+                  title: 'Astro Matcher',
+                  subtitle: 'Find compatibility',
+                  onTap: controller.navigateToAstroMatcher,
+                  color: AppColors.lightGold,
+                ),
               ),
             ),
           ],
@@ -442,61 +482,64 @@ class HomeView extends GetView<HomeController> {
     String? iconAsset,
     IconData? icon,
   }) {
-    return LiquidGlassCard(
+    return IzTapScale(
       onTap: onTap,
-      child: Column(
-        children: [
-          // Display icon asset if provided, otherwise fall back to Material icon
-          if (iconAsset != null)
-            Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color: color.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(8),
-                child: Image.asset(
-                  iconAsset,
-                  width: 24,
-                  height: 24,
-                  // Note: PNG files don't support color tinting, so we use background color instead
-                  errorBuilder: (context, error, stackTrace) {
-                    // Fallback to a default icon if asset loading fails
-                    return Icon(
-                      icon ?? Icons.error_outline,
-                      size: 24,
-                      color: color,
-                    );
-                  },
+      child: LiquidGlassCard(
+        onTap: onTap,
+        child: Column(
+          children: [
+            // Display icon asset if provided, otherwise fall back to Material icon
+            if (iconAsset != null)
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: color.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(20),
                 ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Image.asset(
+                    iconAsset,
+                    width: 24,
+                    height: 24,
+                    // Note: PNG files don't support color tinting, so we use background color instead
+                    errorBuilder: (context, error, stackTrace) {
+                      // Fallback to a default icon if asset loading fails
+                      return Icon(
+                        icon ?? Icons.error_outline,
+                        size: 24,
+                        color: color,
+                      );
+                    },
+                  ),
+                ),
+              )
+            else if (icon != null)
+              Icon(
+                icon,
+                size: 40,
+                color: color,
               ),
-            )
-          else if (icon != null)
-            Icon(
-              icon,
-              size: 40,
-              color: color,
+            const SizedBox(height: AppConstants.smallPadding),
+            Text(
+              title,
+              style: AppTheme.bodyMedium.copyWith(
+                fontWeight: FontWeight.w600,
+                color: AppColors.darkTextPrimary,
+              ),
+              textAlign: TextAlign.center,
             ),
-          const SizedBox(height: AppConstants.smallPadding),
-          Text(
-            title,
-            style: AppTheme.bodyMedium.copyWith(
-              fontWeight: FontWeight.w600,
-              color: AppColors.darkTextPrimary,
+            const SizedBox(height: 4),
+            Text(
+              subtitle,
+              style: AppTheme.caption.copyWith(
+                color: AppColors.darkTextSecondary,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 4),
-          Text(
-            subtitle,
-            style: AppTheme.caption.copyWith(
-              color: AppColors.darkTextSecondary,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

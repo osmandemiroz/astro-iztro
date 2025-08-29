@@ -1,6 +1,7 @@
 import 'package:astro_iztro/app/modules/tarot/tarot_controller.dart';
 import 'package:astro_iztro/core/constants/app_constants.dart';
 import 'package:astro_iztro/core/constants/colors.dart';
+import 'package:astro_iztro/core/utils/iz_animated_widgets.dart';
 import 'package:astro_iztro/shared/themes/app_theme.dart';
 import 'package:astro_iztro/shared/widgets/background_image_widget.dart';
 import 'package:astro_iztro/shared/widgets/enhanced_tarot_reading_widget.dart';
@@ -73,29 +74,21 @@ class TarotView extends GetView<TarotController> {
             height: AppConstants.largePadding * 2,
           ), // Much more top spacing for better breathing room
           // Main title with clean, centered positioning and better readability
-          TweenAnimationBuilder<double>(
+          IzSlideFadeIn(
+            offset: const Offset(0, 20),
             duration: const Duration(milliseconds: 800),
-            tween: Tween(begin: 0, end: 1),
-            builder: (context, value, child) {
-              return Opacity(
-                opacity: value,
-                child: Transform.translate(
-                  offset: Offset(0, 20 * (1 - value)),
-                  child: Text(
-                    'TAROT READING',
-                    style: AppTheme.headingLarge.copyWith(
-                      color: AppColors.darkTextPrimary,
-                      fontFamily: AppConstants.decorativeFont,
-                      fontWeight: FontWeight
-                          .w400, // Slightly bolder for better readability
-                      letterSpacing:
-                          4, // Increased letter spacing for elegance and clarity
-                      fontSize: 36, // Larger font size for better visibility
-                    ),
-                  ),
-                ),
-              );
-            },
+            child: Text(
+              'TAROT READING',
+              style: AppTheme.headingLarge.copyWith(
+                color: AppColors.darkTextPrimary,
+                fontFamily: AppConstants.decorativeFont,
+                fontWeight:
+                    FontWeight.w400, // Slightly bolder for better readability
+                letterSpacing:
+                    4, // Increased letter spacing for elegance and clarity
+                fontSize: 36, // Larger font size for better visibility
+              ),
+            ),
           ),
           const SizedBox(height: 12), // Space between title and subtitle
           // Subtle subtitle for better user guidance
@@ -130,59 +123,75 @@ class TarotView extends GetView<TarotController> {
   /// [buildMainContent] - Main scrollable content with tarot features
   Widget _buildMainContent() {
     return SliverToBoxAdapter(
-      child: TweenAnimationBuilder<double>(
+      child: IzSlideFadeIn(
+        offset: const Offset(0, 30),
         duration: const Duration(milliseconds: 600),
-        tween: Tween(begin: 0, end: 1),
-        builder: (context, value, child) {
-          return Transform.translate(
-            offset: Offset(0, 30 * (1 - value)),
-            child: Opacity(
-              opacity: value,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: AppColors.darkCard,
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(AppConstants.borderRadius * 2),
-                    topRight: Radius.circular(AppConstants.borderRadius * 2),
-                  ),
-                  // Add subtle shadow for better visual separation
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColors.black.withValues(alpha: 0.1),
-                      blurRadius: 20,
-                      offset: const Offset(0, -5),
-                    ),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(AppConstants.defaultPadding),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(
-                        height: AppConstants.largePadding,
-                      ), // Increased top spacing for better separation
-                      _buildReadingTypeSelector(),
-                      const SizedBox(height: AppConstants.largePadding),
-                      _buildCardSelectionInterface(),
-                      const SizedBox(height: AppConstants.largePadding),
-                      _buildQuestionInput(),
-                      const SizedBox(height: AppConstants.largePadding),
-                      _buildReadingButton(),
-                      const SizedBox(height: AppConstants.largePadding),
-                      _buildSelectedCards(),
-                      const SizedBox(height: AppConstants.largePadding),
-                      _buildReadingInterpretation(),
-                      const SizedBox(
-                        height: AppConstants.defaultPadding,
-                      ), // Bottom spacing
-                    ],
-                  ),
-                ),
-              ),
+        child: Container(
+          decoration: BoxDecoration(
+            color: AppColors.darkCard,
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(AppConstants.borderRadius * 2),
+              topRight: Radius.circular(AppConstants.borderRadius * 2),
             ),
-          );
-        },
+            // Add subtle shadow for better visual separation
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.black.withValues(alpha: 0.1),
+                blurRadius: 20,
+                offset: const Offset(0, -5),
+              ),
+            ],
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(AppConstants.defaultPadding),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(
+                  height: AppConstants.largePadding,
+                ), // Increased top spacing for better separation
+                // Animate reading type selector with staggered effect
+                IzSlideFadeIn(
+                  delay: const Duration(milliseconds: 200),
+                  child: _buildReadingTypeSelector(),
+                ),
+                const SizedBox(height: AppConstants.largePadding),
+                // Animate card selection interface
+                IzSlideFadeIn(
+                  delay: const Duration(milliseconds: 300),
+                  child: _buildCardSelectionInterface(),
+                ),
+                const SizedBox(height: AppConstants.largePadding),
+                // Animate question input
+                IzSlideFadeIn(
+                  delay: const Duration(milliseconds: 400),
+                  child: _buildQuestionInput(),
+                ),
+                const SizedBox(height: AppConstants.largePadding),
+                // Animate reading button
+                IzSlideFadeIn(
+                  delay: const Duration(milliseconds: 500),
+                  child: _buildReadingButton(),
+                ),
+                const SizedBox(height: AppConstants.largePadding),
+                // Animate selected cards
+                IzSlideFadeIn(
+                  delay: const Duration(milliseconds: 600),
+                  child: _buildSelectedCards(),
+                ),
+                const SizedBox(height: AppConstants.largePadding),
+                // Animate reading interpretation
+                IzSlideFadeIn(
+                  delay: const Duration(milliseconds: 700),
+                  child: _buildReadingInterpretation(),
+                ),
+                const SizedBox(
+                  height: AppConstants.defaultPadding,
+                ), // Bottom spacing
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -214,7 +223,11 @@ class TarotView extends GetView<TarotController> {
             return Obx(() {
               final isSelected =
                   controller.selectedReadingType.value == readingType;
-              return _buildReadingTypeCard(readingType, isSelected);
+              return IzSlideFadeIn(
+                offset: const Offset(0, 20),
+                delay: Duration(milliseconds: 100 + (index * 50)),
+                child: _buildReadingTypeCard(readingType, isSelected),
+              );
             });
           },
         ),
@@ -269,48 +282,51 @@ class TarotView extends GetView<TarotController> {
           'color': AppColors.lightPurple,
         };
 
-    return LiquidGlassCard(
+    return IzTapScale(
       onTap: () => controller.setReadingType(readingType),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 300),
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: isSelected ? (info['color'] as Color) : Colors.transparent,
-            width: isSelected ? 2 : 0,
+      child: LiquidGlassCard(
+        onTap: () => controller.setReadingType(readingType),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: isSelected ? (info['color'] as Color) : Colors.transparent,
+              width: isSelected ? 2 : 0,
+            ),
           ),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              info['icon'] as IconData,
-              size: 32,
-              color: isSelected
-                  ? (info['color'] as Color)
-                  : AppColors.darkTextTertiary,
-            ),
-            const SizedBox(height: AppConstants.smallPadding),
-            Text(
-              info['title'] as String,
-              style: AppTheme.bodyMedium.copyWith(
-                fontWeight: FontWeight.w600,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                info['icon'] as IconData,
+                size: 32,
                 color: isSelected
                     ? (info['color'] as Color)
-                    : AppColors.darkTextPrimary,
+                    : AppColors.darkTextTertiary,
               ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 4),
-            Text(
-              info['subtitle'] as String,
-              style: AppTheme.caption.copyWith(
-                color: isSelected
-                    ? (info['color'] as Color)
-                    : AppColors.darkTextSecondary,
+              const SizedBox(height: AppConstants.smallPadding),
+              Text(
+                info['title'] as String,
+                style: AppTheme.bodyMedium.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: isSelected
+                      ? (info['color'] as Color)
+                      : AppColors.darkTextPrimary,
+                ),
+                textAlign: TextAlign.center,
               ),
-              textAlign: TextAlign.center,
-            ),
-          ],
+              const SizedBox(height: 4),
+              Text(
+                info['subtitle'] as String,
+                style: AppTheme.caption.copyWith(
+                  color: isSelected
+                      ? (info['color'] as Color)
+                      : AppColors.darkTextPrimary,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -424,13 +440,16 @@ class TarotView extends GetView<TarotController> {
                     itemCount: itemCount,
                     itemBuilder: (context, index) {
                       final card = cards[index];
-                      return _buildSelectableCard(
-                        card,
-                        controller.selectedCards.any(
-                          (selectedCard) => selectedCard['id'] == card['id'],
+                      return IzSlideFadeIn(
+                        delay: Duration(milliseconds: 200 + (index * 30)),
+                        child: _buildSelectableCard(
+                          card,
+                          controller.selectedCards.any(
+                            (selectedCard) => selectedCard['id'] == card['id'],
+                          ),
+                          cardWidth,
+                          cardHeight,
                         ),
-                        cardWidth,
-                        cardHeight,
                       );
                     },
                   );
