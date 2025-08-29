@@ -6,6 +6,7 @@ import 'package:astro_iztro/shared/themes/app_theme.dart';
 import 'package:astro_iztro/shared/widgets/background_image_widget.dart';
 import 'package:astro_iztro/shared/widgets/liquid_glass_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 /// [AstroMatcherView] - Astrological compatibility analysis screen
@@ -19,9 +20,7 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
     return Scaffold(
       // Modern dark theme background with space gradient
       body: AstroMatcherBackground(
-        child: SafeArea(
-          child: Obx(_buildBody),
-        ),
+        child: Obx(_buildBody),
       ),
     );
   }
@@ -37,6 +36,7 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
     }
 
     return CustomScrollView(
+      physics: const BouncingScrollPhysics(),
       slivers: [
         _buildAppBar(),
         _buildMainContent(),
@@ -49,7 +49,7 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
   /// Enhanced with liquid glass effects for modern appearance
   Widget _buildAppBar() {
     return SliverAppBar(
-      expandedHeight: 120,
+      expandedHeight: 100,
       pinned: true,
       backgroundColor: Colors.transparent,
       elevation: 0,
@@ -74,7 +74,6 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
       flexibleSpace: LayoutBuilder(
         builder: (context, constraints) {
           final statusBarHeight = MediaQuery.of(context).padding.top;
-
           return FlexibleSpaceBar(
             title: Padding(
               padding: const EdgeInsets.symmetric(
@@ -86,14 +85,14 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
                   color: AppColors.darkTextPrimary,
                   fontFamily: AppConstants.decorativeFont,
                   fontWeight: FontWeight.w300,
-                  letterSpacing: 2,
+                  letterSpacing: 1.5,
                 ),
               ),
             ),
             titlePadding: EdgeInsets.only(
               left: 16,
               bottom: AppConstants.largePadding,
-              top: statusBarHeight + 8,
+              top: statusBarHeight + 16,
             ),
             background: Container(
               decoration: const BoxDecoration(
@@ -164,14 +163,18 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
               borderColor: AppColors.success,
               borderRadius: BorderRadius.circular(12),
               padding: const EdgeInsets.all(8),
-              child: IconButton(
-                onPressed: controller.navigateToInput,
-                icon: const Icon(
-                  Icons.person_add,
-                  color: AppColors.success,
-                  size: 20,
+              child: Semantics(
+                label: 'Create new profile',
+                button: true,
+                child: IconButton(
+                  onPressed: controller.navigateToInput,
+                  icon: const Icon(
+                    Icons.person_add,
+                    color: AppColors.success,
+                    size: 20,
+                  ),
+                  tooltip: 'Create new profile',
                 ),
-                tooltip: 'Create new profile',
               ),
             ),
             const SizedBox(width: AppConstants.smallPadding),
@@ -181,18 +184,46 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
               borderColor: AppColors.lightPurple,
               borderRadius: BorderRadius.circular(12),
               padding: const EdgeInsets.all(8),
-              child: IconButton(
-                onPressed: controller.refreshProfiles,
-                icon: const Icon(
-                  Icons.refresh,
-                  color: AppColors.lightPurple,
-                  size: 20,
+              child: Semantics(
+                label: 'Refresh profiles',
+                button: true,
+                child: IconButton(
+                  onPressed: controller.refreshProfiles,
+                  icon: const Icon(
+                    Icons.refresh,
+                    color: AppColors.lightPurple,
+                    size: 20,
+                  ),
+                  tooltip: 'Refresh profiles',
                 ),
-                tooltip: 'Refresh profiles',
               ),
             ),
           ],
         ),
+        if (controller.selectedProfile1.value != null &&
+            controller.selectedProfile1.value ==
+                controller.selectedProfile2.value) ...[
+          const SizedBox(height: AppConstants.smallPadding),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Icon(
+                Icons.info_outline,
+                color: AppColors.lightGold,
+                size: 16,
+              ),
+              const SizedBox(width: 6),
+              Expanded(
+                child: Text(
+                  'Select a different profile for the other person to continue.',
+                  style: AppTheme.caption.copyWith(
+                    color: AppColors.darkTextSecondary,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
       ],
     );
   }
@@ -464,43 +495,52 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
 
       return SizedBox(
         width: double.infinity,
-        child: LiquidGlassWidget(
-          glassColor: canCalculate
-              ? AppColors.lightPurple
-              : AppColors.glassSecondary,
-          borderColor: canCalculate
-              ? AppColors.lightPurple
-              : AppColors.lightPurple.withValues(alpha: 0.3),
-          borderRadius: BorderRadius.circular(16),
-          padding: const EdgeInsets.all(AppConstants.defaultPadding),
-          child: TextButton(
-            onPressed: canCalculate ? controller.calculateCompatibility : null,
-            style: TextButton.styleFrom(
-              padding: const EdgeInsets.symmetric(
-                vertical: AppConstants.defaultPadding,
-              ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.favorite,
-                  color: canCalculate
-                      ? AppColors.white
-                      : AppColors.darkTextSecondary,
-                  size: 24,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeInOut,
+          child: LiquidGlassWidget(
+            glassColor: canCalculate
+                ? AppColors.lightPurple
+                : AppColors.glassSecondary,
+            borderColor: canCalculate
+                ? AppColors.lightPurple
+                : AppColors.lightPurple.withValues(alpha: 0.3),
+            borderRadius: BorderRadius.circular(16),
+            padding: const EdgeInsets.all(AppConstants.defaultPadding),
+            child: TextButton(
+              onPressed: canCalculate
+                  ? () {
+                      HapticFeedback.mediumImpact();
+                      controller.calculateCompatibility();
+                    }
+                  : null,
+              style: TextButton.styleFrom(
+                padding: const EdgeInsets.symmetric(
+                  vertical: AppConstants.defaultPadding,
                 ),
-                const SizedBox(width: AppConstants.smallPadding),
-                Text(
-                  'Calculate Your Compatibility',
-                  style: AppTheme.bodyLarge.copyWith(
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.favorite,
                     color: canCalculate
                         ? AppColors.white
                         : AppColors.darkTextSecondary,
-                    fontWeight: FontWeight.w600,
+                    size: 24,
                   ),
-                ),
-              ],
+                  const SizedBox(width: AppConstants.smallPadding),
+                  Text(
+                    'Calculate Your Compatibility',
+                    style: AppTheme.bodyLarge.copyWith(
+                      color: canCalculate
+                          ? AppColors.white
+                          : AppColors.darkTextSecondary,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -511,28 +551,32 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
   /// [buildResultsSection] - Compatibility results display
   Widget _buildResultsSection() {
     return Obx(() {
-      if (!controller.hasResult.value) {
-        return const SizedBox.shrink();
-      }
-
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Your Compatibility Results',
-            style: AppTheme.headingSmall.copyWith(
-              color: AppColors.darkTextPrimary,
-            ),
-          ),
-          const SizedBox(height: AppConstants.defaultPadding),
-          _buildOverallScoreCard(),
-          const SizedBox(height: AppConstants.defaultPadding),
-          _buildDetailedAnalysisCard(),
-          const SizedBox(height: AppConstants.defaultPadding),
-          _buildRecommendationsCard(),
-          const SizedBox(height: AppConstants.defaultPadding),
-          _buildFutureInsightsCard(),
-        ],
+      return AnimatedSwitcher(
+        duration: const Duration(milliseconds: 250),
+        switchInCurve: Curves.easeOut,
+        switchOutCurve: Curves.easeIn,
+        child: controller.hasResult.value
+            ? Column(
+                key: const ValueKey('results'),
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Your Compatibility Results',
+                    style: AppTheme.headingSmall.copyWith(
+                      color: AppColors.darkTextPrimary,
+                    ),
+                  ),
+                  const SizedBox(height: AppConstants.defaultPadding),
+                  _buildOverallScoreCard(),
+                  const SizedBox(height: AppConstants.defaultPadding),
+                  _buildDetailedAnalysisCard(),
+                  const SizedBox(height: AppConstants.defaultPadding),
+                  _buildRecommendationsCard(),
+                  const SizedBox(height: AppConstants.defaultPadding),
+                  _buildFutureInsightsCard(),
+                ],
+              )
+            : const SizedBox.shrink(),
       );
     });
   }
