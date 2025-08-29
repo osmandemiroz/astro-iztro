@@ -18,7 +18,7 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
   Widget build(BuildContext context) {
     return Scaffold(
       // Modern dark theme background with space gradient
-      body: HomeBackground(
+      body: AstroMatcherBackground(
         child: SafeArea(
           child: Obx(_buildBody),
         ),

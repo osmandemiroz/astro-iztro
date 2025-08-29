@@ -86,6 +86,28 @@ class PurpleStarBackground extends StatelessWidget {
   }
 }
 
+/// [AstroMatcherBackground] - Pre-configured background for Astro Matcher screens
+/// Uses the astro_matcher.jpg image with optimal blur settings
+class AstroMatcherBackground extends StatelessWidget {
+  const AstroMatcherBackground({
+    required this.child,
+    super.key,
+    this.blurRadius,
+  });
+  final Widget child;
+  final double? blurRadius;
+
+  @override
+  Widget build(BuildContext context) {
+    return BackgroundImageWidget(
+      imagePath: 'assets/images/astro_matcher.jpg',
+      blurRadius: blurRadius ?? 18.0, // Match BaZi feel for consistency
+      overlayColor: AppColors.darkBackground.withValues(alpha: 0.35),
+      child: child,
+    );
+  }
+}
+
 /// [BaZiBackground] - Pre-configured background for BaZi Analysis screens
 /// Uses the bazi_analysis.jpg image with optimal blur settings
 class BaZiBackground extends StatelessWidget {
