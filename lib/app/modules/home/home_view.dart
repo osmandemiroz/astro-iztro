@@ -6,7 +6,6 @@ import 'package:astro_iztro/core/utils/iz_animated_widgets.dart';
 import 'package:astro_iztro/shared/themes/app_theme.dart';
 import 'package:astro_iztro/shared/widgets/background_image_widget.dart';
 import 'package:astro_iztro/shared/widgets/liquid_glass_widget.dart';
-import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -26,9 +25,6 @@ class HomeView extends GetView<HomeController> {
           child: Obx(_buildBody),
         ),
       ),
-
-      // Bottom navigation for main app sections
-      bottomNavigationBar: _buildBottomNavigationBar(),
     );
   }
 
@@ -386,8 +382,9 @@ class HomeView extends GetView<HomeController> {
     );
   }
 
-  /// [buildQuickActionsSection] - Quick action buttons
-  /// Uses custom icon assets for enhanced visual appeal
+  /// [buildQuickActionsSection] - Quick action buttons redesigned for 5 actions
+  /// Uses modern vertical column layout for better organization and visual appeal
+  /// Includes tarot reading as one of the quick actions
   Widget _buildQuickActionsSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -403,69 +400,75 @@ class HomeView extends GetView<HomeController> {
           ),
         ),
         const SizedBox(height: AppConstants.defaultPadding),
-        // First row with staggered animation
-        Row(
+        // All actions in a vertical column layout for better UX
+        Column(
           children: [
-            Expanded(
-              child: IzSlideFadeIn(
-                offset: const Offset(-20, 0),
-                delay: const Duration(milliseconds: 200),
-                child: _buildActionCard(
-                  iconAsset: 'assets/images/icon/ic_astrology_chart.png',
-                  title: 'Purple Star Chart',
-                  subtitle: 'View astrology chart',
-                  onTap: controller.navigateToChart,
-                  color: AppColors.lightPurple,
-                ),
+            // Purple Star Chart
+            IzSlideFadeIn(
+              offset: const Offset(0, 20),
+              delay: const Duration(milliseconds: 200),
+              child: _buildActionCard(
+                iconAsset: 'assets/images/icon/ic_astrology_chart.png',
+                title: 'Purple Star Chart',
+                subtitle: 'View astrology chart',
+                onTap: controller.navigateToChart,
+                color: AppColors.lightPurple,
               ),
             ),
-            const SizedBox(width: AppConstants.defaultPadding),
-            Expanded(
-              child: IzSlideFadeIn(
-                offset: const Offset(20, 0),
-                delay: const Duration(milliseconds: 250),
-                child: _buildActionCard(
-                  iconAsset: 'assets/images/icon/ic_analyze.png',
-                  title: 'BaZi Analysis',
-                  subtitle: 'Four Pillars reading',
-                  onTap: controller.navigateToBaZi,
-                  color: AppColors.lightGold,
-                ),
+            const SizedBox(height: AppConstants.defaultPadding),
+            // BaZi Analysis
+            IzSlideFadeIn(
+              offset: const Offset(0, 20),
+              delay: const Duration(milliseconds: 250),
+              child: _buildActionCard(
+                iconAsset: 'assets/images/icon/ic_analyze.png',
+                title: 'BaZi Analysis',
+                subtitle: 'Four Pillars reading',
+                onTap: controller.navigateToBaZi,
+                color: AppColors.lightGold,
               ),
             ),
-          ],
-        ),
-        const SizedBox(height: AppConstants.defaultPadding),
-        // Second row with staggered animation
-        Row(
-          children: [
-            Expanded(
-              child: IzSlideFadeIn(
-                offset: const Offset(-20, 0),
-                delay: const Duration(milliseconds: 300),
-                child: _buildActionCard(
-                  iconAsset: 'assets/images/icon/ic_detailed_analyze.png',
-                  title: 'Detailed Analysis',
-                  subtitle: 'In-depth interpretation',
-                  onTap: controller.navigateToAnalysis,
-                  color: AppColors.lightPurple,
-                ),
+            const SizedBox(height: AppConstants.defaultPadding),
+            // Tarot Reading
+            IzSlideFadeIn(
+              offset: const Offset(0, 20),
+              delay: const Duration(milliseconds: 300),
+              child: _buildActionCard(
+                iconAsset: 'assets/images/icon/ic_tarot.png',
+                title: 'Tarot Reading',
+                subtitle: 'Mystical guidance',
+                onTap: controller.navigateToTarot,
+                color: AppColors.lightPurple,
               ),
             ),
-            const SizedBox(width: AppConstants.defaultPadding),
-            Expanded(
-              child: IzSlideFadeIn(
-                offset: const Offset(20, 0),
-                delay: const Duration(milliseconds: 350),
-                child: _buildActionCard(
-                  iconAsset: 'assets/images/icon/ic_matcher.png',
-                  title: 'Astro Matcher',
-                  subtitle: 'Find compatibility',
-                  onTap: controller.navigateToAstroMatcher,
-                  color: AppColors.lightGold,
-                ),
+            const SizedBox(height: AppConstants.defaultPadding),
+            // Detailed Analysis
+            IzSlideFadeIn(
+              offset: const Offset(0, 20),
+              delay: const Duration(milliseconds: 350),
+              child: _buildActionCard(
+                iconAsset: 'assets/images/icon/ic_detailed_analyze.png',
+                title: 'Detailed Analysis',
+                subtitle: 'In-depth interpretation',
+                onTap: controller.navigateToAnalysis,
+                color: AppColors.lightPurple,
               ),
             ),
+            const SizedBox(height: AppConstants.defaultPadding),
+            // Astro Matcher
+            IzSlideFadeIn(
+              offset: const Offset(0, 20),
+              delay: const Duration(milliseconds: 400),
+              child: _buildActionCard(
+                iconAsset: 'assets/images/icon/ic_matcher.png',
+                title: 'Astro Matcher',
+                subtitle: 'Find compatibility',
+                onTap: controller.navigateToAstroMatcher,
+                color: AppColors.lightGold,
+              ),
+            ),
+            // Add extra bottom spacing to ensure last card is visible
+            const SizedBox(height: AppConstants.largePadding),
           ],
         ),
       ],
@@ -474,6 +477,7 @@ class HomeView extends GetView<HomeController> {
 
   /// [buildActionCard] - Individual action card
   /// Enhanced to support both icon assets and Material icons for flexibility
+  /// Redesigned for full-width, professional appearance
   Widget _buildActionCard({
     required String title,
     required String subtitle,
@@ -484,183 +488,90 @@ class HomeView extends GetView<HomeController> {
   }) {
     return IzTapScale(
       onTap: onTap,
-      child: LiquidGlassCard(
-        onTap: onTap,
-        child: Column(
-          children: [
-            // Display icon asset if provided, otherwise fall back to Material icon
-            if (iconAsset != null)
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: color.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Image.asset(
-                    iconAsset,
-                    width: 24,
-                    height: 24,
-                    // Note: PNG files don't support color tinting, so we use background color instead
-                    errorBuilder: (context, error, stackTrace) {
-                      // Fallback to a default icon if asset loading fails
-                      return Icon(
-                        icon ?? Icons.error_outline,
-                        size: 24,
-                        color: color,
-                      );
-                    },
-                  ),
-                ),
-              )
-            else if (icon != null)
-              Icon(
-                icon,
-                size: 40,
-                color: color,
-              ),
-            const SizedBox(height: AppConstants.smallPadding),
-            Text(
-              title,
-              style: AppTheme.bodyMedium.copyWith(
-                fontWeight: FontWeight.w600,
-                color: AppColors.darkTextPrimary,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 4),
-            Text(
-              subtitle,
-              style: AppTheme.caption.copyWith(
-                color: AppColors.darkTextSecondary,
-              ),
-              textAlign: TextAlign.center,
+      child: Container(
+        width: double.infinity, // Full width
+        padding: const EdgeInsets.all(AppConstants.defaultPadding),
+        decoration: BoxDecoration(
+          color: AppColors.darkSurface,
+          borderRadius: BorderRadius.circular(AppConstants.borderRadius),
+          border: Border.all(
+            color: color.withValues(alpha: 0.3),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: color.withValues(alpha: 0.1),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  /// [buildBottomNavigationBar] - Bottom navigation bar with iztro and tarot sections
-  Widget _buildBottomNavigationBar() {
-    return Obx(
-      () => BottomNavigationBar(
-        currentIndex: controller.selectedBottomNavIndex.value,
-        onTap: (index) {
-          controller.setBottomNavIndex(index);
-          switch (index) {
-            case 0:
-              // Already on home (iztro)
-              break;
-            case 1:
-              controller.navigateToTarot();
-          }
-        },
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: AppColors.lightPurple,
-        unselectedItemColor: AppColors.darkTextTertiary,
-        backgroundColor: AppColors.darkSurface,
-        elevation: 12, // Enhanced elevation for modern depth
-        selectedFontSize: 11, // Optimized font size for better fit
-        unselectedFontSize: 11, // Consistent font sizing
-        showUnselectedLabels: true, // Always show labels for better UX
-        selectedLabelStyle: AppTheme.caption.copyWith(
-          fontWeight: FontWeight.w600,
-          letterSpacing: 0.5,
-          color: AppColors.lightPurple,
-        ), // Enhanced selected label styling
-        unselectedLabelStyle: AppTheme.caption.copyWith(
-          fontWeight: FontWeight.w400,
-          letterSpacing: 0.3,
-          color: AppColors.darkTextTertiary,
-        ), // Consistent unselected label styling
-        items: [
-          BottomNavigationBarItem(
-            icon: SizedBox(
-              width: 28,
-              height: 28,
-              child: Image.asset(
-                'assets/images/icon/ic_iztro.png',
-                fit: BoxFit.contain,
-                errorBuilder: (context, error, stackTrace) {
-                  if (kDebugMode) {
-                    print('[HomeView] Error loading ic_iztro.png: $error');
-                  }
-                  return const Icon(
-                    Icons.home_outlined,
-                    size: 28,
-                    color: AppColors.darkTextTertiary,
-                  );
-                },
+        child: Row(
+          children: [
+            // Icon container with background
+            Container(
+              width: 60,
+              height: 60,
+              decoration: BoxDecoration(
+                color: color.withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(30),
+                border: Border.all(
+                  color: color.withValues(alpha: 0.3),
+                ),
+              ),
+              child: Center(
+                child: iconAsset != null
+                    ? Image.asset(
+                        iconAsset,
+                        width: 32,
+                        height: 32,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Icon(
+                            icon ?? Icons.error_outline,
+                            size: 32,
+                            color: color,
+                          );
+                        },
+                      )
+                    : Icon(
+                        icon ?? Icons.auto_awesome,
+                        size: 32,
+                        color: color,
+                      ),
               ),
             ),
-            activeIcon: SizedBox(
-              width: 32,
-              height: 32,
-              child: Image.asset(
-                'assets/images/icon/ic_iztro.png',
-                fit: BoxFit.contain,
-                errorBuilder: (context, error, stackTrace) {
-                  if (kDebugMode) {
-                    print(
-                      '[HomeView] Error loading ic_iztro.png (active): $error',
-                    );
-                  }
-                  return const Icon(
-                    Icons.home,
-                    size: 24,
-                    color: AppColors.lightPurple,
-                  );
-                },
+            const SizedBox(width: AppConstants.defaultPadding),
+            // Text content
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: AppTheme.bodyLarge.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.darkTextPrimary,
+                      fontSize: 16,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    subtitle,
+                    style: AppTheme.bodyMedium.copyWith(
+                      color: AppColors.darkTextSecondary,
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
               ),
             ),
-            label: 'Iztro',
-          ),
-          BottomNavigationBarItem(
-            icon: SizedBox(
-              width: 28,
-              height: 28,
-              child: Image.asset(
-                'assets/images/icon/ic_tarot.png',
-                fit: BoxFit.contain,
-                errorBuilder: (context, error, stackTrace) {
-                  if (kDebugMode) {
-                    print('[HomeView] Error loading ic_tarot.png: $error');
-                  }
-                  return const Icon(
-                    Icons.auto_awesome_outlined,
-                    size: 28,
-                    color: AppColors.darkTextTertiary,
-                  );
-                },
-              ),
+            // Arrow indicator
+            Icon(
+              Icons.arrow_forward_ios,
+              color: color.withValues(alpha: 0.6),
+              size: 20,
             ),
-            activeIcon: SizedBox(
-              width: 32,
-              height: 32,
-              child: Image.asset(
-                'assets/images/icon/ic_tarot.png',
-                fit: BoxFit.contain,
-                errorBuilder: (context, error, stackTrace) {
-                  if (kDebugMode) {
-                    print(
-                      '[HomeView] Error loading ic_tarot.png (active): $error',
-                    );
-                  }
-                  return const Icon(
-                    Icons.auto_awesome,
-                    size: 24,
-                    color: AppColors.lightPurple,
-                  );
-                },
-              ),
-            ),
-            label: 'Tarot',
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

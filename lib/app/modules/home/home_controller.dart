@@ -23,9 +23,6 @@ class HomeController extends GetxController {
   final RxString selectedLanguage = 'en'.obs;
   final RxString selectedTheme = 'system'.obs;
 
-  // Navigation tracking
-  final RxInt selectedBottomNavIndex = 0.obs;
-
   @override
   void onInit() {
     super.onInit();
@@ -452,14 +449,6 @@ class HomeController extends GetxController {
   /// [navigateToTarot] - Navigate to tarot screen
   void navigateToTarot() {
     Get.toNamed<void>('/tarot');
-  }
-
-  /// [setBottomNavIndex] - Set bottom navigation index
-  void setBottomNavIndex(int index) {
-    if (index < 0 || index > 1) {
-      return;
-    }
-    selectedBottomNavIndex.value = index;
   }
 
   /// Getters for computed values
