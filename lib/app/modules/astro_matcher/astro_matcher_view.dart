@@ -44,9 +44,10 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
     );
   }
 
-  /// [buildAppBar] - Custom app bar with title and back button
+  /// [buildAppBar] - Custom app bar with centered title
   /// Edge-to-edge design with proper status bar spacing
   /// Enhanced with liquid glass effects for modern appearance
+  /// Follows Apple's Human Interface Guidelines for clean, minimal design
   Widget _buildAppBar() {
     return SliverAppBar(
       expandedHeight: 100,
@@ -54,43 +55,31 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
       backgroundColor: Colors.transparent,
       elevation: 0,
       stretch: true,
-      leading: Padding(
-        padding: const EdgeInsets.only(left: 8),
-        child: LiquidGlassWidget(
-          glassColor: AppColors.glassPrimary,
-          borderColor: AppColors.lightPurple,
-          borderRadius: BorderRadius.circular(20),
-          padding: const EdgeInsets.all(8),
-          child: IconButton(
-            onPressed: controller.navigateBack,
-            icon: const Icon(
-              Icons.arrow_back_ios,
-              color: AppColors.darkTextPrimary,
-              size: 20,
-            ),
-          ),
-        ),
-      ),
+      // Remove leading (back button) for cleaner, centered design
+      automaticallyImplyLeading: false,
       flexibleSpace: LayoutBuilder(
         builder: (context, constraints) {
           final statusBarHeight = MediaQuery.of(context).padding.top;
           return FlexibleSpaceBar(
-            title: Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: AppConstants.defaultPadding,
-              ),
-              child: Text(
-                'Astro Matcher',
-                style: AppTheme.headingMedium.copyWith(
-                  color: AppColors.darkTextPrimary,
-                  fontFamily: AppConstants.decorativeFont,
-                  fontWeight: FontWeight.w300,
-                  letterSpacing: 1.5,
+            // Center the title at the bottom of the header
+            title: Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: AppConstants.defaultPadding,
+                ),
+                child: Text(
+                  'ASTRO MATCHER',
+                  style: AppTheme.headingMedium.copyWith(
+                    color: AppColors.darkTextPrimary,
+                    fontFamily: AppConstants.decorativeFont,
+                    fontWeight: FontWeight.w300,
+                    letterSpacing: 1.5,
+                  ),
                 ),
               ),
             ),
+            // Center the title horizontally and position at bottom
             titlePadding: EdgeInsets.only(
-              left: 16,
               bottom: AppConstants.largePadding,
               top: statusBarHeight + 16,
             ),
