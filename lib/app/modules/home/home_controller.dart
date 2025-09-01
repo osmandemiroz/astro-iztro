@@ -456,4 +456,26 @@ class HomeController extends GetxController {
   bool get hasRecentCalculations => recentCalculations.isNotEmpty;
   bool get hasSavedProfiles => savedProfiles.isNotEmpty;
   int get storageSize => _storageService.getStorageSize();
+
+  /// [resetOnboarding] - Reset onboarding status for testing
+  /// This method allows users to see the onboarding again
+  Future<void> resetOnboarding() async {
+    try {
+      await _storageService.resetOnboarding();
+      Get.snackbar(
+        'Onboarding Reset',
+        'You can now see the onboarding again on next app launch',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } on Exception catch (e) {
+      if (kDebugMode) {
+        print('[HomeController] Error resetting onboarding: $e');
+      }
+      Get.snackbar(
+        'Error',
+        'Failed to reset onboarding: $e',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
+  }
 }

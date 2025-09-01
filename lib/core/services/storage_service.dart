@@ -630,6 +630,29 @@ class StorageService {
       'enable_fortune_timing': true,
     };
   }
+
+  /// [isOnboardingCompleted] - Check if onboarding has been completed
+  bool isOnboardingCompleted() {
+    return prefs.getBool(AppConstants.onboardingCompletedKey) ?? false;
+  }
+
+  /// [markOnboardingCompleted] - Mark onboarding as completed
+  Future<bool> markOnboardingCompleted() async {
+    try {
+      return await prefs.setBool(AppConstants.onboardingCompletedKey, true);
+    } catch (e) {
+      throw StorageException('Failed to mark onboarding as completed: $e');
+    }
+  }
+
+  /// [resetOnboarding] - Reset onboarding status (for testing)
+  Future<bool> resetOnboarding() async {
+    try {
+      return await prefs.setBool(AppConstants.onboardingCompletedKey, false);
+    } catch (e) {
+      throw StorageException('Failed to reset onboarding: $e');
+    }
+  }
 }
 
 /// Custom exception for storage operations

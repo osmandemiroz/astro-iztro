@@ -253,6 +253,16 @@ class SettingsView extends GetView<SettingsController> {
             ),
           ],
         ),
+        const SizedBox(height: AppConstants.smallPadding),
+        OutlinedButton.icon(
+          onPressed: controller.resetOnboarding,
+          icon: const Icon(Icons.refresh),
+          label: const Text('Reset Onboarding'),
+          style: OutlinedButton.styleFrom(
+            foregroundColor: AppColors.primaryPurple,
+            side: const BorderSide(color: AppColors.primaryPurple),
+          ),
+        ),
       ],
     );
   }

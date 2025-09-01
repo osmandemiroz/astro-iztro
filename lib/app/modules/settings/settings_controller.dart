@@ -349,4 +349,47 @@ class SettingsController extends GetxController {
     {'code': 'light', 'name': 'Light'},
     {'code': 'dark', 'name': 'Dark'},
   ];
+
+  /// [resetOnboarding] - Reset onboarding status for testing
+  /// This method allows users to see the onboarding again
+  Future<void> resetOnboarding() async {
+    try {
+      final result = await Get.dialog<bool>(
+        AlertDialog(
+          title: const Text('Reset Onboarding'),
+          content: const Text(
+            'This will reset the onboarding status. You will see the onboarding screens again on the next app launch.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Get.back(result: false),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () => Get.back(result: true),
+              child: const Text('Reset'),
+            ),
+          ],
+        ),
+      );
+
+      if (result ?? false) {
+        await _storageService.resetOnboarding();
+        Get.snackbar(
+          'Onboarding Reset',
+          'Onboarding has been reset. Restart the app to see it again.',
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      }
+    } on Exception catch (e) {
+      if (kDebugMode) {
+        print('[SettingsController] Error resetting onboarding: $e');
+      }
+      Get.snackbar(
+        'Error',
+        'Failed to reset onboarding: $e',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
+  }
 }

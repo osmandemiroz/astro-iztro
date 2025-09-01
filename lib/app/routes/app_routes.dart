@@ -1,5 +1,6 @@
 /// [AppRoutes] - Application route names
 abstract class AppRoutes {
+  static const onboarding = '/onboarding';
   static const home = '/';
   static const input = '/input';
   static const chart = '/chart';

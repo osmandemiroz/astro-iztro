@@ -10,6 +10,8 @@ import 'package:astro_iztro/app/modules/home/home_binding.dart';
 import 'package:astro_iztro/app/modules/home/home_view.dart';
 import 'package:astro_iztro/app/modules/input/input_binding.dart';
 import 'package:astro_iztro/app/modules/input/input_view.dart';
+import 'package:astro_iztro/app/modules/onboarding/onboarding_binding.dart';
+import 'package:astro_iztro/app/modules/onboarding/onboarding_view.dart';
 import 'package:astro_iztro/app/modules/palace_detail/palace_detail_binding.dart';
 import 'package:astro_iztro/app/modules/palace_detail/palace_detail_view.dart';
 import 'package:astro_iztro/app/modules/settings/settings_binding.dart';
@@ -24,6 +26,11 @@ abstract class AppPages {
   static const String INITIAL = AppRoutes.home;
 
   static final routes = [
+    GetPage<dynamic>(
+      name: AppRoutes.onboarding,
+      page: () => const OnboardingView(),
+      binding: OnboardingBinding(),
+    ),
     GetPage<dynamic>(
       name: AppRoutes.home,
       page: () => const HomeView(),

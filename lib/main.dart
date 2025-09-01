@@ -1,5 +1,6 @@
 import 'package:astro_iztro/app/bindings/initial_binding.dart';
 import 'package:astro_iztro/app/routes/app_pages.dart';
+import 'package:astro_iztro/app/routes/app_routes.dart';
 import 'package:astro_iztro/core/constants/app_constants.dart';
 import 'package:astro_iztro/core/services/iztro_service.dart';
 import 'package:astro_iztro/core/services/storage_service.dart';
@@ -23,6 +24,18 @@ void main() async {
     ..put<StorageService>(storageService, permanent: true)
     // Initialize IztroService
     ..put<IztroService>(IztroService(), permanent: true);
+
+  // Check if onboarding has been completed
+  final onboardingCompleted =
+      storageService.prefs.getBool(
+        AppConstants.onboardingCompletedKey,
+      ) ??
+      false;
+
+  // Set initial route based on onboarding status
+  final initialRoute = onboardingCompleted
+      ? AppRoutes.home
+      : AppRoutes.onboarding;
 
   // [main] - Setting preferred orientations to portrait for optimal chart viewing
   await SystemChrome.setPreferredOrientations([
@@ -53,13 +66,17 @@ void main() async {
     SystemUiMode.edgeToEdge,
   );
 
-  runApp(const AstroIztroApp());
+  runApp(AstroIztroApp(initialRoute: initialRoute));
 }
 
 /// [AstroIztroApp] - Main application widget with GetX configuration
 /// Implements comprehensive Purple Star Astrology app with modern UI/UX
 class AstroIztroApp extends StatelessWidget {
-  const AstroIztroApp({super.key});
+  const AstroIztroApp({
+    required this.initialRoute,
+    super.key,
+  });
+  final String initialRoute;
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +86,7 @@ class AstroIztroApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
 
       // Navigation configuration
-      initialRoute: AppPages.INITIAL,
+      initialRoute: initialRoute,
       getPages: AppPages.routes,
       initialBinding: InitialBinding(),
 
