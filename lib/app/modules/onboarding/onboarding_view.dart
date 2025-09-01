@@ -105,13 +105,15 @@ class OnboardingView extends GetView<OnboardingController> {
   /// [buildPageView] - Main content area with smooth page transitions
   /// Uses PageView for fluid navigation between onboarding screens
   Widget _buildPageView() {
-    return PageView.builder(
-      controller: PageController(),
-      onPageChanged: (index) => controller.currentPage.value = index,
-      itemCount: 4,
-      itemBuilder: (context, index) {
-        return _buildOnboardingPage(index);
-      },
+    return PageView(
+      controller: controller.pageController,
+      onPageChanged: controller.onPageChanged,
+      children: [
+        _buildOnboardingPage(0),
+        _buildOnboardingPage(1),
+        _buildOnboardingPage(2),
+        _buildOnboardingPage(3),
+      ],
     );
   }
 
