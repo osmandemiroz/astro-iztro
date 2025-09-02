@@ -13,62 +13,62 @@ class SettingsView extends GetView<SettingsController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Settings',
-          style: TextStyle(color: AppColors.darkTextPrimary),
+        title: Text(
+          'SETTINGS',
+          style: AppTheme.headingMedium.copyWith(
+            color: AppColors.darkTextPrimary,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 1.5,
+            fontSize: 18,
+          ),
         ),
         elevation: 0,
         backgroundColor: Colors.transparent,
+        centerTitle: true,
         actions: [
-          IconButton(
-            onPressed: controller.resetToDefaults,
-            icon: const Icon(
-              Icons.restore,
-              color: AppColors.lightPurple,
+          Container(
+            margin: const EdgeInsets.only(right: AppConstants.smallPadding),
+            decoration: BoxDecoration(
+              color: AppColors.darkCard.withValues(alpha: 0.8),
+              borderRadius: BorderRadius.circular(AppConstants.borderRadius),
+              border: Border.all(
+                color: AppColors.lightPurple.withValues(alpha: 0.3),
+              ),
             ),
-            tooltip: 'Reset to Defaults',
+            child: IconButton(
+              onPressed: controller.resetToDefaults,
+              icon: const Icon(
+                Icons.restore_rounded,
+                color: AppColors.lightPurple,
+                size: 22,
+              ),
+              tooltip: 'Reset to Defaults',
+            ),
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(AppConstants.defaultPadding),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildAppearanceSection(),
-            const SizedBox(height: AppConstants.defaultPadding),
-            _buildCalculationSection(),
-            const SizedBox(height: AppConstants.defaultPadding),
-            _buildAdvancedSection(),
-            const SizedBox(height: AppConstants.defaultPadding),
-            _buildDataSection(),
-            const SizedBox(height: AppConstants.defaultPadding),
-            _buildAboutSection(),
-          ],
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: AppColors.darkSpaceGradient,
+        ),
+        child: SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(AppConstants.defaultPadding),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildCalculationSection(),
+                const SizedBox(height: AppConstants.defaultPadding),
+                _buildAdvancedSection(),
+                const SizedBox(height: AppConstants.defaultPadding),
+                _buildDataSection(),
+                const SizedBox(height: AppConstants.defaultPadding),
+                _buildAboutSection(),
+              ],
+            ),
+          ),
         ),
       ),
-    );
-  }
-
-  Widget _buildAppearanceSection() {
-    return _buildSection(
-      title: 'Appearance',
-      icon: Icons.palette_outlined,
-      children: [
-        _buildThemeSelector(),
-        const SizedBox(height: AppConstants.smallPadding),
-        _buildLanguageSelector(),
-        const SizedBox(height: AppConstants.smallPadding),
-        _buildSwitchTile(
-          title: 'Traditional Chinese',
-          subtitle: 'Use traditional Chinese characters',
-          value: controller.preferTraditionalChinese,
-          onChanged: (value) {
-            controller.preferTraditionalChinese.value = value;
-            controller.saveCalculationPreferences();
-          },
-        ),
-      ],
     );
   }
 
@@ -176,54 +176,34 @@ class SettingsView extends GetView<SettingsController> {
       title: 'Data Management',
       icon: Icons.storage_outlined,
       children: [
-        Card(
-          child: Padding(
-            padding: const EdgeInsets.all(AppConstants.defaultPadding),
-            child: Column(
+        Container(
+          padding: const EdgeInsets.all(AppConstants.defaultPadding * 1.2),
+          decoration: BoxDecoration(
+            color: AppColors.darkSurface.withValues(alpha: 0.4),
+            borderRadius: BorderRadius.circular(AppConstants.borderRadius),
+            border: Border.all(
+              color: AppColors.lightPurple.withValues(alpha: 0.2),
+            ),
+          ),
+          child: Obx(
+            () => Column(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text('Storage Used'),
-                    Obx(
-                      () => Text(
-                        controller.formattedStorageSize,
-                        style: AppTheme.bodyMedium.copyWith(
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ],
+                _buildDataRow(
+                  'Storage Used',
+                  controller.formattedStorageSize,
+                  Icons.storage_rounded,
                 ),
                 const SizedBox(height: AppConstants.smallPadding),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text('Total Profiles'),
-                    Obx(
-                      () => Text(
-                        controller.totalProfiles.value.toString(),
-                        style: AppTheme.bodyMedium.copyWith(
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ],
+                _buildDataRow(
+                  'Total Profiles',
+                  controller.totalProfiles.value.toString(),
+                  Icons.person_rounded,
                 ),
                 const SizedBox(height: AppConstants.smallPadding),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text('Calculations Stored'),
-                    Obx(
-                      () => Text(
-                        controller.totalCalculations.value.toString(),
-                        style: AppTheme.bodyMedium.copyWith(
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ],
+                _buildDataRow(
+                  'Calculations Stored',
+                  controller.totalCalculations.value.toString(),
+                  Icons.calculate_rounded,
                 ),
               ],
             ),
@@ -233,34 +213,87 @@ class SettingsView extends GetView<SettingsController> {
         Row(
           children: [
             Expanded(
-              child: OutlinedButton.icon(
-                onPressed: controller.exportUserData,
-                icon: const Icon(Icons.upload_outlined),
-                label: const Text('Export Data'),
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      AppColors.lightPurple.withValues(alpha: 0.1),
+                      AppColors.lightPurple.withValues(alpha: 0.05),
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(
+                    AppConstants.borderRadius,
+                  ),
+                  border: Border.all(
+                    color: AppColors.lightPurple.withValues(alpha: 0.3),
+                  ),
+                ),
+                child: OutlinedButton.icon(
+                  onPressed: controller.exportUserData,
+                  icon: const Icon(Icons.upload_outlined, size: 18),
+                  label: const Text('Export Data'),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: AppColors.lightPurple,
+                    side: BorderSide.none,
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                  ),
+                ),
               ),
             ),
             const SizedBox(width: AppConstants.smallPadding),
             Expanded(
-              child: OutlinedButton.icon(
-                onPressed: controller.clearUserData,
-                icon: const Icon(Icons.delete_outline),
-                label: const Text('Clear Data'),
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: Colors.red,
-                  side: const BorderSide(color: Colors.red),
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Colors.red.withValues(alpha: 0.1),
+                      Colors.red.withValues(alpha: 0.05),
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(
+                    AppConstants.borderRadius,
+                  ),
+                  border: Border.all(
+                    color: Colors.red.withValues(alpha: 0.3),
+                  ),
+                ),
+                child: OutlinedButton.icon(
+                  onPressed: controller.clearUserData,
+                  icon: const Icon(Icons.delete_outline, size: 18),
+                  label: const Text('Clear Data'),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: Colors.red,
+                    side: BorderSide.none,
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                  ),
                 ),
               ),
             ),
           ],
         ),
         const SizedBox(height: AppConstants.smallPadding),
-        OutlinedButton.icon(
-          onPressed: controller.resetOnboarding,
-          icon: const Icon(Icons.refresh),
-          label: const Text('Reset Onboarding'),
-          style: OutlinedButton.styleFrom(
-            foregroundColor: AppColors.primaryPurple,
-            side: const BorderSide(color: AppColors.primaryPurple),
+        Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                AppColors.lightPurple.withValues(alpha: 0.1),
+                AppColors.lightPurple.withValues(alpha: 0.05),
+              ],
+            ),
+            borderRadius: BorderRadius.circular(AppConstants.borderRadius),
+            border: Border.all(
+              color: AppColors.lightPurple.withValues(alpha: 0.3),
+            ),
+          ),
+          child: OutlinedButton.icon(
+            onPressed: controller.resetOnboarding,
+            icon: const Icon(Icons.refresh_rounded, size: 18),
+            label: const Text('Reset Onboarding'),
+            style: OutlinedButton.styleFrom(
+              foregroundColor: AppColors.lightPurple,
+              side: BorderSide.none,
+              padding: const EdgeInsets.symmetric(vertical: 12),
+            ),
           ),
         ),
       ],
@@ -289,112 +322,135 @@ class SettingsView extends GetView<SettingsController> {
         ),
         const ListTile(
           title: Text('Package'),
-          subtitle: Text('dart_iztro integration'),
+          subtitle: Text('Iztro'),
           leading: Icon(Icons.integration_instructions),
         ),
       ],
     );
   }
 
+  /// [_buildSection] - Modern section card with Apple-inspired design
+  /// Features liquid glass effect, subtle shadows, and elegant typography
+  /// Following Apple Human Interface Guidelines for clean, accessible UI
   Widget _buildSection({
     required String title,
     required IconData icon,
     required List<Widget> children,
   }) {
-    return Card(
+    return Container(
+      margin: const EdgeInsets.only(bottom: AppConstants.defaultPadding),
+      decoration: BoxDecoration(
+        color: AppColors.darkCard.withValues(alpha: 0.95),
+        borderRadius: BorderRadius.circular(AppConstants.borderRadius * 1.5),
+        border: Border.all(
+          color: AppColors.lightPurple.withValues(alpha: 0.2),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.lightPurple.withValues(alpha: 0.1),
+            blurRadius: 20,
+            offset: const Offset(0, 8),
+          ),
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.1),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
       child: Padding(
-        padding: const EdgeInsets.all(AppConstants.defaultPadding),
+        padding: const EdgeInsets.all(AppConstants.defaultPadding * 1.2),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Icon(icon, color: AppColors.primaryPurple),
-                const SizedBox(width: AppConstants.smallPadding),
-                Text(
-                  title,
-                  style: AppTheme.headingMedium.copyWith(
-                    color: AppColors.primaryPurple,
-                  ),
+            // Section header with enhanced styling
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppConstants.smallPadding,
+                vertical: AppConstants.smallPadding / 2,
+              ),
+              decoration: BoxDecoration(
+                color: AppColors.lightPurple.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(AppConstants.borderRadius),
+                border: Border.all(
+                  color: AppColors.lightPurple.withValues(alpha: 0.3),
+                  width: 0.5,
                 ),
-              ],
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    icon,
+                    color: AppColors.lightPurple,
+                    size: 20,
+                  ),
+                  const SizedBox(width: AppConstants.smallPadding),
+                  Text(
+                    title.toUpperCase(),
+                    style: AppTheme.bodyMedium.copyWith(
+                      color: AppColors.lightPurple,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 1.2,
+                      fontSize: 13,
+                    ),
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(height: AppConstants.defaultPadding),
-            ...children,
+            const SizedBox(height: AppConstants.defaultPadding * 1.2),
+            // Section content with improved spacing
+            ...children.map(
+              (child) => Padding(
+                padding: const EdgeInsets.only(
+                  bottom: AppConstants.smallPadding,
+                ),
+                child: child,
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildThemeSelector() {
-    return Obx(
-      () => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Theme',
-            style: AppTheme.bodyMedium.copyWith(
-              fontWeight: FontWeight.w600,
+  /// [_buildDataRow] - Data display row with icon and modern styling
+  /// Used in the data management section for consistent information display
+  Widget _buildDataRow(String label, String value, IconData icon) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          children: [
+            Icon(
+              icon,
+              size: 18,
+              color: AppColors.lightPurple.withValues(alpha: 0.7),
             ),
-          ),
-          const SizedBox(height: AppConstants.smallPadding),
-          Wrap(
-            spacing: AppConstants.smallPadding,
-            children: controller.themeModes.map((theme) {
-              final isSelected = controller.themeMode.value == theme['code'];
-              return FilterChip(
-                label: Text(theme['name']!),
-                selected: isSelected,
-                onSelected: (_) => controller.setThemeMode(theme['code']!),
-                selectedColor: AppColors.primaryPurple.withValues(alpha: 0.2),
-                checkmarkColor: AppColors.primaryPurple,
-              );
-            }).toList(),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildLanguageSelector() {
-    return Obx(
-      () => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Language',
-            style: AppTheme.bodyMedium.copyWith(
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: AppConstants.smallPadding),
-          DropdownButtonFormField<String>(
-            value: controller.languageCode.value,
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              contentPadding: EdgeInsets.symmetric(
-                horizontal: AppConstants.defaultPadding,
-                vertical: AppConstants.smallPadding,
+            const SizedBox(width: AppConstants.smallPadding),
+            Text(
+              label,
+              style: AppTheme.bodyMedium.copyWith(
+                color: AppColors.darkTextSecondary,
+                fontWeight: FontWeight.w500,
               ),
             ),
-            items: controller.supportedLanguages.map((language) {
-              return DropdownMenuItem<String>(
-                value: language['code'],
-                child: Text(language['name']!),
-              );
-            }).toList(),
-            onChanged: (value) {
-              if (value != null) {
-                controller.setLanguage(value);
-              }
-            },
+          ],
+        ),
+        Text(
+          value,
+          style: AppTheme.bodyMedium.copyWith(
+            color: AppColors.darkTextPrimary,
+            fontWeight: FontWeight.w700,
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
+  /// [_buildSwitchTile] - Enhanced switch tile with modern Apple-inspired design
+  /// Features improved typography, better spacing, and elegant visual hierarchy
+  /// Following Apple Human Interface Guidelines for intuitive user interaction
   Widget _buildSwitchTile({
     required String title,
     required String subtitle,
@@ -402,13 +458,64 @@ class SettingsView extends GetView<SettingsController> {
     required ValueChanged<bool> onChanged,
   }) {
     return Obx(
-      () => SwitchListTile(
-        title: Text(title),
-        subtitle: Text(subtitle),
-        value: value.value,
-        onChanged: onChanged,
-        activeThumbColor: AppColors.primaryPurple,
-        contentPadding: EdgeInsets.zero,
+      () => Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppConstants.smallPadding,
+          vertical: AppConstants.smallPadding,
+        ),
+        decoration: BoxDecoration(
+          color: AppColors.darkSurface.withValues(alpha: 0.3),
+          borderRadius: BorderRadius.circular(AppConstants.borderRadius),
+          border: Border.all(
+            color: AppColors.lightPurple.withValues(alpha: 0.1),
+            width: 0.5,
+          ),
+        ),
+        child: Row(
+          children: [
+            // Text content with improved typography
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: AppTheme.bodyLarge.copyWith(
+                      color: AppColors.darkTextPrimary,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    subtitle,
+                    style: AppTheme.bodyMedium.copyWith(
+                      color: AppColors.darkTextSecondary,
+                      fontSize: 14,
+                      height: 1.3,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: AppConstants.smallPadding),
+            // Enhanced switch with custom styling
+            Transform.scale(
+              scale: 1.1,
+              child: Switch(
+                value: value.value,
+                onChanged: onChanged,
+                activeThumbColor: AppColors.lightPurple,
+                activeTrackColor: AppColors.lightPurple.withValues(alpha: 0.3),
+                inactiveThumbColor: AppColors.darkTextTertiary,
+                inactiveTrackColor: AppColors.darkTextTertiary.withValues(
+                  alpha: 0.2,
+                ),
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

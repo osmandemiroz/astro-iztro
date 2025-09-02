@@ -7,13 +7,10 @@ import 'package:get/get.dart';
 class SettingsController extends GetxController {
   final StorageService _storageService = Get.find<StorageService>();
 
-  // Reactive settings
-  final RxString themeMode = 'system'.obs;
-  final RxString languageCode = 'en'.obs;
+  // Reactive settings - Core calculation and analysis preferences
   final RxBool useTrueSolarTime = true.obs;
   final RxBool showBrightness = true.obs;
   final RxBool showTransformations = true.obs;
-  final RxBool preferTraditionalChinese = false.obs;
   final RxBool autoSaveCalculations = true.obs;
   final RxBool showAdvancedAnalysis = false.obs;
   final RxBool enableDetailedStarAnalysis = true.obs;
@@ -33,21 +30,18 @@ class SettingsController extends GetxController {
     _updateStorageInfo();
   }
 
-  /// [loadSettings] - Load all settings from storage
+  /// [loadSettings] - Load calculation and analysis settings from storage
+  /// Focuses on core functionality preferences for astrology calculations
   Future<void> _loadSettings() async {
     try {
       final preferences = _storageService.loadCalculationPreferences();
 
-      themeMode.value = _storageService.loadThemeMode();
-      languageCode.value = _storageService.loadLanguage();
-
+      // Load core calculation preferences
       useTrueSolarTime.value =
           preferences['use_true_solar_time'] as bool? ?? true;
       showBrightness.value = preferences['show_brightness'] as bool? ?? true;
       showTransformations.value =
           preferences['show_transformations'] as bool? ?? true;
-      preferTraditionalChinese.value =
-          preferences['prefer_traditional_chinese'] as bool? ?? false;
       autoSaveCalculations.value =
           preferences['auto_save_calculations'] as bool? ?? true;
       showAdvancedAnalysis.value =
@@ -80,66 +74,14 @@ class SettingsController extends GetxController {
     }
   }
 
-  /// [setThemeMode] - Change theme mode
-  Future<void> setThemeMode(String mode) async {
-    try {
-      themeMode.value = mode;
-      await _storageService.saveThemeMode(mode);
-
-      // Apply theme change
-      switch (mode) {
-        case 'light':
-          Get.changeThemeMode(ThemeMode.light);
-        case 'dark':
-          Get.changeThemeMode(ThemeMode.dark);
-        case 'system':
-        default:
-          Get.changeThemeMode(ThemeMode.system);
-      }
-
-      Get.snackbar(
-        'Theme Updated',
-        'Theme changed to $mode mode',
-        snackPosition: SnackPosition.BOTTOM,
-      );
-    } on Exception catch (e) {
-      if (kDebugMode) {
-        print('[SettingsController] Error setting theme: $e');
-      }
-    }
-  }
-
-  /// [setLanguage] - Change app language
-  Future<void> setLanguage(String code) async {
-    try {
-      languageCode.value = code;
-      await _storageService.saveLanguage(code);
-
-      // Apply language change
-      final locale = _getLocaleFromCode(code);
-      await Get.updateLocale(locale);
-
-      Get.snackbar(
-        'Language Updated',
-        'Language changed successfully',
-        snackPosition: SnackPosition.BOTTOM,
-      );
-    } on Exception catch (e) {
-      if (kDebugMode) {
-        print('[SettingsController] Error setting language: $e');
-      }
-    }
-  }
-
-  /// [saveCalculationPreferences] - Save calculation preferences
+  /// [saveCalculationPreferences] - Save core calculation and analysis preferences
+  /// Focuses on astrology calculation settings and analysis features
   Future<void> saveCalculationPreferences() async {
     try {
       final preferences = {
         'use_true_solar_time': useTrueSolarTime.value,
         'show_brightness': showBrightness.value,
         'show_transformations': showTransformations.value,
-        'default_language': languageCode.value,
-        'prefer_traditional_chinese': preferTraditionalChinese.value,
         'auto_save_calculations': autoSaveCalculations.value,
         'show_advanced_analysis': showAdvancedAnalysis.value,
         'enable_detailed_star_analysis': enableDetailedStarAnalysis.value,
@@ -272,13 +214,10 @@ class SettingsController extends GetxController {
       );
 
       if (result ?? false) {
-        // Reset to defaults
-        themeMode.value = 'system';
-        languageCode.value = 'en';
+        // Reset calculation and analysis settings to defaults
         useTrueSolarTime.value = true;
         showBrightness.value = true;
         showTransformations.value = true;
-        preferTraditionalChinese.value = false;
         autoSaveCalculations.value = true;
         showAdvancedAnalysis.value = false;
         enableDetailedStarAnalysis.value = true;
@@ -287,13 +226,11 @@ class SettingsController extends GetxController {
         enableFortuneTiming.value = true;
 
         // Save defaults
-        await setThemeMode('system');
-        await setLanguage('en');
         await saveCalculationPreferences();
 
         Get.snackbar(
           'Settings Reset',
-          'All settings have been reset to defaults',
+          'All calculation settings have been reset to defaults',
           snackPosition: SnackPosition.BOTTOM,
         );
       }
@@ -301,24 +238,6 @@ class SettingsController extends GetxController {
       if (kDebugMode) {
         print('[SettingsController] Error resetting settings: $e');
       }
-    }
-  }
-
-  /// Get locale from language code
-  Locale _getLocaleFromCode(String code) {
-    switch (code) {
-      case 'zh':
-        return const Locale('zh', 'CN');
-      case 'ja':
-        return const Locale('ja', 'JP');
-      case 'ko':
-        return const Locale('ko', 'KR');
-      case 'th':
-        return const Locale('th', 'TH');
-      case 'vi':
-        return const Locale('vi', 'VN');
-      default:
-        return const Locale('en', 'US');
     }
   }
 
@@ -332,23 +251,6 @@ class SettingsController extends GetxController {
     }
     return '${(bytes / (1024 * 1024 * 1024)).toStringAsFixed(1)} GB';
   }
-
-  /// Get supported languages
-  List<Map<String, String>> get supportedLanguages => [
-    {'code': 'en', 'name': 'English'},
-    {'code': 'zh', 'name': '中文'},
-    {'code': 'ja', 'name': '日本語'},
-    {'code': 'ko', 'name': '한국어'},
-    {'code': 'th', 'name': 'ไทย'},
-    {'code': 'vi', 'name': 'Tiếng Việt'},
-  ];
-
-  /// Get theme modes
-  List<Map<String, String>> get themeModes => [
-    {'code': 'system', 'name': 'System'},
-    {'code': 'light', 'name': 'Light'},
-    {'code': 'dark', 'name': 'Dark'},
-  ];
 
   /// [resetOnboarding] - Reset onboarding status for testing
   /// This method allows users to see the onboarding again

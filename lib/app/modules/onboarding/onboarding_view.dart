@@ -372,6 +372,8 @@ class OnboardingView extends GetView<OnboardingController> {
   }
 
   /// [buildAnimatedLogo] - Animated app logo with floating effect
+  /// Uses the actual app logo from assets/marketing/app_logo.png
+  /// Following Apple HIG principles for brand consistency and visual hierarchy
   Widget _buildAnimatedLogo() {
     return TweenAnimationBuilder<double>(
       tween: Tween(begin: 0, end: 1),
@@ -395,10 +397,21 @@ class OnboardingView extends GetView<OnboardingController> {
                   ],
                 ),
               ),
-              child: const Icon(
-                Icons.auto_awesome,
-                size: 60,
-                color: AppColors.white,
+              child: ClipOval(
+                child: Image.asset(
+                  'assets/marketing/app_logo.png',
+                  width: 100,
+                  height: 100,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    // Fallback to original icon if image fails to load
+                    return const Icon(
+                      Icons.auto_awesome,
+                      size: 60,
+                      color: AppColors.white,
+                    );
+                  },
+                ),
               ),
             ),
           ),
@@ -408,19 +421,29 @@ class OnboardingView extends GetView<OnboardingController> {
   }
 
   /// [buildFeatureIcons] - Feature icons with staggered animation
+  /// Uses actual app icons from assets/images/icon/ for brand consistency
+  /// Following Apple HIG principles for visual hierarchy and user recognition
   Widget _buildFeatureIcons() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        _buildFeatureIcon(Icons.psychology, 'Analysis'),
-        _buildFeatureIcon(Icons.favorite, 'Compatibility'),
-        _buildFeatureIcon(Icons.style, 'Tarot'),
+        _buildFeatureIconWithImage(
+          'assets/images/icon/ic_analyze.png',
+          'Analysis',
+        ),
+        _buildFeatureIconWithImage(
+          'assets/images/icon/ic_matcher.png',
+          'Compatibility',
+        ),
+        _buildFeatureIconWithImage('assets/images/icon/ic_tarot.png', 'Tarot'),
       ],
     );
   }
 
-  /// [buildFeatureIcon] - Individual feature icon with animation
-  Widget _buildFeatureIcon(IconData icon, String label) {
+  /// [buildFeatureIconWithImage] - Individual feature icon with image asset
+  /// Uses actual app icons for enhanced brand recognition and visual consistency
+  /// Includes error handling with fallback to generic icons
+  Widget _buildFeatureIconWithImage(String imagePath, String label) {
     return TweenAnimationBuilder<double>(
       tween: Tween(begin: 0, end: 1),
       duration: AppConstants.mediumAnimation,
@@ -430,8 +453,8 @@ class OnboardingView extends GetView<OnboardingController> {
           child: Column(
             children: [
               Container(
-                width: 80,
-                height: 80,
+                width: 75,
+                height: 75,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   gradient: LinearGradient(
@@ -443,10 +466,21 @@ class OnboardingView extends GetView<OnboardingController> {
                     ],
                   ),
                 ),
-                child: Icon(
-                  icon,
-                  size: 40,
-                  color: AppColors.white,
+                child: ClipOval(
+                  child: Image.asset(
+                    imagePath,
+                    width: 60,
+                    height: 60,
+                    fit: BoxFit.contain,
+                    errorBuilder: (context, error, stackTrace) {
+                      // Fallback to generic icon if image fails to load
+                      return Icon(
+                        _getFallbackIcon(label),
+                        size: 40,
+                        color: AppColors.white,
+                      );
+                    },
+                  ),
                 ),
               ),
               const SizedBox(height: AppConstants.smallPadding),
@@ -462,6 +496,21 @@ class OnboardingView extends GetView<OnboardingController> {
         );
       },
     );
+  }
+
+  /// [getFallbackIcon] - Get appropriate fallback icon based on feature label
+  /// Ensures graceful degradation when custom icons fail to load
+  IconData _getFallbackIcon(String label) {
+    switch (label.toLowerCase()) {
+      case 'analysis':
+        return Icons.psychology;
+      case 'compatibility':
+        return Icons.favorite;
+      case 'tarot':
+        return Icons.style;
+      default:
+        return Icons.auto_awesome;
+    }
   }
 
   /// [buildFeatureList] - Feature list with glass cards

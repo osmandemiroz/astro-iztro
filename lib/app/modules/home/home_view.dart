@@ -179,23 +179,64 @@ class HomeView extends GetView<HomeController> {
             // Add extra top padding to push content below status bar and title
             top: statusBarHeight + 10, // Status bar + title space
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.end,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Obx(() {
-                final profile = controller.currentProfile.value;
-                return Text(
-                  profile != null
-                      ? 'Welcome back, ${profile.name ?? 'User'}!'
-                      : 'Welcome to Astro Iztro!',
-                  style: AppTheme.bodyLarge.copyWith(
-                    color: AppColors.darkTextPrimary,
-                    fontWeight: FontWeight.w800,
+              // Welcome message section
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Obx(() {
+                      final profile = controller.currentProfile.value;
+                      return Text(
+                        profile != null
+                            ? 'Welcome back, ${profile.name ?? 'User'}!'
+                            : 'Welcome to Astro Iztro!',
+                        style: AppTheme.bodyLarge.copyWith(
+                          color: AppColors.darkTextPrimary,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      );
+                    }),
+                    const SizedBox(height: 2),
+                  ],
+                ),
+              ),
+              // Settings button - Apple Human Interface Guidelines inspired
+              // Positioned in top right with modern, sleek design
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 8,
+                ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: AppColors.darkCard.withValues(alpha: 0.8),
+                    borderRadius: BorderRadius.circular(
+                      AppConstants.borderRadius,
+                    ),
+                    border: Border.all(
+                      color: AppColors.lightPurple.withValues(alpha: 0.3),
+                    ),
                   ),
-                );
-              }),
-              const SizedBox(height: 2),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: controller.navigateToSettings,
+                      borderRadius: BorderRadius.circular(
+                        AppConstants.borderRadius,
+                      ),
+                      child: const Icon(
+                        Icons.settings_rounded,
+                        color: AppColors.lightPurple,
+                        size: 24,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         );
