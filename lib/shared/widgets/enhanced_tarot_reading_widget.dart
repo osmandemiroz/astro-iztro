@@ -426,28 +426,6 @@ class EnhancedTarotReadingWidget extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: AppConstants.defaultPadding),
-          Expanded(
-            child: OutlinedButton.icon(
-              onPressed: () {
-                // TODO: Implement save/share functionality
-              },
-              icon: const Icon(Icons.share, size: 18),
-              label: const Text('Share'),
-              style: OutlinedButton.styleFrom(
-                foregroundColor: AppColors.lightPurple,
-                side: const BorderSide(color: AppColors.lightPurple),
-                padding: const EdgeInsets.symmetric(
-                  vertical: AppConstants.defaultPadding,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(
-                    AppConstants.borderRadius,
-                  ),
-                ),
-              ),
-            ),
-          ),
         ],
       ),
     );

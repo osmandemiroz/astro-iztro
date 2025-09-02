@@ -55,8 +55,36 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
       backgroundColor: Colors.transparent,
       elevation: 0,
       stretch: true,
-      // Remove leading (back button) for cleaner, centered design
+      // Custom leading back button to return to previous screen
       automaticallyImplyLeading: false,
+      leading: Padding(
+        padding: const EdgeInsets.only(left: 8),
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: LiquidGlassWidget(
+            glassColor: AppColors.glassPrimary,
+            borderColor: AppColors.lightPurple.withValues(alpha: 0.4),
+            borderRadius: BorderRadius.circular(12),
+            padding: const EdgeInsets.all(2),
+            child: Semantics(
+              label: 'Go back',
+              button: true,
+              child: IconButton(
+                onPressed: () {
+                  // [AstroMatcherView._buildAppBar] Back navigation
+                  Get.back<void>();
+                },
+                tooltip: 'Back',
+                icon: const Icon(
+                  Icons.arrow_back_ios_new,
+                  color: AppColors.darkTextPrimary,
+                  size: 18,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
       flexibleSpace: LayoutBuilder(
         builder: (context, constraints) {
           final statusBarHeight = MediaQuery.of(context).padding.top;
@@ -69,11 +97,11 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
                 ),
                 child: Text(
                   'ASTRO MATCHER',
-                  style: AppTheme.headingMedium.copyWith(
+                  style: AppTheme.headingSmall.copyWith(
                     color: AppColors.darkTextPrimary,
                     fontFamily: AppConstants.decorativeFont,
-                    fontWeight: FontWeight.w300,
-                    letterSpacing: 1.5,
+                    fontWeight: FontWeight.w200,
+                    letterSpacing: 0.2,
                   ),
                 ),
               ),
