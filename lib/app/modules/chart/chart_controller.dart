@@ -291,18 +291,40 @@ class ChartController extends GetxController {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Elegant drag handle
-                Center(
-                  child: Container(
-                    width: 48,
-                    height: 6,
-                    margin: const EdgeInsets.only(bottom: 20),
-                    decoration: BoxDecoration(
-                      color: AppColors.lightPurple.withValues(alpha: 0.3),
-                      borderRadius: BorderRadius.circular(3),
+                // Header with close button and drag handle
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // Close button
+                    GestureDetector(
+                      onTap: () => Get.back<void>(),
+                      child: Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: AppColors.lightPurple.withValues(alpha: 0.2),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: const Icon(
+                          Icons.close_rounded,
+                          color: AppColors.lightPurple,
+                          size: 20,
+                        ),
+                      ),
                     ),
-                  ),
+                    // Drag handle
+                    Container(
+                      width: 48,
+                      height: 6,
+                      decoration: BoxDecoration(
+                        color: AppColors.lightPurple.withValues(alpha: 0.3),
+                        borderRadius: BorderRadius.circular(3),
+                      ),
+                    ),
+                    // Spacer to balance the layout
+                    const SizedBox(width: 36),
+                  ],
                 ),
+                const SizedBox(height: 20),
 
                 // Main title with cosmic styling
                 Container(

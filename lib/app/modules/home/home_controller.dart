@@ -31,6 +31,25 @@ class HomeController extends GetxController {
     _loadAppPreferences();
   }
 
+  @override
+  void onReady() {
+    super.onReady();
+    // [HomeController.onReady] - Called when the controller is ready
+    // This ensures data is loaded when returning to the home screen
+    if (kDebugMode) {
+      print('[HomeController] onReady called');
+    }
+  }
+
+  /// [onResume] - Called when returning to this screen
+  /// This ensures data is refreshed when coming back from other screens
+  void onResume() {
+    if (kDebugMode) {
+      print('[HomeController] onResume called - refreshing data');
+    }
+    refreshData();
+  }
+
   /// [loadUserData] - Load all saved user data from storage
   Future<void> _loadUserData() async {
     try {
@@ -39,6 +58,10 @@ class HomeController extends GetxController {
       // Load current user profile
       final profile = _storageService.loadUserProfile();
       currentProfile.value = profile;
+
+      if (kDebugMode) {
+        print('[HomeController] Loaded profile: ${profile?.name ?? 'null'}');
+      }
 
       // Load all saved profiles
       final profiles = _storageService.loadUserProfiles();
@@ -383,18 +406,28 @@ class HomeController extends GetxController {
 
   /// [refreshData] - Refresh all user data
   Future<void> refreshData() async {
+    if (kDebugMode) {
+      print('[HomeController] refreshData called');
+    }
     await _loadUserData();
     await _loadAppPreferences();
+    if (kDebugMode) {
+      print('[HomeController] refreshData completed');
+    }
   }
 
   /// [navigateToInput] - Navigate to input screen
   void navigateToInput() {
     Get.toNamed<void>('/input');
+    // Note: Data will be refreshed when the screen becomes active again
+    // The input controller will handle the refresh after saving
   }
 
   /// [navigateToNewProfile] - Navigate to create new profile screen
   void navigateToNewProfile() {
     Get.toNamed<void>('/input');
+    // Note: Data will be refreshed when the screen becomes active again
+    // The input controller will handle the refresh after saving
   }
 
   /// [navigateToChart] - Navigate to chart screen

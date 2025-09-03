@@ -301,29 +301,6 @@ class InputView extends GetView<InputController> {
             onChanged: (value) => controller.useTrueSolarTime.value = value,
           ),
         ),
-
-        Obx(
-          () => DropdownButtonFormField<String>(
-            value: controller.selectedLanguage.value,
-            decoration: const InputDecoration(
-              labelText: 'Language',
-              prefixIcon: Icon(Icons.language_outlined),
-            ),
-            items: const [
-              DropdownMenuItem(value: 'en', child: Text('English')),
-              DropdownMenuItem(value: 'zh', child: Text('Chinese Simplified')),
-              DropdownMenuItem(
-                value: 'zh-TW',
-                child: Text('Chinese Traditional'),
-              ),
-              DropdownMenuItem(value: 'ja', child: Text('Japanese')),
-              DropdownMenuItem(value: 'ko', child: Text('Korean')),
-            ],
-            onChanged: (value) {
-              if (value != null) controller.selectedLanguage.value = value;
-            },
-          ),
-        ),
       ],
     );
   }

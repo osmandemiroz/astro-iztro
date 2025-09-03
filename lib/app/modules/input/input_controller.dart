@@ -1,3 +1,4 @@
+import 'package:astro_iztro/app/modules/home/home_controller.dart';
 import 'package:astro_iztro/core/models/user_profile.dart';
 import 'package:astro_iztro/core/services/iztro_service.dart';
 import 'package:astro_iztro/core/services/storage_service.dart';
@@ -26,7 +27,7 @@ class InputController extends GetxController {
   final RxString selectedGender = 'male'.obs;
   final RxBool isLunarCalendar = false.obs;
   final RxBool hasLeapMonth = false.obs;
-  final RxString selectedLanguage = 'en'.obs;
+
   final RxBool useTrueSolarTime = true.obs;
   final RxBool isLoading = false.obs;
 
@@ -71,17 +72,47 @@ class InputController extends GetxController {
       locationController.text = profile.locationName ?? '';
       isLunarCalendar.value = profile.isLunarCalendar;
       hasLeapMonth.value = profile.hasLeapMonth;
-      selectedLanguage.value = profile.languageCode;
+      // Language is always English
       useTrueSolarTime.value = profile.useTrueSolarTime;
     }
   }
 
   /// Save user profile
   Future<void> saveProfile() async {
-    if (!formKey.currentState!.validate()) return;
+    if (kDebugMode) {
+      print('[InputController] saveProfile method called');
+    }
+
+    // Show immediate feedback that save was attempted
+    Get.snackbar(
+      'Saving...',
+      'Processing your profile data...',
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: Colors.blue,
+      colorText: Colors.white,
+      duration: const Duration(seconds: 1),
+    );
+
+    if (!formKey.currentState!.validate()) {
+      if (kDebugMode) {
+        print('[InputController] Form validation failed');
+      }
+      Get.snackbar(
+        'Validation Error',
+        'Please check your input fields',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.orange,
+        colorText: Colors.white,
+      );
+      return;
+    }
 
     try {
       isLoading.value = true;
+
+      if (kDebugMode) {
+        print('[InputController] Starting profile save...');
+      }
 
       final profile = UserProfile(
         name: nameController.text.trim().isEmpty
@@ -98,7 +129,6 @@ class InputController extends GetxController {
             : locationController.text.trim(),
         isLunarCalendar: isLunarCalendar.value,
         hasLeapMonth: hasLeapMonth.value,
-        languageCode: selectedLanguage.value,
         useTrueSolarTime: useTrueSolarTime.value,
       );
 
@@ -131,16 +161,28 @@ class InputController extends GetxController {
         // Save as current user profile
         await _storageService.saveUserProfile(profile);
 
-        Get
-          ..snackbar(
-            'Success',
-            'Your profile saved successfully!',
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: Colors.green,
-            colorText: Colors.white,
-          )
-          // Go back to home
-          ..back(result: profile);
+        // Send event to refresh home screen data
+        await Get.find<HomeController>().refreshData();
+
+        if (kDebugMode) {
+          print(
+            '[InputController] Profile saved successfully, showing snackbar...',
+          );
+        }
+
+        // Show success snackbar
+        Get.snackbar(
+          'Success',
+          'Your profile saved successfully!',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+          duration: const Duration(seconds: 1),
+        );
+
+        // Wait a moment for snackbar to show, then navigate back
+        await Future<void>.delayed(const Duration(milliseconds: 500));
+        Get.back(result: profile);
       }
     } on Exception catch (e) {
       Get.snackbar(
@@ -212,7 +254,7 @@ class InputController extends GetxController {
       longitude: double.tryParse(longitudeController.text),
       gender: selectedGender.value,
       calendarType: isLunarCalendar.value ? 'lunar' : 'solar',
-      languageCode: selectedLanguage.value,
+      languageCode: 'en', // Always English
       timezone: DateTime.now().timeZoneOffset.inHours.toString(),
     );
 
@@ -258,7 +300,7 @@ class InputController extends GetxController {
     selectedGender.value = 'male';
     isLunarCalendar.value = false;
     hasLeapMonth.value = false;
-    selectedLanguage.value = 'en';
+    // Language is always English
     useTrueSolarTime.value = true;
   }
 
@@ -276,7 +318,7 @@ class InputController extends GetxController {
     // Use solar as default since calendarType doesn't exist
     isLunarCalendar.value = false;
     hasLeapMonth.value = profile.hasLeapMonth;
-    selectedLanguage.value = profile.languageCode;
+    // Language is always English
     useTrueSolarTime.value = profile.useTrueSolarTime;
   }
 }
