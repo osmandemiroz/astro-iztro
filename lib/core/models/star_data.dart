@@ -1,5 +1,5 @@
 /// [StarData] - Star information and analysis data
-// ignore_for_file: avoid_positional_boolean_parameters, dangling_library_doc_comments
+library;
 
 class StarData {
   const StarData({
@@ -62,7 +62,7 @@ class StarData {
   }
 
   /// Get star influence description
-  String getInfluence(bool inChinese) {
+  String getInfluence({required bool inChinese}) {
     final influence = analysis['influence'] as String? ?? '';
     if (influence.isEmpty) {
       return inChinese
@@ -78,7 +78,7 @@ class StarData {
   }
 
   /// Get star description
-  String getDescription(bool inChinese) {
+  String getDescription({required bool inChinese}) {
     final description = analysis['description'] as String? ?? '';
     if (description.isEmpty) {
       return inChinese
@@ -102,7 +102,7 @@ class StarData {
   }
 
   /// Get star category name
-  String getCategoryName(bool inChinese) {
+  String getCategoryName({required bool inChinese}) {
     if (isMajorStar) {
       return inChinese ? '主星' : 'Major Star';
     }
@@ -119,7 +119,7 @@ class StarData {
   }
 
   /// Get transformation type name
-  String getTransformationName(bool inChinese) {
+  String getTransformationName({required bool inChinese}) {
     if (transformationType == null) return '';
 
     final types = {

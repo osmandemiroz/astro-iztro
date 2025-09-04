@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_int_literals, document_ignores
-
 import 'dart:math' as math;
 
 import 'package:astro_iztro/core/constants/app_constants.dart';
@@ -301,8 +299,8 @@ class EnhancedAstroChartPainter extends CustomPainter {
     // Calculate optimal palace size to prevent overlapping
     final basePalaceSize = math.min(
       0.12 * radius,
-      50.0,
-    ); // Scale with chart size, max 50px
+      50, // Scale with chart size, max 50px
+    );
     var palaceSize = basePalaceSize;
     if (index == selectedPalaceIndex) {
       palaceSize *= pulseAnimation.value;
@@ -327,15 +325,15 @@ class EnhancedAstroChartPainter extends CustomPainter {
             Rect.fromLTWH(
               -palaceSize / 2,
               -palaceSize / 2,
-              palaceSize,
-              palaceSize,
+              palaceSize.toDouble(),
+              palaceSize.toDouble(),
             ),
           );
 
     final palaceRect = Rect.fromCenter(
       center: palaceCenter,
-      width: palaceSize,
-      height: palaceSize * 0.7, // More compact height
+      width: palaceSize.toDouble(),
+      height: palaceSize.toDouble() * 0.7, // More compact height
     );
 
     final rrect = RRect.fromRectAndRadius(
@@ -364,8 +362,8 @@ class EnhancedAstroChartPainter extends CustomPainter {
             Rect.fromLTWH(
               -palaceSize / 2,
               -palaceSize / 2,
-              palaceSize,
-              palaceSize,
+              palaceSize.toDouble(),
+              palaceSize.toDouble(),
             ),
           )
       ..style = PaintingStyle.stroke
@@ -383,11 +381,21 @@ class EnhancedAstroChartPainter extends CustomPainter {
 
     // Draw enhanced stars in palace
     if (showStarDetails) {
-      _drawEnhancedStarsInPalace(canvas, palaceCenter, palace, palaceSize);
+      _drawEnhancedStarsInPalace(
+        canvas,
+        palaceCenter,
+        palace,
+        palaceSize.toDouble(),
+      );
     }
 
     // Draw palace element indicator
-    _drawPalaceElement(canvas, palaceCenter, palace, palaceSize);
+    _drawPalaceElement(
+      canvas,
+      palaceCenter,
+      palace,
+      palaceSize.toDouble(),
+    );
   }
 
   /// Draw enhanced palace name with better typography

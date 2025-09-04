@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_dynamic_calls, unused_field, document_ignores, use_is_even_rather_than_modulo, unused_element
+// ignore_for_file: unused_element, document_ignores
 
 import 'package:astro_iztro/core/engines/advanced_star_engine.dart';
 import 'package:astro_iztro/core/engines/astro_matcher_engine.dart';
@@ -298,7 +298,9 @@ class IztroService {
         westernZodiac: baziResult['westernZodiac'] as String? ?? 'Aries',
         analysis: {
           'element_balance':
-              (baziResult['analysis']?['overallBalance'] as String?) ??
+              ((baziResult['analysis']
+                      as Map<String, dynamic>?)?['overallBalance']
+                  as String?) ??
               'Balanced',
           'day_master_strength':
               dayMasterAnalysis['strength'] as String? ?? 'Moderate',
@@ -306,7 +308,8 @@ class IztroService {
               baziResult['analysis'] as Map<String, dynamic>? ?? {},
         },
         recommendations: List<String>.from(
-          (baziResult['analysis']?['recommendations'] as List<dynamic>?) ??
+          (baziResult['analysis'] as Map<String, dynamic>?)?['recommendations']
+                  as List<dynamic>? ??
               <dynamic>[
                 'Focus on personal development',
                 'Maintain balanced lifestyle',
@@ -437,8 +440,8 @@ class IztroService {
       branchEn: branchEn[branchIndex],
       stemElement: _getStemElement(stems[stemIndex]),
       branchElement: _getBranchElement(branches[branchIndex]),
-      stemYinYang: stemIndex % 2 == 0 ? '阳' : '阴',
-      branchYinYang: branchIndex % 2 == 0 ? '阳' : '阴',
+      stemYinYang: stemIndex.isEven ? '阳' : '阴',
+      branchYinYang: branchIndex.isEven ? '阳' : '阴',
       hiddenStems: ['癸'], // Simplified
     );
   }

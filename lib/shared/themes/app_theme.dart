@@ -1,5 +1,3 @@
-// ignore_for_file: deprecated_member_use, document_ignores
-
 import 'package:astro_iztro/core/constants/app_constants.dart';
 import 'package:astro_iztro/core/constants/colors.dart';
 import 'package:flutter/material.dart';
@@ -291,8 +289,6 @@ class AppTheme {
     surfaceContainerHighest: AppColors.darkCard,
     onSurfaceVariant: AppColors.darkTextSecondary,
     outline: AppColors.darkBorder,
-    background: AppColors.darkBackground,
-    onBackground: AppColors.darkTextPrimary,
   );
 
   /// Text styles for consistent typography

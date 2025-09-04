@@ -3,7 +3,7 @@
 /// Follows Apple Human Interface Guidelines for user experience and clean architecture principles
 /// Production-ready implementation for reliable tarot readings with advanced analytics
 
-// ignore_for_file: avoid_dynamic_calls, document_ignores, avoid_types_as_parameter_names
+// ignore_for_file: document_ignores
 
 library;
 
@@ -658,7 +658,9 @@ class TarotResponseEngine {
     final questionType = questionAnalysis['questionType'] as String;
     final emotionalTone = questionAnalysis['emotionalTone'] as String;
     final balance =
-        cardAnalysis['balance']?['balance'] as String? ?? 'balanced';
+        (cardAnalysis['balance'] as Map<String, dynamic>?)?['balance']
+            as String? ??
+        'balanced';
 
     final interpretation = StringBuffer()
       // Opening based on reading type
@@ -981,7 +983,9 @@ class TarotResponseEngine {
     final category = questionAnalysis['primaryCategory'] as String;
     final emotionalTone = questionAnalysis['emotionalTone'] as String;
     final balance =
-        cardAnalysis['balance']?['balance'] as String? ?? 'balanced';
+        (cardAnalysis['balance'] as Map<String, dynamic>?)?['balance']
+            as String? ??
+        'balanced';
 
     final guidance = <String>[];
     final affirmations = <String>[];
@@ -1387,7 +1391,7 @@ class TarotResponseEngine {
     }
 
     // Calculate overall numerological energy
-    final totalEnergy = lifePathNumbers.fold(0, (sum, num) => sum + num);
+    final totalEnergy = lifePathNumbers.fold(0, (sum, number) => sum + number);
     final reducedEnergy = _reduceToSingleDigit(totalEnergy);
 
     return {
@@ -2232,7 +2236,9 @@ class TarotResponseEngine {
     final category = questionAnalysis['primaryCategory'] as String;
     final emotionalTone = questionAnalysis['emotionalTone'] as String;
     final balance =
-        cardAnalysis['balance']?['balance'] as String? ?? 'balanced';
+        (cardAnalysis['balance'] as Map<String, dynamic>?)?['balance']
+            as String? ??
+        'balanced';
 
     // Main theme based on category and balance
     keyThemes.add(
@@ -2248,9 +2254,11 @@ class TarotResponseEngine {
     }
 
     // Numerological themes
-    if (numerologicalInsights['overallVibration']?.isNotEmpty == true) {
+    final overallVibration =
+        numerologicalInsights['overallVibration'] as String?;
+    if (overallVibration?.isNotEmpty ?? false) {
       keyThemes.add(
-        'Numerological Energy - ${numerologicalInsights['overallVibration']}',
+        'Numerological Energy - $overallVibration',
       );
     }
 
@@ -2263,9 +2271,10 @@ class TarotResponseEngine {
     }
 
     // Seasonal themes
-    if (seasonalInsights['dominantElement']?.isNotEmpty == true) {
+    final dominantElement = seasonalInsights['dominantElement'] as String?;
+    if (dominantElement?.isNotEmpty ?? false) {
       keyThemes.add(
-        'Elemental Energy - ${seasonalInsights['dominantElement'].toUpperCase()}',
+        'Elemental Energy - ${dominantElement!.toUpperCase()}',
       );
     }
 
@@ -2427,7 +2436,9 @@ class TarotResponseEngine {
     Map<String, dynamic> seasonalInsights,
   ) {
     final balance =
-        cardAnalysis['balance']?['balance'] as String? ?? 'balanced';
+        (cardAnalysis['balance'] as Map<String, dynamic>?)?['balance']
+            as String? ??
+        'balanced';
     final dominantElement =
         seasonalInsights['dominantElement'] as String? ?? 'balanced';
 

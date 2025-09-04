@@ -815,9 +815,6 @@ class BaZiView extends GetView<BaZiController> {
     required List<Widget> children,
   }) {
     if (kDebugMode) {
-      // Print for debugging without spamming in release builds
-      // Respecting user's request to include function name in prints
-      // ignore: avoid_print
       print('[BaZiView._showExplanationSheet] Opening sheet: $title');
     }
 

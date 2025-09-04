@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_dynamic_calls, document_ignores
-
 import 'dart:convert';
 import 'dart:math';
 
@@ -250,55 +248,62 @@ class TarotController extends GetxController {
         ..writeln();
 
       // Add actionable guidance section
-      final guidance = response['guidance'] as Map<String, dynamic>;
-      if (guidance['actions']?.isNotEmpty == true) {
+      final guidance = response['guidance'] as Map<String, dynamic>?;
+      final actions = guidance?['actions'] as List<dynamic>?;
+      if (actions?.isNotEmpty ?? false) {
         interpretation.writeln('**Actionable Guidance:**');
-        for (final action in guidance['actions'] as List<dynamic>) {
+        for (final action in actions!) {
           interpretation.writeln('• $action');
         }
         interpretation.writeln();
       }
 
       // Add affirmations section
-      if (guidance['affirmations']?.isNotEmpty == true) {
+      final affirmations = guidance?['affirmations'] as List<dynamic>?;
+      if (affirmations?.isNotEmpty ?? false) {
         interpretation.writeln('**Affirmations:**');
-        for (final affirmation in guidance['affirmations'] as List<dynamic>) {
+        for (final affirmation in affirmations!) {
           interpretation.writeln('• $affirmation');
         }
         interpretation.writeln();
       }
 
       // Add warnings section
-      if (guidance['warnings']?.isNotEmpty == true) {
+      final warnings = guidance?['warnings'] as List<dynamic>?;
+      if (warnings?.isNotEmpty ?? false) {
         interpretation.writeln('**Considerations:**');
-        for (final warning in guidance['warnings'] as List<dynamic>) {
+        for (final warning in warnings!) {
           interpretation.writeln('• $warning');
         }
         interpretation.writeln();
       }
 
       // Add focus areas section
-      if (guidance['focusAreas']?.isNotEmpty == true) {
+      final focusAreas = guidance?['focusAreas'] as List<dynamic>?;
+      if (focusAreas?.isNotEmpty ?? false) {
         interpretation.writeln('**Focus Areas:**');
-        for (final focusArea in guidance['focusAreas'] as List<dynamic>) {
+        for (final focusArea in focusAreas!) {
           interpretation.writeln('• $focusArea');
         }
         interpretation.writeln();
       }
 
       // Add timing insights section
-      final timingInsights = response['timingInsights'] as Map<String, dynamic>;
-      if (timingInsights['timeframes']?.isNotEmpty == true) {
+      final timingInsights =
+          response['timingInsights'] as Map<String, dynamic>?;
+      final timeframes = timingInsights?['timeframes'] as List<dynamic>?;
+      if (timeframes?.isNotEmpty ?? false) {
         interpretation.writeln('**Timing Insights:**');
-        for (final timeframe in timingInsights['timeframes'] as List<dynamic>) {
+        for (final timeframe in timeframes!) {
           interpretation.writeln('• $timeframe');
         }
         interpretation.writeln();
       }
 
-      if (timingInsights['bestTimes']?.isNotEmpty == true) {
+      final bestTimes = timingInsights?['bestTimes'] as List<dynamic>?;
+      if (bestTimes?.isNotEmpty ?? false) {
         interpretation.writeln('**Best Times for Action:**');
-        for (final bestTime in timingInsights['bestTimes'] as List<dynamic>) {
+        for (final bestTime in bestTimes!) {
           interpretation.writeln('• $bestTime');
         }
         interpretation.writeln();

@@ -108,17 +108,17 @@ class PalaceDetailController extends GetxController {
 
   /// Get star category name based on language
   String getStarCategory(StarData star) {
-    return star.getCategoryName(showChineseNames.value);
+    return star.getCategoryName(inChinese: showChineseNames.value);
   }
 
   /// Get transformation type name based on language
   String getTransformationType(StarData star) {
-    return star.getTransformationName(showChineseNames.value);
+    return star.getTransformationName(inChinese: showChineseNames.value);
   }
 
   /// Get star influence description
   String getStarInfluence(StarData star) {
-    return star.getInfluence(showChineseNames.value);
+    return star.getInfluence(inChinese: showChineseNames.value);
   }
 
   /// Get star recommendations

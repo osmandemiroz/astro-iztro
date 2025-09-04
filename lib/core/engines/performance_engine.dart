@@ -1,7 +1,6 @@
 /// [PerformanceEngine] - Performance optimization and caching engine
 /// Implements intelligent caching, memoization, and performance monitoring
 /// Production-ready implementation for optimized astrological calculations
-// ignore_for_file: avoid_dynamic_calls
 
 library;
 
@@ -302,7 +301,8 @@ class PerformanceEngine {
           if (kDebugMode) {
             print('[PerformanceEngine] Using cached result for $operationName');
           }
-          return cachedResult['result'] as T;
+          final resultMap = cachedResult as Map<String, dynamic>;
+          return resultMap['result'] as T;
         }
       }
 
@@ -336,8 +336,9 @@ class PerformanceEngine {
       final expiredKeys = <String>[];
 
       _calculationCache.forEach((key, entry) {
-        final timestamp = entry['timestamp'] as DateTime;
-        final expiration = entry['expiration'] as Duration;
+        final entryMap = entry as Map<String, dynamic>;
+        final timestamp = entryMap['timestamp'] as DateTime;
+        final expiration = entryMap['expiration'] as Duration;
 
         if (now.difference(timestamp) > expiration) {
           expiredKeys.add(key);
