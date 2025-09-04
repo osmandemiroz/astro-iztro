@@ -23,7 +23,7 @@ import 'package:get/get.dart';
 
 /// [AppPages] - Application page routes and bindings
 abstract class AppPages {
-  static const String INITIAL = AppRoutes.home;
+  static const String initial = AppRoutes.home;
 
   static final routes = [
     GetPage<dynamic>(

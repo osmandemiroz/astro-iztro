@@ -1,7 +1,6 @@
 /// [BaZiEngine] - Native Four Pillars BaZi calculation engine
 /// Implements authentic BaZi calculations without external dependencies
 /// Production-ready implementation for reliable Four Pillars analysis
-// ignore_for_file: unused_local_variable
 
 library;
 
@@ -242,7 +241,9 @@ class BaZiEngine {
       // Validate that all required fields are present
       if (kDebugMode) {
         print('[BaZiEngine] Validating result fields...');
-        for (final entry in result.entries) {}
+        for (final entry in result.entries) {
+          print('  ${entry.key}: ${entry.value}');
+        }
       }
 
       // Ensure no null values in critical fields
@@ -1214,10 +1215,6 @@ class BaZiEngine {
 
       // Day master based recommendations with null safety
       final dayMasterElement = dayMasterAnalysis['element'] as String? ?? '木';
-      final favorableElements =
-          (dayMasterAnalysis['favorableElements'] as List<dynamic>?)
-              ?.cast<String>() ??
-          <String>['水', '火'];
 
       recommendations.add('Focus on developing your $dayMasterElement nature');
 

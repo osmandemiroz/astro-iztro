@@ -121,8 +121,6 @@ class ChartView extends GetView<ChartController> {
               switch (value) {
                 case 'refresh':
                   controller.refreshChart();
-                case 'export':
-                  controller.exportChart();
                 case 'analysis':
                   controller.navigateToAnalysis();
               }
@@ -142,22 +140,6 @@ class ChartView extends GetView<ChartController> {
                   ),
                   title: Text(
                     'Refresh Chart',
-                    style: AppTheme.bodyMedium.copyWith(
-                      color: AppColors.darkTextPrimary,
-                    ),
-                  ),
-                  dense: true,
-                ),
-              ),
-              PopupMenuItem(
-                value: 'export',
-                child: ListTile(
-                  leading: const Icon(
-                    Icons.share_rounded,
-                    color: AppColors.lightPurple,
-                  ),
-                  title: Text(
-                    'Export Chart',
                     style: AppTheme.bodyMedium.copyWith(
                       color: AppColors.darkTextPrimary,
                     ),

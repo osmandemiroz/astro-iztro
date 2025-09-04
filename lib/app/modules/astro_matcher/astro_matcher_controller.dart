@@ -1,5 +1,3 @@
-// ignore_for_file: inference_failure_on_function_invocation, document_ignores
-
 import 'package:astro_iztro/core/models/user_profile.dart';
 import 'package:astro_iztro/core/services/iztro_service.dart';
 import 'package:astro_iztro/core/services/storage_service.dart';
@@ -398,6 +396,7 @@ class AstroMatcherController extends GetxController {
     try {
       // Navigate to input screen and wait for result
       // We need to pass a parameter to indicate this is for creating a profile for someone else
+      // ignore: inference_failure_on_function_invocation
       final result = await Get.toNamed(
         '/input',
         arguments: {'isForOtherPerson': true},

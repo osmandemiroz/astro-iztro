@@ -292,6 +292,7 @@ class ChartController extends GetxController {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Header with close button and drag handle
+                const SizedBox(height: 50),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

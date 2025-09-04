@@ -1,5 +1,3 @@
-// ignore_for_file: unused_local_variable, document_ignores
-
 import 'package:astro_iztro/core/models/bazi_data.dart';
 import 'package:astro_iztro/core/models/chart_data.dart';
 import 'package:astro_iztro/core/models/user_profile.dart';
@@ -327,13 +325,13 @@ class AnalysisController extends GetxController {
 
       // Test native engines by calculating fortune for current year
       final currentYear = DateTime.now().year;
-      final fortuneData = await _iztroService.calculateFortuneForYear(
+      await _iztroService.calculateFortuneForYear(
         currentProfile.value!,
         currentYear,
       );
 
       // Test timing cycles
-      final timingData = await _iztroService.calculateTimingCycles(
+      await _iztroService.calculateTimingCycles(
         currentProfile.value!,
         currentYear,
       );

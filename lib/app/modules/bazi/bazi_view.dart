@@ -1,7 +1,3 @@
-// ignore: lines_longer_than_80_chars
-
-// ignore_for_file: document_ignores
-
 import 'package:astro_iztro/app/modules/bazi/bazi_controller.dart';
 import 'package:astro_iztro/core/constants/app_constants.dart';
 import 'package:astro_iztro/core/constants/colors.dart';

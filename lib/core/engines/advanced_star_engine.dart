@@ -1,7 +1,6 @@
 /// [AdvancedStarEngine] - Advanced star positioning and calculation engine
 /// Implements sophisticated star positioning algorithms for Purple Star Astrology
 /// Production-ready implementation for advanced astrological star calculations
-// ignore_for_file: avoid_dynamic_calls
 
 library;
 
@@ -283,7 +282,7 @@ class AdvancedStarEngine {
 
     // Calculate star strengths based on location
     stars['starStrengths'] = _calculateStarStrengths(
-      stars['mainStars'] as Map<String, dynamic>,
+      stars['mainStars'] as Map<String, Map<String, dynamic>>,
       latitude,
       longitude,
     );
@@ -552,7 +551,7 @@ class AdvancedStarEngine {
   }
 
   static Map<String, dynamic> _calculateStarStrengths(
-    Map<String, dynamic> mainStars,
+    Map<String, Map<String, dynamic>> mainStars,
     double latitude,
     double longitude,
   ) {
@@ -616,7 +615,10 @@ class AdvancedStarEngine {
     Map<String, dynamic> stars,
   ) {
     final positions = <String, List<String>>{};
-    (stars['mainStars'] as Map<String, dynamic>).forEach((name, data) {
+    (stars['mainStars'] as Map<String, Map<String, dynamic>>).forEach((
+      name,
+      data,
+    ) {
       final pos = data['position'] as int;
       final key = pos.toString();
       positions.putIfAbsent(key, () => []).add(name);

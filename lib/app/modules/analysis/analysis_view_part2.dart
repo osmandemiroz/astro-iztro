@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_dynamic_calls, document_ignores
-
 part of 'analysis_view.dart';
 
 /// Fortune cycles and element analysis widgets
@@ -222,9 +220,13 @@ extension AnalysisViewPart2 on AnalysisView {
         if (fortuneData['lifePeriods'] != null)
           _buildFortuneCard(
             'Life Period',
-            (fortuneData['lifePeriods']['currentPeriod'] as String?) ??
+            ((fortuneData['lifePeriods'] as Map?)
+                        ?.cast<String, dynamic>()['currentPeriod']
+                    as String?) ??
                 'Unknown',
-            (fortuneData['lifePeriods']['description'] as String?) ??
+            ((fortuneData['lifePeriods'] as Map?)
+                        ?.cast<String, dynamic>()['description']
+                    as String?) ??
                 'No description available',
             Icons.person_outline,
           ),
@@ -233,8 +235,13 @@ extension AnalysisViewPart2 on AnalysisView {
         if (fortuneData['grandLimit'] != null)
           _buildFortuneCard(
             'Grand Limit Cycle',
-            (fortuneData['grandLimit']['cycleName'] as String?) ?? 'Unknown',
-            (fortuneData['grandLimit']['description'] as String?) ??
+            ((fortuneData['grandLimit'] as Map?)
+                        ?.cast<String, dynamic>()['cycleName']
+                    as String?) ??
+                'Unknown',
+            ((fortuneData['grandLimit'] as Map?)
+                        ?.cast<String, dynamic>()['description']
+                    as String?) ??
                 'No description available',
             Icons.timeline,
           ),
@@ -243,8 +250,13 @@ extension AnalysisViewPart2 on AnalysisView {
         if (fortuneData['smallLimit'] != null)
           _buildFortuneCard(
             'Small Limit Cycle',
-            (fortuneData['smallLimit']['cycleName'] as String?) ?? 'Unknown',
-            (fortuneData['smallLimit']['description'] as String?) ??
+            ((fortuneData['smallLimit'] as Map?)
+                        ?.cast<String, dynamic>()['cycleName']
+                    as String?) ??
+                'Unknown',
+            ((fortuneData['smallLimit'] as Map?)
+                        ?.cast<String, dynamic>()['description']
+                    as String?) ??
                 'No description available',
             Icons.schedule,
           ),
@@ -253,9 +265,13 @@ extension AnalysisViewPart2 on AnalysisView {
         if (fortuneData['annualFortune'] != null)
           _buildFortuneCard(
             'Annual Fortune',
-            fortuneData['annualFortune']['overallRating']?.toString() ??
+            ((fortuneData['annualFortune'] as Map?)
+                        ?.cast<String, dynamic>()['overallRating'])
+                    ?.toString() ??
                 'Unknown',
-            (fortuneData['annualFortune']['summary'] as String?) ??
+            ((fortuneData['annualFortune'] as Map?)
+                        ?.cast<String, dynamic>()['summary']
+                    as String?) ??
                 'No summary available',
             Icons.star,
           ),
@@ -831,7 +847,9 @@ extension AnalysisViewPart2 on AnalysisView {
         ),
         const SizedBox(height: 8),
         p0('Year element: ${a['yearElement'] ?? '—'}'),
-        p0('Relation to birth year: ${a['relationship']?['type'] ?? '—'}'),
+        p0(
+          'Relation to birth year: ${(a['relationship'] as Map<String, dynamic>?)?['type'] ?? '—'}',
+        ),
         if (best != null) p0('Best months: $best'),
         if (ch != null) p0('Challenging months: $ch'),
       ]);
