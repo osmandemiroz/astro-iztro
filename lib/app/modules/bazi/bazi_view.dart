@@ -4,6 +4,7 @@ import 'package:astro_iztro/core/constants/colors.dart';
 import 'package:astro_iztro/core/models/bazi_data.dart';
 import 'package:astro_iztro/shared/themes/app_theme.dart';
 import 'package:astro_iztro/shared/widgets/background_image_widget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -16,41 +17,91 @@ class BaZiView extends GetView<BaZiController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Obx(
-          () => Text(
-            controller.baziTitle,
-            style: const TextStyle(
-              color: AppColors.darkTextPrimary,
-              fontWeight: FontWeight.w600,
-              fontSize: 20,
-            ),
-          ),
-        ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
+    // =============================
+    // Adaptive Scaffold + App Bar
+    // =============================
+    // Following Apple HIG and the referenced article's adaptive guidance
+    // we render a Cupertino-styled navigation bar on iOS and Material AppBar elsewhere.
+    final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
 
-        leading: IconButton(
-          icon: Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: AppColors.darkCard.withValues(alpha: 0.8),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: const Icon(
-              Icons.arrow_back_ios_new_rounded,
-              color: AppColors.lightPurple,
-              size: 20,
-            ),
-          ),
-          onPressed: Get.back<void>,
-        ),
-      ),
+    return Scaffold(
+      appBar: _buildAdaptiveAppBar(isIOS),
       body: BaZiBackground(
         child: Obx(_buildBody),
       ),
       floatingActionButton: _buildFloatingActionButton(),
+    );
+  }
+
+  /// [buildAdaptiveAppBar] - Platform adaptive app bar
+  /// - iOS: Uses CupertinoNavigationBar with centered large title feel
+  /// - Others: Uses Material AppBar
+  PreferredSizeWidget _buildAdaptiveAppBar(bool isIOS) {
+    if (isIOS) {
+      return PreferredSize(
+        preferredSize: const Size.fromHeight(44),
+        child: Obx(
+          () => CupertinoNavigationBar(
+            middle: Text(
+              controller.baziTitle,
+              // Keeping typography consistent with app theme while honoring iOS style
+              style: const TextStyle(
+                color: AppColors.darkTextPrimary,
+                fontWeight: FontWeight.w600,
+                fontSize: 18,
+              ),
+            ),
+            backgroundColor: AppColors.darkCard.withValues(alpha: 0.8),
+            border: Border.all(color: Colors.transparent),
+            leading: CupertinoButton(
+              padding: EdgeInsets.zero,
+              onPressed: Get.back<void>,
+              child: Container(
+                padding: const EdgeInsets.all(6),
+                decoration: BoxDecoration(
+                  color: AppColors.darkCard.withValues(alpha: 0.9),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Icon(
+                  CupertinoIcons.back,
+                  color: AppColors.lightPurple,
+                  size: 18,
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
+    return AppBar(
+      title: Obx(
+        () => Text(
+          controller.baziTitle,
+          style: const TextStyle(
+            color: AppColors.darkTextPrimary,
+            fontWeight: FontWeight.w600,
+            fontSize: 20,
+          ),
+        ),
+      ),
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      leading: IconButton(
+        icon: Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: AppColors.darkCard.withValues(alpha: 0.8),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: AppColors.lightPurple,
+            size: 20,
+          ),
+        ),
+        onPressed: Get.back<void>,
+      ),
     );
   }
 
