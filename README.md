@@ -11,7 +11,6 @@ Astro Iztro is a mobile application built with Flutter that provides users with 
 - **Astrolabe Generation**: Create detailed Purple Star Astrology charts
 - **Horoscope Analysis**: Get personalized horoscope readings and personality analysis
 - **Tarot Reading System**: Intelligent tarot card interpretations with contextual guidance
-- **Multi-language Support**: Available in multiple languages
 - **Cross-platform**: Runs on both iOS and Android devices
 - **Traditional Chinese Astrology**: Based on the authentic Zi Wei Dou Shu system
 - **User-friendly Interface**: Clean and intuitive mobile UI design with Apple-inspired aesthetics
