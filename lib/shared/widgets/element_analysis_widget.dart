@@ -22,61 +22,68 @@ class ElementAnalysisWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: AppConstants.cardElevation,
-      child: Padding(
-        padding: const EdgeInsets.all(AppConstants.defaultPadding),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Five Elements Analysis',
-              style: AppTheme.headingMedium.copyWith(
-                color: AppColors.primaryPurple,
-              ),
-            ),
-            const SizedBox(height: AppConstants.defaultPadding),
+    // Get the available size from the context
+    final size = MediaQuery.of(context).size;
+    final maxWidth = size.width * 0.95; // Use 95% of screen width
 
-            // Element bars
-            ...elementCounts.entries.map(
-              (entry) => _buildElementBar(entry.key, entry.value),
-            ),
-
-            const SizedBox(height: AppConstants.defaultPadding),
-
-            // Summary
-            Row(
-              children: [
-                Expanded(
-                  child: _buildSummaryChip(
-                    'Strongest',
-                    strongestElement,
-                    Colors.green,
-                    Icons.trending_up,
-                  ),
+    return SizedBox(
+      width: maxWidth,
+      child: Card(
+        elevation: AppConstants.cardElevation,
+        child: Padding(
+          padding: const EdgeInsets.all(AppConstants.defaultPadding),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Five Elements Analysis',
+                style: AppTheme.headingMedium.copyWith(
+                  color: AppColors.primaryPurple,
                 ),
-                const SizedBox(width: AppConstants.smallPadding),
-                Expanded(
-                  child: _buildSummaryChip(
-                    'Weakest',
-                    weakestElement,
-                    Colors.red,
-                    Icons.trending_down,
+              ),
+              const SizedBox(height: AppConstants.defaultPadding),
+
+              // Element bars
+              ...elementCounts.entries.map(
+                (entry) => _buildElementBar(entry.key, entry.value),
+              ),
+
+              const SizedBox(height: AppConstants.defaultPadding),
+
+              // Summary
+              Row(
+                children: [
+                  Expanded(
+                    child: _buildSummaryChip(
+                      'Strongest',
+                      strongestElement,
+                      Colors.green,
+                      Icons.trending_up,
+                    ),
                   ),
+                  const SizedBox(width: AppConstants.smallPadding),
+                  Expanded(
+                    child: _buildSummaryChip(
+                      'Weakest',
+                      weakestElement,
+                      Colors.red,
+                      Icons.trending_down,
+                    ),
+                  ),
+                ],
+              ),
+
+              if (missingElements.isNotEmpty) ...[
+                const SizedBox(height: AppConstants.smallPadding),
+                _buildSummaryChip(
+                  'Missing',
+                  missingElements.join(', '),
+                  Colors.orange,
+                  Icons.warning_amber,
                 ),
               ],
-            ),
-
-            if (missingElements.isNotEmpty) ...[
-              const SizedBox(height: AppConstants.smallPadding),
-              _buildSummaryChip(
-                'Missing',
-                missingElements.join(', '),
-                Colors.orange,
-                Icons.warning_amber,
-              ),
             ],
-          ],
+          ),
         ),
       ),
     );

@@ -27,35 +27,42 @@ class PalaceInfluenceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: InkWell(
-        onTap: () => onTap(
-          palace: palace,
-          stars: stars,
-          showChineseNames: showChineseNames,
-        ),
-        borderRadius: BorderRadius.circular(AppConstants.borderRadius),
-        child: Padding(
-          padding: const EdgeInsets.all(AppConstants.defaultPadding),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  _buildPalaceName(),
-                  const SizedBox(width: AppConstants.smallPadding),
-                  _buildStarCount(),
-                  const Spacer(),
-                  _buildPalaceElement(),
+    // Get the available size from the context
+    final size = MediaQuery.of(context).size;
+    final maxWidth = size.width * 0.95; // Use 95% of screen width
+
+    return SizedBox(
+      width: maxWidth,
+      child: Card(
+        child: InkWell(
+          onTap: () => onTap(
+            palace: palace,
+            stars: stars,
+            showChineseNames: showChineseNames,
+          ),
+          borderRadius: BorderRadius.circular(AppConstants.borderRadius),
+          child: Padding(
+            padding: const EdgeInsets.all(AppConstants.defaultPadding),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    _buildPalaceName(),
+                    const SizedBox(width: AppConstants.smallPadding),
+                    _buildStarCount(),
+                    const Spacer(),
+                    _buildPalaceElement(),
+                  ],
+                ),
+                if (stars.isNotEmpty) ...[
+                  const SizedBox(height: AppConstants.smallPadding),
+                  _buildStarList(),
                 ],
-              ),
-              if (stars.isNotEmpty) ...[
                 const SizedBox(height: AppConstants.smallPadding),
-                _buildStarList(),
+                _buildAnalysis(),
               ],
-              const SizedBox(height: AppConstants.smallPadding),
-              _buildAnalysis(),
-            ],
+            ),
           ),
         ),
       ),

@@ -23,99 +23,107 @@ class BaZiPillarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Get the available size from the context
+    final size = MediaQuery.of(context).size;
+    final pillarSize =
+        size.width * 0.2; // Use 20% of screen width for each pillar
+
     return GestureDetector(
       onTap: onTap,
-      child: AnimatedContainer(
-        duration: AppConstants.shortAnimation,
-        decoration: BoxDecoration(
-          color: isSelected
-              ? AppColors.primaryGold.withValues(alpha: 0.1)
-              : AppColors.white,
-          borderRadius: BorderRadius.circular(AppConstants.borderRadius),
-          border: Border.all(
-            color: isSelected ? AppColors.primaryGold : AppColors.grey300,
-            width: isSelected ? 2 : 1,
+      child: SizedBox(
+        width: pillarSize,
+        child: AnimatedContainer(
+          duration: AppConstants.shortAnimation,
+          decoration: BoxDecoration(
+            color: isSelected
+                ? AppColors.primaryGold.withValues(alpha: 0.1)
+                : AppColors.white,
+            borderRadius: BorderRadius.circular(AppConstants.borderRadius),
+            border: Border.all(
+              color: isSelected ? AppColors.primaryGold : AppColors.grey300,
+              width: isSelected ? 2 : 1,
+            ),
+            boxShadow: isSelected
+                ? [
+                    BoxShadow(
+                      color: AppColors.primaryGold.withValues(alpha: 0.2),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ]
+                : null,
           ),
-          boxShadow: isSelected
-              ? [
-                  BoxShadow(
-                    color: AppColors.primaryGold.withValues(alpha: 0.2),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
-                ]
-              : null,
-        ),
-        padding: const EdgeInsets.all(AppConstants.smallPadding),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Stem
-            Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color: _getElementColor(pillar.stemElement),
-                shape: BoxShape.circle,
-                border: Border.all(color: AppColors.white, width: 2),
-              ),
-              child: Center(
-                child: Text(
-                  pillar.stem,
-                  style: AppTheme.headingSmall.copyWith(
-                    color: AppColors.white,
-                    fontFamily: AppConstants.chineseFont,
-                    fontSize: 16,
+          padding: const EdgeInsets.all(AppConstants.smallPadding),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Stem
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: _getElementColor(pillar.stemElement),
+                  shape: BoxShape.circle,
+                  border: Border.all(color: AppColors.white, width: 2),
+                ),
+                child: Center(
+                  child: Text(
+                    pillar.stem,
+                    style: AppTheme.headingSmall.copyWith(
+                      color: AppColors.white,
+                      fontFamily: AppConstants.chineseFont,
+                      fontSize: 16,
+                    ),
                   ),
                 ),
               ),
-            ),
 
-            const SizedBox(height: 4),
+              const SizedBox(height: 4),
 
-            // Branch
-            Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color: _getElementColor(pillar.branchElement),
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: AppColors.white, width: 2),
-              ),
-              child: Center(
-                child: Text(
-                  pillar.branch,
-                  style: AppTheme.headingSmall.copyWith(
-                    color: AppColors.white,
-                    fontFamily: AppConstants.chineseFont,
-                    fontSize: 16,
+              // Branch
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: _getElementColor(pillar.branchElement),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: AppColors.white, width: 2),
+                ),
+                child: Center(
+                  child: Text(
+                    pillar.branch,
+                    style: AppTheme.headingSmall.copyWith(
+                      color: AppColors.white,
+                      fontFamily: AppConstants.chineseFont,
+                      fontSize: 16,
+                    ),
                   ),
                 ),
               ),
-            ),
 
-            const SizedBox(height: AppConstants.smallPadding),
+              const SizedBox(height: AppConstants.smallPadding),
 
-            // Elements
-            Text(
-              '${pillar.stemElement}/${pillar.branchElement}',
-              style: AppTheme.caption.copyWith(
-                color: isSelected ? AppColors.primaryGold : AppColors.grey600,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-
-            if (showChineseNames) ...[
-              const SizedBox(height: 2),
+              // Elements
               Text(
-                '${pillar.stemEn}/${pillar.branchEn}',
+                '${pillar.stemElement}/${pillar.branchElement}',
                 style: AppTheme.caption.copyWith(
-                  fontSize: 10,
-                  color: AppColors.grey500,
+                  color: isSelected ? AppColors.primaryGold : AppColors.grey600,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
+
+              if (showChineseNames) ...[
+                const SizedBox(height: 2),
+                Text(
+                  '${pillar.stemEn}/${pillar.branchEn}',
+                  style: AppTheme.caption.copyWith(
+                    fontSize: 10,
+                    color: AppColors.grey500,
+                  ),
+                ),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );

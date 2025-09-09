@@ -22,7 +22,12 @@ class EnhancedTarotReadingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Get the available size from the context
+    final size = MediaQuery.of(context).size;
+    final maxWidth = size.width * 0.95; // Use 95% of screen width
+
     return Container(
+      width: maxWidth,
       decoration: BoxDecoration(
         color: AppColors.darkCard,
         borderRadius: BorderRadius.circular(AppConstants.borderRadius),

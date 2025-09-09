@@ -50,9 +50,16 @@ class LiquidGlassWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Get the available size from the context
+    final size = MediaQuery.of(context).size;
+    final defaultWidth =
+        size.width * 0.95; // Use 95% of screen width by default
+    final defaultHeight =
+        size.height * 0.3; // Use 30% of screen height by default
+
     return Container(
-      width: width,
-      height: height,
+      width: width ?? defaultWidth,
+      height: height ?? defaultHeight,
       margin: margin,
       decoration: BoxDecoration(
         borderRadius: borderRadius ?? BorderRadius.circular(16),

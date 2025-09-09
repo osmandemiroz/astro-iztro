@@ -21,31 +21,40 @@ class PalaceDetailCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: AppConstants.cardElevation * 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppConstants.borderRadius),
-      ),
-      child: Container(
-        decoration: BoxDecoration(
+    // Get the available size from the context
+    final size = MediaQuery.of(context).size;
+    final maxWidth = size.width * 0.95; // Use 95% of screen width
+    final maxHeight = size.height * 0.8; // Use 80% of screen height
+
+    return SizedBox(
+      width: maxWidth,
+      height: maxHeight,
+      child: Card(
+        elevation: AppConstants.cardElevation * 2,
+        shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppConstants.borderRadius),
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              AppColors.white,
-              AppColors.ultraLightPurple.withValues(alpha: 0.3),
+        ),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(AppConstants.borderRadius),
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                AppColors.white,
+                AppColors.ultraLightPurple.withValues(alpha: 0.3),
+              ],
+            ),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildHeader(),
+              _buildPalaceInfo(),
+              if (stars.isNotEmpty) _buildStarsList(),
+              _buildAnalysis(),
             ],
           ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildHeader(),
-            _buildPalaceInfo(),
-            if (stars.isNotEmpty) _buildStarsList(),
-            _buildAnalysis(),
-          ],
         ),
       ),
     );

@@ -21,34 +21,41 @@ class FortuneCycleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(AppConstants.defaultPadding),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                const Icon(
-                  Icons.cyclone,
-                  color: AppColors.primaryGold,
-                ),
-                const SizedBox(width: AppConstants.smallPadding),
-                Text(
-                  showChineseNames ? '運程分析' : 'Fortune Cycles',
-                  style: AppTheme.headingMedium.copyWith(
-                    color: AppColors.primaryPurple,
+    // Get the available size from the context
+    final size = MediaQuery.of(context).size;
+    final maxWidth = size.width * 0.95; // Use 95% of screen width
+
+    return SizedBox(
+      width: maxWidth,
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(AppConstants.defaultPadding),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const Icon(
+                    Icons.cyclone,
+                    color: AppColors.primaryGold,
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(height: AppConstants.defaultPadding),
-            _buildYearSelector(),
-            const SizedBox(height: AppConstants.defaultPadding),
-            ...cycles.entries.map(
-              (entry) => _buildCycleRow(entry.key, entry.value),
-            ),
-          ],
+                  const SizedBox(width: AppConstants.smallPadding),
+                  Text(
+                    showChineseNames ? '運程分析' : 'Fortune Cycles',
+                    style: AppTheme.headingMedium.copyWith(
+                      color: AppColors.primaryPurple,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: AppConstants.defaultPadding),
+              _buildYearSelector(),
+              const SizedBox(height: AppConstants.defaultPadding),
+              ...cycles.entries.map(
+                (entry) => _buildCycleRow(entry.key, entry.value),
+              ),
+            ],
+          ),
         ),
       ),
     );

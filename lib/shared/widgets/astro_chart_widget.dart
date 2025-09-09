@@ -120,16 +120,26 @@ class _AstroChartWidgetState extends State<AstroChartWidget>
 
   @override
   Widget build(BuildContext context) {
-    return CustomPaint(
-      painter: EnhancedAstroChartPainter(
-        chartData: widget.chartData,
-        selectedPalaceIndex: widget.selectedPalaceIndex,
-        showStarDetails: widget.showStarDetails,
-        showChineseNames: widget.showChineseNames,
-        rotationAnimation: _rotationAnimation,
-        pulseAnimation: _pulseAnimation,
-        glowAnimation: _glowAnimation,
-        onPalaceTap: widget.onPalaceTap,
+    // Get the available size from the context
+    final size = MediaQuery.of(context).size;
+    final availableWidth = size.width;
+    final availableHeight = size.height;
+    final chartSize = math.min(availableWidth, availableHeight);
+
+    return SizedBox(
+      width: chartSize,
+      height: chartSize,
+      child: CustomPaint(
+        painter: EnhancedAstroChartPainter(
+          chartData: widget.chartData,
+          selectedPalaceIndex: widget.selectedPalaceIndex,
+          showStarDetails: widget.showStarDetails,
+          showChineseNames: widget.showChineseNames,
+          rotationAnimation: _rotationAnimation,
+          pulseAnimation: _pulseAnimation,
+          glowAnimation: _glowAnimation,
+          onPalaceTap: widget.onPalaceTap,
+        ),
       ),
     );
   }
