@@ -239,7 +239,11 @@ class TarotController extends GetxController {
       );
 
       // Store the enhanced reading data for the enhanced widget
-      enhancedReadingData.assignAll(response);
+      enhancedReadingData.assignAll({
+        ...response,
+        'selectedCards': selectedCards
+            .toList(), // Explicitly add selected cards
+      });
 
       // Generate the interpretation using the response engine
       final interpretation = StringBuffer()

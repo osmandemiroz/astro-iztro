@@ -2,6 +2,7 @@ import 'package:astro_iztro/app/modules/tarot/tarot_controller.dart';
 import 'package:astro_iztro/core/constants/app_constants.dart';
 import 'package:astro_iztro/core/constants/colors.dart';
 import 'package:astro_iztro/core/utils/iz_animated_widgets.dart';
+import 'package:astro_iztro/core/utils/responsive_sizer.dart';
 import 'package:astro_iztro/shared/themes/app_theme.dart';
 import 'package:astro_iztro/shared/widgets/background_image_widget.dart';
 import 'package:astro_iztro/shared/widgets/enhanced_tarot_reading_widget.dart';
@@ -19,6 +20,9 @@ class TarotView extends GetView<TarotController> {
 
   @override
   Widget build(BuildContext context) {
+    // Initialize ResponsiveSizer
+    ResponsiveSizer.init(context);
+
     return Scaffold(
       // Modern dark theme background with mystical gradient
       body: HomeBackground(
@@ -43,7 +47,7 @@ class TarotView extends GetView<TarotController> {
   /// Edge-to-edge design with mystical elements and proper spacing
   Widget _buildAppBar() {
     return SliverAppBar(
-      expandedHeight: 180, // Increased height to accommodate more top spacing
+      expandedHeight: ResponsiveSizer.h(25), // 25% of screen height for app bar
       pinned: true,
       backgroundColor: Colors.transparent,
       elevation: 0,
@@ -86,7 +90,7 @@ class TarotView extends GetView<TarotController> {
                     FontWeight.w400, // Slightly bolder for better readability
                 letterSpacing:
                     4, // Increased letter spacing for elegance and clarity
-                fontSize: 36, // Larger font size for better visibility
+                fontSize: ResponsiveSizer.sp(5), // 5% of screen size for font
               ),
             ),
           ),
@@ -390,8 +394,8 @@ class TarotView extends GetView<TarotController> {
           builder: (context, constraints) {
             // Calculate optimal grid layout based on available width
             final availableWidth = constraints.maxWidth;
-            const cardWidth = 70.0; // Smaller card width
-            const cardHeight = 90.0; // Smaller card height
+            final cardWidth = ResponsiveSizer.w(17); // 17% of screen width
+            final cardHeight = ResponsiveSizer.h(12); // 12% of screen height
             const spacing = AppConstants.smallPadding;
 
             // Calculate how many cards can fit in a row
@@ -621,6 +625,8 @@ class TarotView extends GetView<TarotController> {
         ),
         const SizedBox(height: AppConstants.defaultPadding),
         LiquidGlassCard(
+          height: ResponsiveSizer.h(10),
+          width: ResponsiveSizer.w(100),
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(AppConstants.borderRadius),
@@ -667,6 +673,8 @@ class TarotView extends GetView<TarotController> {
   /// [buildReadingButton] - Perform reading button with mystical effects
   Widget _buildReadingButton() {
     return LiquidGlassCard(
+      height: ResponsiveSizer.h(10),
+      width: ResponsiveSizer.w(100),
       onTap: () {
         if (controller.currentQuestion.value.isNotEmpty) {
           controller.performReading();
@@ -761,8 +769,8 @@ class TarotView extends GetView<TarotController> {
         // Single card - show large and prominent
         return Center(
           child: SizedBox(
-            width: 200,
-            height: 405,
+            width: ResponsiveSizer.w(45),
+            height: ResponsiveSizer.h(45),
             child: _buildCardDisplay(cards.first, 0, isLarge: true),
           ),
         );
@@ -772,13 +780,13 @@ class TarotView extends GetView<TarotController> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             SizedBox(
-              width: 140,
-              height: 196,
+              width: ResponsiveSizer.w(35),
+              height: ResponsiveSizer.h(35),
               child: _buildCardDisplay(cards[0], 0),
             ),
             SizedBox(
-              width: 140,
-              height: 196,
+              width: ResponsiveSizer.w(35),
+              height: ResponsiveSizer.h(35),
               child: _buildCardDisplay(cards[1], 1),
             ),
           ],
@@ -817,9 +825,11 @@ class TarotView extends GetView<TarotController> {
     final position = (card['position'] as int?) ?? 1;
 
     // Dynamic sizing based on isLarge parameter
-    final cardWidth = isLarge ? 200.0 : 60.0;
-    final cardHeight = isLarge ? 280.0 : 80.0;
-    final fontSize = isLarge ? 16.0 : 12.0;
+    final cardWidth = isLarge ? ResponsiveSizer.w(45) : ResponsiveSizer.w(25);
+    final cardHeight = isLarge ? ResponsiveSizer.h(30) : ResponsiveSizer.h(12);
+    final fontSize = isLarge
+        ? ResponsiveSizer.sp(2.5)
+        : ResponsiveSizer.sp(1.8);
 
     return LiquidGlassCard(
       child: Column(
@@ -869,14 +879,14 @@ class TarotView extends GetView<TarotController> {
             style: AppTheme.bodyMedium.copyWith(
               fontWeight: FontWeight.w600,
               color: AppColors.darkTextPrimary,
-              fontSize: fontSize,
+              fontSize: fontSize * 0.8,
             ),
             textAlign: TextAlign.center,
             maxLines: isLarge ? 3 : 2,
             overflow: TextOverflow.ellipsis,
           ),
 
-          const SizedBox(height: 4),
+          const SizedBox(height: 2),
 
           // Orientation indicator
           Container(
@@ -1043,14 +1053,19 @@ class LiquidGlassCard extends StatelessWidget {
     super.key,
     this.onTap,
     this.padding,
+    this.height,
+    this.width,
   });
   final Widget child;
   final VoidCallback? onTap;
   final EdgeInsetsGeometry? padding;
-
+  final double? height;
+  final double? width;
   @override
   Widget build(BuildContext context) {
     return LiquidGlassWidget(
+      height: height,
+      width: width,
       glassColor: AppColors.glassPrimary,
       borderColor: AppColors.lightPurple,
       borderRadius: BorderRadius.circular(AppConstants.borderRadius),
