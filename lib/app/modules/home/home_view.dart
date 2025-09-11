@@ -3,6 +3,7 @@ import 'package:astro_iztro/core/constants/app_constants.dart';
 import 'package:astro_iztro/core/constants/colors.dart';
 import 'package:astro_iztro/core/models/user_profile.dart';
 import 'package:astro_iztro/core/utils/iz_animated_widgets.dart';
+import 'package:astro_iztro/core/utils/responsive_sizer.dart';
 import 'package:astro_iztro/shared/themes/app_theme.dart';
 import 'package:astro_iztro/shared/widgets/background_image_widget.dart';
 import 'package:astro_iztro/shared/widgets/liquid_glass_widget.dart';
@@ -34,7 +35,8 @@ class HomeView extends GetView<HomeController> {
     // [HomeView.build] - Platform detection for adaptive design
     // Following the article's recommendation to use Theme.of(context).platform
     final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
-
+    // Initialize ResponsiveSizer
+    ResponsiveSizer.init(context);
     return Scaffold(
       // Modern dark theme background with space gradient
       body: HomeBackground(
@@ -452,6 +454,8 @@ class HomeView extends GetView<HomeController> {
       return IzTapScale(
         onTap: controller.navigateToInput,
         child: LiquidGlassCard(
+          height: ResponsiveSizer.h(25),
+          width: ResponsiveSizer.w(100),
           onTap: controller.navigateToInput,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

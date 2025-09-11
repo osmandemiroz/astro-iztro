@@ -2,6 +2,7 @@ import 'package:astro_iztro/app/modules/astro_matcher/astro_matcher_controller.d
 import 'package:astro_iztro/core/constants/app_constants.dart';
 import 'package:astro_iztro/core/constants/colors.dart';
 import 'package:astro_iztro/core/models/user_profile.dart';
+import 'package:astro_iztro/core/utils/responsive_sizer.dart';
 import 'package:astro_iztro/shared/themes/app_theme.dart';
 import 'package:astro_iztro/shared/widgets/background_image_widget.dart';
 import 'package:astro_iztro/shared/widgets/liquid_glass_widget.dart';
@@ -17,6 +18,7 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
 
   @override
   Widget build(BuildContext context) {
+    ResponsiveSizer.init(context);
     return Scaffold(
       // Modern dark theme background with space gradient
       body: AstroMatcherBackground(
@@ -38,7 +40,10 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
     return CustomScrollView(
       physics: const BouncingScrollPhysics(),
       slivers: [
-        _buildAppBar(),
+        _buildAppBar(
+          height: ResponsiveSizer.h(20),
+          width: ResponsiveSizer.w(100),
+        ),
         _buildMainContent(),
       ],
     );
@@ -48,7 +53,10 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
   /// Edge-to-edge design with proper status bar spacing
   /// Enhanced with liquid glass effects for modern appearance
   /// Follows Apple's Human Interface Guidelines for clean, minimal design
-  Widget _buildAppBar() {
+  Widget _buildAppBar({
+    required double height,
+    required double width,
+  }) {
     return SliverAppBar(
       expandedHeight: 100,
       pinned: true,
@@ -62,6 +70,8 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
         child: Align(
           alignment: Alignment.centerLeft,
           child: LiquidGlassWidget(
+            height: height,
+            width: width,
             glassColor: AppColors.glassPrimary,
             borderColor: AppColors.lightPurple.withValues(alpha: 0.4),
             borderRadius: BorderRadius.circular(12),
@@ -130,11 +140,20 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildProfileSelectionSection(),
+            _buildProfileSelectionSection(
+              height: ResponsiveSizer.h(11),
+              width: ResponsiveSizer.w(100),
+            ),
             const SizedBox(height: AppConstants.largePadding),
-            _buildCalculateButton(),
+            _buildCalculateButton(
+              height: ResponsiveSizer.h(10),
+              width: ResponsiveSizer.w(20),
+            ),
             const SizedBox(height: AppConstants.largePadding),
-            _buildResultsSection(),
+            _buildResultsSection(
+              height: ResponsiveSizer.h(10),
+              width: ResponsiveSizer.w(100),
+            ),
           ],
         ),
       ),
@@ -142,7 +161,10 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
   }
 
   /// [buildProfileSelectionSection] - Profile selection interface
-  Widget _buildProfileSelectionSection() {
+  Widget _buildProfileSelectionSection({
+    required double height,
+    required double width,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -156,6 +178,8 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
 
         // Profile 1 Selection (Current Profile - Read Only)
         _buildCurrentProfileDisplay(
+          height: height,
+          width: width,
           title: 'Profile 1 (Your Profile)',
           selectedProfile: controller.selectedProfile1.value,
         ),
@@ -167,6 +191,8 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
           children: [
             Expanded(
               child: _buildProfileSelector(
+                height: height * 0.7,
+                width: width * 0.5,
                 title: 'Profile 2 (Other Person)',
                 selectedProfile: controller.selectedProfile2.value,
                 onProfileSelected: controller.setProfile2,
@@ -176,6 +202,8 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
             const SizedBox(width: AppConstants.smallPadding),
             // Create Profile button
             LiquidGlassWidget(
+              height: 75,
+              width: 75,
               glassColor: AppColors.glassPrimary,
               borderColor: AppColors.success,
               borderRadius: BorderRadius.circular(12),
@@ -197,6 +225,8 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
             const SizedBox(width: AppConstants.smallPadding),
             // Refresh button
             LiquidGlassWidget(
+              height: 75,
+              width: 75,
               glassColor: AppColors.glassPrimary,
               borderColor: AppColors.lightPurple,
               borderRadius: BorderRadius.circular(12),
@@ -249,6 +279,8 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
   Widget _buildCurrentProfileDisplay({
     required String title,
     required UserProfile? selectedProfile,
+    required double height,
+    required double width,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -263,16 +295,28 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
         const SizedBox(height: AppConstants.smallPadding),
 
         if (selectedProfile == null)
-          _buildNoCurrentProfileMessage()
+          _buildNoCurrentProfileMessage(
+            height: height,
+            width: width,
+          )
         else
-          _buildCurrentProfileCard(selectedProfile),
+          _buildCurrentProfileCard(
+            height: height,
+            width: width,
+            profile: selectedProfile,
+          ),
       ],
     );
   }
 
   /// [buildNoCurrentProfileMessage] - Message when no current profile exists
-  Widget _buildNoCurrentProfileMessage() {
+  Widget _buildNoCurrentProfileMessage({
+    required double height,
+    required double width,
+  }) {
     return LiquidGlassWidget(
+      height: height,
+      width: width,
       glassColor: AppColors.glassSecondary,
       borderColor: AppColors.error,
       borderRadius: BorderRadius.circular(12),
@@ -300,8 +344,14 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
   }
 
   /// [buildCurrentProfileCard] - Display current profile information
-  Widget _buildCurrentProfileCard(UserProfile profile) {
+  Widget _buildCurrentProfileCard({
+    required double height,
+    required double width,
+    required UserProfile profile,
+  }) {
     return LiquidGlassWidget(
+      height: height,
+      width: width,
       glassColor: AppColors.glassPrimary,
       borderColor: AppColors.lightPurple,
       borderRadius: BorderRadius.circular(12),
@@ -364,6 +414,8 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
     required UserProfile? selectedProfile,
     required void Function(UserProfile) onProfileSelected,
     required RxList<UserProfile> availableProfiles,
+    required double height,
+    required double width,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -375,12 +427,16 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
             fontWeight: FontWeight.w500,
           ),
         ),
-        const SizedBox(height: AppConstants.smallPadding),
 
         if (availableProfiles.isEmpty)
-          _buildNoOtherProfilesMessage()
+          _buildNoOtherProfilesMessage(
+            height: height,
+            width: width,
+          )
         else
           _buildProfileDropdown(
+            height: height,
+            width: width,
             selectedProfile: selectedProfile,
             availableProfiles: availableProfiles,
             onProfileSelected: onProfileSelected,
@@ -390,8 +446,13 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
   }
 
   /// [buildNoOtherProfilesMessage] - Message when no other profiles are available
-  Widget _buildNoOtherProfilesMessage() {
+  Widget _buildNoOtherProfilesMessage({
+    required double height,
+    required double width,
+  }) {
     return LiquidGlassWidget(
+      height: height,
+      width: width,
       glassColor: AppColors.glassSecondary,
       borderColor: AppColors.lightPurple.withValues(alpha: 0.3),
       borderRadius: BorderRadius.circular(12),
@@ -423,8 +484,12 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
     required UserProfile? selectedProfile,
     required RxList<UserProfile> availableProfiles,
     required void Function(UserProfile) onProfileSelected,
+    required double height,
+    required double width,
   }) {
     return LiquidGlassWidget(
+      height: height,
+      width: width,
       glassColor: AppColors.glassPrimary,
       borderColor: AppColors.lightPurple,
       borderRadius: BorderRadius.circular(12),
@@ -501,7 +566,10 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
   }
 
   /// [buildCalculateButton] - Calculate compatibility button
-  Widget _buildCalculateButton() {
+  Widget _buildCalculateButton({
+    required double height,
+    required double width,
+  }) {
     return Obx(() {
       final hasProfile1 = controller.selectedProfile1.value != null;
       final hasProfile2 = controller.selectedProfile2.value != null;
@@ -516,6 +584,8 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
           duration: const Duration(milliseconds: 200),
           curve: Curves.easeInOut,
           child: LiquidGlassWidget(
+            height: height,
+            width: width,
             glassColor: canCalculate
                 ? AppColors.lightPurple
                 : AppColors.glassSecondary,
@@ -566,7 +636,10 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
   }
 
   /// [buildResultsSection] - Compatibility results display
-  Widget _buildResultsSection() {
+  Widget _buildResultsSection({
+    required double height,
+    required double width,
+  }) {
     return Obx(() {
       return AnimatedSwitcher(
         duration: const Duration(milliseconds: 250),
@@ -584,13 +657,25 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
                     ),
                   ),
                   const SizedBox(height: AppConstants.defaultPadding),
-                  _buildOverallScoreCard(),
+                  _buildOverallScoreCard(
+                    height: height,
+                    width: width,
+                  ),
                   const SizedBox(height: AppConstants.defaultPadding),
-                  _buildDetailedAnalysisCard(),
+                  _buildDetailedAnalysisCard(
+                    height: height,
+                    width: width,
+                  ),
                   const SizedBox(height: AppConstants.defaultPadding),
-                  _buildRecommendationsCard(),
+                  _buildRecommendationsCard(
+                    height: height,
+                    width: width,
+                  ),
                   const SizedBox(height: AppConstants.defaultPadding),
-                  _buildFutureInsightsCard(),
+                  _buildFutureInsightsCard(
+                    height: height,
+                    width: width,
+                  ),
                 ],
               )
             : const SizedBox.shrink(),
@@ -599,13 +684,18 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
   }
 
   /// [buildOverallScoreCard] - Overall compatibility score display
-  Widget _buildOverallScoreCard() {
+  Widget _buildOverallScoreCard({
+    required double height,
+    required double width,
+  }) {
     return _insightInk(
       onTap: () => _openInsight(
         title: 'Overall Compatibility',
         body: _overallScoreExplanation(),
       ),
       child: LiquidGlassWidget(
+        height: height * 1.6,
+        width: width,
         glassColor: AppColors.glassPrimary,
         borderColor: AppColors.lightPurple,
         borderRadius: BorderRadius.circular(16),
@@ -642,7 +732,10 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
   }
 
   /// [buildDetailedAnalysisCard] - Detailed compatibility analysis
-  Widget _buildDetailedAnalysisCard() {
+  Widget _buildDetailedAnalysisCard({
+    required double height,
+    required double width,
+  }) {
     final analysis = controller.getCompatibilityAnalysis();
     if (analysis == null) return const SizedBox.shrink();
 
@@ -652,6 +745,8 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
         body: _detailedAnalysisExplanation(analysis),
       ),
       child: LiquidGlassWidget(
+        height: height * 4,
+        width: width,
         glassColor: AppColors.glassPrimary,
         borderColor: AppColors.lightPurple,
         borderRadius: BorderRadius.circular(16),
@@ -745,7 +840,10 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
   }
 
   /// [buildRecommendationsCard] - Compatibility recommendations
-  Widget _buildRecommendationsCard() {
+  Widget _buildRecommendationsCard({
+    required double height,
+    required double width,
+  }) {
     final recommendations = controller.getRecommendations();
     if (recommendations.isEmpty) return const SizedBox.shrink();
 
@@ -755,6 +853,8 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
         body: _recommendationsExplanation(),
       ),
       child: LiquidGlassWidget(
+        height: height * 2.4,
+        width: width,
         glassColor: AppColors.glassPrimary,
         borderColor: AppColors.lightPurple,
         borderRadius: BorderRadius.circular(16),
@@ -804,7 +904,10 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
   }
 
   // --- Future insights card and explanation helpers ---
-  Widget _buildFutureInsightsCard() {
+  Widget _buildFutureInsightsCard({
+    required double height,
+    required double width,
+  }) {
     final yearly = controller.getYearlyScores();
     final prediction = controller.getPredictionLabel();
     if (yearly.isEmpty &&
@@ -819,6 +922,8 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
         body: _futureInsightsExplanation(yearly, prediction),
       ),
       child: LiquidGlassWidget(
+        height: height * 3,
+        width: width,
         glassColor: AppColors.glassPrimary,
         borderColor: AppColors.lightPurple,
         borderRadius: BorderRadius.circular(16),
