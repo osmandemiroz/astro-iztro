@@ -505,7 +505,6 @@ class SettingsView extends GetView<SettingsController> {
               child: Switch(
                 value: value.value,
                 onChanged: onChanged,
-                activeThumbColor: AppColors.lightPurple,
                 activeTrackColor: AppColors.lightPurple.withValues(alpha: 0.3),
                 inactiveThumbColor: AppColors.darkTextTertiary,
                 inactiveTrackColor: AppColors.darkTextTertiary.withValues(

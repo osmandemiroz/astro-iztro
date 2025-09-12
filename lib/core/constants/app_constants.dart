@@ -3,7 +3,6 @@ class AppConstants {
   // App Information
   static const String appName = 'Astro Iztro';
   static const String appVersion = '1.0.0';
-  static const String packageName = 'com.example.astro_iztro';
 
   // UI Constants
   static const double borderRadius = 12;

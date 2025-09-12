@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:astro_iztro/app/modules/onboarding/onboarding_controller.dart';
 import 'package:astro_iztro/core/constants/app_constants.dart';
 import 'package:astro_iztro/core/constants/colors.dart';
+import 'package:astro_iztro/core/utils/responsive_sizer.dart';
 import 'package:astro_iztro/shared/themes/app_theme.dart';
 import 'package:astro_iztro/shared/widgets/liquid_glass_widget.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,7 @@ class OnboardingView extends GetView<OnboardingController> {
 
   @override
   Widget build(BuildContext context) {
+    ResponsiveSizer.init(context);
     return Scaffold(
       // Full-screen immersive experience with space gradient background
       body: OnboardingBackground(
@@ -52,6 +54,8 @@ class OnboardingView extends GetView<OnboardingController> {
           Obx(
             () => controller.currentPage.value < 3
                 ? LiquidGlassWidget(
+                    width: ResponsiveSizer.w(17),
+                    height: ResponsiveSizer.h(6),
                     child: TextButton(
                       onPressed: controller.skipOnboarding,
                       style: TextButton.styleFrom(
@@ -160,6 +164,8 @@ class OnboardingView extends GetView<OnboardingController> {
 
           // Subtitle with glass effect
           LiquidGlassWidget(
+            width: ResponsiveSizer.w(85),
+            height: ResponsiveSizer.h(13),
             child: Padding(
               padding: const EdgeInsets.all(AppConstants.defaultPadding),
               child: Text(
@@ -231,6 +237,8 @@ class OnboardingView extends GetView<OnboardingController> {
           const SizedBox(height: AppConstants.defaultPadding),
 
           LiquidGlassWidget(
+            width: ResponsiveSizer.w(100),
+            height: ResponsiveSizer.h(13),
             child: Padding(
               padding: const EdgeInsets.all(AppConstants.defaultPadding),
               child: Text(
@@ -272,6 +280,8 @@ class OnboardingView extends GetView<OnboardingController> {
           const SizedBox(height: AppConstants.defaultPadding),
 
           LiquidGlassWidget(
+            width: ResponsiveSizer.w(100),
+            height: ResponsiveSizer.h(13),
             child: Padding(
               padding: const EdgeInsets.all(AppConstants.defaultPadding),
               child: Text(
@@ -301,6 +311,8 @@ class OnboardingView extends GetView<OnboardingController> {
             () => controller.currentPage.value > 0
                 ? Expanded(
                     child: LiquidGlassWidget(
+                      width: ResponsiveSizer.w(50),
+                      height: ResponsiveSizer.h(6),
                       child: TextButton(
                         onPressed: controller.previousPage,
                         style: TextButton.styleFrom(
@@ -328,10 +340,11 @@ class OnboardingView extends GetView<OnboardingController> {
             flex: 2,
             child: Obx(
               () => LiquidGlassWidget(
+                width: ResponsiveSizer.w(50),
+                height: ResponsiveSizer.h(6),
                 child: ElevatedButton(
-                  onPressed: controller.isLoading.value
-                      ? null
-                      : controller.nextPage,
+                  onPressed:
+                      controller.isLoading.value ? null : controller.nextPage,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.white,
                     foregroundColor: AppColors.primaryPurple,
@@ -541,6 +554,8 @@ class OnboardingView extends GetView<OnboardingController> {
                     bottom: AppConstants.smallPadding,
                   ),
                   child: LiquidGlassWidget(
+                    width: ResponsiveSizer.w(100),
+                    height: ResponsiveSizer.h(6),
                     child: Padding(
                       padding: const EdgeInsets.all(
                         AppConstants.defaultPadding,

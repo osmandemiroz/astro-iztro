@@ -73,8 +73,7 @@ class IzSlideFadeIn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final total = duration + delay;
-    final start =
-        delay.inMilliseconds /
+    final start = delay.inMilliseconds /
         (total.inMilliseconds == 0 ? 1 : total.inMilliseconds);
     return TweenAnimationBuilder<double>(
       tween: Tween(begin: 0, end: 1),
@@ -211,13 +210,15 @@ class _IzTapScaleState extends State<IzTapScale>
   }
 
   void _onTapDown(_) {
-    _controller.duration = widget.durationDown;
-    _controller.forward();
+    _controller
+      ..duration = widget.durationDown
+      ..forward();
   }
 
   void _onTapCancel() {
-    _controller.reverseDuration = widget.durationUp;
-    _controller.reverse();
+    _controller
+      ..reverseDuration = widget.durationUp
+      ..reverse();
   }
 
   void _onTapUp(_) {

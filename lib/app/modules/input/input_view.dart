@@ -16,8 +16,7 @@ class InputView extends GetView<InputController> {
   /// [_getTitle] - Get the appropriate title based on context
   String _getTitle() {
     final arguments = Get.arguments;
-    final isForOtherPerson =
-        arguments is Map<String, dynamic> &&
+    final isForOtherPerson = arguments is Map<String, dynamic> &&
         arguments['isForOtherPerson'] == true;
     return isForOtherPerson
         ? 'Create Profile for Other Person'
@@ -221,10 +220,10 @@ class InputView extends GetView<InputController> {
                 transition: Transition.cupertino,
               );
               if (picked != null) {
-                controller.latitudeController.text = picked.latitude
-                    .toStringAsFixed(6);
-                controller.longitudeController.text = picked.longitude
-                    .toStringAsFixed(6);
+                controller.latitudeController.text =
+                    picked.latitude.toStringAsFixed(6);
+                controller.longitudeController.text =
+                    picked.longitude.toStringAsFixed(6);
               }
             },
           ),
@@ -281,7 +280,6 @@ class InputView extends GetView<InputController> {
       children: [
         Text('Calculation Preferences', style: AppTheme.headingSmall),
         const SizedBox(height: AppConstants.defaultPadding),
-
         Obx(
           () => SwitchListTile(
             title: const Text('Use Lunar Calendar'),
@@ -290,7 +288,6 @@ class InputView extends GetView<InputController> {
             onChanged: (value) => controller.isLunarCalendar.value = value,
           ),
         ),
-
         Obx(
           () => SwitchListTile(
             title: const Text('True Solar Time'),
