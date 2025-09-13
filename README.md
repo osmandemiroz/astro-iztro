@@ -14,6 +14,7 @@ Astro Iztro is a mobile application built with Flutter that provides users with 
 - **Cross-platform**: Runs on both iOS and Android devices
 - **Traditional Chinese Astrology**: Based on the authentic Zi Wei Dou Shu system
 - **User-friendly Interface**: Clean and intuitive mobile UI design with Apple-inspired aesthetics
+- **Multi-language Support**: Full internationalization with English, Turkish, Chinese, and Japanese translations
 
 ## 🚀 Getting Started
 
@@ -23,6 +24,7 @@ Astro Iztro is a mobile application built with Flutter that provides users with 
 - Dart SDK (>=2.12.0)
 - Android Studio / VS Code with Flutter extensions
 - iOS development setup (for iOS deployment)
+- Flutter Localization packages (flutter_localizations, intl)
 
 ### Installation
 
@@ -77,7 +79,7 @@ The app features an **intelligent Tarot Response Engine** that provides:
 
 ## 🛠 Technical Details
 
-This Flutter application uses **native calculation engines** to provide:
+This Flutter application uses **native calculation engines** and **modern Flutter features** to provide:
 
 - **PurpleStarEngine**: Core Purple Star Astrology calculations
 - **BaZiEngine**: Four Pillars BaZi analysis
@@ -85,6 +87,7 @@ This Flutter application uses **native calculation engines** to provide:
 - **ElementEngine**: Five Elements balance analysis
 - **TimingEngine**: Life cycle and timing analysis
 - **TarotResponseEngine**: Intelligent tarot reading and interpretation system
+- **LanguageService**: Internationalization and localization management
 
 **Key Benefits:**
 - ✅ **No External Dependencies**: All calculations performed locally
@@ -93,6 +96,24 @@ This Flutter application uses **native calculation engines** to provide:
 - ✅ **Intelligent Tarot System**: Contextual interpretations and actionable guidance
 - ✅ **Production Ready**: Comprehensive error handling and validation
 - ✅ **Beautiful UI**: Apple-inspired design with smooth animations
+- ✅ **Comprehensive Internationalization**: Complete translations in multiple languages
+
+## 🌐 Internationalization
+
+The application supports multiple languages to provide a localized experience for users worldwide:
+
+- **English**: Default language with professional astrological terminology
+- **Turkish**: Complete Turkish translations with culturally appropriate terms
+- **Chinese (Simplified)**: Authentic Chinese translations with traditional astrological terminology
+- **Japanese**: Full Japanese support with proper astrological context
+
+### Language Features
+- **Dynamic Language Switching**: Change languages on-the-fly without app restart
+- **Persistent Language Selection**: App remembers your language preference
+- **Complete UI Translation**: All user interface elements are fully translated
+- **Specialized Terminology**: Accurate translations of astrological and tarot concepts
+- **Chinese Character Support**: Traditional Chinese characters for authentic experience
+- **Localized Descriptions**: Culturally appropriate explanations and guidance
 
 ## 📖 Usage
 
@@ -101,6 +122,7 @@ This Flutter application uses **native calculation engines** to provide:
 2. **Generate Astrolabe**: The app calculates your Purple Star Astrology chart
 3. **View Analysis**: Read detailed personality insights and predictions
 4. **Explore Features**: Navigate through different aspects of your astrological profile
+5. **Select Language**: Choose your preferred language from the settings
 
 ### Tarot Reading System
 1. **Ask a Question**: Enter your specific question or concern
@@ -130,6 +152,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Traditional Chinese Astrology**: Based on centuries-old Zi Wei Dou Shu principles
 - **Flutter Community**: Excellent mobile development framework
 - **Open Source**: Built with modern, maintainable code architecture
+- **Internationalization**: Multi-language support with Flutter's i18n infrastructure
 
 ## 📞 Support
 
