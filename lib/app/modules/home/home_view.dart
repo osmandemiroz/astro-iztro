@@ -1,7 +1,10 @@
+// ignore_for_file: use_build_context_synchronously, document_ignores
+
 import 'package:astro_iztro/app/modules/home/home_controller.dart';
 import 'package:astro_iztro/core/constants/app_constants.dart';
 import 'package:astro_iztro/core/constants/colors.dart';
 import 'package:astro_iztro/core/models/user_profile.dart';
+import 'package:astro_iztro/core/services/language_service.dart';
 import 'package:astro_iztro/core/utils/iz_animated_widgets.dart';
 import 'package:astro_iztro/core/utils/responsive_sizer.dart';
 import 'package:astro_iztro/shared/themes/app_theme.dart';
@@ -9,6 +12,7 @@ import 'package:astro_iztro/shared/widgets/background_image_widget.dart';
 import 'package:astro_iztro/shared/widgets/liquid_glass_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 
 /// [HomeView] - Adaptive main dashboard screen following Apple Human Interface Guidelines
@@ -78,7 +82,7 @@ class HomeView extends GetView<HomeController> {
               ),
             const SizedBox(height: AppConstants.defaultPadding),
             Text(
-              'Loading your cosmic journey...',
+              AppLocalizations.of(context)!.loadingCosmicJourney,
               style: AppTheme.bodyLarge.copyWith(
                 color: AppColors.darkTextSecondary,
                 fontWeight: FontWeight.w500,
@@ -238,8 +242,11 @@ class HomeView extends GetView<HomeController> {
                   final profile = controller.currentProfile.value;
                   return Text(
                     profile != null
-                        ? 'Welcome back, ${profile.name ?? 'User'}!'
-                        : 'Welcome to Astro Iztro!',
+                        ? AppLocalizations.of(context)!.welcomeBack(
+                            profile.name ??
+                                AppLocalizations.of(context)!.unknown,
+                          )
+                        : AppLocalizations.of(context)!.welcomeToAstroIztro,
                     style: AppTheme.bodyLarge.copyWith(
                       color: AppColors.darkTextPrimary,
                       fontWeight: FontWeight.w800,
@@ -251,7 +258,7 @@ class HomeView extends GetView<HomeController> {
                 if (isTablet) ...[
                   // [buildHeaderContent] - Additional info for tablet layout
                   Text(
-                    'Discover your cosmic destiny',
+                    AppLocalizations.of(context)!.discoverCosmicDestiny,
                     style: AppTheme.bodyMedium.copyWith(
                       color: AppColors.darkTextSecondary,
                       fontSize: 14,
@@ -378,7 +385,7 @@ class HomeView extends GetView<HomeController> {
       children: [
         // [buildResponsiveGridLayout] - Section title
         Text(
-          'Dashboard',
+          AppLocalizations.of(context)!.dashboard,
           style: AppTheme.headingLarge.copyWith(
             color: AppColors.darkTextPrimary,
             fontSize: isDesktop ? 32 : 28,
@@ -396,7 +403,7 @@ class HomeView extends GetView<HomeController> {
           physics: const NeverScrollableScrollPhysics(),
           children: [
             // [buildResponsiveGridLayout] - Profile section
-            _buildCurrentProfileSection(),
+            _buildCurrentProfileSection(context),
 
             // [buildResponsiveGridLayout] - Quick actions grid
             _buildQuickActionsGrid(context, isIOS, isTablet, isDesktop),
@@ -424,7 +431,7 @@ class HomeView extends GetView<HomeController> {
         // [buildMobileLayout] - Animate profile section with slide-in effect
         IzSlideFadeIn(
           offset: const Offset(0, 20),
-          child: _buildCurrentProfileSection(),
+          child: _buildCurrentProfileSection(context),
         ),
         const SizedBox(height: AppConstants.largePadding),
 
@@ -432,6 +439,14 @@ class HomeView extends GetView<HomeController> {
         IzSlideFadeIn(
           delay: const Duration(milliseconds: 150),
           child: _buildQuickActionsSection(context, isIOS),
+        ),
+
+        const SizedBox(height: AppConstants.largePadding),
+
+        // [buildMobileLayout] - Animate settings section with slide-in effect
+        IzSlideFadeIn(
+          delay: const Duration(milliseconds: 200),
+          child: _buildSettingsSection(context, isIOS),
         ),
       ],
     );
@@ -443,12 +458,12 @@ class HomeView extends GetView<HomeController> {
   /// - iOS: Cupertino-style card with rounded corners and subtle shadows
   /// - Android: Material Design card with elevation and ripple effects
   /// - Responsive: Adapts content density for different screen sizes
-  Widget _buildCurrentProfileSection() {
+  Widget _buildCurrentProfileSection(BuildContext context) {
     return Obx(() {
       final profile = controller.currentProfile.value;
 
       if (profile == null) {
-        return _buildNoProfileCard();
+        return _buildNoProfileCard(context);
       }
 
       return IzTapScale(
@@ -464,7 +479,7 @@ class HomeView extends GetView<HomeController> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Current Profile',
+                    AppLocalizations.of(context)!.currentProfile,
                     style: AppTheme.headingSmall.copyWith(
                       color: AppColors.darkTextPrimary,
                     ),
@@ -479,7 +494,7 @@ class HomeView extends GetView<HomeController> {
                 ],
               ),
               const SizedBox(height: AppConstants.smallPadding),
-              _buildProfileInfo(profile),
+              _buildProfileInfo(profile, context),
             ],
           ),
         ),
@@ -492,7 +507,7 @@ class HomeView extends GetView<HomeController> {
   /// Implements adaptive design with platform-specific styling:
   /// - iOS: Cupertino-style button and layout
   /// - Android: Material Design button and layout
-  Widget _buildNoProfileCard() {
+  Widget _buildNoProfileCard(BuildContext context) {
     return IzTapScale(
       onTap: controller.navigateToInput,
       child: LiquidGlassCard(
@@ -506,14 +521,14 @@ class HomeView extends GetView<HomeController> {
             ),
             const SizedBox(height: AppConstants.smallPadding),
             Text(
-              'Create Your First Profile',
+              AppLocalizations.of(context)!.createYourFirstProfile,
               style: AppTheme.headingSmall.copyWith(
                 color: AppColors.lightPurple,
               ),
             ),
             const SizedBox(height: AppConstants.smallPadding),
             Text(
-              'Start your astrological journey by creating a profile with your birth information.',
+              AppLocalizations.of(context)!.startAstrologicalJourney,
               style: AppTheme.bodyMedium.copyWith(
                 color: AppColors.darkTextSecondary,
               ),
@@ -523,7 +538,7 @@ class HomeView extends GetView<HomeController> {
             ElevatedButton.icon(
               onPressed: controller.navigateToInput,
               icon: const Icon(Icons.add),
-              label: const Text('Create Profile'),
+              label: Text(AppLocalizations.of(context)!.createProfile),
             ),
           ],
         ),
@@ -536,27 +551,27 @@ class HomeView extends GetView<HomeController> {
   /// Adapts information density based on screen size:
   /// - Mobile: Compact layout with essential information
   /// - Tablet/Desktop: Expanded layout with additional details
-  Widget _buildProfileInfo(UserProfile profile) {
+  Widget _buildProfileInfo(UserProfile profile, BuildContext context) {
     return Column(
       children: [
         _buildInfoRow(
           Icons.person_outline,
-          'Name',
-          profile.name ?? 'Unknown',
+          AppLocalizations.of(context)!.name,
+          profile.name ?? AppLocalizations.of(context)!.unknown,
         ),
         _buildInfoRow(
           Icons.calendar_today_outlined,
-          'Birth Date',
+          AppLocalizations.of(context)!.birthDate,
           '${profile.birthDate.day}/${profile.birthDate.month}/${profile.birthDate.year}',
         ),
         _buildInfoRow(
           Icons.access_time_outlined,
-          'Birth Time',
+          AppLocalizations.of(context)!.birthTime,
           profile.formattedBirthTime,
         ),
         _buildInfoRow(
           Icons.location_on_outlined,
-          'Location',
+          AppLocalizations.of(context)!.location,
           profile.locationString,
         ),
       ],
@@ -615,7 +630,7 @@ class HomeView extends GetView<HomeController> {
         IzFadeIn(
           delay: const Duration(milliseconds: 100),
           child: Text(
-            'Quick Actions',
+            AppLocalizations.of(context)!.quickActions,
             style: AppTheme.headingSmall.copyWith(
               color: AppColors.darkTextPrimary,
             ),
@@ -628,8 +643,8 @@ class HomeView extends GetView<HomeController> {
           children: [
             _buildActionCard(
               iconAsset: 'assets/images/icon/ic_astrology_chart.png',
-              title: 'Purple Star Chart',
-              subtitle: 'View astrology chart',
+              title: AppLocalizations.of(context)!.purpleStarChart,
+              subtitle: AppLocalizations.of(context)!.viewAstrologyChart,
               onTap: controller.navigateToChart,
               color: AppColors.lightPurple,
               delay: const Duration(milliseconds: 200),
@@ -637,8 +652,8 @@ class HomeView extends GetView<HomeController> {
             const SizedBox(height: AppConstants.defaultPadding),
             _buildActionCard(
               iconAsset: 'assets/images/icon/ic_analyze.png',
-              title: 'BaZi Analysis',
-              subtitle: 'Four Pillars reading',
+              title: AppLocalizations.of(context)!.baziAnalysis,
+              subtitle: AppLocalizations.of(context)!.fourPillarsReading,
               onTap: controller.navigateToBaZi,
               color: AppColors.lightGold,
               delay: const Duration(milliseconds: 250),
@@ -646,8 +661,8 @@ class HomeView extends GetView<HomeController> {
             const SizedBox(height: AppConstants.defaultPadding),
             _buildActionCard(
               iconAsset: 'assets/images/icon/ic_tarot.png',
-              title: 'Tarot Reading',
-              subtitle: 'Mystical guidance',
+              title: AppLocalizations.of(context)!.tarotReading,
+              subtitle: AppLocalizations.of(context)!.mysticalGuidance,
               onTap: controller.navigateToTarot,
               color: AppColors.lightPurple,
               delay: const Duration(milliseconds: 300),
@@ -655,8 +670,8 @@ class HomeView extends GetView<HomeController> {
             const SizedBox(height: AppConstants.defaultPadding),
             _buildActionCard(
               iconAsset: 'assets/images/icon/ic_detailed_analyze.png',
-              title: 'Detailed Analysis',
-              subtitle: 'In-depth interpretation',
+              title: AppLocalizations.of(context)!.detailedAnalysis,
+              subtitle: AppLocalizations.of(context)!.inDepthInterpretation,
               onTap: controller.navigateToAnalysis,
               color: AppColors.lightPurple,
               delay: const Duration(milliseconds: 350),
@@ -664,11 +679,70 @@ class HomeView extends GetView<HomeController> {
             const SizedBox(height: AppConstants.defaultPadding),
             _buildActionCard(
               iconAsset: 'assets/images/icon/ic_matcher.png',
-              title: 'Astro Matcher',
-              subtitle: 'Find compatibility',
+              title: AppLocalizations.of(context)!.astroMatcher,
+              subtitle: AppLocalizations.of(context)!.findCompatibility,
               onTap: controller.navigateToAstroMatcher,
               color: AppColors.lightGold,
               delay: const Duration(milliseconds: 400),
+            ),
+            const SizedBox(height: AppConstants.largePadding),
+          ],
+        ),
+      ],
+    );
+  }
+
+  /// [buildSettingsSection] - Settings section for mobile layout
+  ///
+  /// Implements vertical layout optimized for mobile screens:
+  /// - Settings options in a vertical column for easy thumb navigation
+  /// - Platform-specific styling and interactions
+  /// - Smooth animations with staggered delays
+  Widget _buildSettingsSection(BuildContext context, bool isIOS) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // [buildSettingsSection] - Animate section title with fade-in
+        IzFadeIn(
+          delay: const Duration(milliseconds: 100),
+          child: Text(
+            AppLocalizations.of(context)!.settings,
+            style: AppTheme.headingSmall.copyWith(
+              color: AppColors.darkTextPrimary,
+            ),
+          ),
+        ),
+        const SizedBox(height: AppConstants.defaultPadding),
+
+        // [buildSettingsSection] - Settings options in a vertical column layout
+        Column(
+          children: [
+            _buildActionCard(
+              icon: Icons.settings_outlined,
+              title: AppLocalizations.of(context)!.appSettings,
+              subtitle:
+                  AppLocalizations.of(context)!.preferencesAndConfiguration,
+              onTap: controller.navigateToSettings,
+              color: AppColors.lightPurple,
+              delay: const Duration(milliseconds: 200),
+            ),
+            const SizedBox(height: AppConstants.defaultPadding),
+            _buildActionCard(
+              icon: Icons.language_outlined,
+              title: AppLocalizations.of(context)!.language,
+              subtitle: AppLocalizations.of(context)!.changeAppLanguage,
+              onTap: () => _showLanguageDialog(context),
+              color: AppColors.lightGold,
+              delay: const Duration(milliseconds: 250),
+            ),
+            const SizedBox(height: AppConstants.defaultPadding),
+            _buildActionCard(
+              icon: Icons.info_outline,
+              title: AppLocalizations.of(context)!.about,
+              subtitle: AppLocalizations.of(context)!.appInformationAndVersion,
+              onTap: () => _showAboutDialog(context, isIOS),
+              color: AppColors.lightPurple,
+              delay: const Duration(milliseconds: 300),
             ),
             const SizedBox(height: AppConstants.largePadding),
           ],
@@ -691,38 +765,45 @@ class HomeView extends GetView<HomeController> {
     final actions = [
       {
         'iconAsset': 'assets/images/icon/ic_astrology_chart.png',
-        'title': 'Purple Star Chart',
-        'subtitle': 'View astrology chart',
+        'title': AppLocalizations.of(context)!.purpleStarChart,
+        'subtitle': AppLocalizations.of(context)!.viewAstrologyChart,
         'onTap': controller.navigateToChart,
         'color': AppColors.lightPurple,
       },
       {
         'iconAsset': 'assets/images/icon/ic_analyze.png',
-        'title': 'BaZi Analysis',
-        'subtitle': 'Four Pillars reading',
+        'title': AppLocalizations.of(context)!.baziAnalysis,
+        'subtitle': AppLocalizations.of(context)!.fourPillarsReading,
         'onTap': controller.navigateToBaZi,
         'color': AppColors.lightGold,
       },
       {
         'iconAsset': 'assets/images/icon/ic_tarot.png',
-        'title': 'Tarot Reading',
-        'subtitle': 'Mystical guidance',
+        'title': AppLocalizations.of(context)!.tarotReading,
+        'subtitle': AppLocalizations.of(context)!.mysticalGuidance,
         'onTap': controller.navigateToTarot,
         'color': AppColors.lightPurple,
       },
       {
         'iconAsset': 'assets/images/icon/ic_detailed_analyze.png',
-        'title': 'Detailed Analysis',
-        'subtitle': 'In-depth interpretation',
+        'title': AppLocalizations.of(context)!.detailedAnalysis,
+        'subtitle': AppLocalizations.of(context)!.inDepthInterpretation,
         'onTap': controller.navigateToAnalysis,
         'color': AppColors.lightPurple,
       },
       {
         'iconAsset': 'assets/images/icon/ic_matcher.png',
-        'title': 'Astro Matcher',
-        'subtitle': 'Find compatibility',
+        'title': AppLocalizations.of(context)!.astroMatcher,
+        'subtitle': AppLocalizations.of(context)!.findCompatibility,
         'onTap': controller.navigateToAstroMatcher,
         'color': AppColors.lightGold,
+      },
+      {
+        'icon': Icons.settings_outlined,
+        'title': AppLocalizations.of(context)!.settings,
+        'subtitle': AppLocalizations.of(context)!.appPreferences,
+        'onTap': controller.navigateToSettings,
+        'color': AppColors.lightPurple,
       },
     ];
 
@@ -773,7 +854,7 @@ class HomeView extends GetView<HomeController> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Recent Activity',
+          AppLocalizations.of(context)!.recentActivity,
           style: AppTheme.headingSmall.copyWith(
             color: AppColors.darkTextPrimary,
           ),
@@ -797,14 +878,14 @@ class HomeView extends GetView<HomeController> {
               ),
               const SizedBox(height: AppConstants.smallPadding),
               Text(
-                'No recent calculations',
+                AppLocalizations.of(context)!.noRecentCalculations,
                 style: AppTheme.bodyMedium.copyWith(
                   color: AppColors.darkTextSecondary,
                 ),
               ),
               const SizedBox(height: AppConstants.smallPadding),
               Text(
-                'Start exploring your cosmic journey',
+                AppLocalizations.of(context)!.startExploringCosmicJourney,
                 style: AppTheme.caption.copyWith(
                   color: AppColors.darkTextTertiary,
                 ),
@@ -954,14 +1035,14 @@ class HomeView extends GetView<HomeController> {
             ),
             const SizedBox(height: AppConstants.defaultPadding),
             Text(
-              'Error loading content',
+              AppLocalizations.of(context)!.errorLoadingContent,
               style: AppTheme.headingSmall.copyWith(
                 color: AppColors.error,
               ),
             ),
             const SizedBox(height: AppConstants.smallPadding),
             Text(
-              'There was an error loading the home screen content. This might be due to corrupted data.',
+              AppLocalizations.of(context)!.errorLoadingHomeContent,
               style: AppTheme.bodyMedium.copyWith(
                 color: AppColors.darkTextSecondary,
               ),
@@ -973,12 +1054,12 @@ class HomeView extends GetView<HomeController> {
             if (isIOS)
               CupertinoButton.filled(
                 onPressed: () => _showAdaptiveRetryDialog(context, isIOS),
-                child: const Text('Retry'),
+                child: Text(AppLocalizations.of(context)!.retry),
               )
             else
               ElevatedButton(
                 onPressed: () => _showAdaptiveRetryDialog(context, isIOS),
-                child: const Text('Retry'),
+                child: Text(AppLocalizations.of(context)!.retry),
               ),
           ],
         ),
@@ -998,14 +1079,14 @@ class HomeView extends GetView<HomeController> {
       showCupertinoDialog<void>(
         context: context,
         builder: (ctx) => CupertinoAlertDialog(
-          title: const Text('Retry Loading'),
-          content: const Text(
-            'Would you like to retry loading the home screen content?',
+          title: Text(AppLocalizations.of(context)!.retryLoading),
+          content: Text(
+            AppLocalizations.of(context)!.retryLoadingQuestion,
           ),
           actions: [
             CupertinoDialogAction(
               onPressed: () => Navigator.of(ctx).pop(),
-              child: const Text('Cancel'),
+              child: Text(AppLocalizations.of(context)!.cancel),
             ),
             CupertinoDialogAction(
               onPressed: () {
@@ -1022,14 +1103,14 @@ class HomeView extends GetView<HomeController> {
       showDialog<void>(
         context: context,
         builder: (ctx) => AlertDialog(
-          title: const Text('Retry Loading'),
-          content: const Text(
-            'Would you like to retry loading the home screen content?',
+          title: Text(AppLocalizations.of(context)!.retryLoading),
+          content: Text(
+            AppLocalizations.of(context)!.retryLoadingQuestion,
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(ctx).pop(),
-              child: const Text('Cancel'),
+              child: Text(AppLocalizations.of(context)!.cancel),
             ),
             ElevatedButton(
               onPressed: () {
@@ -1037,6 +1118,150 @@ class HomeView extends GetView<HomeController> {
                 controller.refreshData();
               },
               child: const Text('Retry'),
+            ),
+          ],
+        ),
+      );
+    }
+  }
+
+  /// [showLanguageDialog] - Show language selection dialog
+  /// Beautiful, modern dialog following Apple HIG principles
+  void _showLanguageDialog(BuildContext context) {
+    showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: AppColors.darkBackground,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: Text(
+            AppLocalizations.of(context)!.selectLanguage,
+            style: AppTheme.headingMedium.copyWith(
+              color: AppColors.white,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: const [
+              Locale('en', 'US'),
+              Locale('tr', 'TR'),
+              Locale('zh', 'CN'),
+              Locale('ja', 'JP'),
+            ].map((locale) {
+              final languageNames = {
+                'en': 'English',
+                'tr': 'Türkçe',
+                'zh': '中文',
+                'ja': '日本語',
+              };
+              final languageName =
+                  languageNames[locale.languageCode] ?? 'Unknown';
+
+              return Container(
+                margin: const EdgeInsets.symmetric(vertical: 4),
+                child: ListTile(
+                  title: Text(
+                    languageName,
+                    style: AppTheme.bodyLarge.copyWith(
+                      color: AppColors.white,
+                    ),
+                  ),
+                  onTap: () async {
+                    Navigator.of(context).pop();
+                    try {
+                      // Get the LanguageService and change the language
+                      final languageService = Get.find<LanguageService>();
+                      await languageService.changeLanguage(locale);
+                      Get.snackbar(
+                        AppLocalizations.of(context)!.language,
+                        '${AppLocalizations.of(context)!.language} changed to ${languageNames[locale.languageCode]}',
+                        snackPosition: SnackPosition.BOTTOM,
+                      );
+                    } on Exception catch (e) {
+                      Get.snackbar(
+                        'Error',
+                        'Failed to change language: $e',
+                        snackPosition: SnackPosition.BOTTOM,
+                      );
+                    }
+                  },
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text(
+                AppLocalizations.of(context)!.cancel,
+                style: AppTheme.bodyMedium.copyWith(
+                  color: AppColors.white.withValues(alpha: 0.7),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  /// [showAboutDialog] - Show about dialog with app information
+  /// Platform-specific dialog following Apple HIG principles
+  void _showAboutDialog(BuildContext context, bool isIOS) {
+    if (isIOS) {
+      // iOS Cupertino-style dialog
+      showCupertinoDialog<void>(
+        context: context,
+        builder: (ctx) => CupertinoAlertDialog(
+          title: Text(AppLocalizations.of(context)!.aboutAstroIztro),
+          content: Text(
+            AppLocalizations.of(context)!.aboutDescription,
+          ),
+          actions: [
+            CupertinoDialogAction(
+              onPressed: () => Navigator.of(ctx).pop(),
+              child: Text(AppLocalizations.of(context)!.ok),
+            ),
+          ],
+        ),
+      );
+    } else {
+      // Android Material-style dialog
+      showDialog<void>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          backgroundColor: AppColors.darkBackground,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: Text(
+            'About Astro Iztro',
+            style: AppTheme.headingMedium.copyWith(
+              color: AppColors.white,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          content: Text(
+            AppLocalizations.of(context)!.aboutDescription,
+            style: AppTheme.bodyMedium.copyWith(
+              color: AppColors.white.withValues(alpha: 0.8),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(),
+              child: Text(
+                AppLocalizations.of(context)!.ok,
+                style: AppTheme.bodyMedium.copyWith(
+                  color: AppColors.lightPurple,
+                ),
+              ),
             ),
           ],
         ),

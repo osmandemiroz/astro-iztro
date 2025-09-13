@@ -1,11 +1,14 @@
 import 'dart:math';
+
 import 'package:astro_iztro/app/modules/onboarding/onboarding_controller.dart';
 import 'package:astro_iztro/core/constants/app_constants.dart';
 import 'package:astro_iztro/core/constants/colors.dart';
 import 'package:astro_iztro/core/utils/responsive_sizer.dart';
 import 'package:astro_iztro/shared/themes/app_theme.dart';
+import 'package:astro_iztro/shared/widgets/language_switcher.dart';
 import 'package:astro_iztro/shared/widgets/liquid_glass_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 
 /// [OnboardingView] - Beautiful onboarding experience with Apple-inspired design
@@ -24,25 +27,27 @@ class OnboardingView extends GetView<OnboardingController> {
           child: Column(
             children: [
               // Skip button and progress indicator
-              _buildTopSection(),
+              _buildTopSection(context),
 
               // Main content area with page view
               Expanded(
-                child: _buildPageView(),
+                child: _buildPageView(context),
               ),
 
               // Bottom navigation and action buttons
-              _buildBottomSection(),
+              _buildBottomSection(context),
             ],
           ),
         ),
       ),
+      // Language switcher for testing i18n
+      floatingActionButton: const LanguageSwitcher(),
     );
   }
 
   /// [buildTopSection] - Top section with skip button and progress
   /// Clean, minimal design following Apple HIG principles
-  Widget _buildTopSection() {
+  Widget _buildTopSection(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: AppConstants.defaultPadding,
@@ -66,7 +71,7 @@ class OnboardingView extends GetView<OnboardingController> {
                         ),
                       ),
                       child: Text(
-                        'Skip',
+                        AppLocalizations.of(context)!.skip,
                         style: AppTheme.bodyMedium.copyWith(
                           fontWeight: FontWeight.w500,
                         ),
@@ -108,38 +113,38 @@ class OnboardingView extends GetView<OnboardingController> {
 
   /// [buildPageView] - Main content area with smooth page transitions
   /// Uses PageView for fluid navigation between onboarding screens
-  Widget _buildPageView() {
+  Widget _buildPageView(BuildContext context) {
     return PageView(
       controller: controller.pageController,
       onPageChanged: controller.onPageChanged,
       children: [
-        _buildOnboardingPage(0),
-        _buildOnboardingPage(1),
-        _buildOnboardingPage(2),
-        _buildOnboardingPage(3),
+        _buildOnboardingPage(0, context),
+        _buildOnboardingPage(1, context),
+        _buildOnboardingPage(2, context),
+        _buildOnboardingPage(3, context),
       ],
     );
   }
 
   /// [buildOnboardingPage] - Individual onboarding page content
   /// Each page showcases different app features with elegant animations
-  Widget _buildOnboardingPage(int index) {
+  Widget _buildOnboardingPage(int index, BuildContext context) {
     switch (index) {
       case 0:
-        return _buildWelcomePage();
+        return _buildWelcomePage(context);
       case 1:
-        return _buildFeaturesPage();
+        return _buildFeaturesPage(context);
       case 2:
-        return _buildAstrologyPage();
+        return _buildAstrologyPage(context);
       case 3:
-        return _buildGetStartedPage();
+        return _buildGetStartedPage(context);
       default:
-        return _buildWelcomePage();
+        return _buildWelcomePage(context);
     }
   }
 
   /// [buildWelcomePage] - First page: Welcome and app introduction
-  Widget _buildWelcomePage() {
+  Widget _buildWelcomePage(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(AppConstants.largePadding),
       child: Column(
@@ -152,7 +157,7 @@ class OnboardingView extends GetView<OnboardingController> {
 
           // Welcome text with elegant typography
           Text(
-            'Welcome to Astro Iztro',
+            AppLocalizations.of(context)!.welcomeTitle,
             style: AppTheme.headingLarge.copyWith(
               color: AppColors.white,
               fontWeight: FontWeight.bold,
@@ -169,7 +174,7 @@ class OnboardingView extends GetView<OnboardingController> {
             child: Padding(
               padding: const EdgeInsets.all(AppConstants.defaultPadding),
               child: Text(
-                'Discover the ancient wisdom of Purple Star Astrology through modern technology',
+                AppLocalizations.of(context)!.welcomeSubtitle,
                 style: AppTheme.bodyLarge.copyWith(
                   color: AppColors.white,
                   height: 1.5,
@@ -184,19 +189,19 @@ class OnboardingView extends GetView<OnboardingController> {
   }
 
   /// [buildFeaturesPage] - Second page: Key features showcase
-  Widget _buildFeaturesPage() {
+  Widget _buildFeaturesPage(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(AppConstants.largePadding),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           // Feature icons with staggered animation
-          _buildFeatureIcons(),
+          _buildFeatureIcons(context),
 
           const SizedBox(height: AppConstants.largePadding),
 
           Text(
-            'Powerful Features',
+            AppLocalizations.of(context)!.powerfulFeatures,
             style: AppTheme.headingLarge.copyWith(
               color: AppColors.white,
               fontWeight: FontWeight.bold,
@@ -207,14 +212,14 @@ class OnboardingView extends GetView<OnboardingController> {
           const SizedBox(height: AppConstants.defaultPadding),
 
           // Feature list with glass cards
-          _buildFeatureList(),
+          _buildFeatureList(context),
         ],
       ),
     );
   }
 
   /// [buildAstrologyPage] - Third page: Astrology explanation
-  Widget _buildAstrologyPage() {
+  Widget _buildAstrologyPage(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(AppConstants.largePadding),
       child: Column(
@@ -226,7 +231,7 @@ class OnboardingView extends GetView<OnboardingController> {
           const SizedBox(height: AppConstants.largePadding),
 
           Text(
-            'Ancient Wisdom, Modern Insight',
+            AppLocalizations.of(context)!.ancientWisdomTitle,
             style: AppTheme.headingLarge.copyWith(
               color: AppColors.white,
               fontWeight: FontWeight.bold,
@@ -242,7 +247,7 @@ class OnboardingView extends GetView<OnboardingController> {
             child: Padding(
               padding: const EdgeInsets.all(AppConstants.defaultPadding),
               child: Text(
-                'Explore your destiny through Purple Star Astrology, BaZi analysis, and Tarot readings',
+                AppLocalizations.of(context)!.ancientWisdomSubtitle,
                 style: AppTheme.bodyLarge.copyWith(
                   color: AppColors.white,
                   height: 1.5,
@@ -257,7 +262,7 @@ class OnboardingView extends GetView<OnboardingController> {
   }
 
   /// [buildGetStartedPage] - Final page: Call to action
-  Widget _buildGetStartedPage() {
+  Widget _buildGetStartedPage(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(AppConstants.largePadding),
       child: Column(
@@ -269,7 +274,7 @@ class OnboardingView extends GetView<OnboardingController> {
           const SizedBox(height: AppConstants.largePadding),
 
           Text(
-            'Ready to Begin?',
+            AppLocalizations.of(context)!.readyToBegin,
             style: AppTheme.headingLarge.copyWith(
               color: AppColors.white,
               fontWeight: FontWeight.bold,
@@ -285,7 +290,7 @@ class OnboardingView extends GetView<OnboardingController> {
             child: Padding(
               padding: const EdgeInsets.all(AppConstants.defaultPadding),
               child: Text(
-                'Start your journey into the mystical world of astrology and discover what the stars have in store for you',
+                AppLocalizations.of(context)!.readyToBeginSubtitle,
                 style: AppTheme.bodyLarge.copyWith(
                   color: AppColors.white,
                   height: 1.5,
@@ -301,7 +306,7 @@ class OnboardingView extends GetView<OnboardingController> {
 
   /// [buildBottomSection] - Bottom navigation and action buttons
   /// Clean, accessible design with clear call-to-action
-  Widget _buildBottomSection() {
+  Widget _buildBottomSection(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(AppConstants.largePadding),
       child: Row(
@@ -322,7 +327,7 @@ class OnboardingView extends GetView<OnboardingController> {
                           ),
                         ),
                         child: Text(
-                          'Previous',
+                          AppLocalizations.of(context)!.previous,
                           style: AppTheme.bodyMedium.copyWith(
                             fontWeight: FontWeight.w500,
                           ),
@@ -369,7 +374,9 @@ class OnboardingView extends GetView<OnboardingController> {
                           ),
                         )
                       : Text(
-                          controller.isLastPage.value ? 'Get Started' : 'Next',
+                          controller.isLastPage.value
+                              ? AppLocalizations.of(context)!.getStarted
+                              : AppLocalizations.of(context)!.next,
                           style: AppTheme.bodyMedium.copyWith(
                             fontWeight: FontWeight.w600,
                             color: AppColors.primaryPurple,
@@ -436,19 +443,22 @@ class OnboardingView extends GetView<OnboardingController> {
   /// [buildFeatureIcons] - Feature icons with staggered animation
   /// Uses actual app icons from assets/images/icon/ for brand consistency
   /// Following Apple HIG principles for visual hierarchy and user recognition
-  Widget _buildFeatureIcons() {
+  Widget _buildFeatureIcons(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         _buildFeatureIconWithImage(
           'assets/images/icon/ic_analyze.png',
-          'Analysis',
+          AppLocalizations.of(context)!.analysis,
         ),
         _buildFeatureIconWithImage(
           'assets/images/icon/ic_matcher.png',
-          'Compatibility',
+          AppLocalizations.of(context)!.compatibility,
         ),
-        _buildFeatureIconWithImage('assets/images/icon/ic_tarot.png', 'Tarot'),
+        _buildFeatureIconWithImage(
+          'assets/images/icon/ic_tarot.png',
+          AppLocalizations.of(context)!.tarot,
+        ),
       ],
     );
   }
@@ -527,12 +537,12 @@ class OnboardingView extends GetView<OnboardingController> {
   }
 
   /// [buildFeatureList] - Feature list with glass cards
-  Widget _buildFeatureList() {
+  Widget _buildFeatureList(BuildContext context) {
     final features = [
-      'Purple Star Astrology Charts',
-      'BaZi Destiny Analysis',
-      'Compatibility Matching',
-      'Tarot Card Readings',
+      AppLocalizations.of(context)!.purpleStarCharts,
+      AppLocalizations.of(context)!.baziAnalysis,
+      AppLocalizations.of(context)!.compatibilityMatching,
+      AppLocalizations.of(context)!.tarotReadings,
     ];
 
     return Column(

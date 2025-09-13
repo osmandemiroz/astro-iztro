@@ -1,0 +1,273 @@
+{
+  "@@locale": "en",
+  "appTitle": "Astro Iztro",
+  "@appTitle": {
+    "description": "The title of the application"
+  },
+  "welcomeTitle": "Welcome to Astro Iztro",
+  "@welcomeTitle": {
+    "description": "Welcome title on the first onboarding page"
+  },
+  "welcomeSubtitle": "Discover the ancient wisdom of Purple Star Astrology through modern technology",
+  "@welcomeSubtitle": {
+    "description": "Welcome subtitle explaining the app's purpose"
+  },
+  "skip": "Skip",
+  "@skip": {
+    "description": "Skip button text for onboarding"
+  },
+  "next": "Next",
+  "@next": {
+    "description": "Next button text for onboarding navigation"
+  },
+  "previous": "Previous",
+  "@previous": {
+    "description": "Previous button text for onboarding navigation"
+  },
+  "getStarted": "Get Started",
+  "@getStarted": {
+    "description": "Get started button text for the final onboarding page"
+  },
+  "powerfulFeatures": "Powerful Features",
+  "@powerfulFeatures": {
+    "description": "Title for the features page"
+  },
+  "purpleStarCharts": "Purple Star Astrology Charts",
+  "@purpleStarCharts": {
+    "description": "Feature description for Purple Star charts"
+  },
+  "baziAnalysis": "BaZi Destiny Analysis",
+  "@baziAnalysis": {
+    "description": "Feature description for BaZi analysis"
+  },
+  "compatibilityMatching": "Compatibility Matching",
+  "@compatibilityMatching": {
+    "description": "Feature description for compatibility matching"
+  },
+  "tarotReadings": "Tarot Card Readings",
+  "@tarotReadings": {
+    "description": "Feature description for Tarot readings"
+  },
+  "analysis": "Analysis",
+  "@analysis": {
+    "description": "Analysis feature label"
+  },
+  "compatibility": "Compatibility",
+  "@compatibility": {
+    "description": "Compatibility feature label"
+  },
+  "tarot": "Tarot",
+  "@tarot": {
+    "description": "Tarot feature label"
+  },
+  "ancientWisdomTitle": "Ancient Wisdom, Modern Insight",
+  "@ancientWisdomTitle": {
+    "description": "Title for the astrology explanation page"
+  },
+  "ancientWisdomSubtitle": "Explore your destiny through Purple Star Astrology, BaZi analysis, and Tarot readings",
+  "@ancientWisdomSubtitle": {
+    "description": "Subtitle explaining the astrology features"
+  },
+  "readyToBegin": "Ready to Begin?",
+  "@readyToBegin": {
+    "description": "Title for the final onboarding page"
+  },
+  "readyToBeginSubtitle": "Start your journey into the mystical world of astrology and discover what the stars have in store for you",
+  "@readyToBeginSubtitle": {
+    "description": "Subtitle for the final onboarding page"
+  },
+  "loadingCosmicJourney": "Loading your cosmic journey...",
+  "@loadingCosmicJourney": {
+    "description": "Loading message for home screen"
+  },
+  "welcomeBack": "Welcome back, {name}!",
+  "@welcomeBack": {
+    "description": "Welcome back message with user name",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "description": "User's name"
+      }
+    }
+  },
+  "welcomeToAstroIztro": "Welcome to Astro Iztro!",
+  "@welcomeToAstroIztro": {
+    "description": "Welcome message for new users"
+  },
+  "discoverCosmicDestiny": "Discover your cosmic destiny",
+  "@discoverCosmicDestiny": {
+    "description": "Subtitle for home screen"
+  },
+  "dashboard": "Dashboard",
+  "@dashboard": {
+    "description": "Dashboard section title"
+  },
+  "currentProfile": "Current Profile",
+  "@currentProfile": {
+    "description": "Current profile section title"
+  },
+  "createYourFirstProfile": "Create Your First Profile",
+  "@createYourFirstProfile": {
+    "description": "Title for no profile card"
+  },
+  "startAstrologicalJourney": "Start your astrological journey by creating a profile with your birth information.",
+  "@startAstrologicalJourney": {
+    "description": "Description for creating first profile"
+  },
+  "createProfile": "Create Profile",
+  "@createProfile": {
+    "description": "Create profile button text"
+  },
+  "name": "Name",
+  "@name": {
+    "description": "Name label"
+  },
+  "birthDate": "Birth Date",
+  "@birthDate": {
+    "description": "Birth date label"
+  },
+  "birthTime": "Birth Time",
+  "@birthTime": {
+    "description": "Birth time label"
+  },
+  "location": "Location",
+  "@location": {
+    "description": "Location label"
+  },
+  "quickActions": "Quick Actions",
+  "@quickActions": {
+    "description": "Quick actions section title"
+  },
+  "purpleStarChart": "Purple Star Chart",
+  "@purpleStarChart": {
+    "description": "Purple Star Chart action title"
+  },
+  "viewAstrologyChart": "View astrology chart",
+  "@viewAstrologyChart": {
+    "description": "Purple Star Chart subtitle"
+  },
+  "baziAnalysis": "BaZi Analysis",
+  "@baziAnalysis": {
+    "description": "BaZi Analysis action title"
+  },
+  "fourPillarsReading": "Four Pillars reading",
+  "@fourPillarsReading": {
+    "description": "BaZi Analysis subtitle"
+  },
+  "tarotReading": "Tarot Reading",
+  "@tarotReading": {
+    "description": "Tarot Reading action title"
+  },
+  "mysticalGuidance": "Mystical guidance",
+  "@mysticalGuidance": {
+    "description": "Tarot Reading subtitle"
+  },
+  "detailedAnalysis": "Detailed Analysis",
+  "@detailedAnalysis": {
+    "description": "Detailed Analysis action title"
+  },
+  "inDepthInterpretation": "In-depth interpretation",
+  "@inDepthInterpretation": {
+    "description": "Detailed Analysis subtitle"
+  },
+  "astroMatcher": "Astro Matcher",
+  "@astroMatcher": {
+    "description": "Astro Matcher action title"
+  },
+  "findCompatibility": "Find compatibility",
+  "@findCompatibility": {
+    "description": "Astro Matcher subtitle"
+  },
+  "settings": "Settings",
+  "@settings": {
+    "description": "Settings section title"
+  },
+  "appSettings": "App Settings",
+  "@appSettings": {
+    "description": "App Settings action title"
+  },
+  "preferencesAndConfiguration": "Preferences and configuration",
+  "@preferencesAndConfiguration": {
+    "description": "App Settings subtitle"
+  },
+  "language": "Language",
+  "@language": {
+    "description": "Language action title"
+  },
+  "changeAppLanguage": "Change app language",
+  "@changeAppLanguage": {
+    "description": "Language subtitle"
+  },
+  "about": "About",
+  "@about": {
+    "description": "About action title"
+  },
+  "appInformationAndVersion": "App information and version",
+  "@appInformationAndVersion": {
+    "description": "About subtitle"
+  },
+  "appPreferences": "App preferences",
+  "@appPreferences": {
+    "description": "Settings grid subtitle"
+  },
+  "recentActivity": "Recent Activity",
+  "@recentActivity": {
+    "description": "Recent Activity section title"
+  },
+  "noRecentCalculations": "No recent calculations",
+  "@noRecentCalculations": {
+    "description": "No recent calculations message"
+  },
+  "startExploringCosmicJourney": "Start exploring your cosmic journey",
+  "@startExploringCosmicJourney": {
+    "description": "Start exploring message"
+  },
+  "errorLoadingContent": "Error loading content",
+  "@errorLoadingContent": {
+    "description": "Error loading content title"
+  },
+  "errorLoadingHomeContent": "There was an error loading the home screen content. This might be due to corrupted data.",
+  "@errorLoadingHomeContent": {
+    "description": "Error loading home content message"
+  },
+  "retry": "Retry",
+  "@retry": {
+    "description": "Retry button text"
+  },
+  "retryLoading": "Retry Loading",
+  "@retryLoading": {
+    "description": "Retry loading dialog title"
+  },
+  "retryLoadingQuestion": "Would you like to retry loading the home screen content?",
+  "@retryLoadingQuestion": {
+    "description": "Retry loading dialog question"
+  },
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Cancel button text"
+  },
+  "selectLanguage": "Select Language",
+  "@selectLanguage": {
+    "description": "Select language dialog title"
+  },
+  "languageSwitchingSoon": "Language switching will be implemented soon",
+  "@languageSwitchingSoon": {
+    "description": "Language switching placeholder message"
+  },
+  "aboutAstroIztro": "About Astro Iztro",
+  "@aboutAstroIztro": {
+    "description": "About dialog title"
+  },
+  "aboutDescription": "Version 1.0.0\n\nA comprehensive Purple Star Astrology and BaZi calculation app with modern technology.",
+  "@aboutDescription": {
+    "description": "About dialog description"
+  },
+  "ok": "OK",
+  "@ok": {
+    "description": "OK button text"
+  },
+  "unknown": "Unknown",
+  "@unknown": {
+    "description": "Unknown value placeholder"
+  }
+}

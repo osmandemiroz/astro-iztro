@@ -1,3 +1,4 @@
+import 'package:astro_iztro/core/services/language_service.dart';
 import 'package:get/get.dart';
 
 /// [InitialBinding] - Initial dependency injection setup
@@ -10,7 +11,7 @@ class InitialBinding extends Bindings {
     // initialized in main.dart before the app starts to prevent "service not found" errors
     // This ensures all services are available immediately when the app loads
 
-    // Additional route-specific dependencies can be added here if needed
-    // For example: controllers that should be available app-wide
+    // Initialize language service for i18n support
+    Get.lazyPut<LanguageService>(LanguageService.new, fenix: true);
   }
 }

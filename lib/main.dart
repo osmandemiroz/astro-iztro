@@ -3,11 +3,12 @@ import 'package:astro_iztro/app/routes/app_pages.dart';
 import 'package:astro_iztro/app/routes/app_routes.dart';
 import 'package:astro_iztro/core/constants/app_constants.dart';
 import 'package:astro_iztro/core/services/iztro_service.dart';
+import 'package:astro_iztro/core/services/language_service.dart';
 import 'package:astro_iztro/core/services/storage_service.dart';
 import 'package:astro_iztro/shared/themes/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 
@@ -23,19 +24,19 @@ void main() async {
   Get
     ..put<StorageService>(storageService, permanent: true)
     // Initialize IztroService
-    ..put<IztroService>(IztroService(), permanent: true);
+    ..put<IztroService>(IztroService(), permanent: true)
+    // Initialize LanguageService
+    ..put<LanguageService>(LanguageService(), permanent: true);
 
   // Check if onboarding has been completed
-  final onboardingCompleted =
-      storageService.prefs.getBool(
+  final onboardingCompleted = storageService.prefs.getBool(
         AppConstants.onboardingCompletedKey,
       ) ??
       false;
 
   // Set initial route based on onboarding status
-  final initialRoute = onboardingCompleted
-      ? AppRoutes.home
-      : AppRoutes.onboarding;
+  final initialRoute =
+      onboardingCompleted ? AppRoutes.home : AppRoutes.onboarding;
 
   // [main] - Setting preferred orientations to portrait for optimal chart viewing
   await SystemChrome.setPreferredOrientations([
@@ -80,54 +81,54 @@ class AstroIztroApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      // App configuration
-      title: AppConstants.appName,
-      debugShowCheckedModeBanner: false,
+    return GetBuilder<LanguageService>(
+      builder: (languageService) => GetMaterialApp(
+        // App configuration
+        title: AppConstants.appName,
+        debugShowCheckedModeBanner: false,
 
-      // Navigation configuration
-      initialRoute: initialRoute,
-      getPages: AppPages.routes,
-      initialBinding: InitialBinding(),
+        // Navigation configuration
+        initialRoute: initialRoute,
+        getPages: AppPages.routes,
+        initialBinding: InitialBinding(),
 
-      // Theme configuration - Apple Human Interface Guidelines inspired
-      theme: AppTheme.darkTheme, // Use dark theme as default
-      darkTheme: AppTheme.darkTheme,
-      // Localization configuration for multi-language support
-      locale: const Locale('en', 'US'),
-      fallbackLocale: const Locale('en', 'US'),
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: const [
-        Locale('en', 'US'), // English
-        Locale('zh', 'CN'), // Chinese Simplified
-        Locale('zh', 'TW'), // Chinese Traditional
-        Locale('ja', 'JP'), // Japanese
-        Locale('ko', 'KR'), // Korean
-        Locale('th', 'TH'), // Thai
-        Locale('vi', 'VN'), // Vietnamese
-      ],
+        // Theme configuration - Apple Human Interface Guidelines inspired
+        theme: AppTheme.darkTheme, // Use dark theme as default
+        darkTheme: AppTheme.darkTheme,
+        // Localization configuration for multi-language support
+        locale: languageService.currentLocale.value,
+        fallbackLocale: const Locale('en', 'US'),
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [
+          Locale('en', 'US'), // English
+          Locale('tr', 'TR'), // Turkish
+          Locale('zh', 'CN'), // Chinese Simplified
+          Locale('ja', 'JP'), // Japanese
+        ],
 
-      // Transition configuration for smooth navigation
-      defaultTransition: Transition.cupertino,
-      transitionDuration: AppConstants.mediumAnimation,
+        // Transition configuration for smooth navigation
+        defaultTransition: Transition.cupertino,
+        transitionDuration: AppConstants.mediumAnimation,
 
-      // Enable smart management for better performance
-      smartManagement: SmartManagement.keepFactory,
+        // Enable smart management for better performance
+        smartManagement: SmartManagement.keepFactory,
 
-      // Error handling
-      unknownRoute: GetPage(
-        name: '/notfound',
-        page: () => const Scaffold(
-          body: Center(
-            child: Text(
-              'Page not found',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.w600,
+        // Error handling
+        unknownRoute: GetPage(
+          name: '/notfound',
+          page: () => const Scaffold(
+            body: Center(
+              child: Text(
+                'Page not found',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           ),

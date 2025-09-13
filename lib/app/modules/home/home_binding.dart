@@ -1,4 +1,5 @@
 import 'package:astro_iztro/app/modules/home/home_controller.dart';
+import 'package:astro_iztro/core/services/language_service.dart';
 import 'package:get/get.dart';
 
 /// [HomeBinding] - Dependency injection for Home module
@@ -8,9 +9,16 @@ class HomeBinding extends Bindings {
   void dependencies() {
     // [HomeBinding] - Setting up HomeController for dashboard functionality
     // Using Get.lazyPut for efficient memory management
-    Get.lazyPut<HomeController>(
-      HomeController.new,
-      fenix: true, // Allow recreation if disposed
-    );
+    Get
+      ..lazyPut<HomeController>(
+        HomeController.new,
+        fenix: true, // Allow recreation if disposed
+      )
+
+      // [HomeBinding] - Setting up LanguageService for language switching
+      ..lazyPut<LanguageService>(
+        LanguageService.new,
+        fenix: true, // Allow recreation if disposed
+      );
   }
 }
