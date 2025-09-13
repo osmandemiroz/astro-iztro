@@ -269,5 +269,329 @@
   "unknown": "Unknown",
   "@unknown": {
     "description": "Unknown value placeholder"
+  },
+  "noChartData": "No Chart Data",
+  "@noChartData": {
+    "description": "Message when no chart data is available"
+  },
+  "pleaseCalculateChartFirst": "Please calculate chart first",
+  "@pleaseCalculateChartFirst": {
+    "description": "Message to prompt user to calculate chart"
+  },
+  "understandingYourPurpleStarChart": "Understanding Your Purple Star Chart",
+  "@understandingYourPurpleStarChart": {
+    "description": "Title for chart explanation section"
+  },
+  "discoverHowTheStarsInfluenceYourLifePath": "Discover how the stars influence your life path",
+  "@discoverHowTheStarsInfluenceYourLifePath": {
+    "description": "Subtitle for chart explanation"
+  },
+  "whatStarColorsMean": "What Star Colors Mean",
+  "@whatStarColorsMean": {
+    "description": "Section title for star colors explanation"
+  },
+  "purpleStars": "Purple Stars",
+  "@purpleStars": {
+    "description": "Purple stars category"
+  },
+  "majorInfluences": "Major Influences",
+  "@majorInfluences": {
+    "description": "Subtitle for purple stars"
+  },
+  "purpleStarsDescription": "These are your primary guiding stars that shape your core personality and life direction. They represent the strongest astrological forces in your chart.",
+  "@purpleStarsDescription": {
+    "description": "Description for purple stars"
+  },
+  "goldStars": "Gold Stars",
+  "@goldStars": {
+    "description": "Gold stars category"
+  },
+  "emphasisAndSelection": "Emphasis & Selection",
+  "@emphasisAndSelection": {
+    "description": "Subtitle for gold stars"
+  },
+  "goldStarsDescription": "Gold indicates areas of special focus or selection in your chart. These are highlighted aspects that deserve extra attention in your life.",
+  "@goldStarsDescription": {
+    "description": "Description for gold stars"
+  },
+  "greenStars": "Green Stars",
+  "@greenStars": {
+    "description": "Green stars category"
+  },
+  "supportiveInfluences": "Supportive Influences",
+  "@supportiveInfluences": {
+    "description": "Subtitle for green stars"
+  },
+  "greenStarsDescription": "Green represents supportive and harmonious energies that help balance and enhance the areas they influence.",
+  "@greenStarsDescription": {
+    "description": "Description for green stars"
+  },
+  "redStars": "Red Stars",
+  "@redStars": {
+    "description": "Red stars category"
+  },
+  "challengingInfluences": "Challenging Influences",
+  "@challengingInfluences": {
+    "description": "Subtitle for red stars"
+  },
+  "redStarsDescription": "Red indicates areas that may present challenges or require extra effort, but also opportunities for growth and transformation.",
+  "@redStarsDescription": {
+    "description": "Description for red stars"
+  },
+  "orangeStars": "Orange Stars",
+  "@orangeStars": {
+    "description": "Orange stars category"
+  },
+  "dynamicEnergies": "Dynamic Energies",
+  "@dynamicEnergies": {
+    "description": "Subtitle for orange stars"
+  },
+  "orangeStarsDescription": "Orange represents dynamic, active energies that bring movement and change to the areas they influence.",
+  "@orangeStarsDescription": {
+    "description": "Description for orange stars"
+  },
+  "yellowStars": "Yellow Stars",
+  "@yellowStars": {
+    "description": "Yellow stars category"
+  },
+  "illuminationAndWisdom": "Illumination & Wisdom",
+  "@illuminationAndWisdom": {
+    "description": "Subtitle for yellow stars"
+  },
+  "yellowStarsDescription": "Yellow represents wisdom, clarity, and spiritual insight that illuminates your understanding of these life areas.",
+  "@yellowStarsDescription": {
+    "description": "Description for yellow stars"
+  },
+  "howPropertiesAreCalculated": "How Properties Are Calculated",
+  "@howPropertiesAreCalculated": {
+    "description": "Section title for calculation explanation"
+  },
+  "birthDataAnalysis": "Birth Data Analysis",
+  "@birthDataAnalysis": {
+    "description": "Title for birth data analysis"
+  },
+  "birthDataAnalysisDescription": "Your birth date, time, and location are converted to precise astronomical coordinates and lunar calendar dates.",
+  "@birthDataAnalysisDescription": {
+    "description": "Description for birth data analysis"
+  },
+  "palaceDetermination": "Palace Determination",
+  "@palaceDetermination": {
+    "description": "Title for palace determination"
+  },
+  "palaceDeterminationDescription": "12 life areas (palaces) are calculated based on your birth hour, creating a complete life blueprint from the Life Palace outward.",
+  "@palaceDeterminationDescription": {
+    "description": "Description for palace determination"
+  },
+  "starPlacement": "Star Placement",
+  "@starPlacement": {
+    "description": "Title for star placement"
+  },
+  "starPlacementDescription": "Major and minor stars are placed in palaces using ancient formulas based on your birth year, month, day, and hour.",
+  "@starPlacementDescription": {
+    "description": "Description for star placement"
+  },
+  "transformationStars": "Transformation Stars",
+  "@transformationStars": {
+    "description": "Title for transformation stars"
+  },
+  "transformationStarsDescription": "Special transformation stars (Lu, Quan, Ke, Ji) are calculated to show periods of change and fortune in your life.",
+  "@transformationStarsDescription": {
+    "description": "Description for transformation stars"
+  },
+  "howYouAreCalculated": "How You Are Calculated",
+  "@howYouAreCalculated": {
+    "description": "Section title for personal characteristics"
+  },
+  "corePersonality": "Core Personality",
+  "@corePersonality": {
+    "description": "Title for core personality"
+  },
+  "corePersonalityDescription": "Your fundamental nature is determined by the stars in your Life Palace, calculated from your exact birth hour and the position of the Purple Star (Zi Wei). This creates your unique personality blueprint.",
+  "@corePersonalityDescription": {
+    "description": "Description for core personality"
+  },
+  "lifeStrengths": "Life Strengths",
+  "@lifeStrengths": {
+    "description": "Title for life strengths"
+  },
+  "lifeStrengthsDescription": "Your natural talents and abilities are revealed by the combination of major stars in different palaces, calculated using ancient formulas based on your birth year, month, and day.",
+  "@lifeStrengthsDescription": {
+    "description": "Description for life strengths"
+  },
+  "lifeChallenges": "Life Challenges",
+  "@lifeChallenges": {
+    "description": "Title for life challenges"
+  },
+  "lifeChallengesDescription": "Areas requiring growth are indicated by challenging star combinations and palace positions, calculated from your birth data and the relationships between different stars.",
+  "@lifeChallengesDescription": {
+    "description": "Description for life challenges"
+  },
+  "destinyPath": "Destiny Path",
+  "@destinyPath": {
+    "description": "Title for destiny path"
+  },
+  "destinyPathDescription": "Your life direction is mapped through the sequence of palaces and the transformation stars (Lu, Quan, Ke, Ji), revealing your unique journey through time.",
+  "@destinyPathDescription": {
+    "description": "Description for destiny path"
+  },
+  "howToReadYourChart": "How to Read Your Chart",
+  "@howToReadYourChart": {
+    "description": "Section title for chart reading instructions"
+  },
+  "tapOnPalaceTip": "Tap on any palace to see detailed information about that life area and the stars within it.",
+  "@tapOnPalaceTip": {
+    "description": "Tip for interacting with palaces"
+  },
+  "useZoomControlsTip": "Use the zoom controls to explore different parts of your chart in detail.",
+  "@useZoomControlsTip": {
+    "description": "Tip for using zoom controls"
+  },
+  "toggleLanguageTip": "Toggle between English and Chinese names to explore traditional terminology.",
+  "@toggleLanguageTip": {
+    "description": "Tip for toggling language"
+  },
+  "yourChartSummary": "Your Chart Summary",
+  "@yourChartSummary": {
+    "description": "Title for chart summary"
+  },
+  "palaces": "Palaces",
+  "@palaces": {
+    "description": "Plural form of palace"
+  },
+  "stars": "Stars",
+  "@stars": {
+    "description": "Plural form of star"
+  },
+  "major": "Major",
+  "@major": {
+    "description": "Major stars label"
+  },
+  "whatEachPalaceMeans": "What Each Palace Means",
+  "@whatEachPalaceMeans": {
+    "description": "Section title for palace meanings"
+  },
+  "lifePalace": "Life",
+  "@lifePalace": {
+    "description": "Life palace name"
+  },
+  "lifePalaceDescription": "Your core personality and life path",
+  "@lifePalaceDescription": {
+    "description": "Life palace description"
+  },
+  "siblingsPalace": "Siblings",
+  "@siblingsPalace": {
+    "description": "Siblings palace name"
+  },
+  "siblingsPalaceDescription": "Relationships with siblings",
+  "@siblingsPalaceDescription": {
+    "description": "Siblings palace description"
+  },
+  "spousePalace": "Spouse",
+  "@spousePalace": {
+    "description": "Spouse palace name"
+  },
+  "spousePalaceDescription": "Marriage and partnerships",
+  "@spousePalaceDescription": {
+    "description": "Spouse palace description"
+  },
+  "childrenPalace": "Children",
+  "@childrenPalace": {
+    "description": "Children palace name"
+  },
+  "childrenPalaceDescription": "Children and creativity",
+  "@childrenPalaceDescription": {
+    "description": "Children palace description"
+  },
+  "wealthPalace": "Wealth",
+  "@wealthPalace": {
+    "description": "Wealth palace name"
+  },
+  "wealthPalaceDescription": "Money and resources",
+  "@wealthPalaceDescription": {
+    "description": "Wealth palace description"
+  },
+  "healthPalace": "Health",
+  "@healthPalace": {
+    "description": "Health palace name"
+  },
+  "healthPalaceDescription": "Physical well-being",
+  "@healthPalaceDescription": {
+    "description": "Health palace description"
+  },
+  "travelPalace": "Travel",
+  "@travelPalace": {
+    "description": "Travel palace name"
+  },
+  "travelPalaceDescription": "Movement and change",
+  "@travelPalaceDescription": {
+    "description": "Travel palace description"
+  },
+  "friendsPalace": "Friends",
+  "@friendsPalace": {
+    "description": "Friends palace name"
+  },
+  "friendsPalaceDescription": "Social connections",
+  "@friendsPalaceDescription": {
+    "description": "Friends palace description"
+  },
+  "careerPalace": "Career",
+  "@careerPalace": {
+    "description": "Career palace name"
+  },
+  "careerPalaceDescription": "Work and reputation",
+  "@careerPalaceDescription": {
+    "description": "Career palace description"
+  },
+  "propertyPalace": "Property",
+  "@propertyPalace": {
+    "description": "Property palace name"
+  },
+  "propertyPalaceDescription": "Home and property",
+  "@propertyPalaceDescription": {
+    "description": "Property palace description"
+  },
+  "fortunePalace": "Fortune",
+  "@fortunePalace": {
+    "description": "Fortune palace name"
+  },
+  "fortunePalaceDescription": "Luck and spirituality",
+  "@fortunePalaceDescription": {
+    "description": "Fortune palace description"
+  },
+  "parentsPalace": "Parents",
+  "@parentsPalace": {
+    "description": "Parents palace name"
+  },
+  "parentsPalaceDescription": "Family relationships",
+  "@parentsPalaceDescription": {
+    "description": "Parents palace description"
+  },
+  "loadingChartData": "Loading Chart Data...",
+  "@loadingChartData": {
+    "description": "Message shown when loading chart data"
+  },
+  "preparingCosmicBlueprint": "Preparing your cosmic blueprint",
+  "@preparingCosmicBlueprint": {
+    "description": "Subtitle shown when loading chart data"
+  },
+  "calculatingPurpleStarChart": "Calculating Purple Star Chart...",
+  "@calculatingPurpleStarChart": {
+    "description": "Message shown when calculating chart"
+  },
+  "mappingCelestialInfluences": "Mapping the celestial influences",
+  "@mappingCelestialInfluences": {
+    "description": "Subtitle shown when calculating chart"
+  },
+  "discoverBirthChartPatterns": "Discover the hidden patterns in your birth chart and understand how the stars influence your life path",
+  "@discoverBirthChartPatterns": {
+    "description": "Description text for empty chart state"
+  },
+  "calculateChart": "Calculate Chart",
+  "@calculateChart": {
+    "description": "Button text to calculate chart"
+  },
+  "refreshChart": "Refresh Chart",
+  "@refreshChart": {
+    "description": "Menu option to refresh chart"
   }
 }
