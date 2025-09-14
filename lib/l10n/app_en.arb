@@ -593,5 +593,277 @@
   "refreshChart": "Refresh Chart",
   "@refreshChart": {
     "description": "Menu option to refresh chart"
+  },
+  "fourPillarsBaZi": "Four Pillars BaZi",
+  "@fourPillarsBaZi": {
+    "description": "Title for BaZi analysis screen"
+  },
+  "calculatingYourBaZi": "Calculating your BaZi...",
+  "@calculatingYourBaZi": {
+    "description": "Loading message when calculating BaZi"
+  },
+  "analyzingTheCosmicInfluences": "Analyzing the cosmic influences",
+  "@analyzingTheCosmicInfluences": {
+    "description": "Subtitle when calculating BaZi"
+  },
+  "discoverYourDestiny": "Discover Your Destiny",
+  "@discoverYourDestiny": {
+    "description": "Title for empty BaZi state"
+  },
+  "tapTheGoldenButtonToUnlock": "Tap the golden button to unlock your Four Pillars chart and reveal the cosmic patterns that shape your life",
+  "@tapTheGoldenButtonToUnlock": {
+    "description": "Description for empty BaZi state"
+  },
+  "fourPillars": "Four Pillars",
+  "@fourPillars": {
+    "description": "Section title for four pillars"
+  },
+  "year": "Year",
+  "@year": {
+    "description": "Year pillar name"
+  },
+  "month": "Month",
+  "@month": {
+    "description": "Month pillar name"
+  },
+  "day": "Day",
+  "@day": {
+    "description": "Day pillar name"
+  },
+  "hour": "Hour",
+  "@hour": {
+    "description": "Hour pillar name"
+  },
+  "elementAnalysis": "Element Analysis",
+  "@elementAnalysis": {
+    "description": "Section title for element analysis"
+  },
+  "wood": "Wood",
+  "@wood": {
+    "description": "Wood element name"
+  },
+  "fire": "Fire",
+  "@fire": {
+    "description": "Fire element name"
+  },
+  "earth": "Earth",
+  "@earth": {
+    "description": "Earth element name"
+  },
+  "metal": "Metal",
+  "@metal": {
+    "description": "Metal element name"
+  },
+  "water": "Water",
+  "@water": {
+    "description": "Water element name"
+  },
+  "strongest": "Strongest",
+  "@strongest": {
+    "description": "Strongest element label"
+  },
+  "weakest": "Weakest",
+  "@weakest": {
+    "description": "Weakest element label"
+  },
+  "balance": "Balance",
+  "@balance": {
+    "description": "Balance score label"
+  },
+  "recommendations": "Recommendations",
+  "@recommendations": {
+    "description": "Section title for recommendations"
+  },
+  "howYourBaZiWasCalculated": "How your BaZi was calculated",
+  "@howYourBaZiWasCalculated": {
+    "description": "Title for BaZi explanation sheet"
+  },
+  "weDeriveTheFourPillars": "We derive the Four Pillars (Year, Month, Day, Hour) from your exact birth date and time. If enabled, True Solar Time adjustments are applied for accuracy.",
+  "@weDeriveTheFourPillars": {
+    "description": "Explanation of BaZi calculation"
+  },
+  "eachPillarConsistsOf": "Each pillar consists of a Heavenly Stem and an Earthly Branch. These are mapped to the Five Elements and Yin/Yang to form your personal energy blueprint.",
+  "@eachPillarConsistsOf": {
+    "description": "Explanation of pillar structure"
+  },
+  "chineseZodiacAndWesternZodiac": "Chinese Zodiac and Western Zodiac are determined from the birth year and solar date respectively to give quick archetypal context.",
+  "@chineseZodiacAndWesternZodiac": {
+    "description": "Explanation of zodiac determination"
+  },
+  "bazi": "BaZi",
+  "@bazi": {
+    "description": "BaZi label"
+  },
+  "zodiac": "Zodiac",
+  "@zodiac": {
+    "description": "Zodiac label"
+  },
+  "calculatedAt": "Calculated at",
+  "@calculatedAt": {
+    "description": "Calculated at label"
+  },
+  "pillarPillar": "{pillarName} Pillar",
+  "@pillarPillar": {
+    "description": "Pillar explanation title",
+    "placeholders": {
+      "pillarName": {
+        "type": "String",
+        "description": "Name of the pillar"
+      }
+    }
+  },
+  "thisPillarIsComposedOf": "This pillar is composed of the Heavenly Stem and Earthly Branch shown below. Each maps to an element and Yin/Yang polarity. Together they describe tendencies related to the {pillarName} domain.",
+  "@thisPillarIsComposedOf": {
+    "description": "Explanation of pillar composition",
+    "placeholders": {
+      "pillarName": {
+        "type": "String",
+        "description": "Name of the pillar"
+      }
+    }
+  },
+  "stem": "Stem",
+  "@stem": {
+    "description": "Stem label"
+  },
+  "branch": "Branch",
+  "@branch": {
+    "description": "Branch label"
+  },
+  "hiddenStems": "Hidden Stems",
+  "@hiddenStems": {
+    "description": "Hidden stems label"
+  },
+  "meaningStemsInfluence": "Meaning: Stems influence how energy expresses outwardly, while branches describe context and timing. Element relations between stem and branch indicate support or tension.",
+  "@meaningStemsInfluence": {
+    "description": "Explanation of stem and branch meaning"
+  },
+  "weCountElementsFromBoth": "We count elements from both the stem and branch of each pillar. With four pillars, there are 8 possible element contributions. Balance score = (min ÷ max) × 100.",
+  "@weCountElementsFromBoth": {
+    "description": "Explanation of element counting"
+  },
+  "balanceScore": "Balance Score",
+  "@balanceScore": {
+    "description": "Balance score label"
+  },
+  "totalContributions": "Total Contributions",
+  "@totalContributions": {
+    "description": "Total contributions label"
+  },
+  "meaningDominantElements": "Meaning: Dominant elements describe strengths; missing or weak elements indicate areas to nurture. A higher balance score suggests smoother life dynamics.",
+  "@meaningDominantElements": {
+    "description": "Explanation of element analysis meaning"
+  },
+  "count": "Count",
+  "@count": {
+    "description": "Count label"
+  },
+  "thisCountComesFromAdding": "This count comes from adding occurrences of {element} from the stems and branches across the four pillars.",
+  "@thisCountComesFromAdding": {
+    "description": "Explanation of element count calculation",
+    "placeholders": {
+      "element": {
+        "type": "String",
+        "description": "Element symbol"
+      }
+    }
+  },
+  "woodGrowthCreativity": "Wood - Growth, creativity, flexibility",
+  "@woodGrowthCreativity": {
+    "description": "Wood element description"
+  },
+  "fireEnergyPassion": "Fire - Energy, passion, enthusiasm",
+  "@fireEnergyPassion": {
+    "description": "Fire element description"
+  },
+  "earthStabilityReliability": "Earth - Stability, reliability, grounding",
+  "@earthStabilityReliability": {
+    "description": "Earth element description"
+  },
+  "metalPrecisionDetermination": "Metal - Precision, determination, structure",
+  "@metalPrecisionDetermination": {
+    "description": "Metal element description"
+  },
+  "waterWisdomAdaptability": "Water - Wisdom, adaptability, intuition",
+  "@waterWisdomAdaptability": {
+    "description": "Water element description"
+  },
+  "unknownElement": "Unknown element",
+  "@unknownElement": {
+    "description": "Unknown element placeholder"
+  },
+  "noProfile": "No Profile",
+  "@noProfile": {
+    "description": "No profile error title"
+  },
+  "pleaseCreateAProfileFirst": "Please create a profile first",
+  "@pleaseCreateAProfileFirst": {
+    "description": "No profile error message"
+  },
+  "success": "Success",
+  "@success": {
+    "description": "Success message title"
+  },
+  "baziCalculatedSuccessfully": "BaZi calculated successfully!",
+  "@baziCalculatedSuccessfully": {
+    "description": "Success message for BaZi calculation"
+  },
+  "calculationError": "Calculation Error",
+  "@calculationError": {
+    "description": "Calculation error title"
+  },
+  "failedToCalculateBaZi": "Failed to calculate BaZi: {error}",
+  "@failedToCalculateBaZi": {
+    "description": "Calculation error message",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "description": "Error message"
+      }
+    }
+  },
+  "error": "Error",
+  "@error": {
+    "description": "Generic error title"
+  },
+  "failedToLoadBaZiData": "Failed to load BaZi data: {error}",
+  "@failedToLoadBaZiData": {
+    "description": "Error loading BaZi data",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "description": "Error message"
+      }
+    }
+  },
+  "noBaZiData": "No BaZi Data",
+  "@noBaZiData": {
+    "description": "No BaZi data error title"
+  },
+  "pleaseCalculateBaZiFirst": "Please calculate BaZi first",
+  "@pleaseCalculateBaZiFirst": {
+    "description": "No BaZi data error message"
+  },
+  "export": "Export",
+  "@export": {
+    "description": "Export action title"
+  },
+  "baziExportFeatureComingSoon": "BaZi export feature coming soon!",
+  "@baziExportFeatureComingSoon": {
+    "description": "Export feature coming soon message"
+  },
+  "exportError": "Export Error",
+  "@exportError": {
+    "description": "Export error title"
+  },
+  "failedToExportBaZi": "Failed to export BaZi: {error}",
+  "@failedToExportBaZi": {
+    "description": "Export error message",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "description": "Error message"
+      }
+    }
   }
 }

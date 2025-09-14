@@ -4,6 +4,7 @@ import 'package:astro_iztro/core/services/iztro_service.dart';
 import 'package:astro_iztro/core/services/storage_service.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 
 /// [BaZiController] - Four Pillars BaZi analysis controller
@@ -73,8 +74,8 @@ class BaZiController extends GetxController {
         print('[BaZiController] Error loading BaZi data: $e');
       }
       Get.snackbar(
-        'Error',
-        'Failed to load BaZi data: $e',
+        AppLocalizations.of(Get.context!)!.error,
+        AppLocalizations.of(Get.context!)!.failedToLoadBaZiData(e.toString()),
         snackPosition: SnackPosition.BOTTOM,
       );
     } finally {
@@ -86,8 +87,8 @@ class BaZiController extends GetxController {
   Future<void> calculateBaZi() async {
     if (currentProfile.value == null) {
       Get.snackbar(
-        'No Profile',
-        'Please create a profile first',
+        AppLocalizations.of(Get.context!)!.noProfile,
+        AppLocalizations.of(Get.context!)!.pleaseCreateAProfileFirst,
         snackPosition: SnackPosition.BOTTOM,
       );
       return;
@@ -104,8 +105,8 @@ class BaZiController extends GetxController {
         print('[BaZiController] BaZi calculated successfully');
       }
       Get.snackbar(
-        'Success',
-        'BaZi calculated successfully!',
+        AppLocalizations.of(Get.context!)!.success,
+        AppLocalizations.of(Get.context!)!.baziCalculatedSuccessfully,
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Get.theme.colorScheme.primary,
         colorText: Get.theme.colorScheme.onPrimary,
@@ -115,8 +116,8 @@ class BaZiController extends GetxController {
         print('[BaZiController] Error calculating BaZi: $e');
       }
       Get.snackbar(
-        'Calculation Error',
-        'Failed to calculate BaZi: $e',
+        AppLocalizations.of(Get.context!)!.calculationError,
+        AppLocalizations.of(Get.context!)!.failedToCalculateBaZi(e.toString()),
         snackPosition: SnackPosition.BOTTOM,
       );
     } finally {
@@ -170,8 +171,8 @@ class BaZiController extends GetxController {
       Get.toNamed<void>('/analysis');
     } else {
       Get.snackbar(
-        'No BaZi Data',
-        'Please calculate BaZi first',
+        AppLocalizations.of(Get.context!)!.noBaZiData,
+        AppLocalizations.of(Get.context!)!.pleaseCalculateBaZiFirst,
         snackPosition: SnackPosition.BOTTOM,
       );
     }
@@ -181,8 +182,8 @@ class BaZiController extends GetxController {
   Future<void> exportBaZi() async {
     if (baziData.value == null) {
       Get.snackbar(
-        'No BaZi Data',
-        'Please calculate BaZi first',
+        AppLocalizations.of(Get.context!)!.noBaZiData,
+        AppLocalizations.of(Get.context!)!.pleaseCalculateBaZiFirst,
         snackPosition: SnackPosition.BOTTOM,
       );
       return;
@@ -192,8 +193,8 @@ class BaZiController extends GetxController {
       // For now, just show success message
       // In the future, this would export to PDF or text
       Get.snackbar(
-        'Export',
-        'BaZi export feature coming soon!',
+        AppLocalizations.of(Get.context!)!.export,
+        AppLocalizations.of(Get.context!)!.baziExportFeatureComingSoon,
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Get.theme.colorScheme.secondary,
         colorText: Get.theme.colorScheme.onSecondary,
@@ -203,8 +204,8 @@ class BaZiController extends GetxController {
         print('[BaZiController] Error exporting BaZi: $e');
       }
       Get.snackbar(
-        'Export Error',
-        'Failed to export BaZi: $e',
+        AppLocalizations.of(Get.context!)!.exportError,
+        AppLocalizations.of(Get.context!)!.failedToExportBaZi(e.toString()),
         snackPosition: SnackPosition.BOTTOM,
       );
     }
@@ -230,21 +231,24 @@ class BaZiController extends GetxController {
 
   /// [getElementDescription] - Get description for element
   String getElementDescription(String element) {
-    const descriptions = {
-      '木': 'Wood - Growth, creativity, flexibility',
-      '火': 'Fire - Energy, passion, enthusiasm',
-      '土': 'Earth - Stability, reliability, grounding',
-      '金': 'Metal - Precision, determination, structure',
-      '水': 'Water - Wisdom, adaptability, intuition',
+    final descriptions = {
+      '木': AppLocalizations.of(Get.context!)!.woodGrowthCreativity,
+      '火': AppLocalizations.of(Get.context!)!.fireEnergyPassion,
+      '土': AppLocalizations.of(Get.context!)!.earthStabilityReliability,
+      '金': AppLocalizations.of(Get.context!)!.metalPrecisionDetermination,
+      '水': AppLocalizations.of(Get.context!)!.waterWisdomAdaptability,
     };
 
-    return descriptions[element] ?? 'Unknown element';
+    return descriptions[element] ??
+        AppLocalizations.of(Get.context!)!.unknownElement;
   }
 
   /// Getters for computed values
   bool get hasBaZiData => baziData.value != null;
   bool get hasSelectedPillar => selectedPillarIndex.value != -1;
-  String get baziTitle => showChineseNames.value ? '八字命理' : 'Four Pillars BaZi';
+  String get baziTitle => showChineseNames.value
+      ? '八字命理'
+      : AppLocalizations.of(Get.context!)!.fourPillarsBaZi;
 
   /// Get pillar name based on language preference and index
   String getPillarName(int index) {

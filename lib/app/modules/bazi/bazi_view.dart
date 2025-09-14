@@ -7,6 +7,7 @@ import 'package:astro_iztro/shared/widgets/background_image_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 
 /// [BaZiView] - Four Pillars BaZi analysis screen
@@ -25,9 +26,9 @@ class BaZiView extends GetView<BaZiController> {
     final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
 
     return Scaffold(
-      appBar: _buildAdaptiveAppBar(isIOS),
+      appBar: _buildAdaptiveAppBar(isIOS, context),
       body: BaZiBackground(
-        child: Obx(_buildBody),
+        child: Obx(() => _buildBody(context)),
       ),
       floatingActionButton: _buildFloatingActionButton(),
     );
@@ -36,37 +37,35 @@ class BaZiView extends GetView<BaZiController> {
   /// [buildAdaptiveAppBar] - Platform adaptive app bar
   /// - iOS: Uses CupertinoNavigationBar with centered large title feel
   /// - Others: Uses Material AppBar
-  PreferredSizeWidget _buildAdaptiveAppBar(bool isIOS) {
+  PreferredSizeWidget _buildAdaptiveAppBar(bool isIOS, BuildContext context) {
     if (isIOS) {
       return PreferredSize(
         preferredSize: const Size.fromHeight(44),
-        child: Obx(
-          () => CupertinoNavigationBar(
-            middle: Text(
-              controller.baziTitle,
-              // Keeping typography consistent with app theme while honoring iOS style
-              style: const TextStyle(
-                color: AppColors.darkTextPrimary,
-                fontWeight: FontWeight.w600,
-                fontSize: 18,
-              ),
+        child: CupertinoNavigationBar(
+          middle: Text(
+            AppLocalizations.of(context)!.fourPillarsBaZi,
+            // Keeping typography consistent with app theme while honoring iOS style
+            style: const TextStyle(
+              color: AppColors.darkTextPrimary,
+              fontWeight: FontWeight.w600,
+              fontSize: 18,
             ),
-            backgroundColor: AppColors.darkCard.withValues(alpha: 0.8),
-            border: Border.all(color: Colors.transparent),
-            leading: CupertinoButton(
-              padding: EdgeInsets.zero,
-              onPressed: Get.back<void>,
-              child: Container(
-                padding: const EdgeInsets.all(6),
-                decoration: BoxDecoration(
-                  color: AppColors.darkCard.withValues(alpha: 0.9),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: const Icon(
-                  CupertinoIcons.back,
-                  color: AppColors.lightPurple,
-                  size: 18,
-                ),
+          ),
+          backgroundColor: AppColors.darkCard.withValues(alpha: 0.8),
+          border: Border.all(color: Colors.transparent),
+          leading: CupertinoButton(
+            padding: EdgeInsets.zero,
+            onPressed: Get.back<void>,
+            child: Container(
+              padding: const EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                color: AppColors.darkCard.withValues(alpha: 0.9),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Icon(
+                CupertinoIcons.back,
+                color: AppColors.lightPurple,
+                size: 18,
               ),
             ),
           ),
@@ -75,14 +74,12 @@ class BaZiView extends GetView<BaZiController> {
     }
 
     return AppBar(
-      title: Obx(
-        () => Text(
-          controller.baziTitle,
-          style: const TextStyle(
-            color: AppColors.darkTextPrimary,
-            fontWeight: FontWeight.w600,
-            fontSize: 20,
-          ),
+      title: Text(
+        AppLocalizations.of(context)!.fourPillarsBaZi,
+        style: const TextStyle(
+          color: AppColors.darkTextPrimary,
+          fontWeight: FontWeight.w600,
+          fontSize: 20,
         ),
       ),
       backgroundColor: Colors.transparent,
@@ -132,8 +129,8 @@ class BaZiView extends GetView<BaZiController> {
               controller.isCalculating.value
                   ? Icons.hourglass_empty
                   : controller.hasBaZiData
-                  ? Icons.refresh_rounded
-                  : Icons.calculate_rounded,
+                      ? Icons.refresh_rounded
+                      : Icons.calculate_rounded,
               key: ValueKey(controller.isCalculating.value),
             ),
           ),
@@ -142,13 +139,13 @@ class BaZiView extends GetView<BaZiController> {
     );
   }
 
-  Widget _buildBody() {
+  Widget _buildBody(BuildContext context) {
     if (controller.isLoading.value) {
-      return _buildLoadingState();
+      return _buildLoadingState(context);
     }
 
     if (!controller.hasBaZiData) {
-      return _buildEmptyState();
+      return _buildEmptyState(context);
     }
 
     final baziData = controller.baziData.value!;
@@ -159,21 +156,21 @@ class BaZiView extends GetView<BaZiController> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Hero BaZi display with enhanced visual hierarchy
-          _buildHeroBaZiDisplay(baziData),
+          _buildHeroBaZiDisplay(baziData, context),
 
           const SizedBox(height: AppConstants.largePadding),
 
           // Four Pillars section with modern card design
-          _buildFourPillarsSection(baziData),
+          _buildFourPillarsSection(baziData, context),
 
           const SizedBox(height: AppConstants.largePadding),
 
           // Enhanced Element Analysis section
-          _buildElementAnalysisSection(baziData),
+          _buildElementAnalysisSection(baziData, context),
 
           if (baziData.recommendations.isNotEmpty) ...[
             const SizedBox(height: AppConstants.largePadding),
-            _buildRecommendationsSection(baziData),
+            _buildRecommendationsSection(baziData, context),
           ],
 
           const SizedBox(height: AppConstants.largePadding),
@@ -183,7 +180,7 @@ class BaZiView extends GetView<BaZiController> {
   }
 
   /// [buildLoadingState] - Enhanced loading state with smooth animations
-  Widget _buildLoadingState() {
+  Widget _buildLoadingState(BuildContext context) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -204,14 +201,14 @@ class BaZiView extends GetView<BaZiController> {
           ),
           const SizedBox(height: AppConstants.defaultPadding),
           Text(
-            'Calculating your BaZi...',
+            AppLocalizations.of(context)!.calculatingYourBaZi,
             style: AppTheme.headingMedium.copyWith(
               color: AppColors.darkTextPrimary,
             ),
           ),
           const SizedBox(height: AppConstants.smallPadding),
           Text(
-            'Analyzing the cosmic influences',
+            AppLocalizations.of(context)!.analyzingTheCosmicInfluences,
             style: AppTheme.bodyMedium.copyWith(
               color: AppColors.darkTextSecondary,
             ),
@@ -222,7 +219,7 @@ class BaZiView extends GetView<BaZiController> {
   }
 
   /// [buildEmptyState] - Modern empty state with call-to-action
-  Widget _buildEmptyState() {
+  Widget _buildEmptyState(BuildContext context) {
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(AppConstants.largePadding),
@@ -246,7 +243,7 @@ class BaZiView extends GetView<BaZiController> {
             ),
             const SizedBox(height: AppConstants.defaultPadding),
             Text(
-              'Discover Your Destiny',
+              AppLocalizations.of(context)!.discoverYourDestiny,
               style: AppTheme.headingLarge.copyWith(
                 color: AppColors.darkTextPrimary,
                 fontWeight: FontWeight.w700,
@@ -254,7 +251,7 @@ class BaZiView extends GetView<BaZiController> {
             ),
             const SizedBox(height: AppConstants.smallPadding),
             Text(
-              'Tap the golden button to unlock your Four Pillars chart and reveal the cosmic patterns that shape your life',
+              AppLocalizations.of(context)!.tapTheGoldenButtonToUnlock,
               style: AppTheme.bodyLarge.copyWith(
                 color: AppColors.darkTextSecondary,
                 height: 1.6,
@@ -268,9 +265,9 @@ class BaZiView extends GetView<BaZiController> {
   }
 
   /// [buildHeroBaZiDisplay] - Hero section with main BaZi information
-  Widget _buildHeroBaZiDisplay(BaZiData baziData) {
+  Widget _buildHeroBaZiDisplay(BaZiData baziData, BuildContext context) {
     return GestureDetector(
-      onTap: () => _showHeroExplanation(baziData),
+      onTap: () => _showHeroExplanation(baziData, context),
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.all(AppConstants.largePadding),
@@ -347,12 +344,12 @@ class BaZiView extends GetView<BaZiController> {
   }
 
   /// [buildFourPillarsSection] - Modern four pillars display
-  Widget _buildFourPillarsSection(BaZiData baziData) {
+  Widget _buildFourPillarsSection(BaZiData baziData, BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Four Pillars',
+          AppLocalizations.of(context)!.fourPillars,
           style: AppTheme.headingMedium.copyWith(
             color: AppColors.darkTextPrimary,
             fontWeight: FontWeight.w700,
@@ -372,7 +369,7 @@ class BaZiView extends GetView<BaZiController> {
           ),
           itemCount: 4,
           itemBuilder: (context, index) {
-            return _buildPillarCard(index, baziData.allPillars[index]);
+            return _buildPillarCard(index, baziData.allPillars[index], context);
           },
         ),
       ],
@@ -380,8 +377,13 @@ class BaZiView extends GetView<BaZiController> {
   }
 
   /// [buildPillarCard] - Individual pillar card with modern design
-  Widget _buildPillarCard(int index, PillarData pillar) {
-    final pillarNames = ['Year', 'Month', 'Day', 'Hour'];
+  Widget _buildPillarCard(int index, PillarData pillar, BuildContext context) {
+    final pillarNames = [
+      AppLocalizations.of(context)!.year,
+      AppLocalizations.of(context)!.month,
+      AppLocalizations.of(context)!.day,
+      AppLocalizations.of(context)!.hour,
+    ];
     final pillarColors = [
       AppColors.cinnabar,
       AppColors.emerald,
@@ -393,7 +395,8 @@ class BaZiView extends GetView<BaZiController> {
       color: Colors.transparent,
       child: InkWell(
         borderRadius: BorderRadius.circular(20),
-        onTap: () => _showPillarExplanation(pillarNames[index], pillar),
+        onTap: () =>
+            _showPillarExplanation(pillarNames[index], pillar, context),
         child: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -480,21 +483,20 @@ class BaZiView extends GetView<BaZiController> {
   }
 
   /// [buildElementAnalysisSection] - Enhanced element analysis with modern progress bars
-  Widget _buildElementAnalysisSection(BaZiData baziData) {
+  Widget _buildElementAnalysisSection(BaZiData baziData, BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Element Analysis',
+          AppLocalizations.of(context)!.elementAnalysis,
           style: AppTheme.headingMedium.copyWith(
             color: AppColors.darkTextPrimary,
             fontWeight: FontWeight.w700,
           ),
         ),
         const SizedBox(height: AppConstants.smallPadding),
-
         GestureDetector(
-          onTap: () => _showElementAnalysisExplanation(baziData),
+          onTap: () => _showElementAnalysisExplanation(baziData, context),
           child: Container(
             padding: const EdgeInsets.all(AppConstants.largePadding),
             decoration: BoxDecoration(
@@ -522,13 +524,13 @@ class BaZiView extends GetView<BaZiController> {
               children: [
                 // Element progress bars
                 ...baziData.elementCounts.entries.map(
-                  _buildElementProgressBar,
+                  (entry) => _buildElementProgressBar(entry, context),
                 ),
 
                 const SizedBox(height: AppConstants.defaultPadding),
 
                 // Summary information
-                _buildElementSummary(baziData),
+                _buildElementSummary(baziData, context),
               ],
             ),
           ),
@@ -538,7 +540,10 @@ class BaZiView extends GetView<BaZiController> {
   }
 
   /// [buildElementProgressBar] - Individual element progress bar
-  Widget _buildElementProgressBar(MapEntry<String, int> entry) {
+  Widget _buildElementProgressBar(
+    MapEntry<String, int> entry,
+    BuildContext context,
+  ) {
     final elementColors = {
       '木': AppColors.emerald,
       '火': AppColors.cinnabar,
@@ -555,7 +560,8 @@ class BaZiView extends GetView<BaZiController> {
         color: Colors.transparent,
         child: InkWell(
           borderRadius: BorderRadius.circular(8),
-          onTap: () => _showElementBarExplanation(entry.key, entry.value),
+          onTap: () =>
+              _showElementBarExplanation(entry.key, entry.value, context),
           child: Row(
             children: [
               // Element symbol
@@ -566,8 +572,7 @@ class BaZiView extends GetView<BaZiController> {
                   color: elementColors[entry.key]?.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color:
-                        elementColors[entry.key]?.withValues(alpha: 0.3) ??
+                    color: elementColors[entry.key]?.withValues(alpha: 0.3) ??
                         AppColors.darkBorder,
                   ),
                 ),
@@ -595,7 +600,7 @@ class BaZiView extends GetView<BaZiController> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          _getElementName(entry.key),
+                          _getElementName(entry.key, context),
                           style: AppTheme.bodyMedium.copyWith(
                             color: AppColors.darkTextSecondary,
                             fontWeight: FontWeight.w600,
@@ -649,20 +654,20 @@ class BaZiView extends GetView<BaZiController> {
     );
   }
 
-  /// [getElementName] - Get English name for Chinese element
-  String _getElementName(String element) {
+  /// [getElementName] - Get localized name for Chinese element
+  String _getElementName(String element, BuildContext context) {
     final elementNames = {
-      '木': 'Wood',
-      '火': 'Fire',
-      '土': 'Earth',
-      '金': 'Metal',
-      '水': 'Water',
+      '木': AppLocalizations.of(context)!.wood,
+      '火': AppLocalizations.of(context)!.fire,
+      '土': AppLocalizations.of(context)!.earth,
+      '金': AppLocalizations.of(context)!.metal,
+      '水': AppLocalizations.of(context)!.water,
     };
     return elementNames[element] ?? element;
   }
 
   /// [buildElementSummary] - Element analysis summary
-  Widget _buildElementSummary(BaZiData baziData) {
+  Widget _buildElementSummary(BaZiData baziData, BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(AppConstants.defaultPadding),
       decoration: BoxDecoration(
@@ -690,7 +695,7 @@ class BaZiView extends GetView<BaZiController> {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      'Strongest: ${baziData.strongestElement}',
+                      '${AppLocalizations.of(context)!.strongest}: ${baziData.strongestElement}',
                       style: AppTheme.bodyMedium.copyWith(
                         color: Colors.green,
                         fontWeight: FontWeight.w600,
@@ -711,7 +716,7 @@ class BaZiView extends GetView<BaZiController> {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      'Weakest: ${baziData.weakestElement}',
+                      '${AppLocalizations.of(context)!.weakest}: ${baziData.weakestElement}',
                       style: AppTheme.bodyMedium.copyWith(
                         color: Colors.red,
                         fontWeight: FontWeight.w600,
@@ -722,7 +727,6 @@ class BaZiView extends GetView<BaZiController> {
               ],
             ),
           ),
-
           Container(
             padding: const EdgeInsets.symmetric(
               horizontal: AppConstants.defaultPadding,
@@ -743,7 +747,7 @@ class BaZiView extends GetView<BaZiController> {
             child: Column(
               children: [
                 Text(
-                  'Balance',
+                  AppLocalizations.of(context)!.balance,
                   style: AppTheme.caption.copyWith(
                     color: AppColors.darkTextSecondary,
                   ),
@@ -767,66 +771,88 @@ class BaZiView extends GetView<BaZiController> {
   // Explanation UI helpers
   // =====================
 
-  void _showHeroExplanation(BaZiData data) {
+  void _showHeroExplanation(BaZiData data, BuildContext context) {
     _showExplanationSheet(
-      title: 'How your BaZi was calculated',
+      title: AppLocalizations.of(context)!.howYourBaZiWasCalculated,
       children: [
         _explanationText(
-          'We derive the Four Pillars (Year, Month, Day, Hour) from your exact birth date and time. If enabled, True Solar Time adjustments are applied for accuracy.',
+          AppLocalizations.of(context)!.weDeriveTheFourPillars,
         ),
         _explanationText(
-          'Each pillar consists of a Heavenly Stem and an Earthly Branch. These are mapped to the Five Elements and Yin/Yang to form your personal energy blueprint.',
+          AppLocalizations.of(context)!.eachPillarConsistsOf,
         ),
         _explanationText(
-          'Chinese Zodiac and Western Zodiac are determined from the birth year and solar date respectively to give quick archetypal context.',
+          AppLocalizations.of(context)!.chineseZodiacAndWesternZodiac,
         ),
         const SizedBox(height: 12),
-        _keyValue('BaZi', data.baziString),
-        _keyValue('Zodiac', '${data.chineseZodiac} • ${data.westernZodiac}'),
-        _keyValue('Calculated at', data.calculatedAt.toLocal().toString()),
+        _keyValue(AppLocalizations.of(context)!.bazi, data.baziString),
+        _keyValue(
+          AppLocalizations.of(context)!.zodiac,
+          '${data.chineseZodiac} • ${data.westernZodiac}',
+        ),
+        _keyValue(
+          AppLocalizations.of(context)!.calculatedAt,
+          data.calculatedAt.toLocal().toString(),
+        ),
       ],
     );
   }
 
-  void _showPillarExplanation(String pillarName, PillarData pillar) {
+  void _showPillarExplanation(
+    String pillarName,
+    PillarData pillar,
+    BuildContext context,
+  ) {
     _showExplanationSheet(
-      title: '$pillarName Pillar',
+      title: AppLocalizations.of(context)!.pillarPillar(pillarName),
       children: [
         _explanationText(
-          'This pillar is composed of the Heavenly Stem and Earthly Branch shown below. Each maps to an element and Yin/Yang polarity. Together they describe tendencies related to the $pillarName domain.',
+          AppLocalizations.of(context)!.thisPillarIsComposedOf(pillarName),
         ),
         const SizedBox(height: 8),
         _keyValue(
-          'Stem',
+          AppLocalizations.of(context)!.stem,
           '${pillar.stem} (${pillar.stemEn}) • ${pillar.stemElement} • ${pillar.stemYinYang}',
         ),
         _keyValue(
-          'Branch',
+          AppLocalizations.of(context)!.branch,
           '${pillar.branch} (${pillar.branchEn}) • ${pillar.branchElement} • ${pillar.branchYinYang}',
         ),
         if (pillar.hiddenStems.isNotEmpty)
-          _keyValue('Hidden Stems', pillar.hiddenStems.join(', ')),
+          _keyValue(
+            AppLocalizations.of(context)!.hiddenStems,
+            pillar.hiddenStems.join(', '),
+          ),
         const SizedBox(height: 12),
         _explanationText(
-          'Meaning: Stems influence how energy expresses outwardly, while branches describe context and timing. Element relations between stem and branch indicate support or tension.',
+          AppLocalizations.of(context)!.meaningStemsInfluence,
         ),
       ],
     );
   }
 
-  void _showElementAnalysisExplanation(BaZiData data) {
+  void _showElementAnalysisExplanation(BaZiData data, BuildContext context) {
     final counts = data.elementCounts;
     final total = counts.values.fold<int>(0, (a, b) => a + b);
     _showExplanationSheet(
-      title: 'Element Analysis',
+      title: AppLocalizations.of(context)!.elementAnalysis,
       children: [
         _explanationText(
-          'We count elements from both the stem and branch of each pillar. With four pillars, there are 8 possible element contributions. Balance score = (min ÷ max) × 100.',
+          AppLocalizations.of(context)!.weCountElementsFromBoth,
         ),
-        _keyValue('Strongest', data.strongestElement),
-        _keyValue('Weakest', data.weakestElement),
-        _keyValue('Balance Score', '${data.elementBalanceScore}%'),
-        _keyValue('Total Contributions', '$total (max ≈ 8)'),
+        _keyValue(
+          AppLocalizations.of(context)!.strongest,
+          data.strongestElement,
+        ),
+        _keyValue(AppLocalizations.of(context)!.weakest, data.weakestElement),
+        _keyValue(
+          AppLocalizations.of(context)!.balanceScore,
+          '${data.elementBalanceScore}%',
+        ),
+        _keyValue(
+          AppLocalizations.of(context)!.totalContributions,
+          '$total (max ≈ 8)',
+        ),
         const SizedBox(height: 8),
         Wrap(
           spacing: 12,
@@ -834,28 +860,32 @@ class BaZiView extends GetView<BaZiController> {
           children: counts.entries
               .map(
                 (e) => Chip(
-                  label: Text('${_getElementName(e.key)} ${e.value}'),
+                  label: Text('${_getElementName(e.key, context)} ${e.value}'),
                 ),
               )
               .toList(),
         ),
         const SizedBox(height: 8),
         _explanationText(
-          'Meaning: Dominant elements describe strengths; missing or weak elements indicate areas to nurture. A higher balance score suggests smoother life dynamics.',
+          AppLocalizations.of(context)!.meaningDominantElements,
         ),
       ],
     );
   }
 
-  void _showElementBarExplanation(String element, int count) {
+  void _showElementBarExplanation(
+    String element,
+    int count,
+    BuildContext context,
+  ) {
     final description = controller.getElementDescription(element);
     _showExplanationSheet(
-      title: '${_getElementName(element)} ($element)',
+      title: '${_getElementName(element, context)} ($element)',
       children: [
-        _keyValue('Count', '$count of ~8'),
+        _keyValue(AppLocalizations.of(context)!.count, '$count of ~8'),
         _explanationText(description),
         _explanationText(
-          'This count comes from adding occurrences of $element from the stems and branches across the four pillars.',
+          AppLocalizations.of(context)!.thisCountComesFromAdding(element),
         ),
       ],
     );
@@ -960,19 +990,18 @@ class BaZiView extends GetView<BaZiController> {
   }
 
   /// [buildRecommendationsSection] - Modern recommendations display
-  Widget _buildRecommendationsSection(BaZiData baziData) {
+  Widget _buildRecommendationsSection(BaZiData baziData, BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Recommendations',
+          AppLocalizations.of(context)!.recommendations,
           style: AppTheme.headingMedium.copyWith(
             color: AppColors.darkTextPrimary,
             fontWeight: FontWeight.w700,
           ),
         ),
         const SizedBox(height: AppConstants.smallPadding),
-
         Container(
           padding: const EdgeInsets.all(AppConstants.largePadding),
           decoration: BoxDecoration(
