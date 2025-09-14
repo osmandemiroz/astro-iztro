@@ -3,6 +3,7 @@ import 'package:astro_iztro/core/services/iztro_service.dart';
 import 'package:astro_iztro/core/services/storage_service.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 
 /// [AstroMatcherController] - Controller for Astro Matcher compatibility analysis
@@ -77,10 +78,11 @@ class AstroMatcherController extends GetxController {
       if (kDebugMode) {
         print('[AstroMatcherController] Error loading profiles: $e');
       }
-      errorMessage.value = 'Failed to load profiles: $e';
+      errorMessage.value =
+          AppLocalizations.of(Get.context!)!.failedToLoadProfiles(e.toString());
       Get.snackbar(
-        'Error',
-        'Failed to load profiles: $e',
+        AppLocalizations.of(Get.context!)!.error,
+        AppLocalizations.of(Get.context!)!.failedToLoadProfiles(e.toString()),
         snackPosition: SnackPosition.BOTTOM,
       );
     } finally {
@@ -105,7 +107,8 @@ class AstroMatcherController extends GetxController {
       if (kDebugMode) {
         print('[AstroMatcherController] Error setting profile 2: $e');
       }
-      errorMessage.value = 'Failed to set profile 2: $e';
+      errorMessage.value =
+          AppLocalizations.of(Get.context!)!.failedToSetProfile2(e.toString());
     }
   }
 
@@ -115,10 +118,10 @@ class AstroMatcherController extends GetxController {
       // Validate profile selection
       if (selectedProfile1.value == null || selectedProfile2.value == null) {
         errorMessage.value =
-            'Please select both profiles for compatibility analysis';
+            AppLocalizations.of(Get.context!)!.pleaseSelectBothProfiles;
         Get.snackbar(
-          'Error',
-          'Please select both profiles for compatibility analysis',
+          AppLocalizations.of(Get.context!)!.error,
+          AppLocalizations.of(Get.context!)!.pleaseSelectBothProfiles,
           snackPosition: SnackPosition.BOTTOM,
         );
         return;
@@ -127,10 +130,10 @@ class AstroMatcherController extends GetxController {
       // Check if profiles are different
       if (selectedProfile1.value == selectedProfile2.value) {
         errorMessage.value =
-            'Please select different profiles for compatibility analysis';
+            AppLocalizations.of(Get.context!)!.pleaseSelectDifferentProfiles;
         Get.snackbar(
-          'Error',
-          'Please select different profiles for compatibility analysis',
+          AppLocalizations.of(Get.context!)!.error,
+          AppLocalizations.of(Get.context!)!.pleaseSelectDifferentProfiles,
           snackPosition: SnackPosition.BOTTOM,
         );
         return;
@@ -175,10 +178,12 @@ class AstroMatcherController extends GetxController {
       if (kDebugMode) {
         print('[AstroMatcherController] Error calculating compatibility: $e');
       }
-      errorMessage.value = 'Failed to calculate compatibility: $e';
+      errorMessage.value = AppLocalizations.of(Get.context!)!
+          .failedToCalculateCompatibility(e.toString());
       Get.snackbar(
-        'Error',
-        'Failed to calculate compatibility: $e',
+        AppLocalizations.of(Get.context!)!.error,
+        AppLocalizations.of(Get.context!)!
+            .failedToCalculateCompatibility(e.toString()),
         snackPosition: SnackPosition.BOTTOM,
       );
     } finally {
@@ -250,12 +255,17 @@ class AstroMatcherController extends GetxController {
   /// [getCompatibilitySummary] - Get compatibility summary
   String getCompatibilitySummary() {
     final result = compatibilityResult.value;
-    if (result == null) return 'No analysis available';
+    if (result == null) {
+      return AppLocalizations.of(Get.context!)!.noAnalysisAvailable;
+    }
 
     final analysis = result['analysis'] as Map<String, dynamic>?;
-    if (analysis == null) return 'No analysis available';
+    if (analysis == null) {
+      return AppLocalizations.of(Get.context!)!.noAnalysisAvailable;
+    }
 
-    return analysis['summary'] as String? ?? 'No summary available';
+    return analysis['summary'] as String? ??
+        AppLocalizations.of(Get.context!)!.noSummaryAvailable;
   }
 
   /// [getCompatibilityAnalysis] - Get detailed compatibility analysis
@@ -356,7 +366,9 @@ class AstroMatcherController extends GetxController {
     final p = pred?.cast<String, dynamic>();
     final text = p?['prediction']?.toString();
     final confidence = p?['confidence']?.toString();
-    if (text == null) return 'No prediction available';
+    if (text == null) {
+      return AppLocalizations.of(Get.context!)!.noPredictionAvailable;
+    }
     return confidence == null ? text : '$text • $confidence confidence';
   }
 
@@ -439,8 +451,10 @@ class AstroMatcherController extends GetxController {
 
           // Show success message
           Get.snackbar(
-            'Profile Added',
-            'New profile "${result.name ?? 'Unknown'}" has been added and selected for compatibility analysis',
+            AppLocalizations.of(Get.context!)!.profileAdded,
+            AppLocalizations.of(Get.context!)!.newProfileAddedAndSelected(
+              result.name ?? AppLocalizations.of(Get.context!)!.unknown,
+            ),
             snackPosition: SnackPosition.BOTTOM,
             backgroundColor: Colors.green,
             colorText: Colors.white,
@@ -448,8 +462,8 @@ class AstroMatcherController extends GetxController {
         } else {
           // Show error if trying to create a profile that's the same as current user
           Get.snackbar(
-            'Error',
-            'Cannot create a profile with the same details as your current profile',
+            AppLocalizations.of(Get.context!)!.error,
+            AppLocalizations.of(Get.context!)!.cannotCreateSameProfile,
             snackPosition: SnackPosition.BOTTOM,
             backgroundColor: Colors.red,
             colorText: Colors.white,

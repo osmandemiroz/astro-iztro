@@ -395,8 +395,11 @@ class BaZiView extends GetView<BaZiController> {
       color: Colors.transparent,
       child: InkWell(
         borderRadius: BorderRadius.circular(20),
-        onTap: () =>
-            _showPillarExplanation(pillarNames[index], pillar, context),
+        onTap: () => _showPillarExplanation(
+          pillarNames[index] as String,
+          pillar,
+          context,
+        ),
         child: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -426,7 +429,7 @@ class BaZiView extends GetView<BaZiController> {
               children: [
                 // Pillar name
                 Text(
-                  pillarNames[index],
+                  pillarNames[index] as String,
                   style: AppTheme.caption.copyWith(
                     color: AppColors.darkTextSecondary,
                     fontWeight: FontWeight.w600,

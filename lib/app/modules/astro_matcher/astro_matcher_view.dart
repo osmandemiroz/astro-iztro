@@ -8,6 +8,7 @@ import 'package:astro_iztro/shared/widgets/background_image_widget.dart';
 import 'package:astro_iztro/shared/widgets/liquid_glass_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 
 /// [AstroMatcherView] - Astrological compatibility analysis screen
@@ -77,14 +78,14 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
             borderRadius: BorderRadius.circular(12),
             padding: const EdgeInsets.all(2),
             child: Semantics(
-              label: 'Go back',
+              label: AppLocalizations.of(Get.context!)!.goBack,
               button: true,
               child: IconButton(
                 onPressed: () {
                   // [AstroMatcherView._buildAppBar] Back navigation
                   Get.back<void>();
                 },
-                tooltip: 'Back',
+                tooltip: AppLocalizations.of(Get.context!)!.back,
                 icon: const Icon(
                   Icons.arrow_back_ios_new,
                   color: AppColors.darkTextPrimary,
@@ -106,7 +107,7 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
                   vertical: AppConstants.defaultPadding,
                 ),
                 child: Text(
-                  'ASTRO MATCHER',
+                  AppLocalizations.of(Get.context!)!.astroMatcher,
                   style: AppTheme.headingSmall.copyWith(
                     color: AppColors.darkTextPrimary,
                     fontFamily: AppConstants.decorativeFont,
@@ -169,7 +170,7 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Select Profiles for Compatibility',
+          AppLocalizations.of(Get.context!)!.selectProfilesForCompatibility,
           style: AppTheme.headingSmall.copyWith(
             color: AppColors.darkTextPrimary,
           ),
@@ -180,7 +181,7 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
         _buildCurrentProfileDisplay(
           height: height,
           width: width,
-          title: 'Profile 1 (Your Profile)',
+          title: AppLocalizations.of(Get.context!)!.profile1YourProfile,
           selectedProfile: controller.selectedProfile1.value,
         ),
 
@@ -193,7 +194,7 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
               child: _buildProfileSelector(
                 height: height * 0.7,
                 width: width * 0.5,
-                title: 'Profile 2 (Other Person)',
+                title: AppLocalizations.of(Get.context!)!.profile2OtherPerson,
                 selectedProfile: controller.selectedProfile2.value,
                 onProfileSelected: controller.setProfile2,
                 availableProfiles: controller.availableProfiles,
@@ -209,7 +210,7 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
               borderRadius: BorderRadius.circular(12),
               padding: const EdgeInsets.all(8),
               child: Semantics(
-                label: 'Create new profile',
+                label: AppLocalizations.of(Get.context!)!.createNewProfile,
                 button: true,
                 child: IconButton(
                   onPressed: controller.navigateToInput,
@@ -218,7 +219,7 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
                     color: AppColors.success,
                     size: 20,
                   ),
-                  tooltip: 'Create new profile',
+                  tooltip: AppLocalizations.of(Get.context!)!.createNewProfile,
                 ),
               ),
             ),
@@ -232,7 +233,7 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
               borderRadius: BorderRadius.circular(12),
               padding: const EdgeInsets.all(8),
               child: Semantics(
-                label: 'Refresh profiles',
+                label: AppLocalizations.of(Get.context!)!.refreshProfiles,
                 button: true,
                 child: IconButton(
                   onPressed: controller.refreshProfiles,
@@ -241,7 +242,7 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
                     color: AppColors.lightPurple,
                     size: 20,
                   ),
-                  tooltip: 'Refresh profiles',
+                  tooltip: AppLocalizations.of(Get.context!)!.refreshProfiles,
                 ),
               ),
             ),
@@ -262,7 +263,8 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
               const SizedBox(width: 6),
               Expanded(
                 child: Text(
-                  'Select a different profile for the other person to continue.',
+                  AppLocalizations.of(Get.context!)!
+                      .selectDifferentProfileToContinue,
                   style: AppTheme.caption.copyWith(
                     color: AppColors.darkTextSecondary,
                   ),
@@ -293,7 +295,6 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
           ),
         ),
         const SizedBox(height: AppConstants.smallPadding),
-
         if (selectedProfile == null)
           _buildNoCurrentProfileMessage(
             height: height,
@@ -331,7 +332,7 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
           const SizedBox(width: AppConstants.smallPadding),
           Expanded(
             child: Text(
-              'No current profile found. Please create a profile first.',
+              AppLocalizations.of(Get.context!)!.noCurrentProfileFound,
               style: AppTheme.bodyMedium.copyWith(
                 color: AppColors.darkTextSecondary,
                 fontSize: 12,
@@ -376,7 +377,7 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  profile.name ?? 'Unknown',
+                  profile.name ?? AppLocalizations.of(Get.context!)!.unknown,
                   style: AppTheme.bodyMedium.copyWith(
                     fontWeight: FontWeight.w600,
                     color: AppColors.darkTextPrimary,
@@ -389,7 +390,7 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
                   ),
                 ),
                 Text(
-                  'Current Profile',
+                  AppLocalizations.of(Get.context!)!.currentProfile,
                   style: AppTheme.caption.copyWith(
                     color: AppColors.lightPurple,
                     fontWeight: FontWeight.w500,
@@ -427,7 +428,6 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
             fontWeight: FontWeight.w500,
           ),
         ),
-
         if (availableProfiles.isEmpty)
           _buildNoOtherProfilesMessage(
             height: height,
@@ -467,7 +467,7 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
           const SizedBox(width: AppConstants.smallPadding),
           Expanded(
             child: Text(
-              'No other profiles available. Create a profile for the other person to analyze compatibility.',
+              AppLocalizations.of(Get.context!)!.noOtherProfilesAvailable,
               style: AppTheme.bodyMedium.copyWith(
                 color: AppColors.darkTextSecondary,
                 fontSize: 12,
@@ -509,7 +509,7 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
             color: AppColors.lightPurple,
           ),
           hint: Text(
-            'Select a profile',
+            AppLocalizations.of(Get.context!)!.selectAProfile,
             style: AppTheme.bodyMedium.copyWith(
               color: AppColors.darkTextSecondary,
             ),
@@ -537,7 +537,8 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          profile.name ?? 'Unknown',
+                          profile.name ??
+                              AppLocalizations.of(Get.context!)!.unknown,
                           style: AppTheme.bodyMedium.copyWith(
                             fontWeight: FontWeight.w500,
                           ),
@@ -573,8 +574,7 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
     return Obx(() {
       final hasProfile1 = controller.selectedProfile1.value != null;
       final hasProfile2 = controller.selectedProfile2.value != null;
-      final profilesDifferent =
-          controller.selectedProfile1.value !=
+      final profilesDifferent = controller.selectedProfile1.value !=
           controller.selectedProfile2.value;
       final canCalculate = hasProfile1 && hasProfile2 && profilesDifferent;
 
@@ -586,9 +586,8 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
           child: LiquidGlassWidget(
             height: height,
             width: width,
-            glassColor: canCalculate
-                ? AppColors.lightPurple
-                : AppColors.glassSecondary,
+            glassColor:
+                canCalculate ? AppColors.lightPurple : AppColors.glassSecondary,
             borderColor: canCalculate
                 ? AppColors.lightPurple
                 : AppColors.lightPurple.withValues(alpha: 0.3),
@@ -618,7 +617,8 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
                   ),
                   const SizedBox(width: AppConstants.smallPadding),
                   Text(
-                    'Calculate Your Compatibility',
+                    AppLocalizations.of(Get.context!)!
+                        .calculateYourCompatibility,
                     style: AppTheme.bodyLarge.copyWith(
                       color: canCalculate
                           ? AppColors.white
@@ -651,7 +651,7 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Your Compatibility Results',
+                    AppLocalizations.of(Get.context!)!.yourCompatibilityResults,
                     style: AppTheme.headingSmall.copyWith(
                       color: AppColors.darkTextPrimary,
                     ),
@@ -690,7 +690,7 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
   }) {
     return _insightInk(
       onTap: () => _openInsight(
-        title: 'Overall Compatibility',
+        title: AppLocalizations.of(Get.context!)!.overallCompatibility,
         body: _overallScoreExplanation(),
       ),
       child: LiquidGlassWidget(
@@ -703,7 +703,7 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
         child: Column(
           children: [
             Text(
-              'Your Overall Compatibility',
+              AppLocalizations.of(Get.context!)!.yourOverallCompatibility,
               style: AppTheme.bodyMedium.copyWith(
                 color: AppColors.darkTextSecondary,
               ),
@@ -741,7 +741,7 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
 
     return _insightInk(
       onTap: () => _openInsight(
-        title: 'Detailed Analysis',
+        title: AppLocalizations.of(Get.context!)!.detailedAnalysis,
         body: _detailedAnalysisExplanation(analysis),
       ),
       child: LiquidGlassWidget(
@@ -755,38 +755,33 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Your Detailed Analysis',
+              AppLocalizations.of(Get.context!)!.yourDetailedAnalysis,
               style: AppTheme.bodyMedium.copyWith(
                 color: AppColors.darkTextPrimary,
                 fontWeight: FontWeight.w600,
               ),
             ),
             const SizedBox(height: AppConstants.smallPadding),
-
             _buildAnalysisItem(
-              'Sun Sign',
+              AppLocalizations.of(Get.context!)!.sunSign,
               (analysis['sunSignAnalysis'] as String?) ??
-                  'No analysis available',
+                  AppLocalizations.of(Get.context!)!.noAnalysisAvailable,
               Icons.wb_sunny,
               AppColors.lightGold,
             ),
-
             const SizedBox(height: AppConstants.smallPadding),
-
             _buildAnalysisItem(
-              'Element',
+              AppLocalizations.of(Get.context!)!.element,
               (analysis['elementAnalysis'] as String?) ??
-                  'No analysis available',
+                  AppLocalizations.of(Get.context!)!.noAnalysisAvailable,
               Icons.local_fire_department,
               AppColors.lightPurple,
             ),
-
             const SizedBox(height: AppConstants.smallPadding),
-
             _buildAnalysisItem(
-              'Timing',
+              AppLocalizations.of(Get.context!)!.timing,
               (analysis['timingAnalysis'] as String?) ??
-                  'No analysis available',
+                  AppLocalizations.of(Get.context!)!.noAnalysisAvailable,
               Icons.schedule,
               AppColors.success,
             ),
@@ -849,7 +844,7 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
 
     return _insightInk(
       onTap: () => _openInsight(
-        title: 'Recommendations',
+        title: AppLocalizations.of(Get.context!)!.recommendations,
         body: _recommendationsExplanation(),
       ),
       child: LiquidGlassWidget(
@@ -863,7 +858,8 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Your Relationship Recommendations',
+              AppLocalizations.of(Get.context!)!
+                  .yourRelationshipRecommendations,
               style: AppTheme.bodyMedium.copyWith(
                 color: AppColors.darkTextPrimary,
                 fontWeight: FontWeight.w600,
@@ -918,7 +914,7 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
     final years = yearly.keys.toList()..sort();
     return _insightInk(
       onTap: () => _openInsight(
-        title: 'Future Compatibility Insights',
+        title: AppLocalizations.of(Get.context!)!.futureCompatibilityInsights,
         body: _futureInsightsExplanation(yearly, prediction),
       ),
       child: LiquidGlassWidget(
@@ -932,7 +928,7 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Future Insights',
+              AppLocalizations.of(Get.context!)!.futureInsights,
               style: AppTheme.bodyMedium.copyWith(
                 color: AppColors.darkTextPrimary,
                 fontWeight: FontWeight.w600,
@@ -965,7 +961,11 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
                                 breakdown,
                                 score,
                               );
-                              _openInsight(title: 'Year $y', body: body);
+                              _openInsight(
+                                title:
+                                    AppLocalizations.of(Get.context!)!.year(y),
+                                body: body,
+                              );
                             },
                             child: Container(
                               height: 8,
@@ -1030,7 +1030,7 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
   List<Widget> _overallScoreExplanation() {
     return [
       Text(
-        'Overall score blends Sun Sign (30%), Element (25%), Timing (20%), Chinese Zodiac Year (15%), and Hour Branch (10%).',
+        AppLocalizations.of(Get.context!)!.overallScoreExplanation,
         style: AppTheme.bodyMedium.copyWith(
           color: AppColors.darkTextSecondary,
           height: 1.5,
@@ -1049,21 +1049,27 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
 
   List<Widget> _detailedAnalysisExplanation(Map<String, dynamic> analysis) {
     return [
-      _explainLine('Sun Sign', 'Traditional Western zodiac matrix scoring.'),
-      const SizedBox(height: 6),
       _explainLine(
-        'Element',
-        'Five-element interaction table (Wood, Fire, Earth, Metal, Water).',
+        AppLocalizations.of(Get.context!)!.sunSign,
+        AppLocalizations.of(Get.context!)!.sunSignExplanation,
       ),
       const SizedBox(height: 6),
-      _explainLine('Timing', 'Age gap, seasonal rhythm, and cycle alignment.'),
+      _explainLine(
+        AppLocalizations.of(Get.context!)!.element,
+        AppLocalizations.of(Get.context!)!.elementExplanation,
+      ),
+      const SizedBox(height: 6),
+      _explainLine(
+        AppLocalizations.of(Get.context!)!.timing,
+        AppLocalizations.of(Get.context!)!.timingExplanation,
+      ),
     ];
   }
 
   List<Widget> _recommendationsExplanation() {
     return [
       Text(
-        'Suggestions are derived from your overall score to amplify strengths and address challenges.',
+        AppLocalizations.of(Get.context!)!.recommendationsExplanation,
         style: AppTheme.bodyMedium.copyWith(
           color: AppColors.darkTextSecondary,
           height: 1.5,
@@ -1078,7 +1084,7 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
   ) {
     return [
       Text(
-        'We compute yearly projections from trend analysis over multiple years and highlight peaks and dips.',
+        AppLocalizations.of(Get.context!)!.futureInsightsExplanation,
         style: AppTheme.bodyMedium.copyWith(
           color: AppColors.darkTextSecondary,
           height: 1.5,
@@ -1086,7 +1092,7 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
       ),
       const SizedBox(height: 8),
       Text(
-        'Prediction: $prediction',
+        AppLocalizations.of(Get.context!)!.prediction(prediction),
         style: AppTheme.bodyMedium.copyWith(
           color: AppColors.darkTextPrimary,
           fontWeight: FontWeight.w600,
@@ -1110,67 +1116,80 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
     final pairAnimals = (reasons?['pairAnimals'] as List?)?.join(' & ');
 
     List<Widget> row(String label, String value) => [
-      Row(
-        children: [
-          Text(
-            '$label: ',
-            style: AppTheme.bodyMedium.copyWith(
-              color: AppColors.darkTextSecondary,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          Expanded(
-            child: Text(
-              value,
-              style: AppTheme.bodyMedium.copyWith(
-                color: AppColors.darkTextPrimary,
+          Row(
+            children: [
+              Text(
+                '$label: ',
+                style: AppTheme.bodyMedium.copyWith(
+                  color: AppColors.darkTextSecondary,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-            ),
+              Expanded(
+                child: Text(
+                  value,
+                  style: AppTheme.bodyMedium.copyWith(
+                    color: AppColors.darkTextPrimary,
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
-      const SizedBox(height: 6),
-    ];
+          const SizedBox(height: 6),
+        ];
 
     return [
       Text(
-        'Composed yearly score with explicit contributions.',
+        AppLocalizations.of(Get.context!)!.yearBreakdownExplanation,
         style: AppTheme.bodyMedium.copyWith(
           color: AppColors.darkTextSecondary,
           height: 1.5,
         ),
       ),
       const SizedBox(height: 8),
-      ...row('Overall', '${score.toStringAsFixed(1)}%'),
+      ...row(
+        AppLocalizations.of(Get.context!)!.overall,
+        '${score.toStringAsFixed(1)}%',
+      ),
       if (yearElement != null)
-        ...row('Year Element', '$yearElement vs $pairElements'),
+        ...row(
+          AppLocalizations.of(Get.context!)!.yearElement,
+          '$yearElement vs $pairElements',
+        ),
       if (yearAnimal != null)
-        ...row('Year Animal', '$yearAnimal vs $pairAnimals'),
+        ...row(
+          AppLocalizations.of(Get.context!)!.yearAnimal,
+          '$yearAnimal vs $pairAnimals',
+        ),
       if (scores != null && weights != null)
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Components',
+              AppLocalizations.of(Get.context!)!.components,
               style: AppTheme.bodyMedium.copyWith(
                 color: AppColors.darkTextPrimary,
                 fontWeight: FontWeight.w600,
               ),
             ),
             const SizedBox(height: 6),
-            _componentLine('Baseline pair', scores['base'], weights['base']),
             _componentLine(
-              'Year element support',
+              AppLocalizations.of(Get.context!)!.baselinePair,
+              scores['base'],
+              weights['base'],
+            ),
+            _componentLine(
+              AppLocalizations.of(Get.context!)!.yearElementSupport,
               scores['yearElementSupport'],
               weights['elementYear'],
             ),
             _componentLine(
-              'Year animal support',
+              AppLocalizations.of(Get.context!)!.yearAnimalSupport,
               scores['yearAnimalSupport'],
               weights['zodiacYear'],
             ),
             _componentLine(
-              'Timing synergy',
+              AppLocalizations.of(Get.context!)!.timingSynergy,
               scores['timingSynergy'],
               weights['synergy'],
             ),
@@ -1179,7 +1198,7 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
       if (timing != null) ...[
         const SizedBox(height: 8),
         Text(
-          'Timing',
+          AppLocalizations.of(Get.context!)!.timingBreakdown,
           style: AppTheme.bodyMedium.copyWith(
             color: AppColors.darkTextPrimary,
             fontWeight: FontWeight.w600,
@@ -1187,7 +1206,11 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
         ),
         const SizedBox(height: 6),
         Text(
-          'Energy levels: ${(timing['energy1'] as num?)?.toStringAsFixed(0)} & ${(timing['energy2'] as num?)?.toStringAsFixed(0)} • Synergy ${(timing['synergyScore'] as num?)?.toStringAsFixed(0)}',
+          AppLocalizations.of(Get.context!)!.energyLevelsAndSynergy(
+            (timing['energy1'] as num?)?.toStringAsFixed(0) ?? '0',
+            (timing['energy2'] as num?)?.toStringAsFixed(0) ?? '0',
+            (timing['synergyScore'] as num?)?.toStringAsFixed(0) ?? '0',
+          ),
           style: AppTheme.bodyMedium.copyWith(
             color: AppColors.darkTextSecondary,
           ),
@@ -1289,7 +1312,7 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
                       Icons.close_rounded,
                       color: AppColors.darkTextSecondary,
                     ),
-                    tooltip: 'Close',
+                    tooltip: AppLocalizations.of(Get.context!)!.close,
                   ),
                 ],
               ),
@@ -1310,7 +1333,7 @@ class AstroMatcherView extends GetView<AstroMatcherController> {
                       borderRadius: BorderRadius.circular(14),
                     ),
                   ),
-                  child: const Text('Got it'),
+                  child: Text(AppLocalizations.of(Get.context!)!.gotIt),
                 ),
               ),
             ],

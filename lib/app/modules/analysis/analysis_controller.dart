@@ -5,6 +5,7 @@ import 'package:astro_iztro/core/services/iztro_service.dart';
 import 'package:astro_iztro/core/services/storage_service.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 
 /// [AnalysisController] - Controller for detailed astrological analysis
@@ -172,12 +173,23 @@ class AnalysisController extends GetxController {
 
   /// [calculateFortuneForSelectedYear] - Calculate fortune for the selected year
   Future<void> calculateFortuneForSelectedYear() async {
+    final context = Get.context;
+    final l10n = context != null ? AppLocalizations.of(context)! : null;
+
     if (currentProfile.value == null) {
-      Get.snackbar(
-        'No Profile',
-        'Please create a profile first',
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      if (l10n != null) {
+        Get.snackbar(
+          l10n.noProfile,
+          l10n.pleaseCreateProfileFirst,
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      } else {
+        Get.snackbar(
+          'No Profile',
+          'Please create a profile first',
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      }
       return;
     }
 
@@ -192,24 +204,44 @@ class AnalysisController extends GetxController {
           '[AnalysisController] Fortune for year $year calculated successfully',
         );
       }
-      Get.snackbar(
-        'Success',
-        'Fortune for year $year calculated successfully!',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Get.theme.colorScheme.primary,
-        colorText: Get.theme.colorScheme.onPrimary,
-      );
+
+      if (l10n != null) {
+        Get.snackbar(
+          l10n.success,
+          l10n.fortuneCalculatedSuccessfully(year),
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Get.theme.colorScheme.primary,
+          colorText: Get.theme.colorScheme.onPrimary,
+        );
+      } else {
+        Get.snackbar(
+          'Success',
+          'Fortune for year $year calculated successfully!',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Get.theme.colorScheme.primary,
+          colorText: Get.theme.colorScheme.onPrimary,
+        );
+      }
     } on Exception catch (e) {
       if (kDebugMode) {
         print(
           '[AnalysisController] Error calculating fortune for selected year: $e',
         );
       }
-      Get.snackbar(
-        'Calculation Error',
-        'Failed to calculate fortune for selected year: $e',
-        snackPosition: SnackPosition.BOTTOM,
-      );
+
+      if (l10n != null) {
+        Get.snackbar(
+          l10n.calculationError,
+          l10n.failedToCalculateFortune(e.toString()),
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      } else {
+        Get.snackbar(
+          'Calculation Error',
+          'Failed to calculate fortune for selected year: $e',
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      }
     } finally {
       isCalculating.value = false;
     }
@@ -272,11 +304,30 @@ class AnalysisController extends GetxController {
 
   /// Getters for computed values
   bool get hasAnalysisData => chartData.value != null && baziData.value != null;
-  String get analysisTitle =>
-      showChineseNames.value ? '命盤分析' : 'Destiny Analysis';
+  String get analysisTitle {
+    final context = Get.context;
+    if (context != null) {
+      return AppLocalizations.of(context)!.destinyAnalysis;
+    }
+    return showChineseNames.value ? '命盤分析' : 'Destiny Analysis';
+  }
 
   /// Get fortune cycle name based on language preference
   String getFortuneCycleName(String cycle) {
+    final context = Get.context;
+    if (context != null) {
+      final l10n = AppLocalizations.of(context)!;
+      final names = {
+        'grand_limit': l10n.grandLimitCycle,
+        'small_limit': l10n.smallLimitCycle,
+        'annual_fortune': l10n.annualFortune,
+        'monthly_fortune': l10n.monthly,
+        'daily_fortune': l10n.daily,
+      };
+      return names[cycle] ?? cycle;
+    }
+
+    // Fallback to hardcoded values if context is not available
     final names = {
       'grand_limit': showChineseNames.value ? '大限' : 'Grand Limit',
       'small_limit': showChineseNames.value ? '小限' : 'Small Limit',
@@ -298,11 +349,105 @@ class AnalysisController extends GetxController {
 
   /// Get fortune strength description
   String getFortuneStrength(double value) {
+    final context = Get.context;
+    if (context != null) {
+      final l10n = AppLocalizations.of(context)!;
+      if (value >= 0.8) return '${l10n.strongest} (${l10n.strongest})';
+      if (value >= 0.6) return l10n.strongest;
+      if (value >= 0.4) return 'Moderate';
+      if (value >= 0.2) return l10n.weakest;
+      return '${l10n.weakest} (${l10n.weakest})';
+    }
+
+    // Fallback to hardcoded values if context is not available
     if (value >= 0.8) return 'Very Strong';
     if (value >= 0.6) return 'Strong';
     if (value >= 0.4) return 'Moderate';
     if (value >= 0.2) return 'Weak';
     return 'Very Weak';
+  }
+
+  /// Get localized palace name
+  String getLocalizedPalaceName(String palaceName) {
+    final context = Get.context;
+    if (context != null) {
+      final l10n = AppLocalizations.of(context)!;
+      switch (palaceName.toLowerCase()) {
+        case 'life':
+          return l10n.palaceLife;
+        case 'siblings':
+          return l10n.palaceSiblings;
+        case 'spouse':
+          return l10n.palaceSpouse;
+        case 'children':
+          return l10n.palaceChildren;
+        case 'wealth':
+          return l10n.palaceWealth;
+        case 'health':
+          return l10n.palaceHealth;
+        case 'travel':
+          return l10n.palaceTravel;
+        case 'career':
+          return l10n.palaceCareer;
+        case 'friends':
+          return l10n.palaceFriends;
+        case 'parents':
+          return l10n.palaceParents;
+        case 'property':
+          return l10n.palaceProperty;
+        case 'destiny':
+          return l10n.palaceDestiny;
+        default:
+          return palaceName;
+      }
+    }
+    return palaceName;
+  }
+
+  /// Get localized element name
+  String getLocalizedElementName(String element) {
+    final context = Get.context;
+    if (context != null) {
+      final l10n = AppLocalizations.of(context)!;
+      switch (element) {
+        case '水':
+          return l10n.elementWater;
+        case '木':
+          return l10n.elementWood;
+        case '火':
+          return l10n.elementFire;
+        case '土':
+          return l10n.elementEarth;
+        case '金':
+          return l10n.elementMetal;
+        default:
+          return element;
+      }
+    }
+    return element;
+  }
+
+  /// Get localized star name
+  String getLocalizedStarName(String starName) {
+    final context = Get.context;
+    if (context != null) {
+      final l10n = AppLocalizations.of(context)!;
+      switch (starName.toLowerCase()) {
+        case 'sun':
+          return l10n.starSun;
+        case 'army destroyer':
+          return l10n.starArmyDestroyer;
+        case 'right support':
+          return l10n.starRightSupport;
+        case 'integrity':
+          return l10n.starIntegrity;
+        case 'bell star':
+          return l10n.starBellStar;
+        default:
+          return starName;
+      }
+    }
+    return starName;
   }
 
   /// [testNativeEngines] - Test the native calculation engines with current profile

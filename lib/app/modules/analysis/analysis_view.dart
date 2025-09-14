@@ -6,6 +6,7 @@ import 'package:astro_iztro/core/models/chart_data.dart';
 import 'package:astro_iztro/shared/themes/app_theme.dart';
 import 'package:astro_iztro/shared/widgets/background_image_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 
 part 'analysis_view_part1.dart';
@@ -33,14 +34,12 @@ class AnalysisView extends GetView<AnalysisController> {
   /// [buildEnhancedAppBar] - Modern app bar with enhanced styling
   PreferredSizeWidget _buildEnhancedAppBar() {
     return AppBar(
-      title: Obx(
-        () => Text(
-          controller.analysisTitle,
-          style: const TextStyle(
-            color: AppColors.darkTextPrimary,
-            fontWeight: FontWeight.w600,
-            fontSize: 20,
-          ),
+      title: Text(
+        AppLocalizations.of(Get.context!)!.destinyAnalysis,
+        style: const TextStyle(
+          color: AppColors.darkTextPrimary,
+          fontWeight: FontWeight.w600,
+          fontSize: 20,
         ),
       ),
       elevation: 0,
@@ -62,27 +61,27 @@ class AnalysisView extends GetView<AnalysisController> {
       ),
       actions: [
         // Language toggle
-        Obx(
-          () => Container(
-            margin: const EdgeInsets.only(right: 8),
-            decoration: BoxDecoration(
-              color: AppColors.darkCard.withValues(alpha: 0.8),
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(
-                color: AppColors.lightPurple.withValues(alpha: 0.3),
-              ),
+        Container(
+          margin: const EdgeInsets.only(right: 8),
+          decoration: BoxDecoration(
+            color: AppColors.darkCard.withValues(alpha: 0.8),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: AppColors.lightPurple.withValues(alpha: 0.3),
             ),
-            child: IconButton(
-              onPressed: controller.toggleLanguage,
-              icon: Icon(
+          ),
+          child: IconButton(
+            onPressed: controller.toggleLanguage,
+            icon: Obx(
+              () => Icon(
                 controller.showChineseNames.value
                     ? Icons.translate_rounded
                     : Icons.language_rounded,
                 color: AppColors.lightPurple,
                 size: 20,
               ),
-              tooltip: 'Toggle Language',
             ),
+            tooltip: 'Toggle Language',
           ),
         ),
 
@@ -119,7 +118,7 @@ class AnalysisView extends GetView<AnalysisController> {
                     color: AppColors.lightPurple,
                   ),
                   title: Text(
-                    'Refresh Analysis',
+                    AppLocalizations.of(Get.context!)!.refreshAnalysis,
                     style: AppTheme.bodyMedium.copyWith(
                       color: AppColors.darkTextPrimary,
                     ),
@@ -135,7 +134,7 @@ class AnalysisView extends GetView<AnalysisController> {
                     color: AppColors.lightPurple,
                   ),
                   title: Text(
-                    'Export Analysis',
+                    AppLocalizations.of(Get.context!)!.exportAnalysis,
                     style: AppTheme.bodyMedium.copyWith(
                       color: AppColors.darkTextPrimary,
                     ),
@@ -177,8 +176,8 @@ class AnalysisView extends GetView<AnalysisController> {
               controller.isCalculating.value
                   ? Icons.hourglass_empty_rounded
                   : controller.hasAnalysisData
-                  ? Icons.refresh_rounded
-                  : Icons.auto_awesome_rounded,
+                      ? Icons.refresh_rounded
+                      : Icons.auto_awesome_rounded,
               key: ValueKey(controller.isCalculating.value),
             ),
           ),
@@ -316,7 +315,7 @@ class AnalysisView extends GetView<AnalysisController> {
                 child: Transform.translate(
                   offset: Offset(0, 20 * (1 - value)),
                   child: Text(
-                    'Analyzing Your Destiny...',
+                    AppLocalizations.of(Get.context!)!.analyzingYourDestiny,
                     style: AppTheme.headingMedium.copyWith(
                       color: AppColors.darkTextPrimary,
                       fontWeight: FontWeight.w700,
@@ -338,7 +337,7 @@ class AnalysisView extends GetView<AnalysisController> {
                 child: Transform.translate(
                   offset: Offset(0, 20 * (1 - value)),
                   child: Text(
-                    'Unlocking the secrets of the stars',
+                    AppLocalizations.of(Get.context!)!.unlockingSecretsOfStars,
                     style: AppTheme.bodyLarge.copyWith(
                       color: AppColors.darkTextSecondary,
                       height: 1.4,
@@ -415,7 +414,7 @@ class AnalysisView extends GetView<AnalysisController> {
                   child: Transform.translate(
                     offset: Offset(0, 30 * (1 - value)),
                     child: Text(
-                      'Discover Your Destiny',
+                      AppLocalizations.of(Get.context!)!.discoverYourDestiny,
                       style: AppTheme.headingLarge.copyWith(
                         color: AppColors.darkTextPrimary,
                         fontWeight: FontWeight.w700,
@@ -438,7 +437,7 @@ class AnalysisView extends GetView<AnalysisController> {
                   child: Transform.translate(
                     offset: Offset(0, 30 * (1 - value)),
                     child: Text(
-                      'Unlock the cosmic patterns that shape your life path and reveal the hidden influences of the stars',
+                      AppLocalizations.of(Get.context!)!.unlockCosmicPatterns,
                       style: AppTheme.bodyLarge.copyWith(
                         color: AppColors.darkTextSecondary,
                         height: 1.6,
@@ -545,8 +544,8 @@ class AnalysisView extends GetView<AnalysisController> {
           // Scroll to top functionality would be implemented here
           // For now, just show a snackbar
           Get.snackbar(
-            'Scroll to Top',
-            'This would scroll to the top of the page',
+            AppLocalizations.of(Get.context!)!.scrollToTop,
+            AppLocalizations.of(Get.context!)!.thisWouldScrollToTop,
             snackPosition: SnackPosition.BOTTOM,
             backgroundColor: AppColors.darkCard.withValues(alpha: 0.9),
             colorText: AppColors.darkTextPrimary,
@@ -588,7 +587,7 @@ class AnalysisView extends GetView<AnalysisController> {
           ),
           const SizedBox(width: 8),
           Text(
-            'Analysis',
+            AppLocalizations.of(Get.context!)!.analysis,
             style: AppTheme.caption.copyWith(
               color: AppColors.darkTextPrimary,
               fontWeight: FontWeight.w600,
@@ -649,17 +648,13 @@ class AnalysisView extends GetView<AnalysisController> {
                       Icons.close_rounded,
                       color: AppColors.darkTextSecondary,
                     ),
-                    tooltip: 'Close',
+                    tooltip: AppLocalizations.of(Get.context!)!.close,
                   ),
                 ],
               ),
-
               const SizedBox(height: AppConstants.defaultPadding),
-
               ...body,
-
               const SizedBox(height: AppConstants.defaultPadding),
-
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -674,7 +669,7 @@ class AnalysisView extends GetView<AnalysisController> {
                       borderRadius: BorderRadius.circular(14),
                     ),
                   ),
-                  child: const Text('Got it'),
+                  child: Text(AppLocalizations.of(Get.context!)!.gotIt),
                 ),
               ),
             ],

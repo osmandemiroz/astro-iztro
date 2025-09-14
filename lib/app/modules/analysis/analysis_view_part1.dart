@@ -189,9 +189,18 @@ extension AnalysisViewPart1 on AnalysisView {
       ),
       child: Row(
         children: [
-          _buildEnhancedAnalysisTypeButton('yearly', 'Yearly'),
-          _buildEnhancedAnalysisTypeButton('monthly', 'Monthly'),
-          _buildEnhancedAnalysisTypeButton('daily', 'Daily'),
+          _buildEnhancedAnalysisTypeButton(
+            'yearly',
+            AppLocalizations.of(Get.context!)!.yearly,
+          ),
+          _buildEnhancedAnalysisTypeButton(
+            'monthly',
+            AppLocalizations.of(Get.context!)!.monthly,
+          ),
+          _buildEnhancedAnalysisTypeButton(
+            'daily',
+            AppLocalizations.of(Get.context!)!.daily,
+          ),
         ],
       ),
     );
@@ -285,7 +294,7 @@ extension AnalysisViewPart1 on AnalysisView {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Select Year',
+            AppLocalizations.of(Get.context!)!.selectYear,
             style: AppTheme.headingMedium.copyWith(
               color: AppColors.lightGold,
               fontWeight: FontWeight.w700,

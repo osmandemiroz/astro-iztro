@@ -48,7 +48,7 @@ extension AnalysisViewPart2 on AnalysisView {
               ),
               const SizedBox(height: AppConstants.defaultPadding),
               Text(
-                'Calculating Your Fortune...',
+                AppLocalizations.of(Get.context!)!.calculatingYourFortune,
                 style: AppTheme.headingMedium.copyWith(
                   color: AppColors.darkTextPrimary,
                   fontWeight: FontWeight.w700,
@@ -56,7 +56,8 @@ extension AnalysisViewPart2 on AnalysisView {
               ),
               const SizedBox(height: AppConstants.smallPadding),
               Text(
-                'Unlocking the secrets of ${controller.selectedYear.value}',
+                AppLocalizations.of(Get.context!)!
+                    .unlockingSecretsOfYear(controller.selectedYear.value),
                 style: AppTheme.bodyLarge.copyWith(
                   color: AppColors.darkTextSecondary,
                 ),
@@ -138,7 +139,7 @@ extension AnalysisViewPart2 on AnalysisView {
               const SizedBox(height: AppConstants.defaultPadding),
 
               Text(
-                'Ready to Calculate Fortune',
+                AppLocalizations.of(Get.context!)!.readyToCalculateFortune,
                 style: AppTheme.headingMedium.copyWith(
                   color: AppColors.lightGold,
                   fontWeight: FontWeight.w700,
@@ -148,7 +149,7 @@ extension AnalysisViewPart2 on AnalysisView {
               const SizedBox(height: AppConstants.smallPadding),
 
               Text(
-                'Tap the button below to calculate your fortune',
+                AppLocalizations.of(Get.context!)!.tapButtonToCalculateFortune,
                 style: AppTheme.bodyLarge.copyWith(
                   color: AppColors.darkTextSecondary,
                 ),
@@ -156,7 +157,8 @@ extension AnalysisViewPart2 on AnalysisView {
               ),
 
               Text(
-                'for ${controller.selectedYear.value}',
+                AppLocalizations.of(Get.context!)!
+                    .forYear(controller.selectedYear.value),
                 style: AppTheme.bodyLarge.copyWith(
                   color: AppColors.darkTextSecondary,
                 ),
@@ -179,7 +181,8 @@ extension AnalysisViewPart2 on AnalysisView {
                 child: ElevatedButton.icon(
                   onPressed: () => controller.calculateFortuneForSelectedYear(),
                   icon: const Icon(Icons.auto_awesome_rounded),
-                  label: const Text('Calculate Fortune'),
+                  label:
+                      Text(AppLocalizations.of(Get.context!)!.calculateFortune),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.lightGold,
                     foregroundColor: AppColors.black,
@@ -208,7 +211,8 @@ extension AnalysisViewPart2 on AnalysisView {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Fortune Analysis for ${controller.selectedYear.value}',
+          AppLocalizations.of(Get.context!)!
+              .fortuneAnalysisForYear(controller.selectedYear.value),
           style: AppTheme.headingSmall.copyWith(
             color: AppColors.primaryPurple,
             fontWeight: FontWeight.bold,
@@ -219,60 +223,53 @@ extension AnalysisViewPart2 on AnalysisView {
         // Life Periods
         if (fortuneData['lifePeriods'] != null)
           _buildFortuneCard(
-            'Life Period',
+            AppLocalizations.of(Get.context!)!.lifePeriod,
             ((fortuneData['lifePeriods'] as Map?)
-                        ?.cast<String, dynamic>()['currentPeriod']
-                    as String?) ??
-                'Unknown',
+                    ?.cast<String, dynamic>()['currentPeriod'] as String?) ??
+                AppLocalizations.of(Get.context!)!.unknown,
             ((fortuneData['lifePeriods'] as Map?)
-                        ?.cast<String, dynamic>()['description']
-                    as String?) ??
-                'No description available',
+                    ?.cast<String, dynamic>()['description'] as String?) ??
+                AppLocalizations.of(Get.context!)!.noDescriptionAvailable,
             Icons.person_outline,
           ),
 
         // Grand Limit
         if (fortuneData['grandLimit'] != null)
           _buildFortuneCard(
-            'Grand Limit Cycle',
+            AppLocalizations.of(Get.context!)!.grandLimitCycle,
             ((fortuneData['grandLimit'] as Map?)
-                        ?.cast<String, dynamic>()['cycleName']
-                    as String?) ??
-                'Unknown',
+                    ?.cast<String, dynamic>()['cycleName'] as String?) ??
+                AppLocalizations.of(Get.context!)!.unknown,
             ((fortuneData['grandLimit'] as Map?)
-                        ?.cast<String, dynamic>()['description']
-                    as String?) ??
-                'No description available',
+                    ?.cast<String, dynamic>()['description'] as String?) ??
+                AppLocalizations.of(Get.context!)!.noDescriptionAvailable,
             Icons.timeline,
           ),
 
         // Small Limit
         if (fortuneData['smallLimit'] != null)
           _buildFortuneCard(
-            'Small Limit Cycle',
+            AppLocalizations.of(Get.context!)!.smallLimitCycle,
             ((fortuneData['smallLimit'] as Map?)
-                        ?.cast<String, dynamic>()['cycleName']
-                    as String?) ??
-                'Unknown',
+                    ?.cast<String, dynamic>()['cycleName'] as String?) ??
+                AppLocalizations.of(Get.context!)!.unknown,
             ((fortuneData['smallLimit'] as Map?)
-                        ?.cast<String, dynamic>()['description']
-                    as String?) ??
-                'No description available',
+                    ?.cast<String, dynamic>()['description'] as String?) ??
+                AppLocalizations.of(Get.context!)!.noDescriptionAvailable,
             Icons.schedule,
           ),
 
         // Annual Fortune
         if (fortuneData['annualFortune'] != null)
           _buildFortuneCard(
-            'Annual Fortune',
+            AppLocalizations.of(Get.context!)!.annualFortune,
             ((fortuneData['annualFortune'] as Map?)
                         ?.cast<String, dynamic>()['overallRating'])
                     ?.toString() ??
-                'Unknown',
+                AppLocalizations.of(Get.context!)!.unknown,
             ((fortuneData['annualFortune'] as Map?)
-                        ?.cast<String, dynamic>()['summary']
-                    as String?) ??
-                'No summary available',
+                    ?.cast<String, dynamic>()['summary'] as String?) ??
+                AppLocalizations.of(Get.context!)!.noSummaryAvailable,
             Icons.star,
           ),
 
@@ -293,7 +290,7 @@ extension AnalysisViewPart2 on AnalysisView {
             child: ElevatedButton.icon(
               onPressed: () => controller.calculateFortuneForSelectedYear(),
               icon: const Icon(Icons.refresh_rounded),
-              label: const Text('Refresh Fortune'),
+              label: Text(AppLocalizations.of(Get.context!)!.refreshFortune),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.lightPurple,
                 foregroundColor: AppColors.white,
@@ -453,7 +450,7 @@ extension AnalysisViewPart2 on AnalysisView {
               const SizedBox(width: AppConstants.defaultPadding),
               Expanded(
                 child: Text(
-                  'Element Analysis',
+                  AppLocalizations.of(Get.context!)!.elementAnalysis,
                   style: AppTheme.headingMedium.copyWith(
                     color: AppColors.lightGold,
                     fontWeight: FontWeight.w700,
@@ -482,7 +479,7 @@ extension AnalysisViewPart2 on AnalysisView {
                     ),
                     const SizedBox(width: 6),
                     Text(
-                      'Analysis',
+                      AppLocalizations.of(Get.context!)!.analysis,
                       style: AppTheme.caption.copyWith(
                         color: AppColors.lightPurple,
                         fontWeight: FontWeight.w600,
@@ -528,7 +525,7 @@ extension AnalysisViewPart2 on AnalysisView {
         children: [
           // Element strengths section
           Text(
-            'Element Strengths',
+            AppLocalizations.of(Get.context!)!.elementStrengths,
             style: AppTheme.bodyMedium.copyWith(
               color: AppColors.lightGold,
               fontWeight: FontWeight.w700,
@@ -691,21 +688,19 @@ extension AnalysisViewPart2 on AnalysisView {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Summary',
+                      AppLocalizations.of(Get.context!)!.summary,
                       style: AppTheme.bodyMedium.copyWith(
                         color: AppColors.lightGold,
                         fontWeight: FontWeight.w700,
                         fontSize: 16,
                       ),
                     ),
-
                     const SizedBox(height: AppConstants.smallPadding),
-
                     Row(
                       children: [
                         Expanded(
                           child: _buildSummaryItem(
-                            'Strongest',
+                            AppLocalizations.of(Get.context!)!.strongest,
                             baziData.strongestElement,
                             AppColors.lightGold,
                           ),
@@ -713,18 +708,16 @@ extension AnalysisViewPart2 on AnalysisView {
                         const SizedBox(width: AppConstants.defaultPadding),
                         Expanded(
                           child: _buildSummaryItem(
-                            'Weakest',
+                            AppLocalizations.of(Get.context!)!.weakest,
                             baziData.weakestElement,
                             AppColors.error,
                           ),
                         ),
                       ],
                     ),
-
                     const SizedBox(height: AppConstants.smallPadding),
-
                     _buildSummaryItem(
-                      'Balance',
+                      AppLocalizations.of(Get.context!)!.balance,
                       '${baziData.elementBalanceScore}%',
                       AppColors.success,
                     ),
@@ -762,11 +755,12 @@ extension AnalysisViewPart2 on AnalysisView {
 
   /// [getElementStrength] - Get human-readable strength description
   String _getElementStrength(int count) {
-    if (count >= 5) return '5 Very Strong';
-    if (count >= 4) return '4 Very Strong';
-    if (count >= 3) return '3 Strong';
-    if (count >= 2) return '2 Moderate';
-    return '1 Weak';
+    final l10n = AppLocalizations.of(Get.context!)!;
+    if (count >= 5) return '5 ${l10n.veryStrong}';
+    if (count >= 4) return '4 ${l10n.veryStrong}';
+    if (count >= 3) return '3 ${l10n.strong}';
+    if (count >= 2) return '2 ${l10n.moderate}';
+    return '1 ${l10n.weak}';
   }
 
   /// [getStrengthColor] - Get color based on strength
@@ -797,65 +791,60 @@ extension AnalysisViewPart2 on AnalysisView {
     final widgets = <Widget>[];
 
     Text p0(String text) => Text(
-      text,
-      style: AppTheme.bodyMedium.copyWith(
-        color: AppColors.darkTextSecondary,
-        height: 1.5,
-      ),
-    );
+          text,
+          style: AppTheme.bodyMedium.copyWith(
+            color: AppColors.darkTextSecondary,
+            height: 1.5,
+          ),
+        );
+
+    final l10n = AppLocalizations.of(Get.context!)!;
 
     if (section == 'Life Period') {
-      final p =
-          (data['lifePeriods'] as Map?)?.cast<String, dynamic>() ??
+      final p = (data['lifePeriods'] as Map?)?.cast<String, dynamic>() ??
           <String, dynamic>{};
       widgets.addAll([
-        p0('Your current phase reflects your age and traditional life stages.'),
+        p0(l10n.lifePeriodDescription),
         const SizedBox(height: 8),
-        p0('Focus: ${p['focus'] ?? '—'}'),
-        p0('Challenges: ${p['challenges'] ?? '—'}'),
+        p0('${l10n.focus}: ${p['focus'] ?? '—'}'),
+        p0('${l10n.challenges}: ${p['challenges'] ?? '—'}'),
       ]);
     } else if (section == 'Grand Limit Cycle') {
-      final g =
-          (data['grandLimit'] as Map?)?.cast<String, dynamic>() ??
+      final g = (data['grandLimit'] as Map?)?.cast<String, dynamic>() ??
           <String, dynamic>{};
       widgets.addAll([
-        p0('This runs in 10-year cycles derived from your age.'),
-        p0('Cycle: ${g['cycleStart'] ?? '—'}–${g['cycleEnd'] ?? '—'}'),
-        p0('Years remaining: ${g['yearsRemaining'] ?? '—'}'),
+        p0(l10n.grandLimitDescription),
+        p0('${l10n.cycle}: ${g['cycleStart'] ?? '—'}–${g['cycleEnd'] ?? '—'}'),
+        p0('${l10n.yearsRemaining}: ${g['yearsRemaining'] ?? '—'}'),
       ]);
     } else if (section == 'Small Limit Cycle') {
-      final s =
-          (data['smallLimit'] as Map?)?.cast<String, dynamic>() ??
+      final s = (data['smallLimit'] as Map?)?.cast<String, dynamic>() ??
           <String, dynamic>{};
       widgets.addAll([
-        p0('A 1-year focus within the grand cycle.'),
-        p0('Theme: ${s['yearName'] ?? '—'}'),
-        p0('Focus areas: ${(s['focus'] as List?)?.join(', ') ?? '—'}'),
+        p0(l10n.smallLimitDescription),
+        p0('${l10n.theme}: ${s['yearName'] ?? '—'}'),
+        p0('${l10n.focusAreas}: ${(s['focus'] as List?)?.join(', ') ?? '—'}'),
       ]);
     } else if (section == 'Annual Fortune') {
-      final a =
-          (data['annualFortune'] as Map?)?.cast<String, dynamic>() ??
+      final a = (data['annualFortune'] as Map?)?.cast<String, dynamic>() ??
           <String, dynamic>{};
-      final m =
-          (data['monthlyFortune'] as Map?)?.cast<String, dynamic>() ??
+      final m = (data['monthlyFortune'] as Map?)?.cast<String, dynamic>() ??
           <String, dynamic>{};
       final best = (m['bestMonths'] as List?)?.join(', ');
       final ch = (m['challengingMonths'] as List?)?.join(', ');
       widgets.addAll([
-        p0(
-          'Overall rating combines year element relations, lucky aspects and challenges.',
-        ),
+        p0(l10n.annualFortuneDescription),
         const SizedBox(height: 8),
-        p0('Year element: ${a['yearElement'] ?? '—'}'),
+        p0('${l10n.yearElement}: ${a['yearElement'] ?? '—'}'),
         p0(
-          'Relation to birth year: ${(a['relationship'] as Map<String, dynamic>?)?['type'] ?? '—'}',
+          '${l10n.relationToBirthYear}: ${(a['relationship'] as Map<String, dynamic>?)?['type'] ?? '—'}',
         ),
-        if (best != null) p0('Best months: $best'),
-        if (ch != null) p0('Challenging months: $ch'),
+        if (best != null) p0('${l10n.bestMonths}: $best'),
+        if (ch != null) p0('${l10n.challengingMonths}: $ch'),
       ]);
     } else {
       widgets.add(
-        p0('This card summarizes calculated insights for your selected year.'),
+        p0(l10n.fortuneCardSummary),
       );
     }
 
@@ -867,11 +856,12 @@ extension AnalysisViewPart2 on AnalysisView {
     required String elementName,
     required int count,
   }) {
+    final l10n = AppLocalizations.of(Get.context!)!;
     _showInsightDialog(
       title: '$element • $elementName',
       body: [
         Text(
-          'Strength is based on how many times this element appears across your four pillars.',
+          l10n.elementStrengthDescription,
           style: AppTheme.bodyMedium.copyWith(
             color: AppColors.darkTextSecondary,
             height: 1.5,
@@ -879,7 +869,7 @@ extension AnalysisViewPart2 on AnalysisView {
         ),
         const SizedBox(height: 8),
         Text(
-          'Count: $count (0–5 scale) → ${_getElementStrength(count)}',
+          '${l10n.count}: $count (0–5 ${l10n.scale}) → ${_getElementStrength(count)}',
           style: AppTheme.bodyMedium.copyWith(
             color: AppColors.darkTextPrimary,
             fontWeight: FontWeight.w600,
@@ -891,11 +881,12 @@ extension AnalysisViewPart2 on AnalysisView {
 
   void _openElementBalanceInsight() {
     final data = controller.baziData.value!;
+    final l10n = AppLocalizations.of(Get.context!)!;
     _showInsightDialog(
-      title: 'Element Balance',
+      title: l10n.elementBalance,
       body: [
         Text(
-          'Balance score reflects how even your five elements are. We compute a simple ratio between the least and most frequent elements.',
+          l10n.elementBalanceDescription,
           style: AppTheme.bodyMedium.copyWith(
             color: AppColors.darkTextSecondary,
             height: 1.5,
@@ -903,7 +894,7 @@ extension AnalysisViewPart2 on AnalysisView {
         ),
         const SizedBox(height: 8),
         Text(
-          'Score = floor(minCount / maxCount × 100). Your score: ${data.elementBalanceScore}%',
+          '${l10n.score} = floor(minCount / maxCount × 100). ${l10n.yourScore}: ${data.elementBalanceScore}%',
           style: AppTheme.bodyMedium.copyWith(
             color: AppColors.darkTextPrimary,
             fontWeight: FontWeight.w600,

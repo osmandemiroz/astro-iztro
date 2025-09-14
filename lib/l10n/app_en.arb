@@ -1849,5 +1849,777 @@
   "within6To12MonthsFinancialImprovement": "Within 6-12 months for financial improvement",
   "twoToThreeYearsLongTermFinancialGoals": "2-3 years for long-term financial goals",
   "takeTimeToReflectBeforeDeciding": "Take time to reflect before deciding",
-  "trustIntuitionInTiming": "Trust your intuition in timing"
+  "trustIntuitionInTiming": "Trust your intuition in timing",
+  "destinyAnalysis": "Destiny Analysis",
+  "@destinyAnalysis": {
+    "description": "Title for the destiny analysis screen"
+  },
+  "analysis": "Analysis",
+  "@analysis": {
+    "description": "Analysis button text"
+  },
+  "selectYear": "Select Year",
+  "@selectYear": {
+    "description": "Year selection section title"
+  },
+  "yearly": "Yearly",
+  "@yearly": {
+    "description": "Yearly analysis type button"
+  },
+  "monthly": "Monthly",
+  "@monthly": {
+    "description": "Monthly analysis type button"
+  },
+  "daily": "Daily",
+  "@daily": {
+    "description": "Daily analysis type button"
+  },
+  "analyzingYourDestiny": "Analyzing Your Destiny...",
+  "@analyzingYourDestiny": {
+    "description": "Loading state title for destiny analysis"
+  },
+  "unlockingSecretsOfStars": "Unlocking the secrets of the stars",
+  "@unlockingSecretsOfStars": {
+    "description": "Loading state subtitle for destiny analysis"
+  },
+  "discoverYourDestiny": "Discover Your Destiny",
+  "@discoverYourDestiny": {
+    "description": "Empty state title for destiny analysis"
+  },
+  "unlockCosmicPatterns": "Unlock the cosmic patterns that shape your life path and reveal the hidden influences of the stars",
+  "@unlockCosmicPatterns": {
+    "description": "Empty state description for destiny analysis"
+  },
+  "refreshAnalysis": "Refresh Analysis",
+  "@refreshAnalysis": {
+    "description": "Refresh analysis menu item"
+  },
+  "exportAnalysis": "Export Analysis",
+  "@exportAnalysis": {
+    "description": "Export analysis menu item"
+  },
+  "scrollToTop": "Scroll to Top",
+  "@scrollToTop": {
+    "description": "Scroll to top button tooltip"
+  },
+  "thisWouldScrollToTop": "This would scroll to the top of the page",
+  "@thisWouldScrollToTop": {
+    "description": "Scroll to top button message"
+  },
+  "calculatingYourFortune": "Calculating Your Fortune...",
+  "@calculatingYourFortune": {
+    "description": "Fortune calculation loading state"
+  },
+  "unlockingSecretsOfYear": "Unlocking the secrets of {year}",
+  "@unlockingSecretsOfYear": {
+    "description": "Fortune calculation loading subtitle",
+    "placeholders": {
+      "year": {
+        "type": "int",
+        "description": "Selected year"
+      }
+    }
+  },
+  "readyToCalculateFortune": "Ready to Calculate Fortune",
+  "@readyToCalculateFortune": {
+    "description": "Ready to calculate fortune state"
+  },
+  "tapButtonToCalculateFortune": "Tap the button below to calculate your fortune",
+  "@tapButtonToCalculateFortune": {
+    "description": "Ready to calculate fortune instruction"
+  },
+  "forYear": "for {year}",
+  "@forYear": {
+    "description": "Year suffix for fortune calculation",
+    "placeholders": {
+      "year": {
+        "type": "int",
+        "description": "Selected year"
+      }
+    }
+  },
+  "calculateFortune": "Calculate Fortune",
+  "@calculateFortune": {
+    "description": "Calculate fortune button text"
+  },
+  "fortuneAnalysisForYear": "Fortune Analysis for {year}",
+  "@fortuneAnalysisForYear": {
+    "description": "Fortune analysis section title",
+    "placeholders": {
+      "year": {
+        "type": "int",
+        "description": "Selected year"
+      }
+    }
+  },
+  "lifePeriod": "Life Period",
+  "@lifePeriod": {
+    "description": "Life period fortune card title"
+  },
+  "grandLimitCycle": "Grand Limit Cycle",
+  "@grandLimitCycle": {
+    "description": "Grand limit cycle fortune card title"
+  },
+  "smallLimitCycle": "Small Limit Cycle",
+  "@smallLimitCycle": {
+    "description": "Small limit cycle fortune card title"
+  },
+  "annualFortune": "Annual Fortune",
+  "@annualFortune": {
+    "description": "Annual fortune card title"
+  },
+  "refreshFortune": "Refresh Fortune",
+  "@refreshFortune": {
+    "description": "Refresh fortune button text"
+  },
+  "elementAnalysis": "Element Analysis",
+  "@elementAnalysis": {
+    "description": "Element analysis section title"
+  },
+  "elementStrengths": "Element Strengths",
+  "@elementStrengths": {
+    "description": "Element strengths subsection title"
+  },
+  "summary": "Summary",
+  "@summary": {
+    "description": "Summary section title"
+  },
+  "strongest": "Strongest",
+  "@strongest": {
+    "description": "Strongest element label"
+  },
+  "weakest": "Weakest",
+  "@weakest": {
+    "description": "Weakest element label"
+  },
+  "balance": "Balance",
+  "@balance": {
+    "description": "Balance label"
+  },
+  "palaceInfluences": "Palace Influences",
+  "@palaceInfluences": {
+    "description": "Palace influences section title"
+  },
+  "lifeAreasStarInfluences": "Life Areas & Star Influences",
+  "@lifeAreasStarInfluences": {
+    "description": "Life areas and star influences subsection title"
+  },
+  "star": "star",
+  "@star": {
+    "description": "Star singular form"
+  },
+  "stars": "stars",
+  "@stars": {
+    "description": "Star plural form"
+  },
+  "thisPalaceContainsStars": "This palace contains {count} star(s) affecting {palace}",
+  "@thisPalaceContainsStars": {
+    "description": "Palace description text",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "description": "Number of stars"
+      },
+      "palace": {
+        "type": "String",
+        "description": "Palace name"
+      }
+    }
+  },
+  "close": "Close",
+  "@close": {
+    "description": "Close button text"
+  },
+  "category": "Category",
+  "@category": {
+    "description": "Star detail category label"
+  },
+  "palace": "Palace",
+  "@palace": {
+    "description": "Star detail palace label"
+  },
+  "brightness": "Brightness",
+  "@brightness": {
+    "description": "Star detail brightness label"
+  },
+  "transformation": "Transformation",
+  "@transformation": {
+    "description": "Star detail transformation label"
+  },
+  "degree": "Degree",
+  "@degree": {
+    "description": "Star detail degree label"
+  },
+  "lifeRecommendations": "Life Recommendations",
+  "@lifeRecommendations": {
+    "description": "Life recommendations section title"
+  },
+  "gotIt": "Got it",
+  "@gotIt": {
+    "description": "Got it button text"
+  },
+  "unknown": "Unknown",
+  "@unknown": {
+    "description": "Unknown value placeholder"
+  },
+  "noDescriptionAvailable": "No description available",
+  "@noDescriptionAvailable": {
+    "description": "No description available placeholder"
+  },
+  "noSummaryAvailable": "No summary available",
+  "@noSummaryAvailable": {
+    "description": "No summary available placeholder"
+  },
+  "palaceLife": "Life",
+  "@palaceLife": {
+    "description": "Life palace name"
+  },
+  "palaceSiblings": "Siblings",
+  "@palaceSiblings": {
+    "description": "Siblings palace name"
+  },
+  "palaceSpouse": "Spouse",
+  "@palaceSpouse": {
+    "description": "Spouse palace name"
+  },
+  "palaceChildren": "Children",
+  "@palaceChildren": {
+    "description": "Children palace name"
+  },
+  "palaceWealth": "Wealth",
+  "@palaceWealth": {
+    "description": "Wealth palace name"
+  },
+  "palaceHealth": "Health",
+  "@palaceHealth": {
+    "description": "Health palace name"
+  },
+  "palaceTravel": "Travel",
+  "@palaceTravel": {
+    "description": "Travel palace name"
+  },
+  "palaceCareer": "Career",
+  "@palaceCareer": {
+    "description": "Career palace name"
+  },
+  "palaceFriends": "Friends",
+  "@palaceFriends": {
+    "description": "Friends palace name"
+  },
+  "palaceParents": "Parents",
+  "@palaceParents": {
+    "description": "Parents palace name"
+  },
+  "palaceProperty": "Property",
+  "@palaceProperty": {
+    "description": "Property palace name"
+  },
+  "palaceDestiny": "Destiny",
+  "@palaceDestiny": {
+    "description": "Destiny palace name"
+  },
+  "elementWater": "Water",
+  "@elementWater": {
+    "description": "Water element name"
+  },
+  "elementWood": "Wood",
+  "@elementWood": {
+    "description": "Wood element name"
+  },
+  "elementFire": "Fire",
+  "@elementFire": {
+    "description": "Fire element name"
+  },
+  "elementEarth": "Earth",
+  "@elementEarth": {
+    "description": "Earth element name"
+  },
+  "elementMetal": "Metal",
+  "@elementMetal": {
+    "description": "Metal element name"
+  },
+  "starSun": "Sun",
+  "@starSun": {
+    "description": "Sun star name"
+  },
+  "starArmyDestroyer": "Army Destroyer",
+  "@starArmyDestroyer": {
+    "description": "Army Destroyer star name"
+  },
+  "starRightSupport": "Right Support",
+  "@starRightSupport": {
+    "description": "Right Support star name"
+  },
+  "starIntegrity": "Integrity",
+  "@starIntegrity": {
+    "description": "Integrity star name"
+  },
+  "starBellStar": "Bell Star",
+  "@starBellStar": {
+    "description": "Bell Star star name"
+  },
+  "palaceInsightDescription": "This section summarizes how stars in the {palace} palace affect that life area. The influence is derived from the number and type of stars placed here in your chart.",
+  "@palaceInsightDescription": {
+    "description": "Palace insight dialog description",
+    "placeholders": {
+      "palace": {
+        "type": "String",
+        "description": "Palace name"
+      }
+    }
+  },
+  "elementStars": "Element: {element} • Stars: {count}",
+  "@elementStars": {
+    "description": "Element and star count display",
+    "placeholders": {
+      "element": {
+        "type": "String",
+        "description": "Element name"
+      },
+      "count": {
+        "type": "int",
+        "description": "Star count"
+      }
+    }
+  },
+  "starsList": "Stars: {stars}",
+  "@starsList": {
+    "description": "List of stars in palace",
+    "placeholders": {
+      "stars": {
+        "type": "String",
+        "description": "Comma-separated list of star names"
+      }
+    }
+  },
+  "close": "Close",
+  "@close": {
+    "description": "Close button tooltip"
+  },
+  "lifePeriodDescription": "Your current phase reflects your age and traditional life stages.",
+  "@lifePeriodDescription": {
+    "description": "Life period dialog description"
+  },
+  "focus": "Focus",
+  "@focus": {
+    "description": "Focus label"
+  },
+  "challenges": "Challenges",
+  "@challenges": {
+    "description": "Challenges label"
+  },
+  "grandLimitDescription": "This runs in 10-year cycles derived from your age.",
+  "@grandLimitDescription": {
+    "description": "Grand limit cycle dialog description"
+  },
+  "cycle": "Cycle",
+  "@cycle": {
+    "description": "Cycle label"
+  },
+  "yearsRemaining": "Years remaining",
+  "@yearsRemaining": {
+    "description": "Years remaining label"
+  },
+  "smallLimitDescription": "A 1-year focus within the grand cycle.",
+  "@smallLimitDescription": {
+    "description": "Small limit cycle dialog description"
+  },
+  "theme": "Theme",
+  "@theme": {
+    "description": "Theme label"
+  },
+  "focusAreas": "Focus areas",
+  "@focusAreas": {
+    "description": "Focus areas label"
+  },
+  "annualFortuneDescription": "Overall rating combines year element relations, lucky aspects and challenges.",
+  "@annualFortuneDescription": {
+    "description": "Annual fortune dialog description"
+  },
+  "yearElement": "Year element",
+  "@yearElement": {
+    "description": "Year element label"
+  },
+  "relationToBirthYear": "Relation to birth year",
+  "@relationToBirthYear": {
+    "description": "Relation to birth year label"
+  },
+  "bestMonths": "Best months",
+  "@bestMonths": {
+    "description": "Best months label"
+  },
+  "challengingMonths": "Challenging months",
+  "@challengingMonths": {
+    "description": "Challenging months label"
+  },
+  "fortuneCardSummary": "This card summarizes calculated insights for your selected year.",
+  "@fortuneCardSummary": {
+    "description": "Fortune card summary description"
+  },
+  "elementStrengthDescription": "Strength is based on how many times this element appears across your four pillars.",
+  "@elementStrengthDescription": {
+    "description": "Element strength dialog description"
+  },
+  "count": "Count",
+  "@count": {
+    "description": "Count label"
+  },
+  "scale": "scale",
+  "@scale": {
+    "description": "Scale label"
+  },
+  "elementBalance": "Element Balance",
+  "@elementBalance": {
+    "description": "Element balance dialog title"
+  },
+  "elementBalanceDescription": "Balance score reflects how even your five elements are. We compute a simple ratio between the least and most frequent elements.",
+  "@elementBalanceDescription": {
+    "description": "Element balance dialog description"
+  },
+  "score": "Score",
+  "@score": {
+    "description": "Score label"
+  },
+  "yourScore": "Your score",
+  "@yourScore": {
+    "description": "Your score label"
+  },
+  "veryStrong": "Very Strong",
+  "@veryStrong": {
+    "description": "Very strong strength level"
+  },
+  "strong": "Strong",
+  "@strong": {
+    "description": "Strong strength level"
+  },
+  "moderate": "Moderate",
+  "@moderate": {
+    "description": "Moderate strength level"
+  },
+  "weak": "Weak",
+  "@weak": {
+    "description": "Weak strength level"
+  },
+  "noProfile": "No Profile",
+  "@noProfile": {
+    "description": "No profile error title"
+  },
+  "pleaseCreateProfileFirst": "Please create a profile first",
+  "@pleaseCreateProfileFirst": {
+    "description": "No profile error message"
+  },
+  "success": "Success",
+  "@success": {
+    "description": "Success message title"
+  },
+  "fortuneCalculatedSuccessfully": "Fortune for year {year} calculated successfully!",
+  "@fortuneCalculatedSuccessfully": {
+    "description": "Fortune calculation success message",
+    "placeholders": {
+      "year": {
+        "type": "int",
+        "description": "Selected year"
+      }
+    }
+  },
+  "calculationError": "Calculation Error",
+  "@calculationError": {
+    "description": "Calculation error title"
+  },
+  "failedToCalculateFortune": "Failed to calculate fortune for selected year: {error}",
+  "@failedToCalculateFortune": {
+    "description": "Calculation error message",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "description": "Error message"
+      }
+    }
+  },
+  "astroMatcher": "ASTRO MATCHER",
+  "@astroMatcher": {
+    "description": "Astro Matcher screen title"
+  },
+  "goBack": "Go back",
+  "@goBack": {
+    "description": "Back button accessibility label"
+  },
+  "back": "Back",
+  "@back": {
+    "description": "Back button tooltip"
+  },
+  "selectProfilesForCompatibility": "Select Profiles for Compatibility",
+  "@selectProfilesForCompatibility": {
+    "description": "Profile selection section title"
+  },
+  "profile1YourProfile": "Profile 1 (Your Profile)",
+  "@profile1YourProfile": {
+    "description": "Profile 1 selection label"
+  },
+  "profile2OtherPerson": "Profile 2 (Other Person)",
+  "@profile2OtherPerson": {
+    "description": "Profile 2 selection label"
+  },
+  "createNewProfile": "Create new profile",
+  "@createNewProfile": {
+    "description": "Create profile button accessibility label"
+  },
+  "refreshProfiles": "Refresh profiles",
+  "@refreshProfiles": {
+    "description": "Refresh profiles button accessibility label"
+  },
+  "selectDifferentProfileToContinue": "Select a different profile for the other person to continue.",
+  "@selectDifferentProfileToContinue": {
+    "description": "Warning message when same profile is selected"
+  },
+  "unknown": "Unknown",
+  "@unknown": {
+    "description": "Unknown profile name fallback"
+  },
+  "currentProfile": "Current Profile",
+  "@currentProfile": {
+    "description": "Current profile indicator"
+  },
+  "noCurrentProfileFound": "No current profile found. Please create a profile first.",
+  "@noCurrentProfileFound": {
+    "description": "No current profile error message"
+  },
+  "selectAProfile": "Select a profile",
+  "@selectAProfile": {
+    "description": "Profile dropdown hint text"
+  },
+  "noOtherProfilesAvailable": "No other profiles available. Create a profile for the other person to analyze compatibility.",
+  "@noOtherProfilesAvailable": {
+    "description": "No other profiles available message"
+  },
+  "calculateYourCompatibility": "Calculate Your Compatibility",
+  "@calculateYourCompatibility": {
+    "description": "Calculate compatibility button text"
+  },
+  "yourCompatibilityResults": "Your Compatibility Results",
+  "@yourCompatibilityResults": {
+    "description": "Results section title"
+  },
+  "yourOverallCompatibility": "Your Overall Compatibility",
+  "@yourOverallCompatibility": {
+    "description": "Overall compatibility card title"
+  },
+  "yourDetailedAnalysis": "Your Detailed Analysis",
+  "@yourDetailedAnalysis": {
+    "description": "Detailed analysis card title"
+  },
+  "sunSign": "Sun Sign",
+  "@sunSign": {
+    "description": "Sun sign analysis category"
+  },
+  "element": "Element",
+  "@element": {
+    "description": "Element analysis category"
+  },
+  "timing": "Timing",
+  "@timing": {
+    "description": "Timing analysis category"
+  },
+  "yourRelationshipRecommendations": "Your Relationship Recommendations",
+  "@yourRelationshipRecommendations": {
+    "description": "Recommendations card title"
+  },
+  "futureInsights": "Future Insights",
+  "@futureInsights": {
+    "description": "Future insights card title"
+  },
+  "overallCompatibility": "Overall Compatibility",
+  "@overallCompatibility": {
+    "description": "Overall compatibility insight dialog title"
+  },
+  "detailedAnalysis": "Detailed Analysis",
+  "@detailedAnalysis": {
+    "description": "Detailed analysis insight dialog title"
+  },
+  "recommendations": "Recommendations",
+  "@recommendations": {
+    "description": "Recommendations insight dialog title"
+  },
+  "futureCompatibilityInsights": "Future Compatibility Insights",
+  "@futureCompatibilityInsights": {
+    "description": "Future insights insight dialog title"
+  },
+  "close": "Close",
+  "@close": {
+    "description": "Close dialog button tooltip"
+  },
+  "gotIt": "Got it",
+  "@gotIt": {
+    "description": "Dialog confirmation button text"
+  },
+  "year": "Year {year}",
+  "@year": {
+    "description": "Year breakdown dialog title",
+    "placeholders": {
+      "year": {
+        "type": "int",
+        "description": "Year number"
+      }
+    }
+  },
+  "overallScoreExplanation": "Overall score blends Sun Sign (30%), Element (25%), Timing (20%), Chinese Zodiac Year (15%), and Hour Branch (10%).",
+  "@overallScoreExplanation": {
+    "description": "Overall score explanation text"
+  },
+  "sunSignExplanation": "Traditional Western zodiac matrix scoring.",
+  "@sunSignExplanation": {
+    "description": "Sun sign analysis explanation"
+  },
+  "elementExplanation": "Five-element interaction table (Wood, Fire, Earth, Metal, Water).",
+  "@elementExplanation": {
+    "description": "Element analysis explanation"
+  },
+  "timingExplanation": "Age gap, seasonal rhythm, and cycle alignment.",
+  "@timingExplanation": {
+    "description": "Timing analysis explanation"
+  },
+  "recommendationsExplanation": "Suggestions are derived from your overall score to amplify strengths and address challenges.",
+  "@recommendationsExplanation": {
+    "description": "Recommendations explanation text"
+  },
+  "futureInsightsExplanation": "We compute yearly projections from trend analysis over multiple years and highlight peaks and dips.",
+  "@futureInsightsExplanation": {
+    "description": "Future insights explanation text"
+  },
+  "prediction": "Prediction: {prediction}",
+  "@prediction": {
+    "description": "Prediction text with placeholder",
+    "placeholders": {
+      "prediction": {
+        "type": "String",
+        "description": "Prediction text"
+      }
+    }
+  },
+  "yearBreakdownExplanation": "Composed yearly score with explicit contributions.",
+  "@yearBreakdownExplanation": {
+    "description": "Year breakdown explanation text"
+  },
+  "overall": "Overall",
+  "@overall": {
+    "description": "Overall score label"
+  },
+  "yearElement": "Year Element",
+  "@yearElement": {
+    "description": "Year element breakdown label"
+  },
+  "yearAnimal": "Year Animal",
+  "@yearAnimal": {
+    "description": "Year animal breakdown label"
+  },
+  "components": "Components",
+  "@components": {
+    "description": "Components breakdown section title"
+  },
+  "baselinePair": "Baseline pair",
+  "@baselinePair": {
+    "description": "Baseline pair component label"
+  },
+  "yearElementSupport": "Year element support",
+  "@yearElementSupport": {
+    "description": "Year element support component label"
+  },
+  "yearAnimalSupport": "Year animal support",
+  "@yearAnimalSupport": {
+    "description": "Year animal support component label"
+  },
+  "timingSynergy": "Timing synergy",
+  "@timingSynergy": {
+    "description": "Timing synergy component label"
+  },
+  "timingBreakdown": "Timing",
+  "@timingBreakdown": {
+    "description": "Timing breakdown section title"
+  },
+  "energyLevelsAndSynergy": "Energy levels: {energy1} & {energy2} • Synergy {synergy}",
+  "@energyLevelsAndSynergy": {
+    "description": "Energy levels and synergy breakdown text",
+    "placeholders": {
+      "energy1": {
+        "type": "String",
+        "description": "First person's energy level"
+      },
+      "energy2": {
+        "type": "String",
+        "description": "Second person's energy level"
+      },
+      "synergy": {
+        "type": "String",
+        "description": "Synergy score"
+      }
+    }
+  },
+  "noAnalysisAvailable": "No analysis available",
+  "@noAnalysisAvailable": {
+    "description": "No analysis available fallback text"
+  },
+  "noSummaryAvailable": "No summary available",
+  "@noSummaryAvailable": {
+    "description": "No summary available fallback text"
+  },
+  "noPredictionAvailable": "No prediction available",
+  "@noPredictionAvailable": {
+    "description": "No prediction available fallback text"
+  },
+  "failedToLoadProfiles": "Failed to load profiles: {error}",
+  "@failedToLoadProfiles": {
+    "description": "Failed to load profiles error message",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "description": "Error message"
+      }
+    }
+  },
+  "failedToSetProfile2": "Failed to set profile 2: {error}",
+  "@failedToSetProfile2": {
+    "description": "Failed to set profile 2 error message",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "description": "Error message"
+      }
+    }
+  },
+  "pleaseSelectBothProfiles": "Please select both profiles for compatibility analysis",
+  "@pleaseSelectBothProfiles": {
+    "description": "Please select both profiles error message"
+  },
+  "pleaseSelectDifferentProfiles": "Please select different profiles for compatibility analysis",
+  "@pleaseSelectDifferentProfiles": {
+    "description": "Please select different profiles error message"
+  },
+  "failedToCalculateCompatibility": "Failed to calculate compatibility: {error}",
+  "@failedToCalculateCompatibility": {
+    "description": "Failed to calculate compatibility error message",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "description": "Error message"
+      }
+    }
+  },
+  "profileAdded": "Profile Added",
+  "@profileAdded": {
+    "description": "Profile added success title"
+  },
+  "newProfileAddedAndSelected": "New profile \"{name}\" has been added and selected for compatibility analysis",
+  "@newProfileAddedAndSelected": {
+    "description": "New profile added and selected success message",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "description": "Profile name"
+      }
+    }
+  },
+  "cannotCreateSameProfile": "Cannot create a profile with the same details as your current profile",
+  "@cannotCreateSameProfile": {
+    "description": "Cannot create same profile error message"
+  }
 }

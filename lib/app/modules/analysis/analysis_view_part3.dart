@@ -53,7 +53,7 @@ extension AnalysisViewPart3 on AnalysisView {
               const SizedBox(width: AppConstants.defaultPadding),
               Expanded(
                 child: Text(
-                  'Palace Influences',
+                  AppLocalizations.of(Get.context!)!.palaceInfluences,
                   style: AppTheme.headingMedium.copyWith(
                     color: AppColors.lightPurple,
                     fontWeight: FontWeight.w700,
@@ -82,7 +82,7 @@ extension AnalysisViewPart3 on AnalysisView {
                     ),
                     const SizedBox(width: 6),
                     Text(
-                      'Analysis',
+                      AppLocalizations.of(Get.context!)!.analysis,
                       style: AppTheme.caption.copyWith(
                         color: AppColors.lightPurple,
                         fontWeight: FontWeight.w600,
@@ -119,7 +119,7 @@ extension AnalysisViewPart3 on AnalysisView {
         children: [
           // Palace influences section
           Text(
-            'Life Areas & Star Influences',
+            AppLocalizations.of(Get.context!)!.lifeAreasStarInfluences,
             style: AppTheme.bodyMedium.copyWith(
               color: AppColors.lightPurple,
               fontWeight: FontWeight.w700,
@@ -161,7 +161,7 @@ extension AnalysisViewPart3 on AnalysisView {
                             // Palace name
                             Expanded(
                               child: Text(
-                                palace.name,
+                                controller.getLocalizedPalaceName(palace.name),
                                 style: AppTheme.bodyLarge.copyWith(
                                   color: AppColors.darkTextPrimary,
                                   fontWeight: FontWeight.w700,
@@ -188,7 +188,7 @@ extension AnalysisViewPart3 on AnalysisView {
                                 ),
                               ),
                               child: Text(
-                                '$starCount ${starCount == 1 ? 'star' : 'stars'}',
+                                '$starCount ${starCount == 1 ? AppLocalizations.of(Get.context!)!.star : AppLocalizations.of(Get.context!)!.stars}',
                                 style: AppTheme.caption.copyWith(
                                   color: AppColors.lightPurple,
                                   fontWeight: FontWeight.w600,
@@ -272,7 +272,9 @@ extension AnalysisViewPart3 on AnalysisView {
                                           ),
                                           const SizedBox(width: 6),
                                           Text(
-                                            star.nameEn,
+                                            controller.getLocalizedStarName(
+                                              star.nameEn,
+                                            ),
                                             style: AppTheme.caption.copyWith(
                                               color: AppColors.lightPurple,
                                               fontWeight: FontWeight.w600,
@@ -300,7 +302,11 @@ extension AnalysisViewPart3 on AnalysisView {
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Text(
-                            'This palace contains $starCount star(s) affecting ${palace.name}',
+                            AppLocalizations.of(Get.context!)!
+                                .thisPalaceContainsStars(
+                              starCount,
+                              controller.getLocalizedPalaceName(palace.name),
+                            ),
                             style: AppTheme.bodyMedium.copyWith(
                               color: AppColors.darkTextSecondary,
                               height: 1.4,
@@ -344,7 +350,7 @@ extension AnalysisViewPart3 on AnalysisView {
                   const SizedBox(width: AppConstants.defaultPadding),
                   Expanded(
                     child: Text(
-                      star.nameEn,
+                      controller.getLocalizedStarName(star.nameEn),
                       style: AppTheme.headingMedium.copyWith(
                         color: AppColors.lightPurple,
                         fontWeight: FontWeight.w700,
@@ -357,13 +363,28 @@ extension AnalysisViewPart3 on AnalysisView {
               const SizedBox(height: AppConstants.defaultPadding),
 
               // Star details
-              _buildStarDetailRow('Category', star.category),
-              _buildStarDetailRow('Palace', palace.name),
-              _buildStarDetailRow('Brightness', star.brightness),
+              _buildStarDetailRow(
+                AppLocalizations.of(Get.context!)!.category,
+                star.category,
+              ),
+              _buildStarDetailRow(
+                AppLocalizations.of(Get.context!)!.palace,
+                controller.getLocalizedPalaceName(palace.name),
+              ),
+              _buildStarDetailRow(
+                AppLocalizations.of(Get.context!)!.brightness,
+                star.brightness,
+              ),
               if (star.transformationType != null)
-                _buildStarDetailRow('Transformation', star.transformationType!),
+                _buildStarDetailRow(
+                  AppLocalizations.of(Get.context!)!.transformation,
+                  star.transformationType!,
+                ),
               if (star.degree != null)
-                _buildStarDetailRow('Degree', '${star.degree}°'),
+                _buildStarDetailRow(
+                  AppLocalizations.of(Get.context!)!.degree,
+                  '${star.degree}°',
+                ),
 
               const SizedBox(height: AppConstants.defaultPadding),
 
@@ -382,7 +403,7 @@ extension AnalysisViewPart3 on AnalysisView {
                       borderRadius: BorderRadius.circular(16),
                     ),
                   ),
-                  child: const Text('Close'),
+                  child: Text(AppLocalizations.of(Get.context!)!.close),
                 ),
               ),
             ],
@@ -396,10 +417,16 @@ extension AnalysisViewPart3 on AnalysisView {
   void _openPalaceInsight(PalaceData palace) {
     final stars =
         controller.chartData.value?.getStarsInPalace(palace.name) ?? [];
+    final l10n = AppLocalizations.of(Get.context!)!;
+    final localizedPalaceName = controller.getLocalizedPalaceName(palace.name);
+    final localizedElementName =
+        controller.getLocalizedElementName(palace.element);
+    final localizedStarNames =
+        stars.map((e) => controller.getLocalizedStarName(e.nameEn)).join(', ');
 
     final details = <Widget>[
       Text(
-        'This section summarizes how stars in the ${palace.name} palace affect that life area. The influence is derived from the number and type of stars placed here in your chart.',
+        l10n.palaceInsightDescription(localizedPalaceName),
         style: AppTheme.bodyMedium.copyWith(
           color: AppColors.darkTextSecondary,
           height: 1.5,
@@ -407,7 +434,7 @@ extension AnalysisViewPart3 on AnalysisView {
       ),
       const SizedBox(height: 8),
       Text(
-        'Element: ${palace.element} • Stars: ${stars.length}',
+        l10n.elementStars(localizedElementName, stars.length),
         style: AppTheme.bodyMedium.copyWith(
           color: AppColors.darkTextPrimary,
           fontWeight: FontWeight.w600,
@@ -416,7 +443,7 @@ extension AnalysisViewPart3 on AnalysisView {
       if (stars.isNotEmpty) const SizedBox(height: 8),
       if (stars.isNotEmpty)
         Text(
-          'Stars: ${stars.map((e) => e.nameEn).join(', ')}',
+          l10n.starsList(localizedStarNames),
           style: AppTheme.bodyMedium.copyWith(
             color: AppColors.darkTextSecondary,
           ),
@@ -424,7 +451,7 @@ extension AnalysisViewPart3 on AnalysisView {
     ];
 
     _showInsightDialog(
-      title: palace.name,
+      title: localizedPalaceName,
       body: details,
     );
   }
@@ -507,7 +534,7 @@ extension AnalysisViewPart3 on AnalysisView {
               ),
               const SizedBox(width: AppConstants.defaultPadding),
               Text(
-                'Life Recommendations',
+                AppLocalizations.of(Get.context!)!.lifeRecommendations,
                 style: AppTheme.headingMedium.copyWith(
                   color: AppColors.lightGold,
                   fontWeight: FontWeight.w700,
