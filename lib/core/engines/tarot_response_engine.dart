@@ -8,6 +8,7 @@
 library;
 
 import 'package:flutter/foundation.dart' show kDebugMode;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 /// [TarotResponseEngine] - Core engine for generating intelligent tarot responses
 /// Enhanced with numerology, astrological correspondences, and advanced pattern recognition
@@ -18,6 +19,7 @@ class TarotResponseEngine {
     required String question,
     required List<Map<String, dynamic>> selectedCards,
     required String readingType,
+    required AppLocalizations l10n,
   }) {
     try {
       if (kDebugMode) {
@@ -42,6 +44,7 @@ class TarotResponseEngine {
         selectedCards,
         cardAnalysis,
         readingType,
+        l10n,
       );
 
       // Generate actionable guidance with specific steps
@@ -49,12 +52,14 @@ class TarotResponseEngine {
         questionAnalysis,
         cardAnalysis,
         selectedCards,
+        l10n,
       );
 
       // Generate timing insights with astrological considerations
       final timingInsights = _generateTimingInsights(
         selectedCards,
         questionAnalysis,
+        l10n,
       );
 
       // Generate emotional intelligence insights
@@ -62,6 +67,7 @@ class TarotResponseEngine {
         selectedCards,
         questionAnalysis,
         cardAnalysis,
+        l10n,
       );
 
       // Generate numerological insights
@@ -98,6 +104,7 @@ class TarotResponseEngine {
         cardCombinations,
         shadowWorkInsights,
         archetypalInsights,
+        l10n,
       );
 
       final response = {
@@ -580,8 +587,8 @@ class TarotResponseEngine {
     final balance = totalEnergy > 0
         ? 'positive'
         : totalEnergy < 0
-        ? 'negative'
-        : 'balanced';
+            ? 'negative'
+            : 'balanced';
 
     return {
       'positiveEnergy': positiveEnergy,
@@ -653,22 +660,22 @@ class TarotResponseEngine {
     List<Map<String, dynamic>> cards,
     Map<String, dynamic> cardAnalysis,
     String readingType,
+    AppLocalizations l10n,
   ) {
     final category = questionAnalysis['primaryCategory'] as String;
     final questionType = questionAnalysis['questionType'] as String;
     final emotionalTone = questionAnalysis['emotionalTone'] as String;
-    final balance =
-        (cardAnalysis['balance'] as Map<String, dynamic>?)?['balance']
-            as String? ??
+    final balance = (cardAnalysis['balance']
+            as Map<String, dynamic>?)?['balance'] as String? ??
         'balanced';
 
     final interpretation = StringBuffer()
       // Opening based on reading type
-      ..writeln(_getReadingTypeOpening(readingType))
+      ..writeln(_getReadingTypeOpening(readingType, l10n))
       ..writeln()
       // Question context
       ..writeln(
-        'Your question about ${_getCategoryDescription(category)} reveals important insights.',
+        'Your question about ${_getCategoryDescription(category, l10n)} reveals important insights.',
       )
       ..writeln();
 
@@ -679,14 +686,14 @@ class TarotResponseEngine {
       final isReversed = card['is_reversed'] == true;
 
       interpretation
-        ..writeln('**Card $position: ${card['name']}**')
-        ..writeln(isReversed ? 'Reversed' : 'Upright');
+        ..writeln(l10n.cardPosition(position, card['name'] as String))
+        ..writeln(isReversed ? l10n.reversed : l10n.upright);
 
       final meaning = isReversed
-          ? (card['reversed_meaning'] ?? 'No reversed meaning available')
-          : (card['upright_meaning'] ?? 'No upright meaning available');
+          ? (card['reversed_meaning'] ?? l10n.noReversedMeaningAvailable)
+          : (card['upright_meaning'] ?? l10n.noUprightMeaningAvailable);
 
-      interpretation.writeln('Meaning: $meaning');
+      interpretation.writeln('${l10n.meaningLabelShort} $meaning');
 
       // Add contextual interpretation
       final contextualMeaning = _getContextualMeaning(
@@ -695,9 +702,10 @@ class TarotResponseEngine {
         questionType,
         position,
         readingType,
+        l10n,
       );
       if (contextualMeaning.isNotEmpty) {
-        interpretation.writeln('In your situation: $contextualMeaning');
+        interpretation.writeln(l10n.inYourSituationContext(contextualMeaning));
       }
 
       interpretation.writeln();
@@ -705,63 +713,69 @@ class TarotResponseEngine {
 
     // Overall message based on balance
     interpretation
-      ..writeln('**Overall Message:**')
+      ..writeln(l10n.overallMessage)
       ..writeln(
-        _getOverallMessage(balance, category, emotionalTone),
+        _getOverallMessage(balance, category, emotionalTone, l10n),
       )
       ..writeln();
 
     // Timing insights
     if (questionType == 'timing' || questionType == 'decision') {
       interpretation
-        ..writeln('**Timing:**')
-        ..writeln(_getTimingMessage(cards, balance));
+        ..writeln(l10n.timing)
+        ..writeln(_getTimingMessage(cards, balance, l10n));
     }
 
     return interpretation.toString();
   }
 
   /// [_getReadingTypeOpening] - Get opening message based on reading type
-  static String _getReadingTypeOpening(String readingType) {
+  static String _getReadingTypeOpening(
+    String readingType,
+    AppLocalizations l10n,
+  ) {
     switch (readingType) {
       case 'single_card':
-        return '**Single Card Reading** - A focused insight into your question';
+        return l10n.singleCardReadingDescription;
       case 'three_card':
-        return '**Three Card Reading** - Past, Present, and Future perspectives on your situation';
+        return l10n.threeCardReadingDescription;
       case 'celtic_cross':
-        return '**Celtic Cross Reading** - A comprehensive exploration of your question with deep insights';
+        return l10n.celticCrossReadingDescription;
       case 'horseshoe':
-        return '**Horseshoe Reading** - Guidance on timing and progression of events';
+        return l10n.horseshoeReadingDescription;
       case 'daily_draw':
-        return "**Daily Draw** - Today's guidance and reflection for your journey";
+        return l10n.dailyDrawReadingDescription;
       default:
-        return '**Tarot Reading** - Divine guidance and insight for your question';
+        return l10n.genericTarotReadingDescription;
     }
   }
 
   /// [_getCategoryDescription] - Get human-readable category description
-  static String _getCategoryDescription(String category) {
+  static String _getCategoryDescription(
+    String category,
+    AppLocalizations l10n,
+  ) {
     switch (category) {
       case 'love':
-        return 'love and relationships';
+        return l10n.loveAndRelationships;
       case 'career':
-        return 'career and professional life';
+        return l10n.careerAndProfessionalLife;
       case 'finance':
-        return 'financial matters and abundance';
+        return l10n.financialMattersAndAbundance;
       case 'health':
-        return 'health and wellness';
+        return l10n.healthAndWellness;
       case 'spirituality':
-        return 'spiritual growth and purpose';
+        return l10n.spiritualGrowthAndPurpose;
       case 'family':
-        return 'family and home life';
+        return l10n.familyAndHomeLife;
       case 'travel':
-        return 'travel and new experiences';
+        return l10n.travelAndNewExperiences;
       case 'decision':
-        return 'important decisions and choices';
+        return l10n.importantDecisionsAndChoices;
       case 'timing':
-        return 'timing and life cycles';
+        return l10n.timingAndLifeCycles;
       default:
-        return 'your life path';
+        return l10n.yourLifePath;
     }
   }
 
@@ -772,6 +786,7 @@ class TarotResponseEngine {
     String questionType,
     int position,
     String readingType,
+    AppLocalizations l10n,
   ) {
     final cardName = card['name']?.toString() ?? '';
     final isReversed = card['is_reversed'] == true;
@@ -780,16 +795,16 @@ class TarotResponseEngine {
     if (readingType == 'three_card') {
       switch (position) {
         case 1:
-          return _getPastContext(cardName, category, isReversed);
+          return _getPastContext(cardName, category, isReversed, l10n);
         case 2:
-          return _getPresentContext(cardName, category, isReversed);
+          return _getPresentContext(cardName, category, isReversed, l10n);
         case 3:
-          return _getFutureContext(cardName, category, isReversed);
+          return _getFutureContext(cardName, category, isReversed, l10n);
       }
     }
 
     // Category-based interpretation
-    return _getCategoryContext(cardName, category, isReversed);
+    return _getCategoryContext(cardName, category, isReversed, l10n);
   }
 
   /// [_getPastContext] - Get past context for a card
@@ -797,13 +812,14 @@ class TarotResponseEngine {
     String cardName,
     String category,
     bool isReversed,
+    AppLocalizations l10n,
   ) {
     if (cardName.contains('Death') || cardName.contains('Tower')) {
-      return 'This represents a significant transformation or ending that has shaped your current situation.';
+      return l10n.significantTransformationPast;
     } else if (cardName.contains('Fool') || cardName.contains('Magician')) {
-      return 'This reflects a new beginning or skill development that started your journey.';
+      return l10n.newBeginningPast;
     }
-    return 'This card represents past influences that are still affecting your current circumstances.';
+    return l10n.pastInfluencesGeneral;
   }
 
   /// [_getPresentContext] - Get present context for a card
@@ -811,13 +827,14 @@ class TarotResponseEngine {
     String cardName,
     String category,
     bool isReversed,
+    AppLocalizations l10n,
   ) {
     if (cardName.contains('High Priestess') || cardName.contains('Hermit')) {
-      return 'You are currently in a period of introspection and inner wisdom. Trust your intuition.';
+      return l10n.introspectionPresent;
     } else if (cardName.contains('Chariot') || cardName.contains('Strength')) {
-      return 'You are actively working towards your goals with determination and control.';
+      return l10n.activeWorkPresent;
     }
-    return 'This card represents your current situation and the energy you are working with.';
+    return l10n.currentSituationGeneral;
   }
 
   /// [_getFutureContext] - Get future context for a card
@@ -825,13 +842,14 @@ class TarotResponseEngine {
     String cardName,
     String category,
     bool isReversed,
+    AppLocalizations l10n,
   ) {
     if (cardName.contains('Sun') || cardName.contains('Star')) {
-      return 'A bright and positive outcome awaits you if you continue on your current path.';
+      return l10n.brightOutcomeFuture;
     } else if (cardName.contains('Moon') || cardName.contains('Devil')) {
-      return 'Be aware of potential challenges or illusions that may arise.';
+      return l10n.potentialChallengesFuture;
     }
-    return 'This card shows the direction your path is taking and what you can expect.';
+    return l10n.pathDirectionFuture;
   }
 
   /// [_getCategoryContext] - Get category-specific context for a card
@@ -839,29 +857,30 @@ class TarotResponseEngine {
     String cardName,
     String category,
     bool isReversed,
+    AppLocalizations l10n,
   ) {
     switch (category) {
       case 'love':
         if (cardName.contains('Lovers')) {
-          return 'This represents a significant relationship decision or partnership opportunity.';
+          return l10n.relationshipDecisionLove;
         } else if (cardName.contains('Two of Cups')) {
-          return 'A new romantic connection or deepening of existing love is indicated.';
+          return l10n.romanticConnectionLove;
         }
       case 'career':
         if (cardName.contains('Magician')) {
-          return 'You have the skills and resources to manifest your career goals.';
+          return l10n.skillsManifestCareer;
         } else if (cardName.contains('Chariot')) {
-          return 'Your determination and focus will lead to career success.';
+          return l10n.determinationSuccessCareer;
         }
       case 'finance':
         if (cardName.contains('Six of Pentacles')) {
-          return 'Financial balance and generosity are key themes in your situation.';
+          return l10n.financialBalanceFinance;
         } else if (cardName.contains('Ten of Pentacles')) {
-          return 'Long-term financial security and family wealth are indicated.';
+          return l10n.longTermSecurityFinance;
         }
     }
 
-    return "This card's energy is particularly relevant to your ${_getCategoryDescription(category)}.";
+    return l10n.cardEnergyRelevant(_getCategoryDescription(category, l10n));
   }
 
   /// [_getOverallMessage] - Get overall message based on card balance and category
@@ -869,14 +888,15 @@ class TarotResponseEngine {
     String balance,
     String category,
     String emotionalTone,
+    AppLocalizations l10n,
   ) {
     switch (balance) {
       case 'positive':
-        return _getPositiveOverallMessage(category, emotionalTone);
+        return _getPositiveOverallMessage(category, emotionalTone, l10n);
       case 'negative':
-        return _getNegativeOverallMessage(category, emotionalTone);
+        return _getNegativeOverallMessage(category, emotionalTone, l10n);
       default:
-        return _getBalancedOverallMessage(category, emotionalTone);
+        return _getBalancedOverallMessage(category, emotionalTone, l10n);
     }
   }
 
@@ -884,16 +904,17 @@ class TarotResponseEngine {
   static String _getPositiveOverallMessage(
     String category,
     String emotionalTone,
+    AppLocalizations l10n,
   ) {
     switch (category) {
       case 'love':
-        return 'The cards show positive energy in your love life. Trust the process and remain open to love.';
+        return l10n.positiveEnergyLove;
       case 'career':
-        return 'Your career path is well-aligned with positive outcomes. Continue with confidence and determination.';
+        return l10n.careerPathAligned;
       case 'finance':
-        return 'Financial abundance and prosperity are indicated. Your efforts will be rewarded.';
+        return l10n.financialAbundancePositive;
       default:
-        return 'The overall energy is positive and supportive. Trust your path and embrace the opportunities ahead.';
+        return l10n.overallPositiveEnergy;
     }
   }
 
@@ -901,16 +922,17 @@ class TarotResponseEngine {
   static String _getNegativeOverallMessage(
     String category,
     String emotionalTone,
+    AppLocalizations l10n,
   ) {
     switch (category) {
       case 'love':
-        return 'The cards suggest challenges in relationships. This is a time for self-reflection and healing.';
+        return l10n.relationshipChallenges;
       case 'career':
-        return 'Career obstacles may arise, but these are opportunities for growth and learning.';
+        return l10n.careerObstacles;
       case 'finance':
-        return 'Financial challenges may be present, but they are temporary. Focus on stability and planning.';
+        return l10n.financialChallenges;
       default:
-        return 'While challenges are indicated, remember that difficulties often lead to growth and transformation.';
+        return l10n.challengesLeadGrowth;
     }
   }
 
@@ -918,16 +940,17 @@ class TarotResponseEngine {
   static String _getBalancedOverallMessage(
     String category,
     String emotionalTone,
+    AppLocalizations l10n,
   ) {
     switch (category) {
       case 'love':
-        return 'Your love life shows balance between giving and receiving. Maintain harmony in relationships.';
+        return l10n.loveLifeBalance;
       case 'career':
-        return 'Your career path shows steady progress. Balance work with personal growth.';
+        return l10n.careerSteadyProgress;
       case 'finance':
-        return 'Financial stability is indicated. Balance spending with saving for long-term security.';
+        return l10n.financialStability;
       default:
-        return 'The cards show a balanced energy. This is a time of stability and steady progress.';
+        return l10n.balancedEnergy;
     }
   }
 
@@ -935,8 +958,9 @@ class TarotResponseEngine {
   static String _getTimingMessage(
     List<Map<String, dynamic>> cards,
     String balance,
+    AppLocalizations l10n,
   ) {
-    if (cards.isEmpty) return 'Timing information is not available.';
+    if (cards.isEmpty) return l10n.timingNotAvailable;
 
     // Analyze timing based on card meanings and positions
     final timingKeywords = <String>[];
@@ -957,21 +981,21 @@ class TarotResponseEngine {
     }
 
     if (timingKeywords.contains('soon')) {
-      return 'The cards indicate that changes or answers will come soon. Stay alert and prepared.';
+      return l10n.changesComeSoon;
     } else if (timingKeywords.contains('patience')) {
-      return 'Patience is required. The timing is not yet right, but trust the process.';
+      return l10n.patienceRequired;
     } else if (timingKeywords.contains('long-term')) {
-      return 'This is a long-term situation that will develop gradually. Focus on steady progress.';
+      return l10n.longTermSituation;
     }
 
     // Default timing based on balance
     switch (balance) {
       case 'positive':
-        return 'Positive outcomes are likely to manifest within the next few weeks to months.';
+        return l10n.positiveOutcomesWeeksMonths;
       case 'negative':
-        return 'Challenges may arise soon, but they will pass. Focus on growth and learning.';
+        return l10n.challengesAriseSoon;
       default:
-        return 'The timing suggests steady progress over the coming months.';
+        return l10n.steadyProgressMonths;
     }
   }
 
@@ -979,12 +1003,12 @@ class TarotResponseEngine {
     Map<String, dynamic> questionAnalysis,
     Map<String, dynamic> cardAnalysis,
     List<Map<String, dynamic>> cards,
+    AppLocalizations l10n,
   ) {
     final category = questionAnalysis['primaryCategory'] as String;
     final emotionalTone = questionAnalysis['emotionalTone'] as String;
-    final balance =
-        (cardAnalysis['balance'] as Map<String, dynamic>?)?['balance']
-            as String? ??
+    final balance = (cardAnalysis['balance']
+            as Map<String, dynamic>?)?['balance'] as String? ??
         'balanced';
 
     final guidance = <String>[];
@@ -996,86 +1020,86 @@ class TarotResponseEngine {
       case 'love':
         if (balance == 'positive') {
           guidance
-            ..add('Open your heart to new possibilities')
-            ..add('Express your feelings authentically');
-          affirmations.add('I am worthy of love and respect');
+            ..add(l10n.openHeartNewPossibilities)
+            ..add(l10n.expressFeelingsAuthentically);
+          affirmations.add(l10n.worthyOfLoveAndRespect);
         } else if (balance == 'negative') {
           guidance
-            ..add('Focus on self-love and healing')
-            ..add('Communicate openly about concerns');
-          warnings.add('Avoid rushing into new relationships');
+            ..add(l10n.focusSelfLoveHealing)
+            ..add(l10n.communicateOpenlyConcerns);
+          warnings.add(l10n.avoidRushingRelationships);
         } else {
           guidance
-            ..add('Maintain balance in giving and receiving')
-            ..add('Practice patience in relationships');
+            ..add(l10n.maintainBalanceGivingReceiving)
+            ..add(l10n.practicePatienceRelationships);
         }
 
       case 'career':
         if (balance == 'positive') {
           guidance
-            ..add('Take confident action towards your goals')
-            ..add('Network and build professional relationships');
-          affirmations.add('I have the skills to succeed');
+            ..add(l10n.takeConfidentActionGoals)
+            ..add(l10n.networkBuildRelationships);
+          affirmations.add(l10n.skillsToSucceed);
         } else if (balance == 'negative') {
           guidance
-            ..add('Address any skill gaps or obstacles')
-            ..add('Seek mentorship or guidance');
-          warnings.add('Avoid making hasty career decisions');
+            ..add(l10n.addressSkillGapsObstacles)
+            ..add(l10n.seekMentorshipGuidance);
+          warnings.add(l10n.avoidHastyCareerDecisions);
         } else {
           guidance
-            ..add('Focus on steady, consistent progress')
-            ..add('Balance work with personal development');
+            ..add(l10n.focusSteadyProgress)
+            ..add(l10n.balanceWorkPersonalDevelopment);
         }
 
       case 'finance':
         if (balance == 'positive') {
           guidance
-            ..add('Invest in your future wisely')
-            ..add('Share your abundance with others');
-          affirmations.add('I attract financial prosperity');
+            ..add(l10n.investFutureWisely)
+            ..add(l10n.shareAbundanceOthers);
+          affirmations.add(l10n.attractFinancialProsperity);
         } else if (balance == 'negative') {
           guidance
-            ..add('Create a budget and financial plan')
-            ..add('Avoid unnecessary expenses');
-          warnings.add('Be cautious with financial decisions');
+            ..add(l10n.createBudgetFinancialPlan)
+            ..add(l10n.avoidUnnecessaryExpenses);
+          warnings.add(l10n.cautiousFinancialDecisions);
         } else {
           guidance
-            ..add('Maintain financial discipline')
-            ..add('Build long-term financial security');
+            ..add(l10n.maintainFinancialDiscipline)
+            ..add(l10n.buildLongTermSecurity);
         }
 
       default:
         if (balance == 'positive') {
           guidance
-            ..add('Embrace the positive energy around you')
-            ..add('Take action on your goals');
-          affirmations.add('I am capable and confident');
+            ..add(l10n.embracePositiveEnergy)
+            ..add(l10n.takeActionGoals);
+          affirmations.add(l10n.capableAndConfident);
         } else if (balance == 'negative') {
           guidance
-            ..add('Practice self-care and patience')
-            ..add('Seek support when needed');
-          warnings.add('Avoid making major decisions now');
+            ..add(l10n.practiceSelfCarePatience)
+            ..add(l10n.seekSupportWhenNeeded);
+          warnings.add(l10n.avoidMajorDecisionsNow);
         } else {
           guidance
-            ..add('Maintain balance in all areas of life')
-            ..add('Trust the natural flow of events');
+            ..add(l10n.maintainBalanceAllAreas)
+            ..add(l10n.trustNaturalFlowEvents);
         }
     }
 
     // Add general guidance based on emotional tone
     if (emotionalTone == 'urgent') {
-      guidance.add('Take time to reflect before acting');
-      warnings.add('Avoid making rushed decisions');
+      guidance.add(l10n.takeTimeReflectActing);
+      warnings.add(l10n.avoidRushedDecisions);
     } else if (emotionalTone == 'negative') {
-      guidance.add('Practice gratitude and positive thinking');
-      affirmations.add('I choose to see the good in every situation');
+      guidance.add(l10n.practiceGratitudePositiveThinking);
+      affirmations.add(l10n.chooseSeeGoodEverySituation);
     }
 
     return {
       'actions': guidance,
       'affirmations': affirmations,
       'warnings': warnings,
-      'focusAreas': _getFocusAreas(cards, category),
+      'focusAreas': _getFocusAreas(cards, category, l10n),
     };
   }
 
@@ -1083,6 +1107,7 @@ class TarotResponseEngine {
   static List<String> _getFocusAreas(
     List<Map<String, dynamic>> cards,
     String category,
+    AppLocalizations l10n,
   ) {
     final focusAreas = <String>[];
 
@@ -1090,29 +1115,29 @@ class TarotResponseEngine {
       final cardName = card['name']?.toString() ?? '';
 
       if (cardName.contains('High Priestess')) {
-        focusAreas.add('Intuition and inner wisdom');
+        focusAreas.add(l10n.intuitionInnerWisdom);
       } else if (cardName.contains('Hermit')) {
-        focusAreas.add('Self-reflection and solitude');
+        focusAreas.add(l10n.selfReflectionSolitude);
       } else if (cardName.contains('Temperance')) {
-        focusAreas.add('Balance and moderation');
+        focusAreas.add(l10n.balanceModeration);
       } else if (cardName.contains('Justice')) {
-        focusAreas.add('Fairness and truth');
+        focusAreas.add(l10n.fairnessTruth);
       } else if (cardName.contains('Strength')) {
-        focusAreas.add('Inner strength and courage');
+        focusAreas.add(l10n.innerStrengthCourage);
       }
     }
 
     // Add category-specific focus areas
     switch (category) {
       case 'love':
-        focusAreas.add('Emotional communication');
-        focusAreas.add('Self-love and boundaries');
+        focusAreas.add(l10n.emotionalCommunication);
+        focusAreas.add(l10n.selfLoveBoundaries);
       case 'career':
-        focusAreas.add('Skill development');
-        focusAreas.add('Professional networking');
+        focusAreas.add(l10n.skillDevelopment);
+        focusAreas.add(l10n.professionalNetworking);
       case 'finance':
-        focusAreas.add('Financial planning');
-        focusAreas.add('Responsible spending');
+        focusAreas.add(l10n.financialPlanning);
+        focusAreas.add(l10n.responsibleSpending);
     }
 
     return focusAreas.take(5).toList(); // Limit to top 5 focus areas
@@ -1121,6 +1146,7 @@ class TarotResponseEngine {
   static Map<String, dynamic> _generateTimingInsights(
     List<Map<String, dynamic>> cards,
     Map<String, dynamic> questionAnalysis,
+    AppLocalizations l10n,
   ) {
     final category = questionAnalysis['primaryCategory'] as String;
     final questionType = questionAnalysis['questionType'] as String;
@@ -1135,13 +1161,13 @@ class TarotResponseEngine {
 
       if (lowerMeaning.contains('new moon') ||
           lowerMeaning.contains('full moon')) {
-        timingPatterns.add('Lunar cycles may influence timing');
+        timingPatterns.add(l10n.lunarCyclesInfluenceTiming);
       } else if (lowerMeaning.contains('seasons') ||
           lowerMeaning.contains('cycles')) {
-        timingPatterns.add('Natural cycles are important');
+        timingPatterns.add(l10n.naturalCyclesImportant);
       } else if (lowerMeaning.contains('patience') ||
           lowerMeaning.contains('wait')) {
-        timingPatterns.add('Patience is required');
+        timingPatterns.add(l10n.patienceRequired);
       }
     }
 
@@ -1150,35 +1176,35 @@ class TarotResponseEngine {
       case 'love':
         if (questionType == 'timing') {
           timeframes
-            ..add('Within 1-3 months for new connections')
-            ..add('6-12 months for deeper commitments');
+            ..add(l10n.within1To3MonthsNewConnections)
+            ..add(l10n.sixToTwelveMonthsDeeperCommitments);
         }
       case 'career':
         if (questionType == 'timing') {
           timeframes
-            ..add('Within 3-6 months for career changes')
-            ..add('1-2 years for major career growth');
+            ..add(l10n.within3To6MonthsCareerChanges)
+            ..add(l10n.oneToTwoYearsMajorCareerGrowth);
         }
       case 'finance':
         if (questionType == 'timing') {
           timeframes
-            ..add('Within 6-12 months for financial improvement')
-            ..add('2-3 years for long-term financial goals');
+            ..add(l10n.within6To12MonthsFinancialImprovement)
+            ..add(l10n.twoToThreeYearsLongTermFinancialGoals);
         }
     }
 
     // Add general timing insights
     if (questionType == 'decision') {
       timeframes
-        ..add('Take time to reflect before deciding')
-        ..add('Trust your intuition in timing');
+        ..add(l10n.takeTimeToReflectBeforeDeciding)
+        ..add(l10n.trustIntuitionInTiming);
     }
 
     return {
       'patterns': timingPatterns,
       'timeframes': timeframes,
-      'bestTimes': _getBestTimes(cards, category),
-      'considerations': _getTimingConsiderations(cards),
+      'bestTimes': _getBestTimes(cards, category, l10n),
+      'considerations': _getTimingConsiderations(cards, l10n),
     };
   }
 
@@ -1186,6 +1212,7 @@ class TarotResponseEngine {
   static List<String> _getBestTimes(
     List<Map<String, dynamic>> cards,
     String category,
+    AppLocalizations l10n,
   ) {
     final bestTimes = <String>[];
 
@@ -1205,33 +1232,33 @@ class TarotResponseEngine {
 
     if (hasMoonCards) {
       bestTimes
-        ..add('New moon for new beginnings')
-        ..add('Full moon for completion and clarity');
+        ..add(l10n.newMoonNewBeginnings)
+        ..add(l10n.fullMoonCompletionClarity);
     }
 
     if (hasSunCards) {
       bestTimes
-        ..add('Daytime hours for positive actions')
-        ..add('Sunny days for important decisions');
+        ..add(l10n.daytimeHoursPositiveActions)
+        ..add(l10n.sunnyDaysImportantDecisions);
     }
 
     if (hasSeasonalCards) {
       bestTimes
-        ..add('Spring for new projects and growth')
-        ..add('Autumn for reflection and planning');
+        ..add(l10n.springNewProjectsGrowth)
+        ..add(l10n.autumnReflectionPlanning);
     }
 
     // Add category-specific timing
     switch (category) {
       case 'love':
-        bestTimes.add('Friday evenings for romantic activities');
-        bestTimes.add('Venus-ruled hours for relationship decisions');
+        bestTimes.add(l10n.fridayEveningsRomanticActivities);
+        bestTimes.add(l10n.venusRuledHoursRelationshipDecisions);
       case 'career':
-        bestTimes.add('Monday mornings for new initiatives');
-        bestTimes.add('Mercury-ruled hours for communication');
+        bestTimes.add(l10n.mondayMorningsNewInitiatives);
+        bestTimes.add(l10n.mercuryRuledHoursCommunication);
       case 'finance':
-        bestTimes.add('New moon for financial planning');
-        bestTimes.add('Jupiter-ruled hours for abundance work');
+        bestTimes.add(l10n.newMoonFinancialPlanning);
+        bestTimes.add(l10n.jupiterRuledHoursAbundanceWork);
     }
 
     return bestTimes;
@@ -1240,6 +1267,7 @@ class TarotResponseEngine {
   /// [_getTimingConsiderations] - Get important timing considerations
   static List<String> _getTimingConsiderations(
     List<Map<String, dynamic>> cards,
+    AppLocalizations l10n,
   ) {
     final considerations = <String>[];
 
@@ -1248,21 +1276,21 @@ class TarotResponseEngine {
       final cardName = card['name']?.toString() ?? '';
 
       if (cardName.contains('Hanged Man')) {
-        considerations.add('Patience is required - timing is not yet right');
+        considerations.add(l10n.patienceRequiredTimingNotRight);
       } else if (cardName.contains('Wheel of Fortune')) {
-        considerations.add('Change is constant - be flexible with timing');
+        considerations.add(l10n.changeConstantBeFlexible);
       } else if (cardName.contains('Death')) {
-        considerations.add('Endings create space for new beginnings');
+        considerations.add(l10n.endingsCreateSpaceNewBeginnings);
       } else if (cardName.contains('Tower')) {
-        considerations.add('Sudden changes may accelerate timing');
+        considerations.add(l10n.suddenChangesAccelerateTiming);
       }
     }
 
     // Add general considerations
     considerations
-      ..add('Trust your intuition about timing')
-      ..add('External factors may influence timing')
-      ..add('Personal readiness is as important as external timing');
+      ..add(l10n.trustIntuitionAboutTiming)
+      ..add(l10n.externalFactorsInfluenceTiming)
+      ..add(l10n.personalReadinessImportantTiming);
 
     return considerations;
   }
@@ -1272,6 +1300,7 @@ class TarotResponseEngine {
     List<Map<String, dynamic>> cards,
     Map<String, dynamic> questionAnalysis,
     Map<String, dynamic> cardAnalysis,
+    AppLocalizations l10n,
   ) {
     final emotionalPatterns = <String>[];
     final emotionalStates = <String>[];
@@ -1286,18 +1315,18 @@ class TarotResponseEngine {
       final cardMeaning = isReversed ? reversedMeaning : meaning;
 
       if (cardMeaning.contains('emotion') || cardMeaning.contains('feeling')) {
-        emotionalPatterns.add('Emotional awareness is highlighted');
+        emotionalPatterns.add(l10n.emotionalAwarenessHighlighted);
       }
       if (cardMeaning.contains('intuition') ||
           cardMeaning.contains('psychic')) {
-        emotionalPatterns.add('Intuitive abilities are enhanced');
+        emotionalPatterns.add(l10n.intuitiveAbilitiesEnhanced);
       }
       if (cardMeaning.contains('healing') || cardMeaning.contains('recovery')) {
-        emotionalGrowth.add('Emotional healing and growth');
+        emotionalGrowth.add(l10n.emotionalHealingGrowth);
       }
       if (cardMeaning.contains('conflict') ||
           cardMeaning.contains('struggle')) {
-        emotionalChallenges.add('Emotional challenges to overcome');
+        emotionalChallenges.add(l10n.emotionalChallengesOvercome);
       }
     }
 
@@ -1305,17 +1334,17 @@ class TarotResponseEngine {
     final emotionalTone = questionAnalysis['emotionalTone'] as String;
     switch (emotionalTone) {
       case 'urgent':
-        emotionalStates.add('Feeling pressured or rushed');
-        emotionalGrowth.add('Practice emotional regulation');
+        emotionalStates.add(l10n.feelingPressuredRushed);
+        emotionalGrowth.add(l10n.practiceEmotionalRegulation);
       case 'negative':
-        emotionalStates.add('Experiencing difficult emotions');
-        emotionalGrowth.add('Focus on emotional self-care');
+        emotionalStates.add(l10n.experiencingDifficultEmotions);
+        emotionalGrowth.add(l10n.focusOnEmotionalSelfCare);
       case 'positive':
-        emotionalStates.add('Feeling optimistic and hopeful');
-        emotionalGrowth.add('Share positive energy with others');
+        emotionalStates.add(l10n.feelingOptimisticHopeful);
+        emotionalGrowth.add(l10n.sharePositiveEnergyOthers);
       default:
-        emotionalStates.add('Maintaining emotional balance');
-        emotionalGrowth.add('Continue emotional awareness practices');
+        emotionalStates.add(l10n.maintainingEmotionalBalance);
+        emotionalGrowth.add(l10n.continueEmotionalAwarenessPractices);
     }
 
     return {
@@ -1634,9 +1663,8 @@ class TarotResponseEngine {
       'earth': earthCount,
     };
 
-    final dominantElement = elementCounts.entries
-        .reduce((a, b) => a.value > b.value ? a : b)
-        .key;
+    final dominantElement =
+        elementCounts.entries.reduce((a, b) => a.value > b.value ? a : b).key;
 
     // Add natural cycle insights
     final currentSeason = _getCurrentSeason();
@@ -1976,9 +2004,8 @@ class TarotResponseEngine {
     }
 
     // Check for master numbers (11, 22, 33)
-    final masterNumbers = numbers
-        .where((n) => n == 11 || n == 22 || n == 33)
-        .toList();
+    final masterNumbers =
+        numbers.where((n) => n == 11 || n == 22 || n == 33).toList();
     if (masterNumbers.isNotEmpty) {
       patterns.add(
         'Master numbers present: ${masterNumbers.join(", ")} - Higher spiritual vibration',
@@ -1989,9 +2016,8 @@ class TarotResponseEngine {
     }
 
     // Check for karmic numbers (13, 14, 16, 19)
-    final karmicNumbers = numbers
-        .where((n) => n == 13 || n == 14 || n == 16 || n == 19)
-        .toList();
+    final karmicNumbers =
+        numbers.where((n) => n == 13 || n == 14 || n == 16 || n == 19).toList();
     if (karmicNumbers.isNotEmpty) {
       patterns.add(
         'Karmic numbers present: ${karmicNumbers.join(", ")} - Past life lessons and growth',
@@ -2224,6 +2250,7 @@ class TarotResponseEngine {
     Map<String, dynamic> cardCombinations,
     Map<String, dynamic> shadowWorkInsights,
     Map<String, dynamic> archetypalInsights,
+    AppLocalizations l10n,
   ) {
     final keyThemes = <String>[];
     final mainMessages = <String>[];
@@ -2235,14 +2262,13 @@ class TarotResponseEngine {
     // Extract key themes from various analyses
     final category = questionAnalysis['primaryCategory'] as String;
     final emotionalTone = questionAnalysis['emotionalTone'] as String;
-    final balance =
-        (cardAnalysis['balance'] as Map<String, dynamic>?)?['balance']
-            as String? ??
+    final balance = (cardAnalysis['balance']
+            as Map<String, dynamic>?)?['balance'] as String? ??
         'balanced';
 
     // Main theme based on category and balance
     keyThemes.add(
-      '${_getCategoryDescription(category).toUpperCase()} - ${_getBalanceDescription(balance)}',
+      '${_getCategoryDescription(category, l10n).toUpperCase()} - ${_getBalanceDescription(balance)}',
     );
 
     // Emotional themes
@@ -2435,9 +2461,8 @@ class TarotResponseEngine {
     Map<String, dynamic> cardAnalysis,
     Map<String, dynamic> seasonalInsights,
   ) {
-    final balance =
-        (cardAnalysis['balance'] as Map<String, dynamic>?)?['balance']
-            as String? ??
+    final balance = (cardAnalysis['balance']
+            as Map<String, dynamic>?)?['balance'] as String? ??
         'balanced';
     final dominantElement =
         seasonalInsights['dominantElement'] as String? ?? 'balanced';

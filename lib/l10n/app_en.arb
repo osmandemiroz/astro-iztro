@@ -865,5 +865,989 @@
         "description": "Error message"
       }
     }
-  }
+  },
+  "tarotReadingTitle": "TAROT READING",
+  "@tarotReadingTitle": {
+    "description": "Main title for tarot reading page"
+  },
+  "tarotReadingSubtitle": "Discover your path through mystical wisdom",
+  "@tarotReadingSubtitle": {
+    "description": "Subtitle for tarot reading page"
+  },
+  "chooseReadingType": "Choose Reading Type",
+  "@chooseReadingType": {
+    "description": "Title for reading type selection"
+  },
+  "singleCard": "Single Card",
+  "@singleCard": {
+    "description": "Single card reading type title"
+  },
+  "quickInsight": "Quick insight",
+  "@quickInsight": {
+    "description": "Single card reading type subtitle"
+  },
+  "threeCard": "Three Card",
+  "@threeCard": {
+    "description": "Three card reading type title"
+  },
+  "pastPresentFuture": "Past, Present, Future",
+  "@pastPresentFuture": {
+    "description": "Three card reading type subtitle"
+  },
+  "celticCross": "Celtic Cross",
+  "@celticCross": {
+    "description": "Celtic cross reading type title"
+  },
+  "comprehensiveReading": "Comprehensive reading",
+  "@comprehensiveReading": {
+    "description": "Celtic cross reading type subtitle"
+  },
+  "horseshoe": "Horseshoe",
+  "@horseshoe": {
+    "description": "Horseshoe reading type title"
+  },
+  "timingProgression": "Timing & progression",
+  "@timingProgression": {
+    "description": "Horseshoe reading type subtitle"
+  },
+  "dailyDraw": "Daily Draw",
+  "@dailyDraw": {
+    "description": "Daily draw reading type title"
+  },
+  "dailyGuidance": "Daily guidance",
+  "@dailyGuidance": {
+    "description": "Daily draw reading type subtitle"
+  },
+  "genericTarotReading": "Tarot reading",
+  "@genericTarotReading": {
+    "description": "Generic tarot reading subtitle"
+  },
+  "availableCards": "Available Cards",
+  "@availableCards": {
+    "description": "Title for available cards section"
+  },
+  "cardsSelected": "{count} selected",
+  "@cardsSelected": {
+    "description": "Number of selected cards",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "description": "Number of selected cards"
+      }
+    }
+  },
+  "majorArcana": "Major Arcana",
+  "@majorArcana": {
+    "description": "Major arcana section title"
+  },
+  "minorArcana": "Minor Arcana",
+  "@minorArcana": {
+    "description": "Minor arcana section title"
+  },
+  "showLess": "Show Less",
+  "@showLess": {
+    "description": "Show less button text"
+  },
+  "showMore": "Show More",
+  "@showMore": {
+    "description": "Show more button text"
+  },
+  "unknownCard": "Unknown Card",
+  "@unknownCard": {
+    "description": "Unknown card placeholder"
+  },
+  "yourQuestion": "Your Question",
+  "@yourQuestion": {
+    "description": "Title for question input section"
+  },
+  "askCardsForGuidance": "Ask the cards for guidance...",
+  "@askCardsForGuidance": {
+    "description": "Placeholder text for question input"
+  },
+  "readingCards": "Reading Cards...",
+  "@readingCards": {
+    "description": "Loading text when reading cards"
+  },
+  "performReading": "Perform Reading",
+  "@performReading": {
+    "description": "Button text to perform reading"
+  },
+  "selectedCards": "Selected Cards",
+  "@selectedCards": {
+    "description": "Title for selected cards section"
+  },
+  "newReading": "New Reading",
+  "@newReading": {
+    "description": "Button text for new reading"
+  },
+  "cardPosition": "Card {position}",
+  "@cardPosition": {
+    "description": "Card position label",
+    "placeholders": {
+      "position": {
+        "type": "int",
+        "description": "Card position number"
+      }
+    }
+  },
+  "reversed": "Reversed",
+  "@reversed": {
+    "description": "Reversed card orientation"
+  },
+  "upright": "Upright",
+  "@upright": {
+    "description": "Upright card orientation"
+  },
+  "loading": "Loading...",
+  "@loading": {
+    "description": "Loading text"
+  },
+  "readingInterpretation": "Reading Interpretation",
+  "@readingInterpretation": {
+    "description": "Title for reading interpretation section"
+  },
+  "singleCardReadingDescription": "Single Card Reading - A focused insight into your question",
+  "@singleCardReadingDescription": {
+    "description": "Single card reading type description"
+  },
+  "threeCardReadingDescription": "Three Card Reading - Past, Present, and Future perspectives",
+  "@threeCardReadingDescription": {
+    "description": "Three card reading type description"
+  },
+  "celticCrossReadingDescription": "Celtic Cross Reading - Comprehensive insight into complex situations",
+  "@celticCrossReadingDescription": {
+    "description": "Celtic cross reading type description"
+  },
+  "horseshoeReadingDescription": "Horseshoe Reading - Guidance on timing and progression of events",
+  "@horseshoeReadingDescription": {
+    "description": "Horseshoe reading type description"
+  },
+  "dailyDrawReadingDescription": "Daily Draw - Daily guidance and reflection",
+  "@dailyDrawReadingDescription": {
+    "description": "Daily draw reading type description"
+  },
+  "genericTarotReadingDescription": "Tarot Reading - Divine guidance and insight",
+  "@genericTarotReadingDescription": {
+    "description": "Generic tarot reading type description"
+  },
+  "questionRequired": "Question Required",
+  "@questionRequired": {
+    "description": "Error title when question is required"
+  },
+  "pleaseEnterQuestionForReading": "Please enter a question for your reading",
+  "@pleaseEnterQuestionForReading": {
+    "description": "Error message when question is required"
+  },
+  "readingError": "Reading Error",
+  "@readingError": {
+    "description": "Error title for reading errors"
+  },
+  "failedToCompleteReading": "Failed to complete reading: {error}",
+  "@failedToCompleteReading": {
+    "description": "Error message for reading failures",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "description": "Error details"
+      }
+    }
+  },
+  "failedToLoadTarotCards": "Failed to load tarot cards: {error}",
+  "@failedToLoadTarotCards": {
+    "description": "Error message for tarot card loading failures",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "description": "Error details"
+      }
+    }
+  },
+  "errorLoadingTarotCards": "Error",
+  "@errorLoadingTarotCards": {
+    "description": "Error title for tarot card loading"
+  },
+  "questionLabel": "Question: {question}",
+  "@questionLabel": {
+    "description": "Question label in reading interpretation",
+    "placeholders": {
+      "question": {
+        "type": "String",
+        "description": "User's question"
+      }
+    }
+  },
+  "cardPositionLabel": "Card {position}: {cardName}",
+  "@cardPositionLabel": {
+    "description": "Card position label in reading interpretation",
+    "placeholders": {
+      "position": {
+        "type": "int",
+        "description": "Card position number"
+      },
+      "cardName": {
+        "type": "String",
+        "description": "Card name"
+      }
+    }
+  },
+  "orientationLabel": "Orientation: {orientation}",
+  "@orientationLabel": {
+    "description": "Card orientation label in reading interpretation",
+    "placeholders": {
+      "orientation": {
+        "type": "String",
+        "description": "Card orientation (Upright/Reversed)"
+      }
+    }
+  },
+  "meaningLabel": "Meaning: {meaning}",
+  "@meaningLabel": {
+    "description": "Card meaning label in reading interpretation",
+    "placeholders": {
+      "meaning": {
+        "type": "String",
+        "description": "Card meaning"
+      }
+    }
+  },
+  "descriptionLabel": "Description: {description}",
+  "@descriptionLabel": {
+    "description": "Card description label in reading interpretation",
+    "placeholders": {
+      "description": {
+        "type": "String",
+        "description": "Card description"
+      }
+    }
+  },
+  "overallInterpretation": "Overall Interpretation:",
+  "@overallInterpretation": {
+    "description": "Overall interpretation section title"
+  },
+  "noReversedMeaningAvailable": "No reversed meaning available",
+  "@noReversedMeaningAvailable": {
+    "description": "Fallback text when no reversed meaning is available"
+  },
+  "noUprightMeaningAvailable": "No upright meaning available",
+  "@noUprightMeaningAvailable": {
+    "description": "Fallback text when no upright meaning is available"
+  },
+  "noDescriptionAvailable": "No description available",
+  "@noDescriptionAvailable": {
+    "description": "Fallback text when no description is available"
+  },
+  "actionableGuidance": "**Actionable Guidance:**",
+  "@actionableGuidance": {
+    "description": "Actionable guidance section title"
+  },
+  "affirmations": "**Affirmations:**",
+  "@affirmations": {
+    "description": "Affirmations section title"
+  },
+  "considerations": "**Considerations:**",
+  "@considerations": {
+    "description": "Considerations section title"
+  },
+  "focusAreas": "**Focus Areas:**",
+  "@focusAreas": {
+    "description": "Focus areas section title"
+  },
+  "timingInsights": "**Timing Insights:**",
+  "@timingInsights": {
+    "description": "Timing insights section title"
+  },
+  "bestTimesForAction": "**Best Times for Action:**",
+  "@bestTimesForAction": {
+    "description": "Best times for action section title"
+  },
+  "enhancedTarotReading": "Enhanced Tarot Reading",
+  "@enhancedTarotReading": {
+    "description": "Enhanced tarot reading widget title"
+  },
+  "noQuestionProvided": "No question provided",
+  "@noQuestionProvided": {
+    "description": "Fallback text when no question is provided"
+  },
+  "singleCardReadingFull": "Single Card Reading",
+  "@singleCardReadingFull": {
+    "description": "Full single card reading title"
+  },
+  "threeCardReadingFull": "Three Card Reading (Past, Present, Future)",
+  "@threeCardReadingFull": {
+    "description": "Full three card reading title"
+  },
+  "celticCrossReadingFull": "Celtic Cross Reading",
+  "@celticCrossReadingFull": {
+    "description": "Full Celtic cross reading title"
+  },
+  "horseshoeReadingFull": "Horseshoe Reading",
+  "@horseshoeReadingFull": {
+    "description": "Full horseshoe reading title"
+  },
+  "dailyDrawReadingFull": "Daily Draw",
+  "@dailyDrawReadingFull": {
+    "description": "Full daily draw reading title"
+  },
+  "comprehensiveExplorationDescription": "\"{readingType}\" - A comprehensive exploration of your question with deep insights",
+  "@comprehensiveExplorationDescription": {
+    "description": "Description for reading type exploration",
+    "placeholders": {
+      "readingType": {
+        "type": "String",
+        "description": "The reading type"
+      }
+    }
+  },
+  "yourQuestionAbout": "Your question about {question} reveals important insights.",
+  "@yourQuestionAbout": {
+    "description": "Question context description",
+    "placeholders": {
+      "question": {
+        "type": "String",
+        "description": "The user's question"
+      }
+    }
+  },
+  "noCardsSelected": "No cards selected",
+  "@noCardsSelected": {
+    "description": "Message when no cards are selected"
+  },
+  "cardNumber": "Card {number}: {cardName}",
+  "@cardNumber": {
+    "description": "Card number and name format",
+    "placeholders": {
+      "number": {
+        "type": "int",
+        "description": "Card number"
+      },
+      "cardName": {
+        "type": "String",
+        "description": "Card name"
+      }
+    }
+  },
+  "challengesOrBlockages": "challenges or blockages",
+  "@challengesOrBlockages": {
+    "description": "Description for reversed cards"
+  },
+  "opportunitiesAndPositiveEnergy": "opportunities and positive energy",
+  "@opportunitiesAndPositiveEnergy": {
+    "description": "Description for upright cards"
+  },
+  "thisCardSuggests": "This card suggests {suggestion} in relation to your question about {question}.",
+  "@thisCardSuggests": {
+    "description": "Card situation description",
+    "placeholders": {
+      "suggestion": {
+        "type": "String",
+        "description": "The suggestion text"
+      },
+      "question": {
+        "type": "String",
+        "description": "The user's question"
+      }
+    }
+  },
+  "meaningLabelShort": "Meaning:",
+  "@meaningLabelShort": {
+    "description": "Short meaning label"
+  },
+  "inYourSituation": "In your situation:",
+  "@inYourSituation": {
+    "description": "Situation context label"
+  },
+  "actions": "Actions",
+  "@actions": {
+    "description": "Actions section title"
+  },
+  "timeframes": "Timeframes",
+  "@timeframes": {
+    "description": "Timeframes section title"
+  },
+  "bestTimes": "Best Times",
+  "@bestTimes": {
+    "description": "Best times section title"
+  },
+  "patterns": "Patterns",
+  "@patterns": {
+    "description": "Patterns section title"
+  },
+  "singleCardReadingDescription": "**Single Card Reading** - A focused insight into your question",
+  "@singleCardReadingDescription": {
+    "description": "Single card reading description"
+  },
+  "threeCardReadingDescription": "**Three Card Reading** - Past, Present, and Future perspectives on your situation",
+  "@threeCardReadingDescription": {
+    "description": "Three card reading description"
+  },
+  "celticCrossReadingDescription": "**Celtic Cross Reading** - A comprehensive exploration of your question with deep insights",
+  "@celticCrossReadingDescription": {
+    "description": "Celtic cross reading description"
+  },
+  "horseshoeReadingDescription": "**Horseshoe Reading** - Guidance on timing and progression of events",
+  "@horseshoeReadingDescription": {
+    "description": "Horseshoe reading description"
+  },
+  "dailyDrawReadingDescription": "**Daily Draw** - Today's guidance and reflection for your journey",
+  "@dailyDrawReadingDescription": {
+    "description": "Daily draw reading description"
+  },
+  "genericTarotReadingDescription": "**Tarot Reading** - Divine guidance and insight for your question",
+  "@genericTarotReadingDescription": {
+    "description": "Generic tarot reading description"
+  },
+  "loveAndRelationships": "love and relationships",
+  "@loveAndRelationships": {
+    "description": "Love category description"
+  },
+  "careerAndProfessionalLife": "career and professional life",
+  "@careerAndProfessionalLife": {
+    "description": "Career category description"
+  },
+  "financialMattersAndAbundance": "financial matters and abundance",
+  "@financialMattersAndAbundance": {
+    "description": "Finance category description"
+  },
+  "healthAndWellness": "health and wellness",
+  "@healthAndWellness": {
+    "description": "Health category description"
+  },
+  "spiritualGrowthAndPurpose": "spiritual growth and purpose",
+  "@spiritualGrowthAndPurpose": {
+    "description": "Spirituality category description"
+  },
+  "familyAndHomeLife": "family and home life",
+  "@familyAndHomeLife": {
+    "description": "Family category description"
+  },
+  "travelAndNewExperiences": "travel and new experiences",
+  "@travelAndNewExperiences": {
+    "description": "Travel category description"
+  },
+  "importantDecisionsAndChoices": "important decisions and choices",
+  "@importantDecisionsAndChoices": {
+    "description": "Decision category description"
+  },
+  "timingAndLifeCycles": "timing and life cycles",
+  "@timingAndLifeCycles": {
+    "description": "Timing category description"
+  },
+  "yourLifePath": "your life path",
+  "@yourLifePath": {
+    "description": "General category description"
+  },
+  "cardPosition": "**Card {position}: {cardName}**",
+  "@cardPosition": {
+    "description": "Card position format",
+    "placeholders": {
+      "position": {
+        "type": "int",
+        "description": "Card position number"
+      },
+      "cardName": {
+        "type": "String",
+        "description": "Card name"
+      }
+    }
+  },
+  "overallMessage": "**Overall Message:**",
+  "@overallMessage": {
+    "description": "Overall message section title"
+  },
+  "timing": "**Timing:**",
+  "@timing": {
+    "description": "Timing section title"
+  },
+  "noReversedMeaningAvailable": "No reversed meaning available",
+  "@noReversedMeaningAvailable": {
+    "description": "Fallback for missing reversed meaning"
+  },
+  "noUprightMeaningAvailable": "No upright meaning available",
+  "@noUprightMeaningAvailable": {
+    "description": "Fallback for missing upright meaning"
+  },
+  "inYourSituationContext": "In your situation: {contextualMeaning}",
+  "@inYourSituationContext": {
+    "description": "Contextual situation format",
+    "placeholders": {
+      "contextualMeaning": {
+        "type": "String",
+        "description": "The contextual meaning"
+      }
+    }
+  },
+  "significantTransformationPast": "This represents a significant transformation or ending that has shaped your current situation.",
+  "@significantTransformationPast": {
+    "description": "Past context for transformation cards"
+  },
+  "newBeginningPast": "This reflects a new beginning or skill development that started your journey.",
+  "@newBeginningPast": {
+    "description": "Past context for new beginning cards"
+  },
+  "pastInfluencesGeneral": "This card represents past influences that are still affecting your current circumstances.",
+  "@pastInfluencesGeneral": {
+    "description": "General past context"
+  },
+  "introspectionPresent": "You are currently in a period of introspection and inner wisdom. Trust your intuition.",
+  "@introspectionPresent": {
+    "description": "Present context for introspection cards"
+  },
+  "activeWorkPresent": "You are actively working towards your goals with determination and control.",
+  "@activeWorkPresent": {
+    "description": "Present context for active cards"
+  },
+  "currentSituationGeneral": "This card represents your current situation and the energy you are working with.",
+  "@currentSituationGeneral": {
+    "description": "General present context"
+  },
+  "brightOutcomeFuture": "A bright and positive outcome awaits you if you continue on your current path.",
+  "@brightOutcomeFuture": {
+    "description": "Future context for positive cards"
+  },
+  "potentialChallengesFuture": "Be aware of potential challenges or illusions that may arise.",
+  "@potentialChallengesFuture": {
+    "description": "Future context for challenging cards"
+  },
+  "pathDirectionFuture": "This card shows the direction your path is taking and what you can expect.",
+  "@pathDirectionFuture": {
+    "description": "General future context"
+  },
+  "relationshipDecisionLove": "This represents a significant relationship decision or partnership opportunity.",
+  "@relationshipDecisionLove": {
+    "description": "Love context for Lovers card"
+  },
+  "romanticConnectionLove": "A new romantic connection or deepening of existing love is indicated.",
+  "@romanticConnectionLove": {
+    "description": "Love context for Two of Cups"
+  },
+  "skillsManifestCareer": "You have the skills and resources to manifest your career goals.",
+  "@skillsManifestCareer": {
+    "description": "Career context for Magician"
+  },
+  "determinationSuccessCareer": "Your determination and focus will lead to career success.",
+  "@determinationSuccessCareer": {
+    "description": "Career context for Chariot"
+  },
+  "financialBalanceFinance": "Financial balance and generosity are key themes in your situation.",
+  "@financialBalanceFinance": {
+    "description": "Finance context for Six of Pentacles"
+  },
+  "longTermSecurityFinance": "Long-term financial security and family wealth are indicated.",
+  "@longTermSecurityFinance": {
+    "description": "Finance context for Ten of Pentacles"
+  },
+  "cardEnergyRelevant": "This card's energy is particularly relevant to your {categoryDescription}.",
+  "@cardEnergyRelevant": {
+    "description": "Generic card relevance",
+    "placeholders": {
+      "categoryDescription": {
+        "type": "String",
+        "description": "Category description"
+      }
+    }
+  },
+  "positiveEnergyLove": "The cards show positive energy in your love life. Trust the process and remain open to love.",
+  "@positiveEnergyLove": {
+    "description": "Positive overall message for love"
+  },
+  "careerPathAligned": "Your career path is well-aligned with positive outcomes. Continue with confidence and determination.",
+  "@careerPathAligned": {
+    "description": "Positive overall message for career"
+  },
+  "financialAbundancePositive": "Financial abundance and prosperity are indicated. Your efforts will be rewarded.",
+  "@financialAbundancePositive": {
+    "description": "Positive overall message for finance"
+  },
+  "overallPositiveEnergy": "The overall energy is positive and supportive. Trust your path and embrace the opportunities ahead.",
+  "@overallPositiveEnergy": {
+    "description": "General positive overall message"
+  },
+  "relationshipChallenges": "The cards suggest challenges in relationships. This is a time for self-reflection and healing.",
+  "@relationshipChallenges": {
+    "description": "Negative overall message for love"
+  },
+  "careerObstacles": "Career obstacles may arise, but these are opportunities for growth and learning.",
+  "@careerObstacles": {
+    "description": "Negative overall message for career"
+  },
+  "financialChallenges": "Financial challenges may be present, but they are temporary. Focus on stability and planning.",
+  "@financialChallenges": {
+    "description": "Negative overall message for finance"
+  },
+  "challengesLeadGrowth": "While challenges are indicated, remember that difficulties often lead to growth and transformation.",
+  "@challengesLeadGrowth": {
+    "description": "General negative overall message"
+  },
+  "loveLifeBalance": "Your love life shows balance between giving and receiving. Maintain harmony in relationships.",
+  "@loveLifeBalance": {
+    "description": "Balanced overall message for love"
+  },
+  "careerSteadyProgress": "Your career path shows steady progress. Balance work with personal growth.",
+  "@careerSteadyProgress": {
+    "description": "Balanced overall message for career"
+  },
+  "financialStability": "Financial stability is indicated. Balance spending with saving for long-term security.",
+  "@financialStability": {
+    "description": "Balanced overall message for finance"
+  },
+  "balancedEnergy": "The cards show a balanced energy. This is a time of stability and steady progress.",
+  "@balancedEnergy": {
+    "description": "General balanced overall message"
+  },
+  "timingNotAvailable": "Timing information is not available.",
+  "@timingNotAvailable": {
+    "description": "No timing information message"
+  },
+  "changesComeSoon": "The cards indicate that changes or answers will come soon. Stay alert and prepared.",
+  "@changesComeSoon": {
+    "description": "Timing message for soon"
+  },
+  "patienceRequired": "Patience is required. The timing is not yet right, but trust the process.",
+  "@patienceRequired": {
+    "description": "Timing message for patience"
+  },
+  "longTermSituation": "This is a long-term situation that will develop gradually. Focus on steady progress.",
+  "@longTermSituation": {
+    "description": "Timing message for long-term"
+  },
+  "positiveOutcomesWeeksMonths": "Positive outcomes are likely to manifest within the next few weeks to months.",
+  "@positiveOutcomesWeeksMonths": {
+    "description": "Positive timing message"
+  },
+  "challengesAriseSoon": "Challenges may arise soon, but they will pass. Focus on growth and learning.",
+  "@challengesAriseSoon": {
+    "description": "Negative timing message"
+  },
+  "steadyProgressMonths": "The timing suggests steady progress over the coming months.",
+  "@steadyProgressMonths": {
+    "description": "Balanced timing message"
+  },
+  "openHeartNewPossibilities": "Open your heart to new possibilities",
+  "@openHeartNewPossibilities": {
+    "description": "Love guidance message"
+  },
+  "expressFeelingsAuthentically": "Express your feelings authentically",
+  "@expressFeelingsAuthentically": {
+    "description": "Love guidance message"
+  },
+  "worthyOfLoveAndRespect": "I am worthy of love and respect",
+  "@worthyOfLoveAndRespect": {
+    "description": "Love affirmation"
+  },
+  "focusSelfLoveHealing": "Focus on self-love and healing",
+  "@focusSelfLoveHealing": {
+    "description": "Love guidance message"
+  },
+  "communicateOpenlyConcerns": "Communicate openly about concerns",
+  "@communicateOpenlyConcerns": {
+    "description": "Love guidance message"
+  },
+  "avoidRushingRelationships": "Avoid rushing into new relationships",
+  "@avoidRushingRelationships": {
+    "description": "Love warning"
+  },
+  "maintainBalanceGivingReceiving": "Maintain balance in giving and receiving",
+  "@maintainBalanceGivingReceiving": {
+    "description": "Love guidance message"
+  },
+  "practicePatienceRelationships": "Practice patience in relationships",
+  "@practicePatienceRelationships": {
+    "description": "Love guidance message"
+  },
+  "takeConfidentActionGoals": "Take confident action towards your goals",
+  "@takeConfidentActionGoals": {
+    "description": "Career guidance message"
+  },
+  "networkBuildRelationships": "Network and build professional relationships",
+  "@networkBuildRelationships": {
+    "description": "Career guidance message"
+  },
+  "skillsToSucceed": "I have the skills to succeed",
+  "@skillsToSucceed": {
+    "description": "Career affirmation"
+  },
+  "addressSkillGapsObstacles": "Address any skill gaps or obstacles",
+  "@addressSkillGapsObstacles": {
+    "description": "Career guidance message"
+  },
+  "seekMentorshipGuidance": "Seek mentorship or guidance",
+  "@seekMentorshipGuidance": {
+    "description": "Career guidance message"
+  },
+  "avoidHastyCareerDecisions": "Avoid making hasty career decisions",
+  "@avoidHastyCareerDecisions": {
+    "description": "Career warning"
+  },
+  "focusSteadyProgress": "Focus on steady, consistent progress",
+  "@focusSteadyProgress": {
+    "description": "Career guidance message"
+  },
+  "balanceWorkPersonalDevelopment": "Balance work with personal development",
+  "@balanceWorkPersonalDevelopment": {
+    "description": "Career guidance message"
+  },
+  "investFutureWisely": "Invest in your future wisely",
+  "@investFutureWisely": {
+    "description": "Finance guidance message"
+  },
+  "shareAbundanceOthers": "Share your abundance with others",
+  "@shareAbundanceOthers": {
+    "description": "Finance guidance message"
+  },
+  "attractFinancialProsperity": "I attract financial prosperity",
+  "@attractFinancialProsperity": {
+    "description": "Finance affirmation"
+  },
+  "createBudgetFinancialPlan": "Create a budget and financial plan",
+  "@createBudgetFinancialPlan": {
+    "description": "Finance guidance message"
+  },
+  "avoidUnnecessaryExpenses": "Avoid unnecessary expenses",
+  "@avoidUnnecessaryExpenses": {
+    "description": "Finance guidance message"
+  },
+  "cautiousFinancialDecisions": "Be cautious with financial decisions",
+  "@cautiousFinancialDecisions": {
+    "description": "Finance warning"
+  },
+  "maintainFinancialDiscipline": "Maintain financial discipline",
+  "@maintainFinancialDiscipline": {
+    "description": "Finance guidance message"
+  },
+  "buildLongTermSecurity": "Build long-term financial security",
+  "@buildLongTermSecurity": {
+    "description": "Finance guidance message"
+  },
+  "embracePositiveEnergy": "Embrace the positive energy around you",
+  "@embracePositiveEnergy": {
+    "description": "General guidance message"
+  },
+  "takeActionGoals": "Take action on your goals",
+  "@takeActionGoals": {
+    "description": "General guidance message"
+  },
+  "capableAndConfident": "I am capable and confident",
+  "@capableAndConfident": {
+    "description": "General affirmation"
+  },
+  "practiceSelfCarePatience": "Practice self-care and patience",
+  "@practiceSelfCarePatience": {
+    "description": "General guidance message"
+  },
+  "seekSupportWhenNeeded": "Seek support when needed",
+  "@seekSupportWhenNeeded": {
+    "description": "General guidance message"
+  },
+  "avoidMajorDecisionsNow": "Avoid making major decisions now",
+  "@avoidMajorDecisionsNow": {
+    "description": "General warning"
+  },
+  "maintainBalanceAllAreas": "Maintain balance in all areas of life",
+  "@maintainBalanceAllAreas": {
+    "description": "General guidance message"
+  },
+  "trustNaturalFlowEvents": "Trust the natural flow of events",
+  "@trustNaturalFlowEvents": {
+    "description": "General guidance message"
+  },
+  "takeTimeReflectActing": "Take time to reflect before acting",
+  "@takeTimeReflectActing": {
+    "description": "Urgent tone guidance"
+  },
+  "avoidRushedDecisions": "Avoid making rushed decisions",
+  "@avoidRushedDecisions": {
+    "description": "Urgent tone warning"
+  },
+  "practiceGratitudePositiveThinking": "Practice gratitude and positive thinking",
+  "@practiceGratitudePositiveThinking": {
+    "description": "Negative tone guidance"
+  },
+  "chooseSeeGoodEverySituation": "I choose to see the good in every situation",
+  "@chooseSeeGoodEverySituation": {
+    "description": "Negative tone affirmation"
+  },
+  "intuitionInnerWisdom": "Intuition and inner wisdom",
+  "@intuitionInnerWisdom": {
+    "description": "Focus area for High Priestess"
+  },
+  "selfReflectionSolitude": "Self-reflection and solitude",
+  "@selfReflectionSolitude": {
+    "description": "Focus area for Hermit"
+  },
+  "balanceModeration": "Balance and moderation",
+  "@balanceModeration": {
+    "description": "Focus area for Temperance"
+  },
+  "fairnessTruth": "Fairness and truth",
+  "@fairnessTruth": {
+    "description": "Focus area for Justice"
+  },
+  "innerStrengthCourage": "Inner strength and courage",
+  "@innerStrengthCourage": {
+    "description": "Focus area for Strength"
+  },
+  "emotionalCommunication": "Emotional communication",
+  "@emotionalCommunication": {
+    "description": "Love focus area"
+  },
+  "selfLoveBoundaries": "Self-love and boundaries",
+  "@selfLoveBoundaries": {
+    "description": "Love focus area"
+  },
+  "skillDevelopment": "Skill development",
+  "@skillDevelopment": {
+    "description": "Career focus area"
+  },
+  "professionalNetworking": "Professional networking",
+  "@professionalNetworking": {
+    "description": "Career focus area"
+  },
+  "financialPlanning": "Financial planning",
+  "@financialPlanning": {
+    "description": "Finance focus area"
+  },
+  "responsibleSpending": "Responsible spending",
+  "@responsibleSpending": {
+    "description": "Finance focus area"
+  },
+  "lunarCyclesInfluenceTiming": "Lunar cycles may influence timing",
+  "@lunarCyclesInfluenceTiming": {
+    "description": "Timing pattern insight"
+  },
+  "naturalCyclesImportant": "Natural cycles are important",
+  "@naturalCyclesImportant": {
+    "description": "Timing pattern insight"
+  },
+  "patienceRequired": "Patience is required",
+  "@patienceRequired": {
+    "description": "Timing pattern insight"
+  },
+  "withinMonthsNewConnections": "Within 1-3 months for new connections",
+  "@withinMonthsNewConnections": {
+    "description": "Love timing insight"
+  },
+  "monthsDeeperCommitments": "6-12 months for deeper commitments",
+  "@monthsDeeperCommitments": {
+    "description": "Love timing insight"
+  },
+  "monthsCareerChanges": "Within 3-6 months for career changes",
+  "@monthsCareerChanges": {
+    "description": "Career timing insight"
+  },
+  "yearsMajorCareerGrowth": "1-2 years for major career growth",
+  "@yearsMajorCareerGrowth": {
+    "description": "Career timing insight"
+  },
+  "monthsFinancialImprovement": "Within 6-12 months for financial improvement",
+  "@monthsFinancialImprovement": {
+    "description": "Finance timing insight"
+  },
+  "yearsLongTermGoals": "2-3 years for long-term financial goals",
+  "@yearsLongTermGoals": {
+    "description": "Finance timing insight"
+  },
+  "takeTimeReflectDeciding": "Take time to reflect before deciding",
+  "@takeTimeReflectDeciding": {
+    "description": "Decision timing insight"
+  },
+  "trustIntuitionTiming": "Trust your intuition in timing",
+  "@trustIntuitionTiming": {
+    "description": "Decision timing insight"
+  },
+  "newMoonNewBeginnings": "New moon for new beginnings",
+  "@newMoonNewBeginnings": {
+    "description": "Best time for new beginnings"
+  },
+  "fullMoonCompletionClarity": "Full moon for completion and clarity",
+  "@fullMoonCompletionClarity": {
+    "description": "Best time for completion"
+  },
+  "daytimeHoursPositiveActions": "Daytime hours for positive actions",
+  "@daytimeHoursPositiveActions": {
+    "description": "Best time for positive actions"
+  },
+  "sunnyDaysImportantDecisions": "Sunny days for important decisions",
+  "@sunnyDaysImportantDecisions": {
+    "description": "Best time for decisions"
+  },
+  "springNewProjectsGrowth": "Spring for new projects and growth",
+  "@springNewProjectsGrowth": {
+    "description": "Seasonal timing insight"
+  },
+  "autumnReflectionPlanning": "Autumn for reflection and planning",
+  "@autumnReflectionPlanning": {
+    "description": "Seasonal timing insight"
+  },
+  "fridayEveningsRomanticActivities": "Friday evenings for romantic activities",
+  "@fridayEveningsRomanticActivities": {
+    "description": "Love timing insight"
+  },
+  "venusRuledHoursRelationshipDecisions": "Venus-ruled hours for relationship decisions",
+  "@venusRuledHoursRelationshipDecisions": {
+    "description": "Love timing insight"
+  },
+  "mondayMorningsNewInitiatives": "Monday mornings for new initiatives",
+  "@mondayMorningsNewInitiatives": {
+    "description": "Career timing insight"
+  },
+  "mercuryRuledHoursCommunication": "Mercury-ruled hours for communication",
+  "@mercuryRuledHoursCommunication": {
+    "description": "Career timing insight"
+  },
+  "newMoonFinancialPlanning": "New moon for financial planning",
+  "@newMoonFinancialPlanning": {
+    "description": "Finance timing insight"
+  },
+  "jupiterRuledHoursAbundanceWork": "Jupiter-ruled hours for abundance work",
+  "@jupiterRuledHoursAbundanceWork": {
+    "description": "Finance timing insight"
+  },
+  "patienceRequiredTimingNotRight": "Patience is required - timing is not yet right",
+  "@patienceRequiredTimingNotRight": {
+    "description": "Timing consideration"
+  },
+  "changeConstantBeFlexible": "Change is constant - be flexible with timing",
+  "@changeConstantBeFlexible": {
+    "description": "Timing consideration"
+  },
+  "endingsCreateSpaceNewBeginnings": "Endings create space for new beginnings",
+  "@endingsCreateSpaceNewBeginnings": {
+    "description": "Timing consideration"
+  },
+  "suddenChangesAccelerateTiming": "Sudden changes may accelerate timing",
+  "@suddenChangesAccelerateTiming": {
+    "description": "Timing consideration"
+  },
+  "trustIntuitionAboutTiming": "Trust your intuition about timing",
+  "@trustIntuitionAboutTiming": {
+    "description": "General timing consideration"
+  },
+  "externalFactorsInfluenceTiming": "External factors may influence timing",
+  "@externalFactorsInfluenceTiming": {
+    "description": "General timing consideration"
+  },
+  "personalReadinessImportantTiming": "Personal readiness is as important as external timing",
+  "emotionalAwarenessHighlighted": "Emotional awareness is highlighted",
+  "intuitiveAbilitiesEnhanced": "Intuitive abilities are enhanced",
+  "emotionalHealingGrowth": "Emotional healing and growth",
+  "emotionalChallengesOvercome": "Emotional challenges to overcome",
+  "feelingPressuredRushed": "Feeling pressured or rushed",
+  "practiceEmotionalRegulation": "Practice emotional regulation",
+  "experiencingDifficultEmotions": "Experiencing difficult emotions",
+  "focusOnEmotionalSelfCare": "Focus on emotional self-care",
+  "feelingOptimisticHopeful": "Feeling optimistic and hopeful",
+  "sharePositiveEnergyOthers": "Share positive energy with others",
+  "maintainingEmotionalBalance": "Maintaining emotional balance",
+  "continueEmotionalAwarenessPractices": "Continue emotional awareness practices",
+  "@personalReadinessImportantTiming": {
+    "description": "General timing consideration"
+  },
+  "within1To3MonthsNewConnections": "Within 1-3 months for new connections",
+  "sixToTwelveMonthsDeeperCommitments": "6-12 months for deeper commitments",
+  "within3To6MonthsCareerChanges": "Within 3-6 months for career changes",
+  "oneToTwoYearsMajorCareerGrowth": "1-2 years for major career growth",
+  "within6To12MonthsFinancialImprovement": "Within 6-12 months for financial improvement",
+  "twoToThreeYearsLongTermFinancialGoals": "2-3 years for long-term financial goals",
+  "takeTimeToReflectBeforeDeciding": "Take time to reflect before deciding",
+  "trustIntuitionInTiming": "Trust your intuition in timing"
 }

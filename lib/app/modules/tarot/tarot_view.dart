@@ -10,6 +10,7 @@ import 'package:astro_iztro/shared/widgets/liquid_glass_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 
 /// [TarotView] - Tarot card reading interface with Apple-inspired design
@@ -27,25 +28,25 @@ class TarotView extends GetView<TarotController> {
       // Modern dark theme background with mystical gradient
       body: HomeBackground(
         child: SafeArea(
-          child: _buildBody(),
+          child: _buildBody(context),
         ),
       ),
     );
   }
 
   /// [buildBody] - Main body content with tarot reading interface
-  Widget _buildBody() {
+  Widget _buildBody(BuildContext context) {
     return CustomScrollView(
       slivers: [
-        _buildAppBar(),
-        _buildMainContent(),
+        _buildAppBar(context),
+        _buildMainContent(context),
       ],
     );
   }
 
   /// [buildAppBar] - Custom app bar with tarot theme
   /// Edge-to-edge design with mystical elements and proper spacing
-  Widget _buildAppBar() {
+  Widget _buildAppBar(BuildContext context) {
     return SliverAppBar(
       expandedHeight: ResponsiveSizer.h(25), // 25% of screen height for app bar
       pinned: true,
@@ -58,7 +59,7 @@ class TarotView extends GetView<TarotController> {
           decoration: const BoxDecoration(
             gradient: AppColors.darkSpaceGradient,
           ),
-          child: _buildHeaderContent(),
+          child: _buildHeaderContent(context),
         ),
       ),
     );
@@ -66,7 +67,7 @@ class TarotView extends GetView<TarotController> {
 
   /// [buildHeaderContent] - Header with mystical elements and description
   /// Clean, user-friendly design with single, prominent title
-  Widget _buildHeaderContent() {
+  Widget _buildHeaderContent(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(AppConstants.defaultPadding),
       child: Column(
@@ -82,7 +83,7 @@ class TarotView extends GetView<TarotController> {
             offset: const Offset(0, 20),
             duration: const Duration(milliseconds: 800),
             child: Text(
-              'TAROT READING',
+              AppLocalizations.of(context)!.tarotReadingTitle,
               style: AppTheme.headingLarge.copyWith(
                 color: AppColors.darkTextPrimary,
                 fontFamily: AppConstants.decorativeFont,
@@ -107,7 +108,7 @@ class TarotView extends GetView<TarotController> {
                 child: Transform.translate(
                   offset: Offset(0, 15 * (1 - value)),
                   child: Text(
-                    'Discover your path through mystical wisdom',
+                    AppLocalizations.of(context)!.tarotReadingSubtitle,
                     style: AppTheme.bodyMedium.copyWith(
                       color: AppColors.darkTextSecondary,
                       fontWeight: FontWeight.w400,
@@ -125,7 +126,7 @@ class TarotView extends GetView<TarotController> {
   }
 
   /// [buildMainContent] - Main scrollable content with tarot features
-  Widget _buildMainContent() {
+  Widget _buildMainContent(BuildContext context) {
     return SliverToBoxAdapter(
       child: IzSlideFadeIn(
         offset: const Offset(0, 30),
@@ -157,37 +158,37 @@ class TarotView extends GetView<TarotController> {
                 // Animate reading type selector with staggered effect
                 IzSlideFadeIn(
                   delay: const Duration(milliseconds: 200),
-                  child: _buildReadingTypeSelector(),
+                  child: _buildReadingTypeSelector(context),
                 ),
                 const SizedBox(height: AppConstants.largePadding),
                 // Animate card selection interface
                 IzSlideFadeIn(
                   delay: const Duration(milliseconds: 300),
-                  child: _buildCardSelectionInterface(),
+                  child: _buildCardSelectionInterface(context),
                 ),
                 const SizedBox(height: AppConstants.largePadding),
                 // Animate question input
                 IzSlideFadeIn(
                   delay: const Duration(milliseconds: 400),
-                  child: _buildQuestionInput(),
+                  child: _buildQuestionInput(context),
                 ),
                 const SizedBox(height: AppConstants.largePadding),
                 // Animate reading button
                 IzSlideFadeIn(
                   delay: const Duration(milliseconds: 500),
-                  child: _buildReadingButton(),
+                  child: _buildReadingButton(context),
                 ),
                 const SizedBox(height: AppConstants.largePadding),
                 // Animate selected cards
                 IzSlideFadeIn(
                   delay: const Duration(milliseconds: 600),
-                  child: _buildSelectedCards(),
+                  child: _buildSelectedCards(context),
                 ),
                 const SizedBox(height: AppConstants.largePadding),
                 // Animate reading interpretation
                 IzSlideFadeIn(
                   delay: const Duration(milliseconds: 700),
-                  child: _buildReadingInterpretation(),
+                  child: _buildReadingInterpretation(context),
                 ),
                 const SizedBox(
                   height: AppConstants.defaultPadding,
@@ -201,12 +202,12 @@ class TarotView extends GetView<TarotController> {
   }
 
   /// [buildReadingTypeSelector] - Reading type selection with beautiful cards
-  Widget _buildReadingTypeSelector() {
+  Widget _buildReadingTypeSelector(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Choose Reading Type',
+          AppLocalizations.of(context)!.chooseReadingType,
           style: AppTheme.headingSmall.copyWith(
             color: AppColors.darkTextPrimary,
           ),
@@ -230,7 +231,7 @@ class TarotView extends GetView<TarotController> {
               return IzSlideFadeIn(
                 offset: const Offset(0, 20),
                 delay: Duration(milliseconds: 100 + (index * 50)),
-                child: _buildReadingTypeCard(readingType, isSelected),
+                child: _buildReadingTypeCard(readingType, isSelected, context),
               );
             });
           },
@@ -243,45 +244,49 @@ class TarotView extends GetView<TarotController> {
   }
 
   /// [buildReadingTypeCard] - Individual reading type card with selection state
-  Widget _buildReadingTypeCard(String readingType, bool isSelected) {
+  Widget _buildReadingTypeCard(
+    String readingType,
+    bool isSelected,
+    BuildContext context,
+  ) {
+    final l10n = AppLocalizations.of(context)!;
     final readingTypeInfo = <String, Map<String, dynamic>>{
       'single_card': {
-        'title': 'Single Card',
-        'subtitle': 'Quick insight',
+        'title': l10n.singleCard,
+        'subtitle': l10n.quickInsight,
         'icon': Icons.style,
         'color': AppColors.lightPurple,
       },
       'three_card': {
-        'title': 'Three Card',
-        'subtitle': 'Past, Present, Future',
+        'title': l10n.threeCard,
+        'subtitle': l10n.pastPresentFuture,
         'icon': Icons.view_column,
         'color': AppColors.lightGold,
       },
       'celtic_cross': {
-        'title': 'Celtic Cross',
-        'subtitle': 'Comprehensive reading',
+        'title': l10n.celticCross,
+        'subtitle': l10n.comprehensiveReading,
         'icon': Icons.grid_4x4,
         'color': AppColors.lightPurple,
       },
       'horseshoe': {
-        'title': 'Horseshoe',
-        'subtitle': 'Timing & progression',
+        'title': l10n.horseshoe,
+        'subtitle': l10n.timingProgression,
         'icon': Icons.timeline,
         'color': AppColors.lightGold,
       },
       'daily_draw': {
-        'title': 'Daily Draw',
-        'subtitle': 'Daily guidance',
+        'title': l10n.dailyDraw,
+        'subtitle': l10n.dailyGuidance,
         'icon': Icons.wb_sunny,
         'color': AppColors.lightPurple,
       },
     };
 
-    final info =
-        readingTypeInfo[readingType] ??
+    final info = readingTypeInfo[readingType] ??
         {
           'title': readingType.replaceAll('_', ' ').toUpperCase(),
-          'subtitle': 'Tarot reading',
+          'subtitle': l10n.genericTarotReading,
           'icon': Icons.auto_awesome,
           'color': AppColors.lightPurple,
         };
@@ -338,7 +343,7 @@ class TarotView extends GetView<TarotController> {
 
   /// [buildCardSelectionInterface] - Beautiful card selection interface
   /// Shows available cards with mystical styling and selection states
-  Widget _buildCardSelectionInterface() {
+  Widget _buildCardSelectionInterface(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -346,14 +351,15 @@ class TarotView extends GetView<TarotController> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Available Cards',
+              AppLocalizations.of(context)!.availableCards,
               style: AppTheme.headingSmall.copyWith(
                 color: AppColors.darkTextPrimary,
               ),
             ),
             Obx(
               () => Text(
-                '${controller.selectedCards.length} selected',
+                AppLocalizations.of(context)!
+                    .cardsSelected(controller.selectedCards.length),
                 style: AppTheme.caption.copyWith(
                   color: AppColors.lightPurple,
                   fontWeight: FontWeight.w600,
@@ -365,11 +371,17 @@ class TarotView extends GetView<TarotController> {
         const SizedBox(height: AppConstants.defaultPadding),
 
         // Major Arcana section
-        _buildCardSection('Major Arcana', controller.majorArcana),
+        _buildCardSection(
+          AppLocalizations.of(context)!.majorArcana,
+          controller.majorArcana,
+        ),
         const SizedBox(height: AppConstants.defaultPadding),
 
         // Minor Arcana section
-        _buildCardSection('Minor Arcana', controller.minorArcana),
+        _buildCardSection(
+          AppLocalizations.of(context)!.minorArcana,
+          controller.minorArcana,
+        ),
       ],
     );
   }
@@ -401,9 +413,8 @@ class TarotView extends GetView<TarotController> {
             // Calculate how many cards can fit in a row
             final crossAxisCount =
                 ((availableWidth + spacing) / (cardWidth + spacing)).floor();
-            final effectiveCrossAxisCount = crossAxisCount > 0
-                ? crossAxisCount
-                : 1;
+            final effectiveCrossAxisCount =
+                crossAxisCount > 0 ? crossAxisCount : 1;
 
             // Show only first 12 cards initially to prevent overflow
             final initialCardCount =
@@ -415,9 +426,8 @@ class TarotView extends GetView<TarotController> {
                 // Wrap only the GridView with Obx to make it reactive to expansion state
                 Obx(() {
                   final isExpanded = controller.isCardSectionExpanded(title);
-                  final itemCount = isExpanded
-                      ? cards.length
-                      : initialCardCount;
+                  final itemCount =
+                      isExpanded ? cards.length : initialCardCount;
 
                   // Debug logging
                   if (kDebugMode) {
@@ -453,6 +463,7 @@ class TarotView extends GetView<TarotController> {
                           ),
                           cardWidth,
                           cardHeight,
+                          context,
                         ),
                       );
                     },
@@ -472,6 +483,7 @@ class TarotView extends GetView<TarotController> {
                       cardWidth,
                       cardHeight,
                       spacing,
+                      context,
                     ),
                   ),
               ],
@@ -489,8 +501,10 @@ class TarotView extends GetView<TarotController> {
     bool isSelected,
     double width,
     double height,
+    BuildContext context,
   ) {
-    final cardName = (card['name'] as String?) ?? 'Unknown Card';
+    final cardName =
+        (card['name'] as String?) ?? AppLocalizations.of(context)!.unknownCard;
 
     return GestureDetector(
       onTap: () => controller.toggleCardSelection(card),
@@ -505,9 +519,8 @@ class TarotView extends GetView<TarotController> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(
-                  color: isSelected
-                      ? AppColors.lightPurple
-                      : AppColors.darkBorder,
+                  color:
+                      isSelected ? AppColors.lightPurple : AppColors.darkBorder,
                   width: isSelected ? 3 : 1,
                 ),
                 boxShadow: isSelected
@@ -556,10 +569,12 @@ class TarotView extends GetView<TarotController> {
     double cardWidth,
     double cardHeight,
     double spacing,
+    BuildContext context,
   ) {
     return Obx(() {
       final isExpanded = controller.isCardSectionExpanded(title);
-      final buttonText = isExpanded ? 'Show Less' : 'Show More';
+      final l10n = AppLocalizations.of(context)!;
+      final buttonText = isExpanded ? l10n.showLess : l10n.showMore;
       final iconData = isExpanded ? Icons.expand_less : Icons.expand_more;
 
       return GestureDetector(
@@ -613,12 +628,12 @@ class TarotView extends GetView<TarotController> {
   }
 
   /// [buildQuestionInput] - Question input field with mystical styling
-  Widget _buildQuestionInput() {
+  Widget _buildQuestionInput(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Your Question',
+          AppLocalizations.of(context)!.yourQuestion,
           style: AppTheme.headingSmall.copyWith(
             color: AppColors.darkTextPrimary,
           ),
@@ -641,7 +656,7 @@ class TarotView extends GetView<TarotController> {
                 color: AppColors.darkTextPrimary,
               ),
               decoration: InputDecoration(
-                hintText: 'Ask the cards for guidance...',
+                hintText: AppLocalizations.of(context)!.askCardsForGuidance,
                 hintStyle: AppTheme.bodyMedium.copyWith(
                   color: AppColors.darkTextSecondary,
                 ),
@@ -671,7 +686,7 @@ class TarotView extends GetView<TarotController> {
   }
 
   /// [buildReadingButton] - Perform reading button with mystical effects
-  Widget _buildReadingButton() {
+  Widget _buildReadingButton(BuildContext context) {
     return LiquidGlassCard(
       height: ResponsiveSizer.h(10),
       width: ResponsiveSizer.w(100),
@@ -708,8 +723,8 @@ class TarotView extends GetView<TarotController> {
             Obx(
               () => Text(
                 controller.isReadingInProgress.value
-                    ? 'Reading Cards...'
-                    : 'Perform Reading',
+                    ? AppLocalizations.of(context)!.readingCards
+                    : AppLocalizations.of(context)!.performReading,
                 style: AppTheme.bodyLarge.copyWith(
                   fontWeight: FontWeight.w600,
                   color: controller.currentQuestion.value.isNotEmpty
@@ -725,7 +740,7 @@ class TarotView extends GetView<TarotController> {
   }
 
   /// [buildSelectedCards] - Display selected cards with beautiful animations
-  Widget _buildSelectedCards() {
+  Widget _buildSelectedCards(BuildContext context) {
     return Obx(() {
       if (!controller.hasSelectedCards) return const SizedBox.shrink();
 
@@ -736,7 +751,7 @@ class TarotView extends GetView<TarotController> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Selected Cards',
+                AppLocalizations.of(context)!.selectedCards,
                 style: AppTheme.headingSmall.copyWith(
                   color: AppColors.darkTextPrimary,
                 ),
@@ -744,7 +759,7 @@ class TarotView extends GetView<TarotController> {
               TextButton.icon(
                 onPressed: controller.clearReading,
                 icon: const Icon(Icons.refresh, size: 16),
-                label: const Text('New Reading'),
+                label: Text(AppLocalizations.of(context)!.newReading),
                 style: TextButton.styleFrom(
                   foregroundColor: AppColors.lightPurple,
                 ),
@@ -752,7 +767,7 @@ class TarotView extends GetView<TarotController> {
             ],
           ),
           const SizedBox(height: AppConstants.defaultPadding),
-          _buildCardsGrid(),
+          _buildCardsGrid(context),
         ],
       );
     });
@@ -760,7 +775,7 @@ class TarotView extends GetView<TarotController> {
 
   /// [buildCardsGrid] - Grid layout for displaying selected cards with dynamic sizing
   /// Shows larger images for fewer cards and maintains beautiful proportions
-  Widget _buildCardsGrid() {
+  Widget _buildCardsGrid(BuildContext context) {
     return Obx(() {
       final cards = controller.selectedCards;
 
@@ -771,7 +786,7 @@ class TarotView extends GetView<TarotController> {
           child: SizedBox(
             width: ResponsiveSizer.w(45),
             height: ResponsiveSizer.h(45),
-            child: _buildCardDisplay(cards.first, 0, isLarge: true),
+            child: _buildCardDisplay(cards.first, 0, context, isLarge: true),
           ),
         );
       } else if (cards.length == 2) {
@@ -782,12 +797,12 @@ class TarotView extends GetView<TarotController> {
             SizedBox(
               width: ResponsiveSizer.w(35),
               height: ResponsiveSizer.h(35),
-              child: _buildCardDisplay(cards[0], 0),
+              child: _buildCardDisplay(cards[0], 0, context),
             ),
             SizedBox(
               width: ResponsiveSizer.w(35),
               height: ResponsiveSizer.h(35),
-              child: _buildCardDisplay(cards[1], 1),
+              child: _buildCardDisplay(cards[1], 1, context),
             ),
           ],
         );
@@ -806,7 +821,7 @@ class TarotView extends GetView<TarotController> {
           itemCount: cards.length,
           itemBuilder: (context, index) {
             final card = cards[index];
-            return _buildCardDisplay(card, index);
+            return _buildCardDisplay(card, index, context);
           },
         );
       }
@@ -817,19 +832,20 @@ class TarotView extends GetView<TarotController> {
   /// Supports both large and standard sizes for optimal visual hierarchy
   Widget _buildCardDisplay(
     Map<String, dynamic> card,
-    int index, {
+    int index,
+    BuildContext context, {
     bool isLarge = false,
   }) {
-    final cardName = (card['name'] as String?) ?? 'Unknown Card';
+    final cardName =
+        (card['name'] as String?) ?? AppLocalizations.of(context)!.unknownCard;
     final isReversed = (card['is_reversed'] as bool?) ?? false;
     final position = (card['position'] as int?) ?? 1;
 
     // Dynamic sizing based on isLarge parameter
     final cardWidth = isLarge ? ResponsiveSizer.w(45) : ResponsiveSizer.w(25);
     final cardHeight = isLarge ? ResponsiveSizer.h(30) : ResponsiveSizer.h(12);
-    final fontSize = isLarge
-        ? ResponsiveSizer.sp(2.5)
-        : ResponsiveSizer.sp(1.8);
+    final fontSize =
+        isLarge ? ResponsiveSizer.sp(2.5) : ResponsiveSizer.sp(1.8);
 
     return LiquidGlassCard(
       child: Column(
@@ -845,7 +861,7 @@ class TarotView extends GetView<TarotController> {
               borderRadius: BorderRadius.circular(12),
             ),
             child: Text(
-              'Card $position',
+              AppLocalizations.of(context)!.cardPosition(position, cardName),
               style: AppTheme.caption.copyWith(
                 color: AppColors.lightPurple,
                 fontWeight: FontWeight.w600,
@@ -901,7 +917,9 @@ class TarotView extends GetView<TarotController> {
               borderRadius: BorderRadius.circular(8),
             ),
             child: Text(
-              isReversed ? 'Reversed' : 'Upright',
+              isReversed
+                  ? AppLocalizations.of(context)!.reversed
+                  : AppLocalizations.of(context)!.upright,
               style: AppTheme.caption.copyWith(
                 color: isReversed ? AppColors.lightGold : AppColors.lightPurple,
                 fontSize: fontSize * 0.8,
@@ -968,7 +986,7 @@ class TarotView extends GetView<TarotController> {
             ),
             const SizedBox(height: 4),
             Text(
-              'Loading...',
+              AppLocalizations.of(context)!.loading,
               style: AppTheme.caption.copyWith(
                 color: AppColors.darkTextTertiary,
                 fontSize: width * 0.1,
@@ -994,7 +1012,7 @@ class TarotView extends GetView<TarotController> {
   }
 
   /// [buildReadingInterpretation] - Display enhanced reading interpretation with mystical styling
-  Widget _buildReadingInterpretation() {
+  Widget _buildReadingInterpretation(BuildContext context) {
     return Obx(() {
       if (controller.readingInterpretation.value.isEmpty) {
         return const SizedBox.shrink();
@@ -1020,7 +1038,7 @@ class TarotView extends GetView<TarotController> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Reading Interpretation',
+            AppLocalizations.of(context)!.readingInterpretation,
             style: AppTheme.headingSmall.copyWith(
               color: AppColors.darkTextPrimary,
             ),

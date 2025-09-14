@@ -9,7 +9,7 @@ import 'package:astro_iztro/core/utils/responsive_sizer.dart';
 import 'package:astro_iztro/shared/themes/app_theme.dart';
 import 'package:astro_iztro/shared/widgets/liquid_glass_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 /// [EnhancedTarotReadingWidget] - Displays enhanced tarot reading results
 class EnhancedTarotReadingWidget extends StatelessWidget {
@@ -39,18 +39,18 @@ class EnhancedTarotReadingWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildHeader(),
+          _buildHeader(context),
           const SizedBox(height: AppConstants.defaultPadding),
-          _buildReadingContent(),
+          _buildReadingContent(context),
           const SizedBox(height: AppConstants.defaultPadding),
-          _buildActionButtons(),
+          _buildActionButtons(context),
         ],
       ),
     );
   }
 
   /// [_buildHeader] - Build the reading header with mystical styling
-  Widget _buildHeader() {
+  Widget _buildHeader(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(AppConstants.defaultPadding),
       decoration: BoxDecoration(
@@ -75,7 +75,7 @@ class EnhancedTarotReadingWidget extends StatelessWidget {
           const SizedBox(width: AppConstants.smallPadding),
           Expanded(
             child: Text(
-              'Enhanced Tarot Reading',
+              AppLocalizations.of(context)!.enhancedTarotReading,
               style: AppTheme.headingSmall.copyWith(
                 color: AppColors.darkTextPrimary,
                 fontWeight: FontWeight.w600,
@@ -90,7 +90,7 @@ class EnhancedTarotReadingWidget extends StatelessWidget {
               color: AppColors.lightPurple,
               size: 20,
             ),
-            tooltip: 'New Reading',
+            tooltip: AppLocalizations.of(context)!.newReading,
           ),
         ],
       ),
@@ -98,8 +98,7 @@ class EnhancedTarotReadingWidget extends StatelessWidget {
   }
 
   /// [_buildReadingContent] - Build the main reading content sections
-  Widget _buildReadingContent() {
-    final context = Get.context!;
+  Widget _buildReadingContent(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: AppConstants.defaultPadding,
@@ -111,9 +110,10 @@ class EnhancedTarotReadingWidget extends StatelessWidget {
           _buildSection(
             ResponsiveSizer.w(100),
             ResponsiveSizer.h(11),
-            'Your Question',
+            AppLocalizations.of(context)!.yourQuestion,
             Icons.question_mark,
-            (readingData['question'] as String?) ?? 'No question provided',
+            (readingData['question'] as String?) ??
+                AppLocalizations.of(context)!.noQuestionProvided,
             AppColors.lightPurple,
           ),
           const SizedBox(height: AppConstants.defaultPadding),
@@ -122,9 +122,12 @@ class EnhancedTarotReadingWidget extends StatelessWidget {
           _buildSection(
             ResponsiveSizer.w(100),
             ResponsiveSizer.h(11),
-            'Reading Type',
+            AppLocalizations.of(context)!.chooseReadingType,
             Icons.style,
-            _formatReadingType((readingData['readingType'] as String?) ?? ''),
+            _formatReadingType(
+              (readingData['readingType'] as String?) ?? '',
+              context,
+            ),
             AppColors.lightGold,
           ),
           const SizedBox(height: AppConstants.defaultPadding),
@@ -155,7 +158,7 @@ class EnhancedTarotReadingWidget extends StatelessWidget {
                           ),
                           SizedBox(width: ResponsiveSizer.w(3)),
                           Text(
-                            'Reading Interpretation',
+                            AppLocalizations.of(context)!.readingInterpretation,
                             style: AppTheme.bodyLarge.copyWith(
                               color: AppColors.darkTextPrimary,
                               fontWeight: FontWeight.w600,
@@ -206,7 +209,7 @@ class EnhancedTarotReadingWidget extends StatelessWidget {
                             ),
                             SizedBox(width: ResponsiveSizer.w(3)),
                             Text(
-                              'Actionable Guidance',
+                              AppLocalizations.of(context)!.actionableGuidance,
                               style: AppTheme.bodyLarge.copyWith(
                                 color: AppColors.darkTextPrimary,
                                 fontWeight: FontWeight.w600,
@@ -258,7 +261,7 @@ class EnhancedTarotReadingWidget extends StatelessWidget {
                             ),
                             SizedBox(width: ResponsiveSizer.w(3)),
                             Text(
-                              'Timing Insights',
+                              AppLocalizations.of(context)!.timingInsights,
                               style: AppTheme.bodyLarge.copyWith(
                                 color: AppColors.darkTextPrimary,
                                 fontWeight: FontWeight.w600,
@@ -431,7 +434,7 @@ class EnhancedTarotReadingWidget extends StatelessWidget {
   }
 
   /// [_buildActionButtons] - Build action buttons for the reading
-  Widget _buildActionButtons() {
+  Widget _buildActionButtons(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(AppConstants.defaultPadding),
       child: Row(
@@ -444,7 +447,7 @@ class EnhancedTarotReadingWidget extends StatelessWidget {
                 size: ResponsiveSizer.sp(2.4),
               ), // 2.4% of screen size
               label: Text(
-                'New Reading',
+                AppLocalizations.of(context)!.newReading,
                 style: TextStyle(
                   fontSize: ResponsiveSizer.sp(2.2),
                 ), // 2.2% of screen size
@@ -532,7 +535,7 @@ class EnhancedTarotReadingWidget extends StatelessWidget {
                         ),
                         SizedBox(width: ResponsiveSizer.w(3)),
                         Text(
-                          'Reading Interpretation',
+                          AppLocalizations.of(context)!.readingInterpretation,
                           style: AppTheme.headingSmall.copyWith(
                             color: AppColors.darkTextPrimary,
                             fontWeight: FontWeight.w600,
@@ -553,7 +556,10 @@ class EnhancedTarotReadingWidget extends StatelessWidget {
                         children: [
                           // Reading type description
                           Text(
-                            '"${_formatReadingType(readingType)}" - A comprehensive exploration of your question with deep insights',
+                            AppLocalizations.of(context)!
+                                .comprehensiveExplorationDescription(
+                              _formatReadingType(readingType, context),
+                            ),
                             style: AppTheme.bodyLarge.copyWith(
                               color: AppColors.lightPurple,
                               fontWeight: FontWeight.w600,
@@ -565,7 +571,8 @@ class EnhancedTarotReadingWidget extends StatelessWidget {
                           // Question context
                           if (question.isNotEmpty) ...[
                             Text(
-                              'Your question about ${question.toLowerCase()} reveals important insights.',
+                              AppLocalizations.of(context)!
+                                  .yourQuestionAbout(question.toLowerCase()),
                               style: AppTheme.bodyMedium.copyWith(
                                 color: AppColors.darkTextSecondary,
                                 fontSize: ResponsiveSizer.sp(2.2),
@@ -577,7 +584,7 @@ class EnhancedTarotReadingWidget extends StatelessWidget {
                           // Cards interpretation
                           if (cards.isEmpty) ...[
                             Text(
-                              'No cards selected',
+                              AppLocalizations.of(context)!.noCardsSelected,
                               style: AppTheme.bodyMedium.copyWith(
                                 color: AppColors.darkTextSecondary,
                                 fontSize: ResponsiveSizer.sp(2.2),
@@ -594,11 +601,20 @@ class EnhancedTarotReadingWidget extends StatelessWidget {
                                       card['is_reversed'] as bool? ?? false;
                                   final meaning = isReversed
                                       ? (card['reversed_meaning'] as String? ??
-                                            '')
+                                          '')
                                       : (card['upright_meaning'] as String? ??
-                                            '');
+                                          '');
+                                  final suggestion = isReversed
+                                      ? AppLocalizations.of(context)!
+                                          .challengesOrBlockages
+                                      : AppLocalizations.of(context)!
+                                          .opportunitiesAndPositiveEnergy;
                                   final situation =
-                                      'This card suggests ${isReversed ? 'challenges or blockages' : 'opportunities and positive energy'} in relation to your question about ${question.toLowerCase()}.';
+                                      AppLocalizations.of(context)!
+                                          .thisCardSuggests(
+                                    suggestion,
+                                    question.toLowerCase(),
+                                  );
 
                                   return Padding(
                                     padding: EdgeInsets.only(
@@ -643,18 +659,18 @@ class EnhancedTarotReadingWidget extends StatelessWidget {
                                                 ),
                                                 Expanded(
                                                   child: Text(
-                                                    '"Card ${i + 1}: $cardName"',
+                                                    '"${AppLocalizations.of(context)!.cardNumber(i + 1, cardName)}"',
                                                     style: AppTheme.bodyLarge
                                                         .copyWith(
-                                                          color: AppColors
-                                                              .lightPurple,
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          fontSize:
-                                                              ResponsiveSizer.sp(
-                                                                2.4,
-                                                              ),
-                                                        ),
+                                                      color:
+                                                          AppColors.lightPurple,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontSize:
+                                                          ResponsiveSizer.sp(
+                                                        2.4,
+                                                      ),
+                                                    ),
                                                   ),
                                                 ),
                                               ],
@@ -672,92 +688,92 @@ class EnhancedTarotReadingWidget extends StatelessWidget {
                                                 ),
                                               ),
                                               decoration: BoxDecoration(
-                                                color:
-                                                    (isReversed
-                                                            ? AppColors
-                                                                  .lightGold
-                                                            : AppColors
-                                                                  .lightPurple)
-                                                        .withValues(alpha: 0.1),
+                                                color: (isReversed
+                                                        ? AppColors.lightGold
+                                                        : AppColors.lightPurple)
+                                                    .withValues(alpha: 0.1),
                                                 borderRadius:
                                                     BorderRadius.circular(
-                                                      AppConstants.borderRadius,
-                                                    ),
+                                                  AppConstants.borderRadius,
+                                                ),
                                               ),
                                               child: Text(
                                                 isReversed
-                                                    ? 'Reversed'
-                                                    : 'Upright',
+                                                    ? AppLocalizations.of(
+                                                        context,
+                                                      )!
+                                                        .reversed
+                                                    : AppLocalizations.of(
+                                                        context,
+                                                      )!
+                                                        .upright,
                                                 style: AppTheme.bodyMedium
                                                     .copyWith(
-                                                      color: isReversed
-                                                          ? AppColors.lightGold
-                                                          : AppColors
-                                                                .lightPurple,
-                                                      fontSize:
-                                                          ResponsiveSizer.sp(
-                                                            2.2,
-                                                          ),
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                    ),
+                                                  color: isReversed
+                                                      ? AppColors.lightGold
+                                                      : AppColors.lightPurple,
+                                                  fontSize: ResponsiveSizer.sp(
+                                                    2.2,
+                                                  ),
+                                                  fontWeight: FontWeight.w600,
+                                                ),
                                               ),
                                             ),
                                             SizedBox(
                                               height: ResponsiveSizer.h(2),
                                             ),
                                             Text(
-                                              'Meaning:',
-                                              style: AppTheme.bodyMedium
-                                                  .copyWith(
-                                                    color:
-                                                        AppColors.lightPurple,
-                                                    fontSize:
-                                                        ResponsiveSizer.sp(2.2),
-                                                    fontWeight: FontWeight.w600,
-                                                  ),
+                                              AppLocalizations.of(context)!
+                                                  .meaningLabelShort,
+                                              style:
+                                                  AppTheme.bodyMedium.copyWith(
+                                                color: AppColors.lightPurple,
+                                                fontSize:
+                                                    ResponsiveSizer.sp(2.2),
+                                                fontWeight: FontWeight.w600,
+                                              ),
                                             ),
                                             SizedBox(
                                               height: ResponsiveSizer.h(0.5),
                                             ),
                                             Text(
                                               meaning,
-                                              style: AppTheme.bodyMedium
-                                                  .copyWith(
-                                                    color: AppColors
-                                                        .darkTextSecondary,
-                                                    fontSize:
-                                                        ResponsiveSizer.sp(2.2),
-                                                    height: 1.5,
-                                                  ),
+                                              style:
+                                                  AppTheme.bodyMedium.copyWith(
+                                                color:
+                                                    AppColors.darkTextSecondary,
+                                                fontSize:
+                                                    ResponsiveSizer.sp(2.2),
+                                                height: 1.5,
+                                              ),
                                             ),
                                             SizedBox(
                                               height: ResponsiveSizer.h(2),
                                             ),
                                             Text(
-                                              'In your situation:',
-                                              style: AppTheme.bodyMedium
-                                                  .copyWith(
-                                                    color:
-                                                        AppColors.lightPurple,
-                                                    fontSize:
-                                                        ResponsiveSizer.sp(2.2),
-                                                    fontWeight: FontWeight.w600,
-                                                  ),
+                                              AppLocalizations.of(context)!
+                                                  .inYourSituation,
+                                              style:
+                                                  AppTheme.bodyMedium.copyWith(
+                                                color: AppColors.lightPurple,
+                                                fontSize:
+                                                    ResponsiveSizer.sp(2.2),
+                                                fontWeight: FontWeight.w600,
+                                              ),
                                             ),
                                             SizedBox(
                                               height: ResponsiveSizer.h(0.5),
                                             ),
                                             Text(
                                               situation,
-                                              style: AppTheme.bodyMedium
-                                                  .copyWith(
-                                                    color: AppColors
-                                                        .darkTextSecondary,
-                                                    fontSize:
-                                                        ResponsiveSizer.sp(2.2),
-                                                    height: 1.5,
-                                                  ),
+                                              style:
+                                                  AppTheme.bodyMedium.copyWith(
+                                                color:
+                                                    AppColors.darkTextSecondary,
+                                                fontSize:
+                                                    ResponsiveSizer.sp(2.2),
+                                                height: 1.5,
+                                              ),
                                             ),
                                           ],
                                         ),
@@ -843,7 +859,7 @@ class EnhancedTarotReadingWidget extends StatelessWidget {
                         ),
                         SizedBox(width: ResponsiveSizer.w(3)),
                         Text(
-                          'Actionable Guidance',
+                          AppLocalizations.of(context)!.actionableGuidance,
                           style: AppTheme.headingSmall.copyWith(
                             color: AppColors.darkTextPrimary,
                             fontWeight: FontWeight.w600,
@@ -863,22 +879,22 @@ class EnhancedTarotReadingWidget extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           _buildGuidanceList(
-                            'Actions',
+                            AppLocalizations.of(context)!.actions,
                             guidance['actions'],
                             Icons.trending_up,
                           ),
                           _buildGuidanceList(
-                            'Affirmations',
+                            AppLocalizations.of(context)!.affirmations,
                             guidance['affirmations'],
                             Icons.favorite,
                           ),
                           _buildGuidanceList(
-                            'Considerations',
+                            AppLocalizations.of(context)!.considerations,
                             guidance['warnings'],
                             Icons.warning,
                           ),
                           _buildGuidanceList(
-                            'Focus Areas',
+                            AppLocalizations.of(context)!.focusAreas,
                             guidance['focusAreas'],
                             Icons.center_focus_strong,
                           ),
@@ -959,7 +975,7 @@ class EnhancedTarotReadingWidget extends StatelessWidget {
                         ),
                         SizedBox(width: ResponsiveSizer.w(3)),
                         Text(
-                          'Timing Insights',
+                          AppLocalizations.of(context)!.timingInsights,
                           style: AppTheme.headingSmall.copyWith(
                             color: AppColors.darkTextPrimary,
                             fontWeight: FontWeight.w600,
@@ -979,22 +995,22 @@ class EnhancedTarotReadingWidget extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           _buildTimingList(
-                            'Timeframes',
+                            AppLocalizations.of(context)!.timeframes,
                             timingInsights['timeframes'],
                             Icons.access_time,
                           ),
                           _buildTimingList(
-                            'Best Times',
+                            AppLocalizations.of(context)!.bestTimes,
                             timingInsights['bestTimes'],
                             Icons.star,
                           ),
                           _buildTimingList(
-                            'Patterns',
+                            AppLocalizations.of(context)!.patterns,
                             timingInsights['patterns'],
                             Icons.pattern,
                           ),
                           _buildTimingList(
-                            'Considerations',
+                            AppLocalizations.of(context)!.considerations,
                             timingInsights['considerations'],
                             Icons.info,
                           ),
@@ -1012,18 +1028,19 @@ class EnhancedTarotReadingWidget extends StatelessWidget {
   }
 
   /// [_formatReadingType] - Format reading type for display
-  String _formatReadingType(String readingType) {
+  String _formatReadingType(String readingType, BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     switch (readingType) {
       case 'single_card':
-        return 'Single Card Reading';
+        return l10n.singleCardReadingFull;
       case 'three_card':
-        return 'Three Card Reading (Past, Present, Future)';
+        return l10n.threeCardReadingFull;
       case 'celtic_cross':
-        return 'Celtic Cross Reading';
+        return l10n.celticCrossReadingFull;
       case 'horseshoe':
-        return 'Horseshoe Reading';
+        return l10n.horseshoeReadingFull;
       case 'daily_draw':
-        return 'Daily Draw';
+        return l10n.dailyDrawReadingFull;
       default:
         return readingType.replaceAll('_', ' ').toUpperCase();
     }

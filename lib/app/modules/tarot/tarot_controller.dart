@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:astro_iztro/core/engines/tarot_response_engine.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 
 /// [TarotController] - Controller for Tarot card readings and interpretations
@@ -77,7 +78,7 @@ class TarotController extends GetxController {
       // Extract minor arcana cards
       final minorArcanaData =
           jsonData['minor_arcana'] as Map<String, dynamic>? ??
-          <String, dynamic>{};
+              <String, dynamic>{};
       final allMinorCards = <Map<String, dynamic>>[];
 
       // Combine all minor arcana suits
@@ -106,8 +107,8 @@ class TarotController extends GetxController {
         print('[TarotController] Error loading tarot cards: $e');
       }
       Get.snackbar(
-        'Error',
-        'Failed to load tarot cards: $e',
+        AppLocalizations.of(Get.context!)!.errorLoadingTarotCards,
+        AppLocalizations.of(Get.context!)!.failedToLoadTarotCards(e.toString()),
         snackPosition: SnackPosition.BOTTOM,
       );
     }
@@ -137,8 +138,8 @@ class TarotController extends GetxController {
   Future<void> performReading() async {
     if (currentQuestion.value.isEmpty) {
       Get.snackbar(
-        'Question Required',
-        'Please enter a question for your reading',
+        AppLocalizations.of(Get.context!)!.questionRequired,
+        AppLocalizations.of(Get.context!)!.pleaseEnterQuestionForReading,
         snackPosition: SnackPosition.BOTTOM,
       );
       return;
@@ -164,8 +165,9 @@ class TarotController extends GetxController {
         print('[TarotController] Error performing reading: $e');
       }
       Get.snackbar(
-        'Reading Error',
-        'Failed to complete reading: $e',
+        AppLocalizations.of(Get.context!)!.readingError,
+        AppLocalizations.of(Get.context!)!
+            .failedToCompleteReading(e.toString()),
         snackPosition: SnackPosition.BOTTOM,
       );
     } finally {
@@ -236,13 +238,14 @@ class TarotController extends GetxController {
         question: currentQuestion.value,
         selectedCards: selectedCards,
         readingType: selectedReadingType.value,
+        l10n: AppLocalizations.of(Get.context!)!,
       );
 
       // Store the enhanced reading data for the enhanced widget
       enhancedReadingData.assignAll({
         ...response,
-        'selectedCards': selectedCards
-            .toList(), // Explicitly add selected cards
+        'selectedCards':
+            selectedCards.toList(), // Explicitly add selected cards
       });
 
       // Generate the interpretation using the response engine
@@ -251,11 +254,13 @@ class TarotController extends GetxController {
         ..writeln(response['contextualInterpretation'] as String)
         ..writeln();
 
+      final l10n = AppLocalizations.of(Get.context!)!;
+
       // Add actionable guidance section
       final guidance = response['guidance'] as Map<String, dynamic>?;
       final actions = guidance?['actions'] as List<dynamic>?;
       if (actions?.isNotEmpty ?? false) {
-        interpretation.writeln('**Actionable Guidance:**');
+        interpretation.writeln(l10n.actionableGuidance);
         for (final action in actions!) {
           interpretation.writeln('• $action');
         }
@@ -265,7 +270,7 @@ class TarotController extends GetxController {
       // Add affirmations section
       final affirmations = guidance?['affirmations'] as List<dynamic>?;
       if (affirmations?.isNotEmpty ?? false) {
-        interpretation.writeln('**Affirmations:**');
+        interpretation.writeln(l10n.affirmations);
         for (final affirmation in affirmations!) {
           interpretation.writeln('• $affirmation');
         }
@@ -275,7 +280,7 @@ class TarotController extends GetxController {
       // Add warnings section
       final warnings = guidance?['warnings'] as List<dynamic>?;
       if (warnings?.isNotEmpty ?? false) {
-        interpretation.writeln('**Considerations:**');
+        interpretation.writeln(l10n.considerations);
         for (final warning in warnings!) {
           interpretation.writeln('• $warning');
         }
@@ -285,7 +290,7 @@ class TarotController extends GetxController {
       // Add focus areas section
       final focusAreas = guidance?['focusAreas'] as List<dynamic>?;
       if (focusAreas?.isNotEmpty ?? false) {
-        interpretation.writeln('**Focus Areas:**');
+        interpretation.writeln(l10n.focusAreas);
         for (final focusArea in focusAreas!) {
           interpretation.writeln('• $focusArea');
         }
@@ -297,7 +302,7 @@ class TarotController extends GetxController {
           response['timingInsights'] as Map<String, dynamic>?;
       final timeframes = timingInsights?['timeframes'] as List<dynamic>?;
       if (timeframes?.isNotEmpty ?? false) {
-        interpretation.writeln('**Timing Insights:**');
+        interpretation.writeln(l10n.timingInsights);
         for (final timeframe in timeframes!) {
           interpretation.writeln('• $timeframe');
         }
@@ -306,7 +311,7 @@ class TarotController extends GetxController {
 
       final bestTimes = timingInsights?['bestTimes'] as List<dynamic>?;
       if (bestTimes?.isNotEmpty ?? false) {
-        interpretation.writeln('**Best Times for Action:**');
+        interpretation.writeln(l10n.bestTimesForAction);
         for (final bestTime in bestTimes!) {
           interpretation.writeln('• $bestTime');
         }
@@ -335,20 +340,20 @@ class TarotController extends GetxController {
 
   /// [_generateBasicInterpretation] - Fallback basic interpretation method
   void _generateBasicInterpretation() {
+    final l10n = AppLocalizations.of(Get.context!)!;
     final interpretation = StringBuffer()
       // Add reading type description
       ..writeln(_getReadingTypeDescription())
       ..writeln()
       // Add question
-      ..writeln('Question: ${currentQuestion.value}')
+      ..writeln(l10n.questionLabel(currentQuestion.value))
       ..writeln();
 
     // Add card interpretations
     for (final card in selectedCards) {
       // Safely extract card name, ensuring it's a String
-      final cardName = card['name'] is String
-          ? card['name'] as String
-          : 'Unknown Card';
+      final cardName =
+          card['name'] is String ? card['name'] as String : l10n.unknownCard;
 
       // Safely extract isReversed, ensuring it's a bool
       final isReversed =
@@ -357,32 +362,40 @@ class TarotController extends GetxController {
       // Safely extract position, ensuring it's an int
       final position = card['position'] is int ? card['position'] as int : 1;
 
+      final orientation = isReversed ? l10n.reversed : l10n.upright;
+
       interpretation
-        ..writeln('Card $position: $cardName')
-        ..writeln(
-          'Orientation: ${isReversed ? 'Reversed' : 'Upright'}',
-        );
+        ..writeln(l10n.cardPositionLabel(position, cardName))
+        ..writeln(l10n.orientationLabel(orientation));
 
       if (isReversed) {
         interpretation.writeln(
-          'Meaning: ${card['reversed_meaning'] ?? 'No reversed meaning available'}',
+          l10n.meaningLabel(
+            (card['reversed_meaning'] as String?) ??
+                l10n.noReversedMeaningAvailable,
+          ),
         );
       } else {
         interpretation.writeln(
-          'Meaning: ${card['upright_meaning'] ?? 'No upright meaning available'}',
+          l10n.meaningLabel(
+            (card['upright_meaning'] as String?) ??
+                l10n.noUprightMeaningAvailable,
+          ),
         );
       }
 
       interpretation
         ..writeln(
-          'Description: ${card['description'] ?? 'No description available'}',
+          l10n.descriptionLabel(
+            (card['description'] as String?) ?? l10n.noDescriptionAvailable,
+          ),
         )
         ..writeln();
     }
 
     // Add overall interpretation
     interpretation
-      ..writeln('Overall Interpretation:')
+      ..writeln(l10n.overallInterpretation)
       ..writeln(_generateOverallInterpretation());
 
     readingInterpretation.value = interpretation.toString();
@@ -390,19 +403,20 @@ class TarotController extends GetxController {
 
   /// [getReadingTypeDescription] - Get description for the selected reading type
   String _getReadingTypeDescription() {
+    final l10n = AppLocalizations.of(Get.context!)!;
     switch (selectedReadingType.value) {
       case 'single_card':
-        return 'Single Card Reading - A focused insight into your question';
+        return l10n.singleCardReadingDescription;
       case 'three_card':
-        return 'Three Card Reading - Past, Present, and Future perspectives';
+        return l10n.threeCardReadingDescription;
       case 'celtic_cross':
-        return 'Celtic Cross Reading - Comprehensive insight into complex situations';
+        return l10n.celticCrossReadingDescription;
       case 'horseshoe':
-        return 'Horseshoe Reading - Guidance on timing and progression of events';
+        return l10n.horseshoeReadingDescription;
       case 'daily_draw':
-        return 'Daily Draw - Daily guidance and reflection';
+        return l10n.dailyDrawReadingDescription;
       default:
-        return 'Tarot Reading - Divine guidance and insight';
+        return l10n.genericTarotReadingDescription;
     }
   }
 
@@ -454,10 +468,8 @@ class TarotController extends GetxController {
   /// [getCardImage] - Get the image asset path for a card
   String getCardImage(String cardName) {
     // Convert card name to image asset path
-    final imageName = cardName
-        .toLowerCase()
-        .replaceAll(' ', '_')
-        .replaceAll('the_', '');
+    final imageName =
+        cardName.toLowerCase().replaceAll(' ', '_').replaceAll('the_', '');
     return 'assets/images/tarot/$imageName.png';
   }
 
