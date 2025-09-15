@@ -2621,5 +2621,243 @@
   "cannotCreateSameProfile": "Cannot create a profile with the same details as your current profile",
   "@cannotCreateSameProfile": {
     "description": "Cannot create same profile error message"
+  },
+  "settingsTitle": "SETTINGS",
+  "@settingsTitle": {
+    "description": "Settings screen title"
+  },
+  "resetToDefaults": "Reset to Defaults",
+  "@resetToDefaults": {
+    "description": "Reset to defaults button tooltip"
+  },
+  "calculationSettings": "Calculation Settings",
+  "@calculationSettings": {
+    "description": "Calculation settings section title"
+  },
+  "trueSolarTime": "True Solar Time",
+  "@trueSolarTime": {
+    "description": "True solar time setting title"
+  },
+  "trueSolarTimeDescription": "Use true solar time for calculations",
+  "@trueSolarTimeDescription": {
+    "description": "True solar time setting description"
+  },
+  "showBrightness": "Show Brightness",
+  "@showBrightness": {
+    "description": "Show brightness setting title"
+  },
+  "showBrightnessDescription": "Display star brightness information",
+  "@showBrightnessDescription": {
+    "description": "Show brightness setting description"
+  },
+  "showTransformations": "Show Transformations",
+  "@showTransformations": {
+    "description": "Show transformations setting title"
+  },
+  "showTransformationsDescription": "Display star transformations",
+  "@showTransformationsDescription": {
+    "description": "Show transformations setting description"
+  },
+  "autoSaveCalculations": "Auto Save Calculations",
+  "@autoSaveCalculations": {
+    "description": "Auto save calculations setting title"
+  },
+  "autoSaveCalculationsDescription": "Automatically save calculation results",
+  "@autoSaveCalculationsDescription": {
+    "description": "Auto save calculations setting description"
+  },
+  "advancedFeatures": "Advanced Features",
+  "@advancedFeatures": {
+    "description": "Advanced features section title"
+  },
+  "advancedAnalysis": "Advanced Analysis",
+  "@advancedAnalysis": {
+    "description": "Advanced analysis setting title"
+  },
+  "advancedAnalysisDescription": "Enable detailed analysis features",
+  "@advancedAnalysisDescription": {
+    "description": "Advanced analysis setting description"
+  },
+  "detailedStarAnalysis": "Detailed Star Analysis",
+  "@detailedStarAnalysis": {
+    "description": "Detailed star analysis setting title"
+  },
+  "detailedStarAnalysisDescription": "Show comprehensive star information",
+  "@detailedStarAnalysisDescription": {
+    "description": "Detailed star analysis setting description"
+  },
+  "autoSavePalaceAnalysis": "Auto Save Palace Analysis",
+  "@autoSavePalaceAnalysis": {
+    "description": "Auto save palace analysis setting title"
+  },
+  "autoSavePalaceAnalysisDescription": "Automatically save palace analysis data",
+  "@autoSavePalaceAnalysisDescription": {
+    "description": "Auto save palace analysis setting description"
+  },
+  "transformationEffects": "Transformation Effects",
+  "@transformationEffects": {
+    "description": "Transformation effects setting title"
+  },
+  "transformationEffectsDescription": "Show transformation effects",
+  "@transformationEffectsDescription": {
+    "description": "Transformation effects setting description"
+  },
+  "fortuneTiming": "Fortune Timing",
+  "@fortuneTiming": {
+    "description": "Fortune timing setting title"
+  },
+  "fortuneTimingDescription": "Enable fortune timing calculations",
+  "@fortuneTimingDescription": {
+    "description": "Fortune timing setting description"
+  },
+  "dataManagement": "Data Management",
+  "@dataManagement": {
+    "description": "Data management section title"
+  },
+  "storageUsed": "Storage Used",
+  "@storageUsed": {
+    "description": "Storage used label"
+  },
+  "totalProfiles": "Total Profiles",
+  "@totalProfiles": {
+    "description": "Total profiles label"
+  },
+  "calculationsStored": "Calculations Stored",
+  "@calculationsStored": {
+    "description": "Calculations stored label"
+  },
+  "exportData": "Export Data",
+  "@exportData": {
+    "description": "Export data button text"
+  },
+  "clearData": "Clear Data",
+  "@clearData": {
+    "description": "Clear data button text"
+  },
+  "resetOnboarding": "Reset Onboarding",
+  "@resetOnboarding": {
+    "description": "Reset onboarding button text"
+  },
+  "astroIztroApp": "Astro Iztro",
+  "@astroIztroApp": {
+    "description": "App name in about section"
+  },
+  "purpleStarAstrologyBazi": "Purple Star Astrology & BaZi Analysis",
+  "@purpleStarAstrologyBazi": {
+    "description": "App description in about section"
+  },
+  "version": "Version",
+  "@version": {
+    "description": "Version label in about section"
+  },
+  "framework": "Framework",
+  "@framework": {
+    "description": "Framework label in about section"
+  },
+  "flutterGetx": "Flutter & GetX",
+  "@flutterGetx": {
+    "description": "Framework value in about section"
+  },
+  "package": "Package",
+  "@package": {
+    "description": "Package label in about section"
+  },
+  "iztro": "Iztro",
+  "@iztro": {
+    "description": "Package value in about section"
+  },
+  "settingsSaved": "Settings Saved",
+  "@settingsSaved": {
+    "description": "Settings saved success title"
+  },
+  "calculationPreferencesSaved": "Calculation preferences saved successfully",
+  "@calculationPreferencesSaved": {
+    "description": "Settings saved success message"
+  },
+  "failedToSaveSettings": "Failed to save settings",
+  "@failedToSaveSettings": {
+    "description": "Failed to save settings error message"
+  },
+  "clearUserData": "Clear User Data",
+  "@clearUserData": {
+    "description": "Clear user data dialog title"
+  },
+  "clearUserDataDescription": "This will delete all profiles, calculations, and analysis data. This action cannot be undone.",
+  "@clearUserDataDescription": {
+    "description": "Clear user data dialog description"
+  },
+  "clearAll": "Clear All",
+  "@clearAll": {
+    "description": "Clear all button text in dialog"
+  },
+  "dataCleared": "Data Cleared",
+  "@dataCleared": {
+    "description": "Data cleared success title"
+  },
+  "allUserDataCleared": "All user data has been cleared",
+  "@allUserDataCleared": {
+    "description": "Data cleared success message"
+  },
+  "failedToClearUserData": "Failed to clear user data",
+  "@failedToClearUserData": {
+    "description": "Failed to clear user data error message"
+  },
+  "exportDataTitle": "Export Data",
+  "@exportDataTitle": {
+    "description": "Export data dialog title"
+  },
+  "close": "Close",
+  "@close": {
+    "description": "Close button text in dialog"
+  },
+  "failedToExportData": "Failed to export data",
+  "@failedToExportData": {
+    "description": "Failed to export data error message"
+  },
+  "resetSettings": "Reset Settings",
+  "@resetSettings": {
+    "description": "Reset settings dialog title"
+  },
+  "resetSettingsDescription": "This will reset all settings to their default values.",
+  "@resetSettingsDescription": {
+    "description": "Reset settings dialog description"
+  },
+  "reset": "Reset",
+  "@reset": {
+    "description": "Reset button text in dialog"
+  },
+  "settingsReset": "Settings Reset",
+  "@settingsReset": {
+    "description": "Settings reset success title"
+  },
+  "allCalculationSettingsReset": "All calculation settings have been reset to defaults",
+  "@allCalculationSettingsReset": {
+    "description": "Settings reset success message"
+  },
+  "resetOnboardingTitle": "Reset Onboarding",
+  "@resetOnboardingTitle": {
+    "description": "Reset onboarding dialog title"
+  },
+  "resetOnboardingDescription": "This will reset the onboarding status. You will see the onboarding screens again on the next app launch.",
+  "@resetOnboardingDescription": {
+    "description": "Reset onboarding dialog description"
+  },
+  "onboardingReset": "Onboarding Reset",
+  "@onboardingReset": {
+    "description": "Onboarding reset success title"
+  },
+  "onboardingResetMessage": "Onboarding has been reset. Restart the app to see it again.",
+  "@onboardingResetMessage": {
+    "description": "Onboarding reset success message"
+  },
+  "failedToResetOnboarding": "Failed to reset onboarding: {error}",
+  "@failedToResetOnboarding": {
+    "description": "Failed to reset onboarding error message",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "description": "Error message"
+      }
+    }
   }
 }

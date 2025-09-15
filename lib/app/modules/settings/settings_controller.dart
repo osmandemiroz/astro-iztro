@@ -1,6 +1,7 @@
 import 'package:astro_iztro/core/services/storage_service.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 
 /// [SettingsController] - Manages app settings and preferences
@@ -93,8 +94,8 @@ class SettingsController extends GetxController {
       await _storageService.saveCalculationPreferences(preferences);
 
       Get.snackbar(
-        'Settings Saved',
-        'Calculation preferences saved successfully',
+        AppLocalizations.of(Get.context!)!.settingsSaved,
+        AppLocalizations.of(Get.context!)!.calculationPreferencesSaved,
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Get.theme.colorScheme.primary,
         colorText: Get.theme.colorScheme.onPrimary,
@@ -104,8 +105,8 @@ class SettingsController extends GetxController {
         print('[SettingsController] Error saving preferences: $e');
       }
       Get.snackbar(
-        'Error',
-        'Failed to save settings',
+        AppLocalizations.of(Get.context!)!.error,
+        AppLocalizations.of(Get.context!)!.failedToSaveSettings,
         snackPosition: SnackPosition.BOTTOM,
       );
     }
@@ -116,19 +117,19 @@ class SettingsController extends GetxController {
     try {
       final result = await Get.dialog<bool?>(
         AlertDialog(
-          title: const Text('Clear User Data'),
-          content: const Text(
-            'This will delete all profiles, calculations, and analysis data. This action cannot be undone.',
+          title: Text(AppLocalizations.of(Get.context!)!.clearUserData),
+          content: Text(
+            AppLocalizations.of(Get.context!)!.clearUserDataDescription,
           ),
           actions: [
             TextButton(
               onPressed: () => Get.back(result: false),
-              child: const Text('Cancel'),
+              child: Text(AppLocalizations.of(Get.context!)!.cancel),
             ),
             TextButton(
               onPressed: () => Get.back(result: true),
               style: TextButton.styleFrom(foregroundColor: Colors.red),
-              child: const Text('Clear All'),
+              child: Text(AppLocalizations.of(Get.context!)!.clearAll),
             ),
           ],
         ),
@@ -139,8 +140,8 @@ class SettingsController extends GetxController {
         _updateStorageInfo();
 
         Get.snackbar(
-          'Data Cleared',
-          'All user data has been cleared',
+          AppLocalizations.of(Get.context!)!.dataCleared,
+          AppLocalizations.of(Get.context!)!.allUserDataCleared,
           snackPosition: SnackPosition.BOTTOM,
         );
       }
@@ -149,8 +150,8 @@ class SettingsController extends GetxController {
         print('[SettingsController] Error clearing user data: $e');
       }
       Get.snackbar(
-        'Error',
-        'Failed to clear user data',
+        AppLocalizations.of(Get.context!)!.error,
+        AppLocalizations.of(Get.context!)!.failedToClearUserData,
         snackPosition: SnackPosition.BOTTOM,
       );
     }
@@ -164,7 +165,7 @@ class SettingsController extends GetxController {
       // For now, just show the data in a dialog
       await Get.dialog<void>(
         AlertDialog(
-          title: const Text('Export Data'),
+          title: Text(AppLocalizations.of(Get.context!)!.exportDataTitle),
           content: SingleChildScrollView(
             child: SelectableText(
               exportData,
@@ -174,7 +175,7 @@ class SettingsController extends GetxController {
           actions: [
             TextButton(
               onPressed: () => Get.back<void>(),
-              child: const Text('Close'),
+              child: Text(AppLocalizations.of(Get.context!)!.close),
             ),
           ],
         ),
@@ -184,8 +185,8 @@ class SettingsController extends GetxController {
         print('[SettingsController] Error exporting data: $e');
       }
       Get.snackbar(
-        'Error',
-        'Failed to export data',
+        AppLocalizations.of(Get.context!)!.error,
+        AppLocalizations.of(Get.context!)!.failedToExportData,
         snackPosition: SnackPosition.BOTTOM,
       );
     }
@@ -196,18 +197,18 @@ class SettingsController extends GetxController {
     try {
       final result = await Get.dialog<bool>(
         AlertDialog(
-          title: const Text('Reset Settings'),
-          content: const Text(
-            'This will reset all settings to their default values.',
+          title: Text(AppLocalizations.of(Get.context!)!.resetSettings),
+          content: Text(
+            AppLocalizations.of(Get.context!)!.resetSettingsDescription,
           ),
           actions: [
             TextButton(
               onPressed: () => Get.back(result: false),
-              child: const Text('Cancel'),
+              child: Text(AppLocalizations.of(Get.context!)!.cancel),
             ),
             TextButton(
               onPressed: () => Get.back(result: true),
-              child: const Text('Reset'),
+              child: Text(AppLocalizations.of(Get.context!)!.reset),
             ),
           ],
         ),
@@ -229,8 +230,8 @@ class SettingsController extends GetxController {
         await saveCalculationPreferences();
 
         Get.snackbar(
-          'Settings Reset',
-          'All calculation settings have been reset to defaults',
+          AppLocalizations.of(Get.context!)!.settingsReset,
+          AppLocalizations.of(Get.context!)!.allCalculationSettingsReset,
           snackPosition: SnackPosition.BOTTOM,
         );
       }
@@ -258,18 +259,18 @@ class SettingsController extends GetxController {
     try {
       final result = await Get.dialog<bool>(
         AlertDialog(
-          title: const Text('Reset Onboarding'),
-          content: const Text(
-            'This will reset the onboarding status. You will see the onboarding screens again on the next app launch.',
+          title: Text(AppLocalizations.of(Get.context!)!.resetOnboardingTitle),
+          content: Text(
+            AppLocalizations.of(Get.context!)!.resetOnboardingDescription,
           ),
           actions: [
             TextButton(
               onPressed: () => Get.back(result: false),
-              child: const Text('Cancel'),
+              child: Text(AppLocalizations.of(Get.context!)!.cancel),
             ),
             TextButton(
               onPressed: () => Get.back(result: true),
-              child: const Text('Reset'),
+              child: Text(AppLocalizations.of(Get.context!)!.reset),
             ),
           ],
         ),
@@ -278,8 +279,8 @@ class SettingsController extends GetxController {
       if (result ?? false) {
         await _storageService.resetOnboarding();
         Get.snackbar(
-          'Onboarding Reset',
-          'Onboarding has been reset. Restart the app to see it again.',
+          AppLocalizations.of(Get.context!)!.onboardingReset,
+          AppLocalizations.of(Get.context!)!.onboardingResetMessage,
           snackPosition: SnackPosition.BOTTOM,
         );
       }
@@ -288,8 +289,8 @@ class SettingsController extends GetxController {
         print('[SettingsController] Error resetting onboarding: $e');
       }
       Get.snackbar(
-        'Error',
-        'Failed to reset onboarding: $e',
+        AppLocalizations.of(Get.context!)!.error,
+        AppLocalizations.of(Get.context!)!.failedToResetOnboarding(e.toString()),
         snackPosition: SnackPosition.BOTTOM,
       );
     }

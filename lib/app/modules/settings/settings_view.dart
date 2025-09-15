@@ -3,6 +3,7 @@ import 'package:astro_iztro/core/constants/app_constants.dart';
 import 'package:astro_iztro/core/constants/colors.dart';
 import 'package:astro_iztro/shared/themes/app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 
 /// [SettingsView] - Comprehensive settings screen
@@ -14,7 +15,7 @@ class SettingsView extends GetView<SettingsController> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'SETTINGS',
+          AppLocalizations.of(context)!.settingsTitle,
           style: AppTheme.headingMedium.copyWith(
             color: AppColors.darkTextPrimary,
             fontWeight: FontWeight.w700,
@@ -42,7 +43,7 @@ class SettingsView extends GetView<SettingsController> {
                 color: AppColors.lightPurple,
                 size: 22,
               ),
-              tooltip: 'Reset to Defaults',
+              tooltip: AppLocalizations.of(context)!.resetToDefaults,
             ),
           ),
         ],
@@ -57,13 +58,13 @@ class SettingsView extends GetView<SettingsController> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildCalculationSection(),
+                _buildCalculationSection(context),
                 const SizedBox(height: AppConstants.defaultPadding),
-                _buildAdvancedSection(),
+                _buildAdvancedSection(context),
                 const SizedBox(height: AppConstants.defaultPadding),
-                _buildDataSection(),
+                _buildDataSection(context),
                 const SizedBox(height: AppConstants.defaultPadding),
-                _buildAboutSection(),
+                _buildAboutSection(context),
               ],
             ),
           ),
@@ -72,14 +73,14 @@ class SettingsView extends GetView<SettingsController> {
     );
   }
 
-  Widget _buildCalculationSection() {
+  Widget _buildCalculationSection(BuildContext context) {
     return _buildSection(
-      title: 'Calculation Settings',
+      title: AppLocalizations.of(context)!.calculationSettings,
       icon: Icons.calculate_outlined,
       children: [
         _buildSwitchTile(
-          title: 'True Solar Time',
-          subtitle: 'Use true solar time for calculations',
+          title: AppLocalizations.of(context)!.trueSolarTime,
+          subtitle: AppLocalizations.of(context)!.trueSolarTimeDescription,
           value: controller.useTrueSolarTime,
           onChanged: (value) {
             controller.useTrueSolarTime.value = value;
@@ -87,8 +88,8 @@ class SettingsView extends GetView<SettingsController> {
           },
         ),
         _buildSwitchTile(
-          title: 'Show Brightness',
-          subtitle: 'Display star brightness information',
+          title: AppLocalizations.of(context)!.showBrightness,
+          subtitle: AppLocalizations.of(context)!.showBrightnessDescription,
           value: controller.showBrightness,
           onChanged: (value) {
             controller.showBrightness.value = value;
@@ -96,8 +97,8 @@ class SettingsView extends GetView<SettingsController> {
           },
         ),
         _buildSwitchTile(
-          title: 'Show Transformations',
-          subtitle: 'Display star transformations',
+          title: AppLocalizations.of(context)!.showTransformations,
+          subtitle: AppLocalizations.of(context)!.showTransformationsDescription,
           value: controller.showTransformations,
           onChanged: (value) {
             controller.showTransformations.value = value;
@@ -105,8 +106,8 @@ class SettingsView extends GetView<SettingsController> {
           },
         ),
         _buildSwitchTile(
-          title: 'Auto Save Calculations',
-          subtitle: 'Automatically save calculation results',
+          title: AppLocalizations.of(context)!.autoSaveCalculations,
+          subtitle: AppLocalizations.of(context)!.autoSaveCalculationsDescription,
           value: controller.autoSaveCalculations,
           onChanged: (value) {
             controller.autoSaveCalculations.value = value;
@@ -117,14 +118,14 @@ class SettingsView extends GetView<SettingsController> {
     );
   }
 
-  Widget _buildAdvancedSection() {
+  Widget _buildAdvancedSection(BuildContext context) {
     return _buildSection(
-      title: 'Advanced Features',
+      title: AppLocalizations.of(context)!.advancedFeatures,
       icon: Icons.settings_outlined,
       children: [
         _buildSwitchTile(
-          title: 'Advanced Analysis',
-          subtitle: 'Enable detailed analysis features',
+          title: AppLocalizations.of(context)!.advancedAnalysis,
+          subtitle: AppLocalizations.of(context)!.advancedAnalysisDescription,
           value: controller.showAdvancedAnalysis,
           onChanged: (value) {
             controller.showAdvancedAnalysis.value = value;
@@ -132,8 +133,8 @@ class SettingsView extends GetView<SettingsController> {
           },
         ),
         _buildSwitchTile(
-          title: 'Detailed Star Analysis',
-          subtitle: 'Show comprehensive star information',
+          title: AppLocalizations.of(context)!.detailedStarAnalysis,
+          subtitle: AppLocalizations.of(context)!.detailedStarAnalysisDescription,
           value: controller.enableDetailedStarAnalysis,
           onChanged: (value) {
             controller.enableDetailedStarAnalysis.value = value;
@@ -141,8 +142,8 @@ class SettingsView extends GetView<SettingsController> {
           },
         ),
         _buildSwitchTile(
-          title: 'Auto Save Palace Analysis',
-          subtitle: 'Automatically save palace analysis data',
+          title: AppLocalizations.of(context)!.autoSavePalaceAnalysis,
+          subtitle: AppLocalizations.of(context)!.autoSavePalaceAnalysisDescription,
           value: controller.autoSavePalaceAnalysis,
           onChanged: (value) {
             controller.autoSavePalaceAnalysis.value = value;
@@ -150,8 +151,8 @@ class SettingsView extends GetView<SettingsController> {
           },
         ),
         _buildSwitchTile(
-          title: 'Transformation Effects',
-          subtitle: 'Show transformation effects',
+          title: AppLocalizations.of(context)!.transformationEffects,
+          subtitle: AppLocalizations.of(context)!.transformationEffectsDescription,
           value: controller.showTransformationEffects,
           onChanged: (value) {
             controller.showTransformationEffects.value = value;
@@ -159,8 +160,8 @@ class SettingsView extends GetView<SettingsController> {
           },
         ),
         _buildSwitchTile(
-          title: 'Fortune Timing',
-          subtitle: 'Enable fortune timing calculations',
+          title: AppLocalizations.of(context)!.fortuneTiming,
+          subtitle: AppLocalizations.of(context)!.fortuneTimingDescription,
           value: controller.enableFortuneTiming,
           onChanged: (value) {
             controller.enableFortuneTiming.value = value;
@@ -171,9 +172,9 @@ class SettingsView extends GetView<SettingsController> {
     );
   }
 
-  Widget _buildDataSection() {
+  Widget _buildDataSection(BuildContext context) {
     return _buildSection(
-      title: 'Data Management',
+      title: AppLocalizations.of(context)!.dataManagement,
       icon: Icons.storage_outlined,
       children: [
         Container(
@@ -189,19 +190,19 @@ class SettingsView extends GetView<SettingsController> {
             () => Column(
               children: [
                 _buildDataRow(
-                  'Storage Used',
+                  AppLocalizations.of(context)!.storageUsed,
                   controller.formattedStorageSize,
                   Icons.storage_rounded,
                 ),
                 const SizedBox(height: AppConstants.smallPadding),
                 _buildDataRow(
-                  'Total Profiles',
+                  AppLocalizations.of(context)!.totalProfiles,
                   controller.totalProfiles.value.toString(),
                   Icons.person_rounded,
                 ),
                 const SizedBox(height: AppConstants.smallPadding),
                 _buildDataRow(
-                  'Calculations Stored',
+                  AppLocalizations.of(context)!.calculationsStored,
                   controller.totalCalculations.value.toString(),
                   Icons.calculate_rounded,
                 ),
@@ -231,7 +232,7 @@ class SettingsView extends GetView<SettingsController> {
                 child: OutlinedButton.icon(
                   onPressed: controller.exportUserData,
                   icon: const Icon(Icons.upload_outlined, size: 18),
-                  label: const Text('Export Data'),
+                  label: Text(AppLocalizations.of(context)!.exportData),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: AppColors.lightPurple,
                     side: BorderSide.none,
@@ -260,7 +261,7 @@ class SettingsView extends GetView<SettingsController> {
                 child: OutlinedButton.icon(
                   onPressed: controller.clearUserData,
                   icon: const Icon(Icons.delete_outline, size: 18),
-                  label: const Text('Clear Data'),
+                  label: Text(AppLocalizations.of(context)!.clearData),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: Colors.red,
                     side: BorderSide.none,
@@ -288,7 +289,7 @@ class SettingsView extends GetView<SettingsController> {
           child: OutlinedButton.icon(
             onPressed: controller.resetOnboarding,
             icon: const Icon(Icons.refresh_rounded, size: 18),
-            label: const Text('Reset Onboarding'),
+            label: Text(AppLocalizations.of(context)!.resetOnboarding),
             style: OutlinedButton.styleFrom(
               foregroundColor: AppColors.lightPurple,
               side: BorderSide.none,
@@ -300,30 +301,30 @@ class SettingsView extends GetView<SettingsController> {
     );
   }
 
-  Widget _buildAboutSection() {
+  Widget _buildAboutSection(BuildContext context) {
     return _buildSection(
-      title: 'About',
+      title: AppLocalizations.of(context)!.about,
       icon: Icons.info_outline,
       children: [
-        const ListTile(
-          title: Text('Astro Iztro'),
-          subtitle: Text('Purple Star Astrology & BaZi Analysis'),
-          leading: Icon(Icons.star_border, color: AppColors.primaryGold),
+        ListTile(
+          title: Text(AppLocalizations.of(context)!.astroIztroApp),
+          subtitle: Text(AppLocalizations.of(context)!.purpleStarAstrologyBazi),
+          leading: const Icon(Icons.star_border, color: AppColors.primaryGold),
         ),
-        const ListTile(
-          title: Text('Version'),
-          subtitle: Text('1.0.0'),
-          leading: Icon(Icons.code),
+        ListTile(
+          title: Text(AppLocalizations.of(context)!.version),
+          subtitle: const Text('1.0.0'),
+          leading: const Icon(Icons.code),
         ),
-        const ListTile(
-          title: Text('Framework'),
-          subtitle: Text('Flutter & GetX'),
-          leading: Icon(Icons.flutter_dash),
+        ListTile(
+          title: Text(AppLocalizations.of(context)!.framework),
+          subtitle: Text(AppLocalizations.of(context)!.flutterGetx),
+          leading: const Icon(Icons.flutter_dash),
         ),
-        const ListTile(
-          title: Text('Package'),
-          subtitle: Text('Iztro'),
-          leading: Icon(Icons.integration_instructions),
+        ListTile(
+          title: Text(AppLocalizations.of(context)!.package),
+          subtitle: Text(AppLocalizations.of(context)!.iztro),
+          leading: const Icon(Icons.integration_instructions),
         ),
       ],
     );
