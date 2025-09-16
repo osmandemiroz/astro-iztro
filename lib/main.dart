@@ -23,10 +23,17 @@ void main() async {
   await storageService.initialize();
   Get
     ..put<StorageService>(storageService, permanent: true)
+
     // Initialize IztroService
-    ..put<IztroService>(IztroService(), permanent: true)
-    // Initialize LanguageService
-    ..put<LanguageService>(LanguageService(), permanent: true);
+    ..put<IztroService>(IztroService(), permanent: true);
+
+  // Initialize LanguageService and ensure it loads the saved language
+  final languageService = LanguageService();
+  Get.put<LanguageService>(languageService, permanent: true);
+
+  // Force the language service to initialize and load saved language
+  // This ensures the correct locale is available before the UI builds
+  languageService.onInit();
 
   // Check if onboarding has been completed
   final onboardingCompleted = storageService.prefs.getBool(

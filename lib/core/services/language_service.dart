@@ -29,20 +29,30 @@ class LanguageService extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    _loadSavedLanguage();
+    // Load saved language synchronously during initialization
+    _loadSavedLanguageSync();
   }
 
-  /// [loadSavedLanguage] - Load saved language preference from storage
+  /// [loadSavedLanguageSync] - Synchronously load saved language preference from storage
   /// Falls back to English if no preference is saved
-  Future<void> _loadSavedLanguage() async {
+  /// This ensures the language is loaded before the UI builds
+  void _loadSavedLanguageSync() {
     try {
       final storageService = Get.find<StorageService>();
       final savedLanguage = storageService.loadLanguage();
 
       if (savedLanguage.isNotEmpty) {
-        final locale = Locale(savedLanguage);
-        if (supportedLocales.contains(locale)) {
-          currentLocale.value = locale;
+        // Check if the saved language matches any supported locale
+        final matchingLocale = supportedLocales.firstWhere(
+          (locale) => locale.languageCode == savedLanguage,
+          orElse: () => const Locale('en', 'US'),
+        );
+        currentLocale.value = matchingLocale;
+
+        if (kDebugMode) {
+          print(
+            '[LanguageService] Loaded saved language: ${matchingLocale.languageCode}',
+          );
         }
       }
     } on Exception catch (e) {
