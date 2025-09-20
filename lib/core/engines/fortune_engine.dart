@@ -261,9 +261,9 @@ class FortuneEngine {
         description = 'Peak performance and leadership';
         focus = ['Mastery', 'Leadership', 'Excellence'];
       default:
-        yearName = 'Unknown Year';
-        description = 'Special circumstances';
-        focus = ['Adaptation', 'Flexibility', 'Growth'];
+        yearName = 'Transformation Year';
+        description = 'Major life transitions and spiritual growth';
+        focus = ['Transformation', 'Spiritual growth', 'Life changes'];
     }
 
     return {
@@ -313,6 +313,13 @@ class FortuneEngine {
         challenges,
       ),
       'advice': _generateAnnualAdvice(relationship, annualThemes, challenges),
+      'summary': _generateAnnualSummary(
+        relationship,
+        annualThemes,
+        luckyAspects,
+        challenges,
+        yearDifference,
+      ),
     };
   }
 
@@ -936,6 +943,81 @@ class FortuneEngine {
       ..writeln('Key Recommendations:');
     for (final recommendation in recommendations) {
       summary.writeln('• $recommendation');
+    }
+
+    return summary.toString();
+  }
+
+  /// [_generateAnnualSummary] - Generate comprehensive annual fortune summary
+  static String _generateAnnualSummary(
+    Map<String, dynamic> relationship,
+    Map<String, dynamic> annualThemes,
+    Map<String, dynamic> luckyAspects,
+    Map<String, dynamic> challenges,
+    int yearDifference,
+  ) {
+    final summary = StringBuffer();
+
+    // Overall year assessment
+    final relationshipType = relationship['type'] as String;
+    final relationshipDesc = relationship['description'] as String;
+
+    summary
+      ..writeln(
+        'This year brings ${relationshipType.toLowerCase()} energy with ${relationshipDesc.toLowerCase()}.',
+      )
+      ..writeln();
+
+    // Key themes
+    if (annualThemes.isNotEmpty) {
+      summary.writeln('Key themes for this year:');
+      annualThemes.forEach((key, value) {
+        if (value is String && value.isNotEmpty) {
+          summary.writeln('• $value');
+        }
+      });
+      summary.writeln();
+    }
+
+    // Lucky aspects
+    if (luckyAspects.isNotEmpty) {
+      summary.writeln('Favorable opportunities:');
+      luckyAspects.forEach((key, value) {
+        if (value is String && value.isNotEmpty) {
+          summary.writeln('• $value');
+        }
+      });
+      summary.writeln();
+    }
+
+    // Challenges and growth areas
+    if (challenges.isNotEmpty) {
+      summary.writeln('Areas for growth and attention:');
+      challenges.forEach((key, value) {
+        if (value is String && value.isNotEmpty) {
+          summary.writeln('• $value');
+        }
+      });
+      summary.writeln();
+    }
+
+    // Age-specific guidance
+    if (yearDifference < 30) {
+      summary.writeln(
+        'As a young adult, focus on building foundations, exploring opportunities, and developing your unique talents.',
+      );
+    } else if (yearDifference < 50) {
+      summary.writeln(
+        'In your prime years, concentrate on career advancement, relationship building, and creating lasting value.',
+      );
+    } else if (yearDifference < 70) {
+      summary.writeln(
+        'In your mature years, focus on wisdom sharing, legacy building, and enjoying the fruits of your labor.',
+      );
+    } else {
+      summary.writeln(
+        'In your golden years, embrace wisdom, share your experiences, and find joy in simple pleasures.',
+      );
     }
 
     return summary.toString();

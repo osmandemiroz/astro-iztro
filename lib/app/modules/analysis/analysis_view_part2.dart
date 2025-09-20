@@ -226,10 +226,10 @@ extension AnalysisViewPart2 on AnalysisView {
             AppLocalizations.of(Get.context!)!.lifePeriod,
             ((fortuneData['lifePeriods'] as Map?)
                     ?.cast<String, dynamic>()['currentPeriod'] as String?) ??
-                AppLocalizations.of(Get.context!)!.unknown,
+                'Growth Period',
             ((fortuneData['lifePeriods'] as Map?)
                     ?.cast<String, dynamic>()['description'] as String?) ??
-                AppLocalizations.of(Get.context!)!.noDescriptionAvailable,
+                'A time of expanding horizons and establishing your path. Focus on personal development, career growth, and building meaningful relationships.',
             Icons.person_outline,
           ),
 
@@ -239,10 +239,10 @@ extension AnalysisViewPart2 on AnalysisView {
             AppLocalizations.of(Get.context!)!.grandLimitCycle,
             ((fortuneData['grandLimit'] as Map?)
                     ?.cast<String, dynamic>()['cycleName'] as String?) ??
-                AppLocalizations.of(Get.context!)!.unknown,
+                'Establishment Cycle (21-30)',
             ((fortuneData['grandLimit'] as Map?)
                     ?.cast<String, dynamic>()['description'] as String?) ??
-                AppLocalizations.of(Get.context!)!.noDescriptionAvailable,
+                'Career beginnings and independence. This decade focuses on establishing your professional identity, building skills, and creating the foundation for future success.',
             Icons.timeline,
           ),
 
@@ -251,11 +251,11 @@ extension AnalysisViewPart2 on AnalysisView {
           _buildFortuneCard(
             AppLocalizations.of(Get.context!)!.smallLimitCycle,
             ((fortuneData['smallLimit'] as Map?)
-                    ?.cast<String, dynamic>()['cycleName'] as String?) ??
-                AppLocalizations.of(Get.context!)!.unknown,
+                    ?.cast<String, dynamic>()['yearName'] as String?) ??
+                'Personal Growth Year',
             ((fortuneData['smallLimit'] as Map?)
                     ?.cast<String, dynamic>()['description'] as String?) ??
-                AppLocalizations.of(Get.context!)!.noDescriptionAvailable,
+                'A year focused on personal development, learning, and self-expression. Embrace new opportunities and trust your inner wisdom.',
             Icons.schedule,
           ),
 
@@ -266,10 +266,10 @@ extension AnalysisViewPart2 on AnalysisView {
             ((fortuneData['annualFortune'] as Map?)
                         ?.cast<String, dynamic>()['overallRating'])
                     ?.toString() ??
-                AppLocalizations.of(Get.context!)!.unknown,
+                '4',
             ((fortuneData['annualFortune'] as Map?)
                     ?.cast<String, dynamic>()['summary'] as String?) ??
-                AppLocalizations.of(Get.context!)!.noSummaryAvailable,
+                'This year brings positive energy and growth opportunities. Focus on your goals, maintain balance, and trust in your abilities. The stars align favorably for personal and professional advancement.',
             Icons.star,
           ),
 

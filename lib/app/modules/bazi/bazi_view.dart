@@ -378,11 +378,11 @@ class BaZiView extends GetView<BaZiController> {
 
   /// [buildPillarCard] - Individual pillar card with modern design
   Widget _buildPillarCard(int index, PillarData pillar, BuildContext context) {
-    final pillarNames = [
-      AppLocalizations.of(context)!.year,
-      AppLocalizations.of(context)!.month,
-      AppLocalizations.of(context)!.day,
-      AppLocalizations.of(context)!.hour,
+    final pillarNames = <String>[
+      'Year',
+      'Month',
+      'Day',
+      'Hour',
     ];
     final pillarColors = [
       AppColors.cinnabar,
@@ -396,7 +396,7 @@ class BaZiView extends GetView<BaZiController> {
       child: InkWell(
         borderRadius: BorderRadius.circular(20),
         onTap: () => _showPillarExplanation(
-          pillarNames[index] as String,
+          pillarNames[index],
           pillar,
           context,
         ),
@@ -429,7 +429,7 @@ class BaZiView extends GetView<BaZiController> {
               children: [
                 // Pillar name
                 Text(
-                  pillarNames[index] as String,
+                  pillarNames[index],
                   style: AppTheme.caption.copyWith(
                     color: AppColors.darkTextSecondary,
                     fontWeight: FontWeight.w600,
