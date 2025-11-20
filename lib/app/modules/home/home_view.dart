@@ -8,11 +8,13 @@ import 'package:astro_iztro/core/services/language_service.dart';
 import 'package:astro_iztro/core/utils/iz_animated_widgets.dart';
 import 'package:astro_iztro/core/utils/responsive_sizer.dart';
 import 'package:astro_iztro/shared/themes/app_theme.dart';
+import 'package:astro_iztro/shared/widgets/animated_3d_card.dart';
 import 'package:astro_iztro/shared/widgets/background_image_widget.dart';
 import 'package:astro_iztro/shared/widgets/liquid_glass_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
 
 /// [HomeView] - Adaptive main dashboard screen following Apple Human Interface Guidelines
@@ -916,8 +918,10 @@ class HomeView extends GetView<HomeController> {
     return IzSlideFadeIn(
       offset: const Offset(0, 20),
       delay: delay ?? Duration.zero,
-      child: IzTapScale(
+      child: Animated3DCard(
         onTap: onTap,
+        depth: 0.3,
+        shadowColor: color,
         child: Container(
           width: double.infinity,
           padding: const EdgeInsets.all(AppConstants.defaultPadding),

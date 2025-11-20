@@ -5,8 +5,10 @@ import 'package:astro_iztro/core/constants/app_constants.dart';
 import 'package:astro_iztro/core/constants/colors.dart';
 import 'package:astro_iztro/core/utils/responsive_sizer.dart';
 import 'package:astro_iztro/shared/themes/app_theme.dart';
+import 'package:astro_iztro/shared/widgets/animated_gradient_background.dart';
 import 'package:astro_iztro/shared/widgets/language_switcher.dart';
 import 'package:astro_iztro/shared/widgets/liquid_glass_widget.dart';
+import 'package:astro_iztro/shared/widgets/particle_background.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
@@ -700,27 +702,29 @@ class OnboardingBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Color(0xFF0A0A0A),
-            Color(0xFF1A1A2E),
-            Color(0xFF16213E),
-          ],
+    return Stack(
+      children: [
+        // Animated gradient background
+        const AnimatedGradientBackground(
+          preset: GradientPreset.cosmic,
         ),
-      ),
-      child: Stack(
-        children: [
-          // Animated background stars
-          _buildAnimatedStars(),
 
-          // Main content
-          child,
-        ],
-      ),
+        // Particle effects layer
+        const Positioned.fill(
+          child: ParticleBackground(
+            particleCount: 40,
+            particleColor: AppColors.white,
+            particleSize: Size(1, 3),
+            speed: 0.5,
+          ),
+        ),
+
+        // Animated background stars (existing)
+        _buildAnimatedStars(),
+
+        // Main content
+        child,
+      ],
     );
   }
 
